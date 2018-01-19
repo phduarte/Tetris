@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Core", "1. Core", "{4E62EBC0-27BF-44CA-AB44-8C4A76338714}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Interfaces", "2. Interfaces", "{A015B636-75A7-4F96-9C3E-2E9306C88A2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gadz.Tetris.Desktop", "Gadz.Tetris.Desktop\Gadz.Tetris.Desktop.csproj", "{873BF7EB-D323-4B5C-BEB6-8C350EFE3447}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0. Docs", "0. Docs", "{E605F3F7-32A7-42C4-B8B9-B3DC40503A9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gadz.Tetris.Core", "Gadz.Tetris.Core\Gadz.Tetris.Core.csproj", "{A4339A4A-68E5-48F0-BE05-A51DAC5CC569}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gadz.Tetris.Core.Tests", "Gadz.Tetris.Core.Tests\Gadz.Tetris.Core.Tests.csproj", "{C1F6B572-1C51-4649-A6A7-57A07E46342E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{873BF7EB-D323-4B5C-BEB6-8C350EFE3447}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{873BF7EB-D323-4B5C-BEB6-8C350EFE3447}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{873BF7EB-D323-4B5C-BEB6-8C350EFE3447}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{873BF7EB-D323-4B5C-BEB6-8C350EFE3447}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4339A4A-68E5-48F0-BE05-A51DAC5CC569}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4339A4A-68E5-48F0-BE05-A51DAC5CC569}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4339A4A-68E5-48F0-BE05-A51DAC5CC569}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4339A4A-68E5-48F0-BE05-A51DAC5CC569}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1F6B572-1C51-4649-A6A7-57A07E46342E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1F6B572-1C51-4649-A6A7-57A07E46342E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1F6B572-1C51-4649-A6A7-57A07E46342E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1F6B572-1C51-4649-A6A7-57A07E46342E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{873BF7EB-D323-4B5C-BEB6-8C350EFE3447} = {A015B636-75A7-4F96-9C3E-2E9306C88A2E}
+		{A4339A4A-68E5-48F0-BE05-A51DAC5CC569} = {4E62EBC0-27BF-44CA-AB44-8C4A76338714}
+		{C1F6B572-1C51-4649-A6A7-57A07E46342E} = {4E62EBC0-27BF-44CA-AB44-8C4A76338714}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {191B99D4-B21C-425D-9A96-E3FCAF658284}
+	EndGlobalSection
+EndGlobal
