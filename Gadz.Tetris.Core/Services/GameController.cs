@@ -11,7 +11,6 @@ namespace Gadz.Tetris.Core.Services {
         #region fields
 
         ITabuleiro _tabuleiro;
-        readonly EstatisticasRepository _repository;
 
         #endregion
 
@@ -95,7 +94,7 @@ namespace Gadz.Tetris.Core.Services {
         public IEnumerable<Bloco> GetNextBlocks()=> _tabuleiro.ProximaPeca.Blocos;
 
         public int GetMaxScore() {
-            return _repository.MaxScore();
+            return _tabuleiro.RecordeMaximo;
         }
     }
 }

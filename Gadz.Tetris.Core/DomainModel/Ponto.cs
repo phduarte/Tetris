@@ -13,10 +13,18 @@
         }
 
         public override bool Equals(object obj) {
-            if(obj is Ponto u) {
+            if (obj is Ponto u) {
                 return ToString().Equals(u.ToString());
             }
             return false;
+        }
+
+        public static bool operator ==(Ponto a, Ponto b) {
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(Ponto a, Ponto b) {
+            return !a.Equals(b);
         }
 
         public bool ColideCom(Ponto ponto) {
