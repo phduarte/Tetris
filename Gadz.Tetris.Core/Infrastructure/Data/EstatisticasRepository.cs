@@ -9,14 +9,31 @@ using System.Threading.Tasks;
 namespace Gadz.Tetris.Core.Infrastructure.Data {
     internal class EstatisticasRepository : IEstatisticasRepository {
 
-        private const string FILE_NAME = "stats.mc";
-        private const char DELIMITADOR = '\t';
+        #region fields
 
+        const string FILE_NAME = "stats.mc";
+        const char DELIMITADOR = '\t';
+        const int COL_ID = 0;
+        const int COL_POINTS = 1;
+        const int COL_LEVEL = 2;
+        const int COL_LINES = 3;
+        const int COL_SPEED = 4;
+        const int COL_MOVES = 5;
+        const int COL_BLOCKS = 6;
+        const int COL_TIME = 7;
         static IList<Estatisticas> _cache = LoadCache().Result;
+
+        #endregion
+
+        #region constructors
 
         public EstatisticasRepository() {
             _cache = new List<Estatisticas>();
         }
+
+        #endregion
+
+        #region public methods
 
         public async void Save(Estatisticas stats) {
 
@@ -26,14 +43,14 @@ namespace Gadz.Tetris.Core.Infrastructure.Data {
 
                     string[] campos = new string[8];
 
-                    campos[0] = stats.Id;
-                    campos[1] = stats.Pontos.ToString();
-                    campos[2] = stats.Nivel.ToString();
-                    campos[3] = stats.Linhas.ToString();
-                    campos[4] = stats.Velocidade.ToString();
-                    campos[5] = stats.Movimentos.ToString();
-                    campos[6] = stats.Blocos.ToString();
-                    campos[7] = stats.Duracao.Ticks.ToString();
+                    campos[COL_ID] = stats.Id;
+                    campos[COL_POINTS] = stats.Pontos.ToString();
+                    campos[COL_LEVEL] = stats.Nivel.ToString();
+                    campos[COL_LINES] = stats.Linhas.ToString();
+                    campos[COL_SPEED] = stats.Velocidade.ToString();
+                    campos[COL_MOVES] = stats.Movimentos.ToString();
+                    campos[COL_BLOCKS] = stats.Blocos.ToString();
+                    campos[COL_TIME] = stats.Duracao.Ticks.ToString();
 
                     arquivo.WriteLine(string.Join(DELIMITADOR.ToString(), campos));
                 }
@@ -59,6 +76,10 @@ namespace Gadz.Tetris.Core.Infrastructure.Data {
             return _cache;
         }
 
+        #endregion
+
+        #region private methods
+
         static async Task<IList<Estatisticas>> LoadCache() {
 
             var _resultado = new List<Estatisticas>();
@@ -74,14 +95,14 @@ namespace Gadz.Tetris.Core.Infrastructure.Data {
 
                         var campos = arquivo.ReadLine().Split(DELIMITADOR);
 
-                        Identidade id = campos[0];
-                        int.TryParse(campos[1], out int pontos);
-                        int.TryParse(campos[2], out int nivel);
-                        int.TryParse(campos[3], out int linhas);
-                        int.TryParse(campos[4], out int velocidade);
-                        int.TryParse(campos[5], out int movimentos);
-                        int.TryParse(campos[6], out int blocos);
-                        long.TryParse(campos[7], out long duracao);
+                        Identidade id = campos[COL_ID];
+                        int.TryParse(campos[COL_POINTS], out int pontos);
+                        int.TryParse(campos[COL_LEVEL], out int nivel);
+                        int.TryParse(campos[COL_LINES], out int linhas);
+                        int.TryParse(campos[COL_SPEED], out int velocidade);
+                        int.TryParse(campos[COL_MOVES], out int movimentos);
+                        int.TryParse(campos[COL_BLOCKS], out int blocos);
+                        long.TryParse(campos[COL_TIME], out long duracao);
 
                         _resultado.Add(new Estatisticas(id, pontos, linhas, nivel, velocidade, movimentos, blocos, duracao));
                     }
@@ -90,5 +111,7 @@ namespace Gadz.Tetris.Core.Infrastructure.Data {
 
             return _resultado;
         }
+
+        #endregion
     }
 }
