@@ -26,7 +26,7 @@ namespace Gadz.Tetris.Core.DomainModel {
             if (int.TryParse(id.ToString(), out int u))
                 return u;
 
-            throw new InvalidCastException();
+            return -1;
         }
 
         public static implicit operator string(Identidade id) {
