@@ -10,6 +10,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gadz.Tetris.Desktop", "Gadz.Tetris.Desktop\Gadz.Tetris.Desktop.csproj", "{873BF7EB-D323-4B5C-BEB6-8C350EFE3447}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0. Docs", "0. Docs", "{E605F3F7-32A7-42C4-B8B9-B3DC40503A9E}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\Repos\Tetris\LICENSE = ..\..\Repos\Tetris\LICENSE
+		..\..\Repos\Tetris\README.md = ..\..\Repos\Tetris\README.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gadz.Tetris.Core", "Gadz.Tetris.Core\Gadz.Tetris.Core.csproj", "{A4339A4A-68E5-48F0-BE05-A51DAC5CC569}"
 EndProject
