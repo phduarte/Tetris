@@ -53,11 +53,11 @@
     <Compile Include="About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
-    <Compile Include="Fim.cs">
+    <Compile Include="GameOver.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Fim.Designer.cs">
-      <DependentUpon>Fim.cs</DependentUpon>
+    <Compile Include="GameOver.Designer.cs">
+      <DependentUpon>GameOver.cs</DependentUpon>
     </Compile>
     <Compile Include="Help.cs">
       <SubType>Form</SubType>
@@ -65,39 +65,39 @@
     <Compile Include="Help.Designer.cs">
       <DependentUpon>Help.cs</DependentUpon>
     </Compile>
-    <Compile Include="Inicio.cs">
+    <Compile Include="Choose.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Inicio.Designer.cs">
-      <DependentUpon>Inicio.cs</DependentUpon>
+    <Compile Include="Choose.Designer.cs">
+      <DependentUpon>Choose.cs</DependentUpon>
     </Compile>
-    <Compile Include="Jogo.cs">
+    <Compile Include="Play.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Jogo.Designer.cs">
-      <DependentUpon>Jogo.cs</DependentUpon>
+    <Compile Include="Play.Designer.cs">
+      <DependentUpon>Play.cs</DependentUpon>
     </Compile>
-    <Compile Include="Player.cs" />
+    <Compile Include="SoundPlayer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Resources\GAME_OVER_LAYER.png" />
-    <Content Include="Sons\Clean.wav">
+    <Content Include="Sounds\Clear.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Sons\Dock.wav">
+    <Content Include="Sounds\Dock.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Sons\Ending.wav">
+    <Content Include="Sounds\Ending.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Sons\Intro.wav">
+    <Content Include="Sounds\Start.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Sons\Move.wav">
+    <Content Include="Sounds\Move.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Sons\NIvelUp.wav" />
-    <Content Include="Sons\Run.wav">
+    <Content Include="Sounds\LevelUp.wav" />
+    <Content Include="Sounds\Run.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\BACKGROUND_TETRIS.png" />
@@ -106,17 +106,17 @@
     <EmbeddedResource Include="About.resx">
       <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Fim.resx">
-      <DependentUpon>Fim.cs</DependentUpon>
+    <EmbeddedResource Include="GameOver.resx">
+      <DependentUpon>GameOver.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Help.resx">
       <DependentUpon>Help.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Inicio.resx">
-      <DependentUpon>Inicio.cs</DependentUpon>
+    <EmbeddedResource Include="Choose.resx">
+      <DependentUpon>Choose.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Jogo.resx">
-      <DependentUpon>Jogo.cs</DependentUpon>
+    <EmbeddedResource Include="Play.resx">
+      <DependentUpon>Play.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

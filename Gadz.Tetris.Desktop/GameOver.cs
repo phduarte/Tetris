@@ -1,9 +1,9 @@
 ﻿using System.Windows.Forms;
 
 namespace Gadz.Tetris.Desktop {
-    public partial class Fim : Form {
+    public partial class GameOver : Form {
 
-        public Fim() {
+        public GameOver() {
             InitializeComponent();
         }
 

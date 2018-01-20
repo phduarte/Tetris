@@ -1,5 +1,5 @@
 ﻿namespace Gadz.Tetris.Desktop {
-    partial class Inicio {
+    partial class Choose {
         /// <summary>
         /// Required designer variable.
         /// </summary>

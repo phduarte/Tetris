@@ -10,20 +10,37 @@ using System.Windows.Forms;
 using Texto = Gadz.Tetris.Core.CrossCutting.Texto.Jogo;
 
 namespace Gadz.Tetris.Desktop {
-    public partial class Jogo : Form {
+    public partial class Play : Form {
+
+        #region fields
 
         Form _baseForm;
         static int _index = 0;
-        TaskScheduler threadPrincipal;
+        readonly TaskScheduler _threadPrincipal;
         readonly GameController _controller;
         const int BLOCK_SIZE = 22;
+        const string BLOCK_PREFIX = "block";
 
-        public Jogo(Form formBase) {
+        #endregion
 
-            threadPrincipal = TaskScheduler.FromCurrentSynchronizationContext();
+        public Play(Form formBase) {
+
             _baseForm = formBase;
-            InitializeComponent();
+            _threadPrincipal = TaskScheduler.FromCurrentSynchronizationContext();
+            _controller = GameController.Create(10, 20);
 
+            InitializeComponent();
+            SetScreenText();
+
+            if (!Program.ClassicMode) {
+                board.BackgroundImage = Properties.Resources.BACKGROUND_TETRIS;
+                BackColor = Color.White;
+            }
+
+            Start();
+        }
+
+        void SetScreenText() {
             label2.Text = Texto.Pontuacao.ToUpper();
             label3.Text = Texto.Tempo.ToUpper();
             label4.Text = Texto.Linhas.ToUpper();
@@ -31,67 +48,59 @@ namespace Gadz.Tetris.Desktop {
             label6.Text = Texto.Velocidade.ToUpper();
             label8.Text = Texto.Proximo.ToUpper();
             Text = Texto.Nome.ToUpper();
-
-            if (!Program.ClassicMode) {
-                board.BackgroundImage = Properties.Resources.BACKGROUND_TETRIS;
-                BackColor = Color.White;
-            }
-
-            _controller = GameController.Create(10, 20);
-
-            Iniciar();
         }
 
-        void Iniciar() {
+        void Start() {
+            CreateBoard();
+            ListenEvents();
+            DrawScreen();
+            PlayStartSound();
+        }
 
-            CriarTabuleiro();
+        void PlayStartSound() {
+            Program.SoundPlayer.Start();
+        }
 
+        private void ListenEvents() {
             _controller.Start();
-            _controller.QuandoAtualizar += DesenharTela;
-            _controller.QuandoAtualizar += AtualizarTextos;
-            _controller.QuandoTerminar += Tabuleiro_Terminou;
+            _controller.OnRefresh += DrawScreen;
+            _controller.OnRefresh += UpdateScreenTextAsync;
+            _controller.OnEnd += ExitAsync;
 
-            _controller.QuandoLimpar += DesenharTela;
-            _controller.QuandoLimpar += Program.Player.Clean;
+            _controller.OnClear += DrawScreen;
+            _controller.OnClear += Program.SoundPlayer.Clear;
 
-            _controller.QuandoMover += Program.Player.Move;
-            _controller.QuandoDeslizar += Program.Player.Slide;
-            Program.Player.Intro();
-
-            DesenharTela();
+            _controller.OnMove += Program.SoundPlayer.Move;
+            _controller.OnSlide += Program.SoundPlayer.Slide;
         }
 
-        private void AtualizarTextos() {
-            Task.Factory.StartNew(() => {
+        async void UpdateScreenTextAsync() {
+            await Task.Factory.StartNew(() => {
                 lbNivel.Text = _controller.Level.ToString();
                 lbPontos.Text = _controller.Score.ToString();
                 lbTempo.Text = _controller.Time.ToString(@"hh\:mm\:ss");
                 lbLinhas.Text = _controller.Lines.ToString();
                 lbVelocidade.Text = _controller.Speed.ToString();
-            }, CancellationToken.None, TaskCreationOptions.None, threadPrincipal);
+            }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
         }
 
-        private void Tabuleiro_Terminou() {
-            Task.Factory.StartNew(() => {
-
-                Program.Player.Ending();
+        async void ExitAsync() {
+            await Task.Factory.StartNew(() => {
+                Program.SoundPlayer.End();
                 Hide();
-                new Fim().ShowDialog();
+                new GameOver().ShowDialog();
                 Close();
-            },
-                CancellationToken.None,
-                TaskCreationOptions.None,
-                threadPrincipal);
+            }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
         }
 
-        void CriarTabuleiro() {
+        void CreateBoard() {
 
             board.Controls.Clear();
-            board.Width = _controller.BoardHeight * BLOCK_SIZE;
-            board.Height = _controller.BoardWidth * BLOCK_SIZE;
+            board.Width = _controller.BoardWidth * BLOCK_SIZE;
+            board.Height = _controller.BoardHeight * BLOCK_SIZE;
 
-            for (int y = 0; y < _controller.BoardWidth; y++) {
-                for (int x = 0; x < _controller.BoardHeight; x++) {
+            for (int y = 0; y < _controller.BoardHeight; y++) {
+                for (int x = 0; x < _controller.BoardWidth; x++) {
                     board.Controls.Add(CreateBlock(x, y, string.Empty));
                 }
             }
@@ -105,40 +114,40 @@ namespace Gadz.Tetris.Desktop {
             }
         }
 
-        void DesenharTela() {
-            DesenharPainelPrincipal();
-            DesenharPainelProximaPeca();
+        void DrawScreen() {
+            DrawBoardAsync();
+            DrawNextPieceAsync();
         }
 
-        private void DesenharPainelProximaPeca() {
-            //próximo
-            for (int y = 0; y < 4; y++) {
-                for (int x = 0; x < 4; x++) {
-                    SetBlock(x, y, string.Empty, painelProximo);
+        async void DrawNextPieceAsync() {
+            await Task.Factory.StartNew(() => {
+                for (int y = 0; y < 4; y++) {
+                    for (int x = 0; x < 4; x++) {
+                        PaintBlock(x, y, string.Empty, painelProximo);
+                    }
                 }
-            }
 
-            SetBlock(_controller.GetNextBlocks(), painelProximo);
+                PaintBlock(_controller.GetNextBlocks(), painelProximo);
+            });
         }
 
-        private void DesenharPainelPrincipal() {
-
-            SetBlock(_controller.GetActualBlocks(), board);
-
-            //background
-            for (int y = 0; y < _controller.BoardWidth; y++) {
-                for (int x = 0; x < _controller.BoardHeight; x++) {
-                    SetBlock(x, y, _controller.Matrix[x, y].Cor.ToString(), board);
+        async void DrawBoardAsync() {
+            await Task.Factory.StartNew(() => {
+                PaintBlock(_controller.GetActualBlocks(), board);
+                for (int y = 0; y < _controller.BoardHeight; y++) {
+                    for (int x = 0; x < _controller.BoardWidth; x++) {
+                        PaintBlock(x, y, _controller.Matrix[x, y].Cor.ToString(), board);
+                    }
                 }
-            }
+            }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
         }
 
         static PictureBox CreateBlock(int x, int y, string cor) {
             var block = new PictureBox {
                 Location = new Point(x * BLOCK_SIZE, y * BLOCK_SIZE),
-                BackgroundImage = PegarImagem(cor),
+                BackgroundImage = GetImage(cor),
                 BackgroundImageLayout = ImageLayout.Stretch,
-                Name = "bloco" + (_index++).ToString(),
+                Name = BLOCK_PREFIX + (_index++).ToString(),
                 Size = new Size(BLOCK_SIZE, BLOCK_SIZE),
                 BorderStyle = BorderStyle.None,
                 TabIndex = 0,
@@ -148,7 +157,7 @@ namespace Gadz.Tetris.Desktop {
             return block;
         }
 
-        static Image PegarImagem(string cor) {
+        static Image GetImage(string cor) {
 
             if (!(cor == "TRANSPARENTE" || cor == string.Empty) && Program.ClassicMode) return Properties.Resources.BLOCK_CLASSIC;
             if (cor == "AMARELO") return Properties.Resources.BLOCK_YELLOW;
@@ -164,19 +173,19 @@ namespace Gadz.Tetris.Desktop {
             return null;
         }
 
-        void SetBlock(IEnumerable<Bloco> blocos, Panel panel) {
+        void PaintBlock(IEnumerable<Bloco> blocos, Panel panel) {
             foreach (var bloco in blocos) {
-                SetBlock(bloco.X, bloco.Y, bloco.Cor.ToString(), panel);
+                PaintBlock(bloco.X, bloco.Y, bloco.Cor.ToString(), panel);
             }
         }
 
-        void SetBlock(int x, int y, string color, Panel panel) {
+        void PaintBlock(int x, int y, string color, Panel panel) {
             foreach (Control i in panel.Controls) {
-                if (i.Name.StartsWith("bloco")
+                if (i.Name.StartsWith(BLOCK_PREFIX)
                     && i.Location.X == x * BLOCK_SIZE
                     && i.Location.Y == y * BLOCK_SIZE) {
                     i.BackColor = Color.Transparent;
-                    i.BackgroundImage = PegarImagem(color);
+                    i.BackgroundImage = GetImage(color);
                     break;
                 }
             }
@@ -226,11 +235,11 @@ namespace Gadz.Tetris.Desktop {
                     break;
 
                 case Keys.ShiftKey:
-                    Program.Player.ToggleMute();
+                    Program.SoundPlayer.ToggleMute();
                     break;
 
                 case Keys.Space:
-                     _controller.SmashDown();
+                    _controller.SmashDown();
                     break;
             }
         }

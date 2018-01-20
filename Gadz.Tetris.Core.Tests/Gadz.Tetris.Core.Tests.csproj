@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -41,9 +42,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DomainModel\Formas\FormasTests.cs" />
+    <Compile Include="DomainModel\IdentidadeTests.cs" />
+    <Compile Include="DomainModel\Pecas\BlocoTests.cs" />
     <Compile Include="DomainModel\Pecas\PecaTests.cs" />
+    <Compile Include="DomainModel\PontoTests.cs" />
+    <Compile Include="DomainModel\Tabuleiros\DimensaoTests.cs" />
+    <Compile Include="DomainModel\Tabuleiros\EstatisticasTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DomainModel\Tabuleiros\TabuleiroTests.cs" />
+    <Compile Include="Services\GameControllerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Gadz.Tetris.Core\Gadz.Tetris.Core.csproj">

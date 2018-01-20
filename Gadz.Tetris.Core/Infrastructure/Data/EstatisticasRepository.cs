@@ -64,12 +64,17 @@ namespace Gadz.Tetris.Core.Infrastructure.Data {
             var _resultado = new List<Estatisticas>();
 
             await Task.Factory.StartNew(() => {
+
+                if (!File.Exists(FILE_NAME))
+                    return;
+
                 using (var arquivo = new StreamReader(FILE_NAME)) {
 
                     while (!arquivo.EndOfStream) {
 
                         var campos = arquivo.ReadLine().Split(DELIMITADOR);
 
+                        Identidade id = campos[0];
                         int.TryParse(campos[1], out int pontos);
                         int.TryParse(campos[2], out int nivel);
                         int.TryParse(campos[3], out int linhas);
@@ -78,7 +83,7 @@ namespace Gadz.Tetris.Core.Infrastructure.Data {
                         int.TryParse(campos[6], out int blocos);
                         long.TryParse(campos[7], out long duracao);
 
-                        _resultado.Add(new Estatisticas(pontos, linhas, nivel, velocidade, movimentos, blocos, duracao));
+                        _resultado.Add(new Estatisticas(id, pontos, linhas, nivel, velocidade, movimentos, blocos, duracao));
                     }
                 }
             }).ConfigureAwait(false);

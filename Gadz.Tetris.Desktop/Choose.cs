@@ -2,8 +2,8 @@
 using System.Windows.Forms;
 
 namespace Gadz.Tetris.Desktop {
-    public partial class Inicio : Form {
-        public Inicio() {
+    public partial class Choose : Form {
+        public Choose() {
             InitializeComponent();
             cmbEstilo.SelectedIndex = 0;
         }
@@ -12,7 +12,7 @@ namespace Gadz.Tetris.Desktop {
             
             Program.ClassicMode = "BRICK GAME".Equals(cmbEstilo.SelectedItem.ToString(), StringComparison.InvariantCultureIgnoreCase);
 
-            new Jogo(this).Show();
+            new Play(this).Show();
             Hide();
         }
 
@@ -30,7 +30,7 @@ namespace Gadz.Tetris.Desktop {
 
         private void Inicio_KeyDown(object sender, KeyEventArgs e) {
             if(e.KeyCode == Keys.ShiftKey) {
-                Program.Player.ToggleMute();
+                Program.SoundPlayer.ToggleMute();
             }
         }
     }

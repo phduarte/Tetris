@@ -3,6 +3,7 @@ using Gadz.Tetris.Core.DomainModel.Pecas;
 using Gadz.Tetris.Core.DomainModel.Tabuleiros;
 using System;
 using System.Collections.Generic;
+using Gadz.Tetris.Core.DomainModel;
 
 namespace Gadz.Tetris.Core.Services {
 
@@ -16,37 +17,49 @@ namespace Gadz.Tetris.Core.Services {
 
         #region eventos
 
-        public event Atualizou QuandoAtualizar;
-        public event Terminou QuandoTerminar;
-        public event Limpou QuandoLimpar;
-        public event Moveu QuandoMover;
-        public event Correu QuandoDeslizar;
+        public event Atualizou OnRefresh;
+        public event Terminou OnEnd;
+        public event Limpou OnClear;
+        public event Moveu OnMove;
+        public event Correu OnSlide;
 
         #endregion
 
         #region properties
 
         public bool Playing => _tabuleiro.EstaJogando;
-        public int BoardWidth => _tabuleiro.Dimensao.Altura;
-        public int BoardHeight => _tabuleiro.Dimensao.Largura;
-        public int Speed => _tabuleiro.Estatisticas.Velocidade;
+        public int BoardWidth => _tabuleiro.Largura;
+        public int BoardHeight => _tabuleiro.Altura;
+        public int Speed => _tabuleiro.Velocidade;
         public int Lines => _tabuleiro.Linhas;
         public Bloco[,] Matrix => _tabuleiro.Matriz;
-        public TimeSpan Time => _tabuleiro.Estatisticas.Duracao;
-        public int Score => _tabuleiro.Estatisticas.Pontos;
+        public TimeSpan Time => _tabuleiro.Duracao;
+        public int Score => _tabuleiro.Pontos;
         public int Level => _tabuleiro.Nivel;
+        public ITabuleiroEstado State => _tabuleiro.Estado;
+        public Ponto CurrentPiecePosition => _tabuleiro.PecaAtual.Posicao;
+        public ITabuleiro CurrentBoard => _tabuleiro;
 
         #endregion
 
         #region constructors
 
         private GameController(int largura, int altura) {
+
+            if(largura < 10) {
+                throw new ArgumentException(nameof(largura));
+            }
+
+            if(altura < 10) {
+                throw new ArgumentException(nameof(altura));
+            }
+
             _tabuleiro = new Tabuleiro(new EstatisticasRepository(), largura, altura);
-            _tabuleiro.QuandoAtualizar += () => { QuandoAtualizar?.Invoke(); };
-            _tabuleiro.QuandoTerminar += () => { QuandoTerminar?.Invoke(); };
-            _tabuleiro.QuandoLimpar += () => { QuandoLimpar?.Invoke(); };
-            _tabuleiro.QuandoMover += () => { QuandoMover?.Invoke(); };
-            _tabuleiro.QuandoDeslizar += () => { QuandoDeslizar?.Invoke(); };
+            _tabuleiro.QuandoAtualizar += () => { OnRefresh?.Invoke(); };
+            _tabuleiro.QuandoTerminar += () => { OnEnd?.Invoke(); };
+            _tabuleiro.QuandoLimpar += () => { OnClear?.Invoke(); };
+            _tabuleiro.QuandoMover += () => { OnMove?.Invoke(); };
+            _tabuleiro.QuandoDeslizar += () => { OnSlide?.Invoke(); };
         }
 
         #endregion
@@ -57,11 +70,6 @@ namespace Gadz.Tetris.Core.Services {
 
         public void SmashDown() {
             _tabuleiro.Cair();
-        }
-
-        public static GameController Load(string id) {
-            //_tabuleiro = _repository.Load(id);
-            return new GameController(20,10);
         }
 
         public void RunRight()=> _tabuleiro.CorrerDireita();

@@ -31,7 +31,7 @@ namespace Gadz.Tetris.Core.DomainModel.Pecas {
             Posicao = clone.Posicao;
             Tipo = clone.Tipo;
             Tabuleiro = clone.Tabuleiro;
-            Cor = PegarCor();
+            Cor = clone.Cor;
         }
 
         #endregion
@@ -57,9 +57,9 @@ namespace Gadz.Tetris.Core.DomainModel.Pecas {
                 }
             }
 
-            if(maxX > Tabuleiro.Dimensao.Largura-1) {
+            if(maxX > Tabuleiro.Largura-1) {
 
-                int excesso = maxX - (Tabuleiro.Dimensao.Largura - 1);
+                int excesso = maxX - (Tabuleiro.Largura - 1);
                 for (int i = 0; i < excesso; i++) {
                     MoverEsquerda();
                 }
@@ -92,8 +92,23 @@ namespace Gadz.Tetris.Core.DomainModel.Pecas {
             return Cores.PegarCorPara(Tipo);
         }
 
+        #endregion
+
+        #region overrided methods
+
         public override string ToString() {
             return $"{Tipo.ToString()} ({Forma.ToString()})";
+        }
+
+        public override bool Equals(object obj) {
+            if(obj is IPeca p) {
+                return ToString().Equals(p.ToString());
+            }
+            return false;
+        }
+
+        public override int GetHashCode() {
+            return ToString().GetHashCode();
         }
 
         #endregion

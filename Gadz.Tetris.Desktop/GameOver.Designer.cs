@@ -1,5 +1,5 @@
 ﻿namespace Gadz.Tetris.Desktop {
-    partial class Fim {
+    partial class GameOver {
         /// <summary>
         /// Required designer variable.
         /// </summary>

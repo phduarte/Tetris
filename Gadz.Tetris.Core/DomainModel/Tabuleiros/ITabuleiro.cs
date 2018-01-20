@@ -1,4 +1,5 @@
 ﻿using Gadz.Tetris.Core.DomainModel.Pecas;
+using System;
 using System.Collections.Generic;
 
 namespace Gadz.Tetris.Core.DomainModel.Tabuleiros {
@@ -17,18 +18,20 @@ namespace Gadz.Tetris.Core.DomainModel.Tabuleiros {
 
         #region fields
 
-        Dimensao Dimensao { get; }
         ITabuleiroEstado Estado { get; }
-        Estatisticas Estatisticas { get; }
         Bloco[,] Matriz { get; }
         IPeca PecaAtual { get; }
         IPeca ProximaPeca { get; }
         int Nivel { get; }
         int Linhas { get; }
-        long Duracao { get; }
+        TimeSpan Duracao { get; }
         IList<Bloco> Blocos { get; }
         bool EstaJogando { get; }
         int RecordeMaximo { get; }
+        int Altura { get;  }
+        int Largura { get; }
+        int Velocidade { get; }
+        int Pontos { get; }
 
         #endregion
 

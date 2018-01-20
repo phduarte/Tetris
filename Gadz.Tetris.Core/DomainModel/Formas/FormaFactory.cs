@@ -1,7 +1,7 @@
 ﻿using Gadz.Tetris.Core.DomainModel.Pecas;
 
 namespace Gadz.Tetris.Core.DomainModel.Formas {
-    internal class FormaFactory {
+    public class FormaFactory {
 
         public static Forma Desenhar(TipoPeca tipo, Ponto ponto, int rotacao) {
 

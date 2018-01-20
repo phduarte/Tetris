@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 namespace Gadz.Tetris.Core.DomainModel.Tabuleiros {
-    public class Estatisticas {
+    public class Estatisticas : Entidade {
 
         #region fields
 
@@ -18,7 +18,6 @@ namespace Gadz.Tetris.Core.DomainModel.Tabuleiros {
 
         #region properties
 
-        public Identidade Id { get; private set; }
         public int Linhas { get; private set; }
         public int Pontos { get; private set; }
         public int Nivel { get; private set; }
@@ -27,29 +26,20 @@ namespace Gadz.Tetris.Core.DomainModel.Tabuleiros {
         public int Blocos { get; private set; }
         public TimeSpan Duracao => calcularTempo();
 
-        private TimeSpan calcularTempo() {
-
-            long duracao = 0;
-
-            duracao += _historicoDuracao.Sum(_ => _.Value);
-            if (_startTime.HasValue)
-                duracao += (DateTime.Now - _startTime.Value).Ticks;
-
-            return new TimeSpan(duracao);
-        }
-
         #endregion
 
         #region constructors
 
-        public Estatisticas() {
-            Id = Identidade.New();
+        public Estatisticas() : this(Identidade.New()) {
             Nivel = 1;
             Velocidade = 1000;
+        }
+
+        public Estatisticas(Identidade id) : base(id) {
             _historicoDuracao = new Dictionary<DateTime, long>();
         }
 
-        public Estatisticas(int pontos, int linhas, int nivel, int velocidade, int movimentos, int blocos, long duracao) : this() {
+        public Estatisticas(Identidade id, int pontos, int linhas, int nivel, int velocidade, int movimentos, int blocos, long duracao) : this(id) {
             Pontos = pontos;
             Linhas = linhas;
             Nivel = nivel;
@@ -104,6 +94,17 @@ namespace Gadz.Tetris.Core.DomainModel.Tabuleiros {
         #endregion
 
         #region private methods
+
+        TimeSpan calcularTempo() {
+
+            long duracao = 0;
+
+            duracao += _historicoDuracao.Sum(_ => _.Value);
+            if (_startTime.HasValue)
+                duracao += (DateTime.Now - _startTime.Value).Ticks;
+
+            return new TimeSpan(duracao);
+        }
 
         void ValidarNivel() {
             if (stageLines >= goal) {

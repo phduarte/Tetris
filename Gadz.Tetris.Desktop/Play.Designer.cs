@@ -1,6 +1,6 @@
 ﻿namespace Gadz.Tetris.Desktop {
     
-    partial class Jogo {
+    partial class Play {
         /// <summary>
         /// Required designer variable.
         /// </summary>

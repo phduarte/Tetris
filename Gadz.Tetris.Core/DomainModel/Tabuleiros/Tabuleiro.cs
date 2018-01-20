@@ -31,9 +31,13 @@ namespace Gadz.Tetris.Core.DomainModel.Tabuleiros {
         public IPeca ProximaPeca { get; private set; }
         public int Nivel => Estatisticas.Nivel;
         public int Linhas => Estatisticas.Linhas;
-        public long Duracao => Estatisticas.Duracao.Ticks;
         public IList<Bloco> Blocos => _blocosJogados;
         public int RecordeMaximo { get; private set; }
+        public TimeSpan Duracao => Estatisticas.Duracao;
+        public int Altura => Dimensao.Altura;
+        public int Largura => Dimensao.Largura;
+        public int Velocidade => Estatisticas.Velocidade;
+        public int Pontos => Estatisticas.Pontos;
 
         #endregion
 
@@ -274,19 +278,17 @@ namespace Gadz.Tetris.Core.DomainModel.Tabuleiros {
                     return;
                 } else {
 
-                    lock (PecaAtual) {
-                        TrocarPecaAtual();
+                    TrocarPecaAtual();
 
-                        if (_atingiuTopo) {
-                            Terminar();
-                            return;
-                        }
+                    if (_atingiuTopo) {
+                        Terminar();
+                        return;
                     }
                 }
+            } else {
+                PecaAtual.MoverBaixo();
             }
-
-            PecaAtual.MoverBaixo();
-
+            
             RedefinirMatriz();
             VerificarSePreencheuLinha();
 

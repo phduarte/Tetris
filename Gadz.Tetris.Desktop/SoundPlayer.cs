@@ -5,30 +5,30 @@ using System.Text;
 namespace Gadz.Tetris.Desktop {
 
 
-    public class Player {
+    public class SoundPlayer {
         
         public bool Mute { get; private set; }
 
         [DllImport("winmm.dll")]
         static extern Int32 mciSendString(string command, StringBuilder buffer, int bufferSize, IntPtr hwndCallback);
 
-        public Player() {
-            mciSendString(@"open Sons\Intro.wav type waveaudio alias intro", null, 0, IntPtr.Zero);
-            mciSendString(@"open Sons\Clean.wav type waveaudio alias clean", null, 0, IntPtr.Zero);
-            mciSendString(@"open Sons\Move.wav type waveaudio alias move", null, 0, IntPtr.Zero);
-            mciSendString(@"open Sons\Run.wav type waveaudio alias run", null, 0, IntPtr.Zero);
-            mciSendString(@"open Sons\Ending.wav type waveaudio alias ending", null, 0, IntPtr.Zero);
-            mciSendString(@"open Sons\Dock.wav type waveaudio alias dock", null, 0, IntPtr.Zero);
+        public SoundPlayer() {
+            mciSendString(@"open Sounds\Start.wav type waveaudio alias intro", null, 0, IntPtr.Zero);
+            mciSendString(@"open Sounds\Clear.wav type waveaudio alias clean", null, 0, IntPtr.Zero);
+            mciSendString(@"open Sounds\Move.wav type waveaudio alias move", null, 0, IntPtr.Zero);
+            mciSendString(@"open Sounds\Run.wav type waveaudio alias run", null, 0, IntPtr.Zero);
+            mciSendString(@"open Sounds\Ending.wav type waveaudio alias ending", null, 0, IntPtr.Zero);
+            mciSendString(@"open Sounds\Dock.wav type waveaudio alias dock", null, 0, IntPtr.Zero);
         }
 
-        public void Intro() {
+        public void Start() {
             if (!Mute) {
                 mciSendString(@"stop ending", null, 0, IntPtr.Zero);
                 mciSendString(@"play intro from 0", null, 0, IntPtr.Zero);
             }
         }
 
-        public void Clean() {
+        public void Clear() {
             if (!Mute) {
                 mciSendString(@"play clean from 0", null, 0, IntPtr.Zero);
             }
@@ -46,7 +46,7 @@ namespace Gadz.Tetris.Desktop {
             }
         }
 
-        public void Ending() {
+        public void End() {
             if (!Mute) {
                 mciSendString(@"stop intro", null, 0, IntPtr.Zero);
                 mciSendString(@"play ending from 0", null, 0, IntPtr.Zero);
