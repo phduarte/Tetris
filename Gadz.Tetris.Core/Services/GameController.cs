@@ -55,11 +55,11 @@ namespace Gadz.Tetris.Core.Services {
             }
 
             _tabuleiro = new Tabuleiro(new EstatisticasRepository(), largura, altura);
-            _tabuleiro.QuandoAtualizar += () => { OnRefresh?.Invoke(); };
-            _tabuleiro.QuandoTerminar += () => { OnEnd?.Invoke(); };
-            _tabuleiro.QuandoLimpar += () => { OnClear?.Invoke(); };
-            _tabuleiro.QuandoMover += () => { OnMove?.Invoke(); };
-            _tabuleiro.QuandoDeslizar += () => { OnSlide?.Invoke(); };
+            _tabuleiro.QuandoAtualizar += ()=> { OnRefresh?.Invoke(); };
+            _tabuleiro.QuandoTerminar += ()=> { OnEnd?.Invoke();  };
+            _tabuleiro.QuandoLimpar += ()=> { OnClear?.Invoke(); };
+            _tabuleiro.QuandoMover += ()=> { OnMove?.Invoke(); };
+            _tabuleiro.QuandoDeslizar += ()=> { OnSlide?.Invoke(); };
         }
 
         #endregion
@@ -96,6 +96,8 @@ namespace Gadz.Tetris.Core.Services {
         public void Rotate()=> _tabuleiro.Rotacionar();
 
         public void Continue()=> _tabuleiro.Continuar();
+
+        public void Restart() => _tabuleiro.Reiniciar();
 
         public IEnumerable<Bloco> GetActualBlocks()=> _tabuleiro.PecaAtual.Blocos;
 
