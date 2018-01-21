@@ -1,4 +1,5 @@
 ﻿using Gadz.Tetris.Core.DomainModel.Pecas;
+using System;
 
 namespace Gadz.Tetris.Core.DomainModel.Formas {
     public class FormaFactory {
@@ -30,7 +31,7 @@ namespace Gadz.Tetris.Core.DomainModel.Formas {
                     return new TetraminoZ(ponto, rotacao, cor);
             }
 
-            return null;
+            throw new NotImplementedException();
         }
     }
 }

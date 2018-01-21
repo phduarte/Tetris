@@ -73,6 +73,16 @@ namespace Gadz.Tetris.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap BG_FADED {
+            get {
+                object obj = ResourceManager.GetObject("BG_FADED", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap BLOCK_BLUE {
             get {
                 object obj = ResourceManager.GetObject("BLOCK_BLUE", resourceCulture);

@@ -64,6 +64,14 @@ namespace Gadz.Tetris.Desktop {
             }
         }
 
+        public void TurnSoundOn() {
+            Mute = false;
+        }
+
+        public void TurnSoundOff() {
+            Mute = true;
+        }
+
         public void Dock() {
             if (!Mute) {
                 mciSendString(@"play dock from 0", null, 0, IntPtr.Zero);

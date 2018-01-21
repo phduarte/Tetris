@@ -22,14 +22,14 @@ namespace Gadz.Tetris.Core.CrossCutting.Texto {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Jogo {
+    public class Jogo_pt {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Jogo() {
+        internal Jogo_pt() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Gadz.Tetris.Core.CrossCutting.Texto {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Gadz.Tetris.Core.CrossCutting.Texto.Jogo", typeof(Jogo).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Gadz.Tetris.Core.CrossCutting.Texto.Jogo-pt", typeof(Jogo_pt).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,7 +61,7 @@ namespace Gadz.Tetris.Core.CrossCutting.Texto {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ajuda.
+        ///   Looks up a localized string similar to Help.
         /// </summary>
         public static string Ajuda {
             get {
@@ -70,7 +70,7 @@ namespace Gadz.Tetris.Core.CrossCutting.Texto {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Escolha o estilo.
+        ///   Looks up a localized string similar to Choose the style.
         /// </summary>
         public static string EscolheEstilo {
             get {
@@ -79,7 +79,7 @@ namespace Gadz.Tetris.Core.CrossCutting.Texto {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Iniciar.
+        ///   Looks up a localized string similar to Start.
         /// </summary>
         public static string Iniciar {
             get {
@@ -88,7 +88,7 @@ namespace Gadz.Tetris.Core.CrossCutting.Texto {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linhas.
+        ///   Looks up a localized string similar to Lines.
         /// </summary>
         public static string Linhas {
             get {
@@ -97,7 +97,7 @@ namespace Gadz.Tetris.Core.CrossCutting.Texto {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nível.
+        ///   Looks up a localized string similar to Level.
         /// </summary>
         public static string Nivel {
             get {
@@ -115,7 +115,7 @@ namespace Gadz.Tetris.Core.CrossCutting.Texto {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Paused.
+        ///   Looks up a localized string similar to Pausado.
         /// </summary>
         public static string Pausado {
             get {
@@ -124,7 +124,7 @@ namespace Gadz.Tetris.Core.CrossCutting.Texto {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pontos.
+        ///   Looks up a localized string similar to Score.
         /// </summary>
         public static string Pontuacao {
             get {
@@ -133,7 +133,7 @@ namespace Gadz.Tetris.Core.CrossCutting.Texto {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Press ENTER to continue.
+        ///   Looks up a localized string similar to Pressione ENTER para continuar.
         /// </summary>
         public static string PressioneEnterParaContinuar {
             get {
@@ -142,7 +142,7 @@ namespace Gadz.Tetris.Core.CrossCutting.Texto {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Press any key to continue.
+        ///   Looks up a localized string similar to Pressione qualquer tecla para continuar.
         /// </summary>
         public static string PressioneParaContinuar {
             get {
@@ -151,7 +151,7 @@ namespace Gadz.Tetris.Core.CrossCutting.Texto {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Próximo.
+        ///   Looks up a localized string similar to Next.
         /// </summary>
         public static string Proximo {
             get {
@@ -160,7 +160,7 @@ namespace Gadz.Tetris.Core.CrossCutting.Texto {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sobre.
+        ///   Looks up a localized string similar to About.
         /// </summary>
         public static string Sobre {
             get {
@@ -169,7 +169,7 @@ namespace Gadz.Tetris.Core.CrossCutting.Texto {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Som desligado.
+        ///   Looks up a localized string similar to Sound Off.
         /// </summary>
         public static string SomDesligado {
             get {
@@ -178,7 +178,7 @@ namespace Gadz.Tetris.Core.CrossCutting.Texto {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Som ligado.
+        ///   Looks up a localized string similar to Sound On.
         /// </summary>
         public static string SomLigado {
             get {
@@ -187,7 +187,7 @@ namespace Gadz.Tetris.Core.CrossCutting.Texto {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tempo.
+        ///   Looks up a localized string similar to Time.
         /// </summary>
         public static string Tempo {
             get {
@@ -196,7 +196,7 @@ namespace Gadz.Tetris.Core.CrossCutting.Texto {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Aperte SHIFT para ligar ou desligar o som.
+        ///   Looks up a localized string similar to Press SHIFT to turn the sound on or off.
         /// </summary>
         public static string ToggleSoundKey {
             get {
@@ -205,7 +205,7 @@ namespace Gadz.Tetris.Core.CrossCutting.Texto {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Velocidade.
+        ///   Looks up a localized string similar to Speed.
         /// </summary>
         public static string Velocidade {
             get {

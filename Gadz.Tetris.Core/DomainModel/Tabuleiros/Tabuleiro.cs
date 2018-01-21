@@ -119,13 +119,12 @@ namespace Gadz.Tetris.Core.DomainModel.Tabuleiros {
         }
 
         public void Iniciar() {
-
-            Estado = new TabuleiroEstadoJogando();
             PecaAtual = CriarBlocoAleatorio();
             ProximaPeca = CriarBlocoAleatorio();
             Estatisticas.Iniciar();
+            RedefinirMatriz();
+            Estado = new TabuleiroEstadoJogando();
             AtualizarAsync();
-            Avaliar();
         }
 
         public void Reiniciar() {
@@ -328,10 +327,9 @@ namespace Gadz.Tetris.Core.DomainModel.Tabuleiros {
         void AtualizarAsync() {
 
             new Thread(() => {
-
                 while (EstaJogando) {
-                    Avaliar();
                     Thread.Sleep(Estatisticas.Velocidade);
+                    Avaliar();
                 }
             }){ IsBackground = true }.Start();
         }
