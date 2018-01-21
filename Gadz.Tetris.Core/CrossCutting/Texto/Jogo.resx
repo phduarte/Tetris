@@ -117,25 +117,55 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Ajuda" xml:space="preserve">
+    <value>Ajuda</value>
+  </data>
+  <data name="EscolheEstilo" xml:space="preserve">
+    <value>Escolha o estilo</value>
+  </data>
+  <data name="Iniciar" xml:space="preserve">
+    <value>Iniciar</value>
+  </data>
   <data name="Linhas" xml:space="preserve">
-    <value>Lines</value>
+    <value>Linhas</value>
   </data>
   <data name="Nivel" xml:space="preserve">
-    <value>Level</value>
+    <value>Nível</value>
   </data>
   <data name="Nome" xml:space="preserve">
     <value>Tetris</value>
   </data>
+  <data name="Pausado" xml:space="preserve">
+    <value>Paused</value>
+  </data>
   <data name="Pontuacao" xml:space="preserve">
-    <value>Score</value>
+    <value>Pontos</value>
+  </data>
+  <data name="PressioneEnterParaContinuar" xml:space="preserve">
+    <value>Press ENTER to continue</value>
+  </data>
+  <data name="PressioneParaContinuar" xml:space="preserve">
+    <value>Press any key to continue</value>
   </data>
   <data name="Proximo" xml:space="preserve">
-    <value>Next</value>
+    <value>Próximo</value>
+  </data>
+  <data name="Sobre" xml:space="preserve">
+    <value>Sobre</value>
+  </data>
+  <data name="SomDesligado" xml:space="preserve">
+    <value>Som desligado</value>
+  </data>
+  <data name="SomLigado" xml:space="preserve">
+    <value>Som ligado</value>
   </data>
   <data name="Tempo" xml:space="preserve">
-    <value>Time</value>
+    <value>Tempo</value>
+  </data>
+  <data name="ToggleSoundKey" xml:space="preserve">
+    <value>Aperte SHIFT para ligar ou desligar o som</value>
   </data>
   <data name="Velocidade" xml:space="preserve">
-    <value>Speed</value>
+    <value>Velocidade</value>
   </data>
 </root>

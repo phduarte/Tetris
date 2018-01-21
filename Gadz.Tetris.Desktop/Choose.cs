@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
+using Texto = Gadz.Tetris.Core.CrossCutting.Texto.Jogo;
 
 namespace Gadz.Tetris.Desktop {
     public partial class Choose : Form {
         public Choose() {
             InitializeComponent();
+            SetScreenText();
             cmbEstilo.SelectedIndex = 0;
         }
 
@@ -30,8 +32,26 @@ namespace Gadz.Tetris.Desktop {
 
         private void Inicio_KeyDown(object sender, KeyEventArgs e) {
             if(e.KeyCode == Keys.ShiftKey) {
-                Program.SoundPlayer.ToggleMute();
+                chkSound.Checked = !chkSound.Checked;
             }
+        }
+
+        private void chkSound_CheckedChanged(object sender, EventArgs e) {
+            chkSound.Text = chkSound.Checked ? Texto.SomLigado : Texto.SomDesligado;
+            if(chkSound.Checked) {
+                Program.SoundPlayer.TurnSoundOn();
+            } else {
+                Program.SoundPlayer.TurnSoundOff();
+            }
+        }
+
+        void SetScreenText() {
+            btnStart.Text = Texto.Iniciar;
+            lblChoose.Text = Texto.EscolheEstilo;
+            lbSoundKey.Text = Texto.ToggleSoundKey;
+            chkSound.Text = Texto.SomLigado;
+            lnkAbout.Text = Texto.Sobre;
+            lnkHelp.Text = Texto.Ajuda;
         }
     }
 }

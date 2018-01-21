@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Gadz.Tetris.Core.DomainModel.Pecas {
     public class Cores {
@@ -17,7 +16,7 @@ namespace Gadz.Tetris.Core.DomainModel.Pecas {
         public static CorPeca PegarCorPara(TipoPeca index) {
             try {
                 return _cores[index];
-            } catch (IndexOutOfRangeException) {
+            } catch (KeyNotFoundException) {
                 return CorPeca.TRANSPARENTE;
             }
         }

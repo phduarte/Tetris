@@ -81,6 +81,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Resources\GAME_OVER_LAYER.png" />
+    <None Include="Resources\BG_FADED.png" />
     <Content Include="Sounds\Clear.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
