@@ -1,5 +1,6 @@
 ﻿using Gadz.Tetris.Core.DomainModel.Pecas;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Linq;
 
 namespace Gadz.Tetris.Core.DomainModel.Formas {
@@ -52,6 +53,12 @@ namespace Gadz.Tetris.Core.DomainModel.Formas {
             var forma = FormaFactory.Desenhar(TipoPeca.Z, new Ponto(), 0);
             Assert.AreEqual(4, forma.Blocos.Count());
             Assert.AreEqual("1+0,1+1,0+1,0+2", forma.ToString());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotImplementedException))]
+        public void NaoDeveDesenharNenhumaForma() {
+            var forma = FormaFactory.Desenhar((TipoPeca)8, new Ponto(), 0);
         }
     }
 }
