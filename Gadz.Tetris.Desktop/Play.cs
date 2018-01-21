@@ -56,6 +56,8 @@ namespace Gadz.Tetris.Desktop {
             label5.Text = Texto.Nivel.ToUpper();
             label6.Text = Texto.Velocidade.ToUpper();
             label8.Text = Texto.Proximo.ToUpper();
+            lbPause.Text = Texto.Pausado;
+            lbPauseDescription.Text = Texto.PressioneEnterParaContinuar;
             Text = Texto.Nome.ToUpper();
         }
 
