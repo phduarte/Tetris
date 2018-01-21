@@ -30,6 +30,7 @@ namespace Gadz.Tetris.Desktop {
             _controller = GameController.Create(10, 20);
 
             InitializeComponent();
+            HidePausedScreen();
             SetScreenText();
 
             if (!Program.ClassicMode) {
@@ -39,7 +40,8 @@ namespace Gadz.Tetris.Desktop {
 
             Start();
         }
-        
+
+
         void Start() {
             ListenEvents();
             DrawScreen();
@@ -228,10 +230,14 @@ namespace Gadz.Tetris.Desktop {
                     break;
 
                 case Keys.Enter:
-                    if (_controller.Playing)
+                    if (_controller.Playing) {
                         _controller.Pause();
-                    else
+                        ShowPausedScreen();
+                    }
+                    else {
+                        HidePausedScreen();
                         _controller.Continue();
+                    }
                     break;
 
                 case Keys.ShiftKey:
@@ -259,6 +265,51 @@ namespace Gadz.Tetris.Desktop {
                     f.Font = new Font(pfc.Families[0], actualFontSize, FontStyle.Regular);
                 }
             }
+
+            Cursor.Hide();
+        }
+
+        private void ValidMousePosition() {
+            var left = Left;
+            var right = Left + Width;
+            var top = Top;
+            var down = Top + Height;
+
+            Cursor.Show();
+
+            if (CursorIsOverScreen(left, right, top, down)) {
+                Cursor.Hide();
+            }
+        }
+
+        private static bool CursorIsOverScreen(int left, int right, int top, int down) {
+            var y = Cursor.Position.Y;
+            var x = Cursor.Position.X;
+
+            return y >= top && y <= down && x >= left && x <= right;
+        }
+
+        private void Play_MouseMove(object sender, MouseEventArgs e) {
+            ValidMousePosition();
+        }
+
+        private void Play_Deactivate(object sender, EventArgs e) {
+            if (_controller.Playing) {
+                _controller.Pause();
+                ShowPausedScreen();
+            }
+        }
+
+        void ShowPausedScreen() {
+            picPause.Left = 0;
+            picPause.Top = 0;
+            lbPause.Visible = true;
+            picPause.Visible = true;
+        }
+
+        void HidePausedScreen() {
+            lbPause.Visible = false;
+            picPause.Visible = false;
         }
     }
 }

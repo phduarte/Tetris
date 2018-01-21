@@ -24,7 +24,9 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Play));
             this.mainBoardPanel = new System.Windows.Forms.Panel();
+            this.lbPause = new System.Windows.Forms.Label();
             this.lbLevel = new System.Windows.Forms.Label();
             this.lbLines = new System.Windows.Forms.Label();
             this.lbPoints = new System.Windows.Forms.Label();
@@ -37,72 +39,88 @@
             this.label6 = new System.Windows.Forms.Label();
             this.lbSpeed = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.picPause = new System.Windows.Forms.PictureBox();
+            this.lbPauseDescription = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.picPause)).BeginInit();
+            this.picPause.SuspendLayout();
             this.SuspendLayout();
             // 
-            // board
+            // mainBoardPanel
             // 
             this.mainBoardPanel.BackColor = System.Drawing.Color.Transparent;
             this.mainBoardPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.mainBoardPanel.ForeColor = System.Drawing.Color.Black;
             this.mainBoardPanel.Location = new System.Drawing.Point(0, 0);
-            this.mainBoardPanel.Name = "board";
+            this.mainBoardPanel.Name = "mainBoardPanel";
             this.mainBoardPanel.Size = new System.Drawing.Size(220, 440);
             this.mainBoardPanel.TabIndex = 0;
             // 
-            // lbNivel
+            // lbPause
+            // 
+            this.lbPause.BackColor = System.Drawing.Color.Transparent;
+            this.lbPause.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.lbPause.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbPause.Location = new System.Drawing.Point(0, 150);
+            this.lbPause.Name = "lbPause";
+            this.lbPause.Size = new System.Drawing.Size(340, 76);
+            this.lbPause.TabIndex = 99;
+            this.lbPause.Text = "PAUSADO";
+            this.lbPause.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lbLevel
             // 
             this.lbLevel.BackColor = System.Drawing.Color.Transparent;
             this.lbLevel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbLevel.ForeColor = System.Drawing.Color.Black;
             this.lbLevel.Location = new System.Drawing.Point(236, 266);
-            this.lbLevel.Name = "lbNivel";
+            this.lbLevel.Name = "lbLevel";
             this.lbLevel.Size = new System.Drawing.Size(86, 30);
             this.lbLevel.TabIndex = 0;
             this.lbLevel.Text = "0";
             this.lbLevel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lbLinhas
+            // lbLines
             // 
             this.lbLines.BackColor = System.Drawing.Color.Transparent;
             this.lbLines.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbLines.ForeColor = System.Drawing.Color.Black;
             this.lbLines.Location = new System.Drawing.Point(236, 87);
-            this.lbLines.Name = "lbLinhas";
+            this.lbLines.Name = "lbLines";
             this.lbLines.Size = new System.Drawing.Size(86, 30);
             this.lbLines.TabIndex = 1;
             this.lbLines.Text = "0";
             this.lbLines.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lbPontos
+            // lbPoints
             // 
             this.lbPoints.BackColor = System.Drawing.Color.Transparent;
             this.lbPoints.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbPoints.ForeColor = System.Drawing.Color.Black;
             this.lbPoints.Location = new System.Drawing.Point(236, 24);
-            this.lbPoints.Name = "lbPontos";
+            this.lbPoints.Name = "lbPoints";
             this.lbPoints.Size = new System.Drawing.Size(86, 30);
             this.lbPoints.TabIndex = 2;
             this.lbPoints.Text = "0";
             this.lbPoints.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // painelProximo
+            // nextBlockPanel
             // 
             this.nextBlockPanel.BackColor = System.Drawing.Color.Transparent;
             this.nextBlockPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.nextBlockPanel.ForeColor = System.Drawing.Color.Black;
             this.nextBlockPanel.Location = new System.Drawing.Point(234, 154);
-            this.nextBlockPanel.Name = "painelProximo";
+            this.nextBlockPanel.Name = "nextBlockPanel";
             this.nextBlockPanel.Size = new System.Drawing.Size(88, 88);
             this.nextBlockPanel.TabIndex = 0;
             // 
-            // lbTempo
+            // lbTime
             // 
             this.lbTime.AutoSize = true;
             this.lbTime.BackColor = System.Drawing.Color.Transparent;
             this.lbTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbTime.ForeColor = System.Drawing.Color.Black;
             this.lbTime.Location = new System.Drawing.Point(229, 406);
-            this.lbTime.Name = "lbTempo";
+            this.lbTime.Name = "lbTime";
             this.lbTime.Size = new System.Drawing.Size(96, 25);
             this.lbTime.TabIndex = 2;
             this.lbTime.Text = "00:00:00";
@@ -167,13 +185,13 @@
             this.label6.Text = "SPEED";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lbVelocidade
+            // lbSpeed
             // 
             this.lbSpeed.BackColor = System.Drawing.Color.Transparent;
             this.lbSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbSpeed.ForeColor = System.Drawing.Color.Black;
             this.lbSpeed.Location = new System.Drawing.Point(235, 328);
-            this.lbSpeed.Name = "lbVelocidade";
+            this.lbSpeed.Name = "lbSpeed";
             this.lbSpeed.Size = new System.Drawing.Size(86, 30);
             this.lbSpeed.TabIndex = 8;
             this.lbSpeed.Text = "0";
@@ -191,12 +209,38 @@
             this.label8.Text = "NEXT";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // Jogo
+            // lbPauseDescription
+            // 
+            this.lbPauseDescription.BackColor = System.Drawing.Color.Transparent;
+            this.lbPauseDescription.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.lbPauseDescription.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbPauseDescription.Location = new System.Drawing.Point(0, 215);
+            this.lbPauseDescription.Name = "lbPauseDescription";
+            this.lbPauseDescription.Size = new System.Drawing.Size(340, 43);
+            this.lbPauseDescription.TabIndex = 100;
+            this.lbPauseDescription.Text = "Pressione ENTER para continuar";
+            this.lbPauseDescription.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // picPause
+            // 
+            this.picPause.BackColor = System.Drawing.Color.Transparent;
+            //this.picPause.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("picPause.BackgroundImage")));
+            this.picPause.Controls.Add(this.lbPause);
+            this.picPause.Controls.Add(this.lbPauseDescription);
+            this.picPause.Location = new System.Drawing.Point(0, 0);
+            this.picPause.Name = "picPause";
+            this.picPause.Size = new System.Drawing.Size(340, 440);
+            this.picPause.TabIndex = 11;
+            this.picPause.TabStop = false;
+            // 
+            // Play
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(165)))), ((int)(((byte)(128)))));
             this.ClientSize = new System.Drawing.Size(340, 440);
+            this.Controls.Add(this.picPause);
+            this.Controls.Add(this.mainBoardPanel);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.lbSpeed);
@@ -209,15 +253,18 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.lbPoints);
             this.Controls.Add(this.nextBlockPanel);
-            this.Controls.Add(this.mainBoardPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.KeyPreview = true;
-            this.Name = "Jogo";
+            this.Name = "Play";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Tetris";
+            this.Deactivate += new System.EventHandler(this.Play_Deactivate);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Jogo_FormClosed);
             this.Load += new System.EventHandler(this.Jogo_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Jogo_KeyDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Play_MouseMove);
+            ((System.ComponentModel.ISupportInitialize)(this.picPause)).EndInit();
+            this.picPause.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -238,5 +285,8 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label lbSpeed;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.PictureBox picPause;
+        private System.Windows.Forms.Label lbPause;
+        private System.Windows.Forms.Label lbPauseDescription;
     }
 }

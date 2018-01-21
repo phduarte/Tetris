@@ -40,6 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CrossCutting\Texto\Jogo-pt.Designer.cs">
+      <DependentUpon>Jogo-pt.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="CrossCutting\Texto\Jogo.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -80,6 +85,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <EmbeddedResource Include="CrossCutting\Texto\Jogo-pt.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Jogo-pt.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="CrossCutting\Texto\Jogo.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Jogo.Designer.cs</LastGenOutput>
