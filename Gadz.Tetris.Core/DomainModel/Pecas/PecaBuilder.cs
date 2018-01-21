@@ -6,7 +6,6 @@ namespace Gadz.Tetris.Core.DomainModel.Pecas {
         #region fields
 
         TipoPeca _tipoPeca;
-        CorPeca _corPeca;
         Ponto _posicao;
         int _rotacao;
         ITabuleiro _tabuleiro;
@@ -17,10 +16,6 @@ namespace Gadz.Tetris.Core.DomainModel.Pecas {
 
         public PecaBuilder DoTipo(TipoPeca tipo) {
             _tipoPeca = tipo;
-            return this;
-        }
-        public PecaBuilder ComCor(CorPeca cor) {
-            _corPeca = cor;
             return this;
         }
         public PecaBuilder NaPosicao(Ponto posicao) {
