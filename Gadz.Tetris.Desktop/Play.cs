@@ -20,6 +20,17 @@ namespace Gadz.Tetris.Desktop {
         readonly GameController _controller;
         const int BLOCK_SIZE = 22;
         const string BLOCK_PREFIX = "block";
+        static IDictionary<string, Image> _imageCache = new Dictionary<string, Image> {
+            {string.Empty, Properties.Resources.BLOCK_CLASSIC},
+            {"TRANSPARENTE", Properties.Resources.BLOCK_CLASSIC},
+            {"AMARELO", Properties.Resources.BLOCK_YELLOW},
+            {"VERMELHO", Properties.Resources.BLOCK_RED},
+            {"ROXO", Properties.Resources.BLOCK_PURPLE},
+            {"VERDE", Properties.Resources.BLOCK_GREEN},
+            {"LARANJA", Properties.Resources.BLOCK_ORANGE},
+            {"AZUL", Properties.Resources.BLOCK_BLUE },
+            {"CIANO", Properties.Resources.BLOCK_CYAN }
+        };
 
         #endregion
 
@@ -32,6 +43,7 @@ namespace Gadz.Tetris.Desktop {
             InitializeComponent();
             HidePausedScreen();
             SetScreenText();
+            ListenEvents();
 
             if (!Program.ClassicMode) {
                 mainBoardPanel.BackgroundImage = Properties.Resources.BACKGROUND_TETRIS;
@@ -43,7 +55,7 @@ namespace Gadz.Tetris.Desktop {
 
 
         void Start() {
-            ListenEvents();
+            _controller.Start();
             DrawScreen();
             PaintScreen();
             PlayStartSound();
@@ -64,7 +76,6 @@ namespace Gadz.Tetris.Desktop {
         }
 
         void ListenEvents() {
-            _controller.Start();
             _controller.OnRefresh += PaintScreen;
             _controller.OnRefresh += UpdateScreenTextAsync;
             _controller.OnEnd += ExitAsync;
@@ -88,6 +99,7 @@ namespace Gadz.Tetris.Desktop {
 
         async void ExitAsync() {
             await Task.Factory.StartNew(() => {
+                MouseMove -= Play_MouseMove;
                 Program.SoundPlayer.End();
                 Hide();
                 new GameOver().ShowDialog();
@@ -161,18 +173,15 @@ namespace Gadz.Tetris.Desktop {
 
         static Image GetBackgroundImage(string cor) {
 
-            if (!(cor == "TRANSPARENTE" || cor == string.Empty) && Program.ClassicMode) return Properties.Resources.BLOCK_CLASSIC;
-            if (cor == "AMARELO") return Properties.Resources.BLOCK_YELLOW;
-            if (cor == "VERMELHO") return Properties.Resources.BLOCK_RED;
-            if (cor == "ROXO") return Properties.Resources.BLOCK_PURPLE;
-            if (cor == "VERDE") return Properties.Resources.BLOCK_GREEN;
-            if (cor == "LARANJA") return Properties.Resources.BLOCK_ORANGE;
-            if (cor == "AZUL") return Properties.Resources.BLOCK_BLUE;
-            if (cor == "CIANO") return Properties.Resources.BLOCK_CYAN;
-
-            if (Program.ClassicMode) return Properties.Resources.BLOCK_CLASSIC_FADED;
-
-            return null;
+            if (Program.ClassicMode) {
+                if("TRANSPARENTE".Equals(cor) || string.Empty.Equals(cor)) {
+                    return Properties.Resources.BLOCK_CLASSIC_FADED;
+                } else {
+                    return Properties.Resources.BLOCK_CLASSIC;
+                }
+            } else {
+                return _imageCache[cor];
+            }
         }
 
         void PaintBlock(IEnumerable<Bloco> blocos, Panel panel) {
@@ -286,7 +295,7 @@ namespace Gadz.Tetris.Desktop {
             var y = Cursor.Position.Y;
             var x = Cursor.Position.X;
 
-            return y >= top && y <= down && x >= left && x <= right;
+            return (y >= top && y <= down) && (x >= left && x <= right);
         }
 
         private void Play_MouseMove(object sender, MouseEventArgs e) {
