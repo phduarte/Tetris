@@ -22,7 +22,7 @@ Neste projeto, opto por isolar a Interface e manter uma tríade (Domain, Infra e
 Normalmente quando se fala em DDD, já vem a cabeça que é só criar uma Class Library pro Domain, uma pra Infra, uma pra Application e um projeto de GUI pra Presentation e o DDD está feito.
 Na verdade, tentarei ir um pouco além disso. Gostaria de dar mais expressividade para nossa estrutura e explorar melhor alguns conceitos de DDD.
 
-Na fase de arquitetura propriamente dita é fundamental compreender e respeitar o que a solução em palta realmente necessita. Ter um "Template de DDD", uma estrutura pré-definida é simplesmente uma receita de bolo, uma bala de prata. O importante aqui é compreender a metodologia, os benefícios de cada prática, princípio ou padrão para ter libertade de arquiteturar uma solução.
+Na fase de arquitetura propriamente dita é fundamental compreender e respeitar o que a solução em pauta realmente necessita. Ter um "Template de DDD", uma estrutura pré-definida é simplesmente uma receita de bolo, uma bala de prata. O importante aqui é compreender a metodologia, os benefícios de cada prática, princípio ou padrão para ter libertade de arquiteturar uma solução.
 
 Para esse projeto tentarei utilizar práticas de DDD que lhe são cabíveis, mas não todas.
 Tentei aplicar aqui algumas práticas apesar de não termos complexidade o suficiente para vermos níveis mais avançados de arquitetura, mas teremos uma boa iniciação nas suas práticas básicas, **Modelagem do Domínio** e **Linguagem Ubíqua**.
