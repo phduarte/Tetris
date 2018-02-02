@@ -181,7 +181,7 @@ namespace Gadz.Tetris.Core.DomainModel.Tabuleiros {
 
         bool PodeRotacionar(IPeca peca) {
 
-            if (!Estado.PodeMovimentarBloco(this)) {
+            if (!Estado.PodeMovimentarBloco) {
                 return false;
             }
 
@@ -190,7 +190,7 @@ namespace Gadz.Tetris.Core.DomainModel.Tabuleiros {
 
         bool PodeMoverParaEsquerda(IPeca peca) {
 
-            if (!Estado.PodeMovimentarBloco(this))
+            if (!Estado.PodeMovimentarBloco)
                 return false;
 
             var novaPosicao = new Ponto(peca.Posicao.X - 1, peca.Posicao.Y);
@@ -213,7 +213,7 @@ namespace Gadz.Tetris.Core.DomainModel.Tabuleiros {
 
         bool PodeMoverParaDireita(IPeca peca) {
 
-            if (!Estado.PodeMovimentarBloco(this))
+            if (!Estado.PodeMovimentarBloco)
                 return false;
 
             var novaPosicao = new Ponto(peca.Posicao.X + 1, peca.Posicao.Y);
@@ -236,7 +236,7 @@ namespace Gadz.Tetris.Core.DomainModel.Tabuleiros {
 
         bool PodeMoverPraBaixo(IPeca peca) {
 
-            if (!Estado.PodeMovimentarBloco(this))
+            if (!Estado.PodeMovimentarBloco)
                 return false;
 
             var novaPosicao = new Ponto(peca.Posicao.X, peca.Posicao.Y + 1);

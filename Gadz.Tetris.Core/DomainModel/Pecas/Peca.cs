@@ -12,13 +12,13 @@ namespace Gadz.Tetris.Core.DomainModel.Pecas {
         public Ponto Posicao { get; private set; }
         public TipoPeca Tipo { get; private set; }
         public ITabuleiro Tabuleiro { get; private set; }
-        public Bloco[] Blocos => Forma.Blocos??Forma.Blocos;
+        public Bloco[] Blocos => Forma.Blocos;
 
         #endregion
 
         #region constructors
 
-        internal Peca(TipoPeca tipo, Ponto posicao, int rotacao, ITabuleiro tabuleiro) {
+        public Peca(TipoPeca tipo, Ponto posicao, int rotacao, ITabuleiro tabuleiro) {
             Tipo = tipo;
             Posicao = posicao;
             Tabuleiro = tabuleiro;
@@ -26,7 +26,7 @@ namespace Gadz.Tetris.Core.DomainModel.Pecas {
             Cor = PegarCor();
         }
 
-        internal Peca(IPeca clone) {
+        private Peca(IPeca clone) {
             Rotacao = clone.Rotacao;
             Posicao = clone.Posicao;
             Tipo = clone.Tipo;
