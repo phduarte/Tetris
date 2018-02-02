@@ -171,6 +171,8 @@
             this.Name = "Choose";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Inicio";
+            this.Load += new System.EventHandler(this.Choose_Load);
+            this.Shown += new System.EventHandler(this.Choose_Shown);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Inicio_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();

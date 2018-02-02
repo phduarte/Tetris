@@ -32,6 +32,7 @@ namespace Gadz.Tetris.Core.DomainModel.Tabuleiros {
         int Largura { get; }
         int Velocidade { get; }
         int Pontos { get; }
+        int FrequenciaDeAtualizacao { get; }
 
         #endregion
 

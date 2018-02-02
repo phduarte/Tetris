@@ -154,4 +154,25 @@
   <data name="BG_FADED" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BG_FADED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Clear" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Clear.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Dock" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Dock.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Ending" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Ending.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="LevelUp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\LevelUp.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Move" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Move.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Run" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Run.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Start" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Start.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

@@ -53,5 +53,13 @@ namespace Gadz.Tetris.Desktop {
             lnkAbout.Text = Texto.Sobre;
             lnkHelp.Text = Texto.Ajuda;
         }
+
+        private void Choose_Load(object sender, EventArgs e) {
+            Cursor.Show();
+        }
+
+        private void Choose_Shown(object sender, EventArgs e) {
+            Cursor.Show();
+        }
     }
 }
