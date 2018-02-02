@@ -3,7 +3,6 @@ using Gadz.Tetris.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -173,14 +172,10 @@ namespace Gadz.Tetris.Desktop {
 
         static Image GetBackgroundImage(string cor) {
 
-            if (Program.ClassicMode) {
-                if("TRANSPARENTE".Equals(cor) || string.Empty.Equals(cor)) {
-                    return Properties.Resources.BLOCK_CLASSIC_FADED;
-                } else {
-                    return Properties.Resources.BLOCK_CLASSIC;
-                }
+            if ("TRANSPARENTE".Equals(cor) || string.Empty.Equals(cor)) {
+                return Program.ClassicMode ? Properties.Resources.BLOCK_CLASSIC_FADED : null;
             } else {
-                return _imageCache[cor];
+                return Program.ClassicMode ? Properties.Resources.BLOCK_CLASSIC : _imageCache[cor];
             }
         }
 
@@ -242,8 +237,7 @@ namespace Gadz.Tetris.Desktop {
                     if (_controller.Playing) {
                         _controller.Pause();
                         ShowPausedScreen();
-                    }
-                    else {
+                    } else {
                         HidePausedScreen();
                         _controller.Continue();
                     }
@@ -264,17 +258,6 @@ namespace Gadz.Tetris.Desktop {
         }
 
         private void Jogo_Load(object sender, EventArgs e) {
-
-            using (var pfc = new PrivateFontCollection()) {
-
-                pfc.AddFontFile(@"Fonts\digital_counter_7.ttf");
-
-                foreach (Control f in Controls) {
-                    var actualFontSize = f.Font.Size;
-                    f.Font = new Font(pfc.Families[0], actualFontSize, FontStyle.Regular);
-                }
-            }
-
             Cursor.Hide();
         }
 

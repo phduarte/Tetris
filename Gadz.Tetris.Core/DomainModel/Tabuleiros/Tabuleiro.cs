@@ -38,6 +38,7 @@ namespace Gadz.Tetris.Core.DomainModel.Tabuleiros {
         public int Largura => Dimensao.Largura;
         public int Velocidade => Estatisticas.Velocidade;
         public int Pontos => Estatisticas.Pontos;
+        public int FrequenciaDeAtualizacao => Estatisticas.Velocidade <= 1000 ? 1000 - Estatisticas.Velocidade : 0;
 
         #endregion
 
@@ -287,7 +288,7 @@ namespace Gadz.Tetris.Core.DomainModel.Tabuleiros {
             } else {
                 PecaAtual.MoverBaixo();
             }
-            
+
             RedefinirMatriz();
             VerificarSePreencheuLinha();
 
@@ -328,18 +329,18 @@ namespace Gadz.Tetris.Core.DomainModel.Tabuleiros {
 
             new Thread(() => {
                 while (EstaJogando) {
-                    Thread.Sleep(Estatisticas.Velocidade);
+                    Thread.Sleep(FrequenciaDeAtualizacao);
                     Avaliar();
                 }
-            }){ IsBackground = true }.Start();
+            }) { IsBackground = true }.Start();
         }
-
+        
         IPeca CriarBlocoAleatorio() {
             var x = new Random().Next(0, 7);
             var tipo = (TipoPeca)x;
             var rotacao = new Random().Next(0, 4);
             var posicao = new Ponto(0, 0);
-            var peca =  new PecaBuilder().DoTipo(tipo)
+            var peca = new PecaBuilder().DoTipo(tipo)
                 .NaPosicao(posicao)
                 .ComRotacao(rotacao)
                 .NoTabuleiro(this)

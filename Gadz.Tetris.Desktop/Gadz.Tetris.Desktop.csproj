@@ -80,27 +80,9 @@
     <Compile Include="SoundPlayer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="Resources\digital_counter_7.ttf" />
     <None Include="Resources\GAME_OVER_LAYER.png" />
     <None Include="Resources\BG_FADED.png" />
-    <Content Include="Sounds\Clear.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sounds\Dock.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sounds\Ending.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sounds\Start.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sounds\Move.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sounds\LevelUp.wav" />
-    <Content Include="Sounds\Run.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Include="Resources\BACKGROUND_TETRIS.png" />
     <None Include="Resources\BLOCK_CLASSIC_FADED.png" />
     <None Include="Resources\BLOCK_CLASSIC.png" />
@@ -138,9 +120,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Content Include="Fonts\digital_counter_7.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -174,6 +153,27 @@
       <Project>{a4339a4a-68e5-48f0-be05-a51dac5cc569}</Project>
       <Name>Gadz.Tetris.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Clear.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Dock.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ending.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LevelUp.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Move.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Run.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Start.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -7,7 +7,7 @@ namespace Gadz.Tetris.Core.DomainModel.Tabuleiros {
 
         #region fields
 
-        const int INTERVALO_ENTRE_VELOCIDADES = 50;
+        const int INTERVALO_ENTRE_VELOCIDADES = 1;
 
         IDictionary<DateTime, long> _historicoDuracao;
         DateTime? _startTime;
@@ -32,7 +32,7 @@ namespace Gadz.Tetris.Core.DomainModel.Tabuleiros {
 
         public Estatisticas() : this(Identidade.New()) {
             Nivel = 1;
-            Velocidade = 1000;
+            Velocidade = 1;
         }
 
         public Estatisticas(Identidade id) : base(id) {
@@ -116,7 +116,12 @@ namespace Gadz.Tetris.Core.DomainModel.Tabuleiros {
 
         void AumentarNivel() {
             Nivel++;
-            Velocidade -= INTERVALO_ENTRE_VELOCIDADES;
+
+            if (Velocidade == 1)
+                Velocidade = INTERVALO_ENTRE_VELOCIDADES;
+            else {
+                Velocidade += INTERVALO_ENTRE_VELOCIDADES;
+            }
         }
 
         int CalcularPontos(int linhas) {
