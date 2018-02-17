@@ -134,19 +134,21 @@ namespace Gadz.Tetris.Desktop {
 
         async void PaintNextPieceAsync() {
             await Task.Factory.StartNew(() => {
-                for (int y = 0; y < 4; y++) {
-                    for (int x = 0; x < 4; x++) {
-                        PaintBlock(x, y, string.Empty, nextBlockPanel);
-                    }
-                }
-
+                ClearNextPiece();
                 PaintBlock(_controller.GetNextBlocks(), nextBlockPanel);
             });
         }
 
+        void ClearNextPiece() {
+            for (int y = 0; y < 4; y++) {
+                for (int x = 0; x < 4; x++) {
+                    PaintBlock(x, y, string.Empty, nextBlockPanel);
+                }
+            }
+        }
+
         async void PaintBoardAsync() {
             await Task.Factory.StartNew(() => {
-                PaintBlock(_controller.GetActualBlocks(), mainBoardPanel);
                 for (int y = 0; y < _controller.BoardHeight; y++) {
                     for (int x = 0; x < _controller.BoardWidth; x++) {
                         PaintBlock(x, y, _controller.Matrix[x, y].Cor.ToString(), mainBoardPanel);
@@ -261,7 +263,7 @@ namespace Gadz.Tetris.Desktop {
             Cursor.Hide();
         }
 
-        private void ValidMousePosition() {
+        private void HideMouseWhenIsOverScreen() {
             var left = Left;
             var right = Left + Width;
             var top = Top;
@@ -282,7 +284,7 @@ namespace Gadz.Tetris.Desktop {
         }
 
         private void Play_MouseMove(object sender, MouseEventArgs e) {
-            ValidMousePosition();
+            HideMouseWhenIsOverScreen();
         }
 
         private void Play_Deactivate(object sender, EventArgs e) {
