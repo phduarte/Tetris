@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A4339A4A-68E5-48F0-BE05-A51DAC5CC569}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Gadz.Tetris</RootNamespace>
+    <AssemblyName>Gadz.Tetris</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Data\EstatisticasRepository.cs" />
+    <Compile Include="Delegates.cs" />
+    <Compile Include="Model\Entidade.cs" />
+    <Compile Include="Model\Forma.cs" />
+    <Compile Include="Model\FormaFactory.cs" />
+    <Compile Include="Model\Identidade.cs" />
+    <Compile Include="Model\Bloco.cs" />
+    <Compile Include="Model\Cores.cs" />
+    <Compile Include="Model\CoresDasPecas.cs" />
+    <Compile Include="Model\PecaBuilder.cs" />
+    <Compile Include="Model\FormaTetraminoI.cs" />
+    <Compile Include="Model\FormaTetraminoJ.cs" />
+    <Compile Include="Model\FormaTetraminoL.cs" />
+    <Compile Include="Model\FormaTetraminoO.cs" />
+    <Compile Include="Model\FormaTetraminoS.cs" />
+    <Compile Include="Model\FormaTetraminoT.cs" />
+    <Compile Include="Model\FormaTetraminoZ.cs" />
+    <Compile Include="Model\IMovel.cs" />
+    <Compile Include="Model\Peca.cs" />
+    <Compile Include="Model\TiposDePecas.cs" />
+    <Compile Include="Ponto.cs" />
+    <Compile Include="Dimensao.cs" />
+    <Compile Include="Model\Estatisticas.cs" />
+    <Compile Include="Model\ITabuleiro.cs" />
+    <Compile Include="Model\IEstatisticasRepository.cs" />
+    <Compile Include="Model\Tabuleiro.cs" />
+    <Compile Include="Model\ITabuleiroEstado.cs" />
+    <Compile Include="Model\TabuleiroEstadoJogando.cs" />
+    <Compile Include="Model\TabuleiroEstadoPausado.cs" />
+    <Compile Include="Model\TabuleiroEstadoTerminado.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="GameController.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

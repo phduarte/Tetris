@@ -1,12 +1,11 @@
-﻿using Gadz.Tetris.Core.DomainModel.Pecas;
-using Gadz.Tetris.Core.Services;
+﻿using Gadz.Tetris.Model;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Texto = Gadz.Tetris.Core.CrossCutting.Texto.Jogo;
+using Texto = Gadz.Tetris.Resources.Textos.Jogo;
 
 namespace Gadz.Tetris.Desktop {
     public partial class Play : Form {
@@ -45,7 +44,7 @@ namespace Gadz.Tetris.Desktop {
             ListenEvents();
 
             if (!Program.ClassicMode) {
-                mainBoardPanel.BackgroundImage = Properties.Resources.BACKGROUND_TETRIS;
+                mainBoardPanel.BackgroundImage =  Properties.Resources.BACKGROUND_TETRIS;
                 BackColor = Color.White;
             }
 
@@ -201,57 +200,59 @@ namespace Gadz.Tetris.Desktop {
 
         private void Jogo_KeyDown(object sender, KeyEventArgs e) {
             switch (e.KeyCode) {
-                case Keys.Down:
+                case Keys.Down: {
+                        if (e.Control)
+                            _controller.SmashDown();
+                        else
+                            _controller.MoveDown();
 
-                    if (e.Control)
-                        _controller.SmashDown();
-                    else
-                        _controller.MoveDown();
-
-                    break;
-
-                case Keys.Left:
-
-                    if (e.Control)
-                        _controller.RunLeft();
-                    else
-                        _controller.MoveLeft();
-
-                    break;
-                case Keys.Right:
-
-                    if (e.Control)
-                        _controller.RunRight();
-                    else
-                        _controller.MoveRight();
-
-                    break;
-
-                case Keys.Up:
-                    _controller.Rotate();
-                    break;
-
-                case Keys.Escape:
-                    _controller.Exit();
-                    break;
-
-                case Keys.Enter:
-                    if (_controller.Playing) {
-                        _controller.Pause();
-                        ShowPausedScreen();
-                    } else {
-                        HidePausedScreen();
-                        _controller.Continue();
+                        break;
                     }
-                    break;
+                case Keys.Left: {
+                        if (e.Control)
+                            _controller.RunLeft();
+                        else
+                            _controller.MoveLeft();
 
-                case Keys.ShiftKey:
-                    Program.SoundPlayer.ToggleMute();
-                    break;
+                        break;
+                    }
+                case Keys.Right: {
+                        if (e.Control)
+                            _controller.RunRight();
+                        else
+                            _controller.MoveRight();
 
-                case Keys.Space:
-                    _controller.SmashDown();
-                    break;
+                        break;
+                    }
+                case Keys.Up: {
+                        _controller.Rotate();
+                        break;
+                    }
+                case Keys.Escape: {
+                        _controller.Exit();
+                        break;
+                    }
+                case Keys.Enter: {
+                        if (_controller.Playing) {
+                            _controller.Pause();
+                            ShowPausedScreen();
+                        } else {
+                            HidePausedScreen();
+                            _controller.Continue();
+                        }
+                        break;
+                    }
+                case Keys.ShiftKey: {
+                        Program.SoundPlayer.ToggleMute();
+                        break;
+                    }
+                case Keys.Space: {
+                        _controller.SmashDown();
+                        break;
+                    }
+
+                default:
+                    return;
             }
         }
 
