@@ -77,15 +77,14 @@
     <Compile Include="Play.Designer.cs">
       <DependentUpon>Play.cs</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SoundPlayer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="Resources\digital_counter_7.ttf" />
-    <None Include="Resources\GAME_OVER_LAYER.png" />
-    <None Include="Resources\BG_FADED.png" />
-    <None Include="Resources\BACKGROUND_TETRIS.png" />
-    <None Include="Resources\BLOCK_CLASSIC_FADED.png" />
-    <None Include="Resources\BLOCK_CLASSIC.png" />
     <EmbeddedResource Include="About.resx">
       <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>
@@ -103,14 +102,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -128,52 +122,34 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\block_blue.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\block_cyan.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\block_green.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\block_orange.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\block_purple.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\block_red.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\block_yellow.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Gadz.Tetris.Core\Gadz.Tetris.Core.csproj">
+    <ProjectReference Include="..\Gadz.Tetris.Core\Gadz.Tetris.csproj">
       <Project>{a4339a4a-68e5-48f0-be05-a51dac5cc569}</Project>
-      <Name>Gadz.Tetris.Core</Name>
+      <Name>Gadz.Tetris</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Gadz.Tetris.Resources\Gadz.Tetris.Resources.csproj">
+      <Project>{110b4184-4a4c-41f6-b86f-0a96cf1a7e8a}</Project>
+      <Name>Gadz.Tetris.Resources</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Clear.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Dock.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Ending.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\LevelUp.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Move.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Run.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Start.wav" />
+    <EmbeddedResource Include="Imagens\GAME_OVER_LAYER.png" />
+    <EmbeddedResource Include="Imagens\block_yellow.png" />
+    <EmbeddedResource Include="Imagens\block_red.png" />
+    <EmbeddedResource Include="Imagens\block_purple.png" />
+    <EmbeddedResource Include="Imagens\block_orange.png" />
+    <EmbeddedResource Include="Imagens\block_green.png" />
+    <EmbeddedResource Include="Imagens\block_cyan.png" />
+    <EmbeddedResource Include="Imagens\BLOCK_CLASSIC_FADED.png" />
+    <EmbeddedResource Include="Imagens\BLOCK_CLASSIC.png" />
+    <EmbeddedResource Include="Imagens\block_blue.png" />
+    <EmbeddedResource Include="Imagens\BG_FADED.png" />
+    <EmbeddedResource Include="Imagens\BACKGROUND_TETRIS.png" />
+    <Content Include="Sounds\Clear.wav" />
+    <Content Include="Sounds\Dock.wav" />
+    <Content Include="Sounds\Ending.wav" />
+    <Content Include="Sounds\Move.wav" />
+    <Content Include="Sounds\Run.wav" />
+    <Content Include="Sounds\Start.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

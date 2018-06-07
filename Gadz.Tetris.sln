@@ -9,15 +9,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Interfaces", "2. Interfa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gadz.Tetris.Desktop", "Gadz.Tetris.Desktop\Gadz.Tetris.Desktop.csproj", "{873BF7EB-D323-4B5C-BEB6-8C350EFE3447}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0. Docs", "0. Docs", "{E605F3F7-32A7-42C4-B8B9-B3DC40503A9E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{E605F3F7-32A7-42C4-B8B9-B3DC40503A9E}"
 	ProjectSection(SolutionItems) = preProject
 		..\..\Repos\Tetris\LICENSE = ..\..\Repos\Tetris\LICENSE
 		..\..\Repos\Tetris\README.md = ..\..\Repos\Tetris\README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gadz.Tetris.Core", "Gadz.Tetris.Core\Gadz.Tetris.Core.csproj", "{A4339A4A-68E5-48F0-BE05-A51DAC5CC569}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gadz.Tetris", "Gadz.Tetris.Core\Gadz.Tetris.csproj", "{A4339A4A-68E5-48F0-BE05-A51DAC5CC569}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gadz.Tetris.Core.Tests", "Gadz.Tetris.Core.Tests\Gadz.Tetris.Core.Tests.csproj", "{C1F6B572-1C51-4649-A6A7-57A07E46342E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gadz.Tetris.Tests", "Gadz.Tetris.Core.Tests\Gadz.Tetris.Tests.csproj", "{C1F6B572-1C51-4649-A6A7-57A07E46342E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gadz.Tetris.Resources", "Gadz.Tetris.Resources\Gadz.Tetris.Resources.csproj", "{110B4184-4A4C-41F6-B86F-0A96CF1A7E8A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FF2E9013-A7C2-4349-8812-640C24625822}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{988F2508-E5F8-4F20-A270-7A5B92F2EC72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,14 +43,21 @@ Global
 		{C1F6B572-1C51-4649-A6A7-57A07E46342E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1F6B572-1C51-4649-A6A7-57A07E46342E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1F6B572-1C51-4649-A6A7-57A07E46342E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{110B4184-4A4C-41F6-B86F-0A96CF1A7E8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{110B4184-4A4C-41F6-B86F-0A96CF1A7E8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{110B4184-4A4C-41F6-B86F-0A96CF1A7E8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{110B4184-4A4C-41F6-B86F-0A96CF1A7E8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{4E62EBC0-27BF-44CA-AB44-8C4A76338714} = {FF2E9013-A7C2-4349-8812-640C24625822}
+		{A015B636-75A7-4F96-9C3E-2E9306C88A2E} = {FF2E9013-A7C2-4349-8812-640C24625822}
 		{873BF7EB-D323-4B5C-BEB6-8C350EFE3447} = {A015B636-75A7-4F96-9C3E-2E9306C88A2E}
 		{A4339A4A-68E5-48F0-BE05-A51DAC5CC569} = {4E62EBC0-27BF-44CA-AB44-8C4A76338714}
-		{C1F6B572-1C51-4649-A6A7-57A07E46342E} = {4E62EBC0-27BF-44CA-AB44-8C4A76338714}
+		{C1F6B572-1C51-4649-A6A7-57A07E46342E} = {988F2508-E5F8-4F20-A270-7A5B92F2EC72}
+		{110B4184-4A4C-41F6-B86F-0A96CF1A7E8A} = {4E62EBC0-27BF-44CA-AB44-8C4A76338714}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {191B99D4-B21C-425D-9A96-E3FCAF658284}

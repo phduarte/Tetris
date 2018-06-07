@@ -1,5 +1,5 @@
 ﻿using System.Windows.Forms;
-using Texto = Gadz.Tetris.Core.CrossCutting.Texto.Jogo;
+using Texto = Gadz.Tetris.Resources.Textos.Jogo;
 
 namespace Gadz.Tetris.Desktop {
     public partial class GameOver : Form {

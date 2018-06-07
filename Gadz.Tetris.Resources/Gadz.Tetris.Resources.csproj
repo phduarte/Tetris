@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{110B4184-4A4C-41F6-B86F-0A96CF1A7E8A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Gadz.Tetris.Resources</RootNamespace>
+    <AssemblyName>Gadz.Tetris.Resources</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Textos\Jogo-pt.Designer.cs">
+      <DependentUpon>Jogo-pt.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Textos\Jogo.Designer.cs">
+      <DependentUpon>Jogo.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Textos\Jogo-pt.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Jogo-pt.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Textos\Jogo.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Jogo.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Fontes\digital_counter_7.ttf" />
+    <EmbeddedResource Include="Imagens\BACKGROUND_TETRIS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Imagens\BG_FADED.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Imagens\block_blue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Imagens\BLOCK_CLASSIC.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Imagens\BLOCK_CLASSIC_FADED.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Imagens\block_cyan.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Imagens\block_green.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Imagens\block_orange.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Imagens\block_purple.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Imagens\block_red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Imagens\block_yellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Imagens\GAME_OVER_LAYER.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Sons\Clear.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Sons\Dock.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Sons\Ending.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Sons\LevelUp.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Sons\Move.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Sons\Run.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Sons\Start.wav" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
