@@ -299,7 +299,7 @@ namespace Gadz.Tetris.Model {
             //limpar a matriz
             for (int y = 0; y < Dimensao.Altura; y++) {
                 for (int x = 0; x < Dimensao.Largura; x++) {
-                    Matriz[x, y] = new Bloco(x, y, CoresDasPecas.Transparente);
+                    Matriz[x, y] = new Bloco(x, y, CoresDePeca.Transparente);
                 }
             }
 
@@ -328,7 +328,7 @@ namespace Gadz.Tetris.Model {
         
         Peca CriarBlocoAleatorio() {
             var x = new Random().Next(0, 7);
-            var tipo = (TiposDePecas)x;
+            var tipo = (TiposDePeca)x;
             var rotacao = new Random().Next(0, 4);
             var posicao = new Ponto(0, 0);
             var peca = new PecaBuilder().DoTipo(tipo)

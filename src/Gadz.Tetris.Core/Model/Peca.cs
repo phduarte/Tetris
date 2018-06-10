@@ -1,13 +1,25 @@
-﻿namespace Gadz.Tetris.Model {
+﻿using System.Collections.Generic;
+
+namespace Gadz.Tetris.Model {
     public class Peca : IMovel {
+
+        static IDictionary<TiposDePeca, CoresDePeca> _cores = new Dictionary<TiposDePeca, CoresDePeca> {
+                { TiposDePeca.I, CoresDePeca.Ciano },
+                { TiposDePeca.T, CoresDePeca.Roxo},
+                { TiposDePeca.L, CoresDePeca.Laranja},
+                { TiposDePeca.J, CoresDePeca.Azul},
+                { TiposDePeca.O, CoresDePeca.Amarelo},
+                { TiposDePeca.S, CoresDePeca.Verde},
+                { TiposDePeca.Z, CoresDePeca.Vermelho}
+        };
 
         #region properties
 
         public int Rotacao { get; private set; }
-        public CoresDasPecas Cor { get; private set; }
+        public CoresDePeca Cor => PegarCorPara(Tipo);
         public Forma Forma => FormaFactory.Desenhar(Tipo, Posicao, Rotacao);
         public Ponto Posicao { get; private set; }
-        public TiposDePecas Tipo { get; private set; }
+        public TiposDePeca Tipo { get; private set; }
         public ITabuleiro Tabuleiro { get; private set; }
         public Bloco[] Blocos => Forma.Blocos;
 
@@ -15,12 +27,11 @@
 
         #region constructors
 
-        internal Peca(TiposDePecas tipo, Ponto posicao, int rotacao, ITabuleiro tabuleiro) {
+        internal Peca(TiposDePeca tipo, Ponto posicao, int rotacao, ITabuleiro tabuleiro) {
             Tipo = tipo;
             Posicao = posicao;
             Tabuleiro = tabuleiro;
             Rotacao = rotacao;
-            Cor = PegarCor();
         }
 
         private Peca(Peca clone) {
@@ -28,7 +39,6 @@
             Posicao = clone.Posicao;
             Tipo = clone.Tipo;
             Tabuleiro = clone.Tabuleiro;
-            Cor = clone.Cor;
         }
 
         #endregion
@@ -84,9 +94,13 @@
         public Peca Clonar() {
             return new Peca(this);
         }
-
-        CoresDasPecas PegarCor() {
-            return Cores.PegarCorPara(Tipo);
+                
+        public static CoresDePeca PegarCorPara(TiposDePeca index) {
+            try {
+                return _cores[index];
+            } catch (KeyNotFoundException) {
+                return CoresDePeca.Transparente;
+            }
         }
 
         #endregion
