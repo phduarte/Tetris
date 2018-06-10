@@ -3,30 +3,30 @@
 namespace Gadz.Tetris.Model {
     class FormaFactory {
 
-        public static Forma Desenhar(TiposDePecas tipo, Ponto ponto, int rotacao) {
+        public static Forma Desenhar(TiposDePeca tipo, Ponto ponto, int rotacao) {
 
-            var cor = Cores.PegarCorPara(tipo);
+            var cor = Peca.PegarCorPara(tipo);
 
             switch (tipo) {
-                case TiposDePecas.T:
+                case TiposDePeca.T:
                     return new FormaTetraminoT(ponto, rotacao, cor);
 
-                case TiposDePecas.O:
+                case TiposDePeca.O:
                     return new FormaTetraminoO(ponto, cor);
 
-                case TiposDePecas.I:
+                case TiposDePeca.I:
                     return new FormaTetraminoI(ponto, rotacao, cor);
 
-                case TiposDePecas.L:
+                case TiposDePeca.L:
                     return new FormaTetraminoL(ponto, rotacao, cor);
 
-                case TiposDePecas.J:
+                case TiposDePeca.J:
                     return new FormaTetraminoJ(ponto, rotacao, cor);
 
-                case TiposDePecas.S:
+                case TiposDePeca.S:
                     return new FormaTetraminoS(ponto, rotacao, cor);
 
-                case TiposDePecas.Z:
+                case TiposDePeca.Z:
                     return new FormaTetraminoZ(ponto, rotacao, cor);
 
                 default:

@@ -3,7 +3,7 @@
 
         #region fields
 
-        TiposDePecas _tipoPeca;
+        TiposDePeca _tipoPeca;
         Ponto _posicao;
         int _rotacao;
         ITabuleiro _tabuleiro;
@@ -12,7 +12,7 @@
 
         #region methods
 
-        public PecaBuilder DoTipo(TiposDePecas tipo) {
+        public PecaBuilder DoTipo(TiposDePeca tipo) {
             _tipoPeca = tipo;
             return this;
         }

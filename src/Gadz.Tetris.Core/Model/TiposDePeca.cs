@@ -1,5 +1,5 @@
 ﻿namespace Gadz.Tetris.Model {
-    public enum TiposDePecas {
+    public enum TiposDePeca {
         T = 0,
         O,
         L,

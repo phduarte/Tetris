@@ -3,19 +3,19 @@
 
         public Bloco[] Blocos { get; protected set; }
 
-        public static Forma Desenhar(TiposDePecas tipo, Ponto ponto, int rotacao) {
+        public static Forma Desenhar(TiposDePeca tipo, Ponto ponto, int rotacao) {
             return FormaFactory.Desenhar(tipo, ponto, rotacao);
         }
 
-        public static Forma Desenhar(TiposDePecas tipo) {
+        public static Forma Desenhar(TiposDePeca tipo) {
             return Desenhar(tipo, new Ponto(0, 0), 0);
         }
 
-        public static Forma Desenhar(TiposDePecas tipo, Ponto ponto) {
+        public static Forma Desenhar(TiposDePeca tipo, Ponto ponto) {
             return Desenhar(tipo, ponto, 0);
         }
 
-        public static Forma Desenhar(TiposDePecas tipo, int rotacao) {
+        public static Forma Desenhar(TiposDePeca tipo, int rotacao) {
             return Desenhar(tipo, new Ponto(0, 0), rotacao);
         }
 

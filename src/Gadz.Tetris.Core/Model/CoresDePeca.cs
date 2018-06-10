@@ -1,5 +1,5 @@
 ﻿namespace Gadz.Tetris.Model {
-    public enum CoresDasPecas {
+    public enum CoresDePeca {
         Transparente = 0,
         Amarelo,
         Azul,

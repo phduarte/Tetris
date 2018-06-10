@@ -16,7 +16,7 @@ namespace Gadz.Tetris.Model {
             tabuleiro = GameController.Create(10, 20).CurrentBoard;
 
             peca = new PecaBuilder()
-                .DoTipo(TiposDePecas.I)
+                .DoTipo(TiposDePeca.I)
                 .ComRotacao(0)
                 .NoTabuleiro(tabuleiro)
                 .Construir();
@@ -25,9 +25,9 @@ namespace Gadz.Tetris.Model {
         [TestMethod]
         public void DeveInstanciar() {
             Assert.IsNotNull(peca,"A peça não foi instanciada.");
-            Assert.AreEqual(TiposDePecas.I, peca.Tipo, "O tipo da peça não é I");
+            Assert.AreEqual(TiposDePeca.I, peca.Tipo, "O tipo da peça não é I");
             Assert.AreEqual(4, peca.Blocos.Count(), "O tetraminó não possui 4 blocos");
-            Assert.AreEqual(Cores.PegarCorPara(TiposDePecas.I), peca.Cor, "A cor da peça não é amarela");
+            Assert.AreEqual(Peca.PegarCorPara(TiposDePeca.I), peca.Cor, "A cor da peça não é amarela");
             Assert.AreEqual(0, peca.Posicao.X,"A posição da peça no eixo X não é 0.");
             Assert.AreEqual(0, peca.Posicao.Y,"A posição da peça no eixo Y não é 0.");
             Assert.AreEqual(0, peca.Rotacao, "A rotação da peça não é 0.");

@@ -20,14 +20,14 @@ namespace Gadz.Tetris.Desktop {
         const string BLOCK_PREFIX = "block";
         static IDictionary<string, Image> _imageCache = new Dictionary<string, Image> {
             {string.Empty, Properties.Resources.BLOCK_CLASSIC},
-            {"TRANSPARENTE", Properties.Resources.BLOCK_CLASSIC},
-            {"AMARELO", Properties.Resources.BLOCK_YELLOW},
-            {"VERMELHO", Properties.Resources.BLOCK_RED},
-            {"ROXO", Properties.Resources.BLOCK_PURPLE},
-            {"VERDE", Properties.Resources.BLOCK_GREEN},
-            {"LARANJA", Properties.Resources.BLOCK_ORANGE},
-            {"AZUL", Properties.Resources.BLOCK_BLUE },
-            {"CIANO", Properties.Resources.BLOCK_CYAN }
+            {"Transparente", Properties.Resources.BLOCK_CLASSIC},
+            {"Amarelo", Properties.Resources.BLOCK_YELLOW},
+            {"Vermelho", Properties.Resources.BLOCK_RED},
+            {"Roxo", Properties.Resources.BLOCK_PURPLE},
+            {"Verde", Properties.Resources.BLOCK_GREEN},
+            {"Laranja", Properties.Resources.BLOCK_ORANGE},
+            {"Azul", Properties.Resources.BLOCK_BLUE },
+            {"Ciano", Properties.Resources.BLOCK_CYAN }
         };
 
         #endregion
@@ -175,7 +175,7 @@ namespace Gadz.Tetris.Desktop {
 
         static Image GetBackgroundImage(string cor) {
 
-            if ("TRANSPARENTE".Equals(cor) || string.Empty.Equals(cor)) {
+            if ("Transparente".Equals(cor) || string.Empty.Equals(cor)) {
                 return Program.ClassicMode ? Properties.Resources.BLOCK_CLASSIC_FADED : null;
             } else {
                 return Program.ClassicMode ? Properties.Resources.BLOCK_CLASSIC : _imageCache[cor];

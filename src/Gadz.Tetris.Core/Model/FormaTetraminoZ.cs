@@ -1,7 +1,7 @@
 ﻿namespace Gadz.Tetris.Model {
     internal class FormaTetraminoZ : Forma {
         
-        public FormaTetraminoZ(Ponto ponto, int rotacao, CoresDasPecas cor) {
+        public FormaTetraminoZ(Ponto ponto, int rotacao, CoresDePeca cor) {
 
             var pontos = new Bloco[4];
             int x = ponto.X, y = ponto.Y;

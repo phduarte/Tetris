@@ -8,9 +8,9 @@ namespace Gadz.Tetris.Model {
         [TestMethod]
         public void DeveColidir() {
 
-            var blocoA = new Bloco(0, 0, CoresDasPecas.Amarelo);
+            var blocoA = new Bloco(0, 0, CoresDePeca.Amarelo);
 
-            var blocoB = new Bloco(0, 0, CoresDasPecas.Azul);
+            var blocoB = new Bloco(0, 0, CoresDePeca.Azul);
 
             Assert.IsTrue(blocoA.ColideCom(blocoB));
         }
@@ -18,16 +18,16 @@ namespace Gadz.Tetris.Model {
         [TestMethod]
         public void NaoDeveColidir() {
 
-            var blocoA = new Bloco(0, 0, CoresDasPecas.Amarelo);
+            var blocoA = new Bloco(0, 0, CoresDePeca.Amarelo);
 
-            var blocoB = new Bloco(1, 0, CoresDasPecas.Azul);
+            var blocoB = new Bloco(1, 0, CoresDePeca.Azul);
 
             Assert.IsFalse(blocoA.ColideCom(blocoB));
         }
 
         [TestMethod]
         public void DeveInstanciar() {
-            var bloco = new Bloco(1, 2, CoresDasPecas.Transparente);
+            var bloco = new Bloco(1, 2, CoresDePeca.Transparente);
             Assert.AreEqual("1+2", bloco.ToString());
         }
     }
