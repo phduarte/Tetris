@@ -147,6 +147,7 @@
     <Content Include="Sounds\Clear.wav" />
     <Content Include="Sounds\Dock.wav" />
     <Content Include="Sounds\Ending.wav" />
+    <Content Include="Sounds\LevelUp.wav" />
     <Content Include="Sounds\Move.wav" />
     <Content Include="Sounds\Run.wav" />
     <Content Include="Sounds\Start.wav" />
