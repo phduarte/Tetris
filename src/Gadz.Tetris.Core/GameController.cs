@@ -9,7 +9,7 @@ namespace Gadz.Tetris {
 
         #region fields
 
-        ITabuleiro _tabuleiro;
+        Tabuleiro _tabuleiro;
 
         #endregion
 
@@ -36,7 +36,7 @@ namespace Gadz.Tetris {
         public int Level => _tabuleiro.Nivel;
         public ITabuleiroEstado State => _tabuleiro.Estado;
         public Ponto CurrentPiecePosition => _tabuleiro.PecaAtual.Posicao;
-        public ITabuleiro CurrentBoard => _tabuleiro;
+        public Tabuleiro CurrentBoard => _tabuleiro;
 
         #endregion
 

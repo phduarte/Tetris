@@ -8,7 +8,7 @@ namespace Gadz.Tetris.Model {
     public class PecaTests {
 
         Peca peca;
-        ITabuleiro tabuleiro;
+        Tabuleiro tabuleiro;
 
         [TestInitialize]
         public void Setup() {

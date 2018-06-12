@@ -6,7 +6,7 @@
         TiposDePeca _tipoPeca;
         Ponto _posicao;
         int _rotacao;
-        ITabuleiro _tabuleiro;
+        Tabuleiro _tabuleiro;
 
         #endregion
 
@@ -26,7 +26,7 @@
             return this;
         }
 
-        public PecaBuilder NoTabuleiro(ITabuleiro tabuleiro) {
+        public PecaBuilder NoTabuleiro(Tabuleiro tabuleiro) {
             _tabuleiro = tabuleiro;
             return this;
         }

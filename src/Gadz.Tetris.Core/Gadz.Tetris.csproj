@@ -51,13 +51,11 @@
     <Compile Include="Model\FormaTetraminoS.cs" />
     <Compile Include="Model\FormaTetraminoT.cs" />
     <Compile Include="Model\FormaTetraminoZ.cs" />
-    <Compile Include="Model\IMovel.cs" />
     <Compile Include="Model\Peca.cs" />
     <Compile Include="Model\TiposDePeca.cs" />
     <Compile Include="Ponto.cs" />
     <Compile Include="Dimensao.cs" />
     <Compile Include="Model\Estatisticas.cs" />
-    <Compile Include="Model\ITabuleiro.cs" />
     <Compile Include="Model\IEstatisticasRepository.cs" />
     <Compile Include="Model\Tabuleiro.cs" />
     <Compile Include="Model\ITabuleiroEstado.cs" />

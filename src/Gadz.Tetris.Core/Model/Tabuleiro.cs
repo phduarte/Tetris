@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace Gadz.Tetris.Model {
 
-    internal class Tabuleiro : ITabuleiro {
+    public class Tabuleiro {
 
         #region fields
 

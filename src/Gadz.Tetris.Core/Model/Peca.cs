@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace Gadz.Tetris.Model {
-    public class Peca : IMovel {
+    public class Peca {
 
         static IDictionary<TiposDePeca, CoresDePeca> _cores = new Dictionary<TiposDePeca, CoresDePeca> {
                 { TiposDePeca.I, CoresDePeca.Ciano },
@@ -20,14 +20,14 @@ namespace Gadz.Tetris.Model {
         public Forma Forma => FormaFactory.Desenhar(Tipo, Posicao, Rotacao);
         public Ponto Posicao { get; private set; }
         public TiposDePeca Tipo { get; private set; }
-        public ITabuleiro Tabuleiro { get; private set; }
+        public Tabuleiro Tabuleiro { get; private set; }
         public Bloco[] Blocos => Forma.Blocos;
 
         #endregion
 
         #region constructors
 
-        internal Peca(TiposDePeca tipo, Ponto posicao, int rotacao, ITabuleiro tabuleiro) {
+        internal Peca(TiposDePeca tipo, Ponto posicao, int rotacao, Tabuleiro tabuleiro) {
             Tipo = tipo;
             Posicao = posicao;
             Tabuleiro = tabuleiro;
