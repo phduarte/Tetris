@@ -1,9 +1,9 @@
 ﻿namespace Gadz.Tetris {
-    public struct Ponto {
+    public struct Point {
 
         public int X, Y;
 
-        public Ponto(int x, int y) {
+        public Point(int x, int y) {
             X = x;
             Y = y;
         }
@@ -13,21 +13,21 @@
         }
 
         public override bool Equals(object obj) {
-            if (obj is Ponto u) {
+            if (obj is Point u) {
                 return ToString().Equals(u.ToString());
             }
             return false;
         }
 
-        public static bool operator ==(Ponto a, Ponto b) {
+        public static bool operator ==(Point a, Point b) {
             return a.Equals(b);
         }
 
-        public static bool operator !=(Ponto a, Ponto b) {
+        public static bool operator !=(Point a, Point b) {
             return !a.Equals(b);
         }
 
-        public bool ColideCom(Ponto ponto) {
+        public bool ColideCom(Point ponto) {
             return Equals(ponto);
         }
 

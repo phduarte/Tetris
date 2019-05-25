@@ -81,13 +81,13 @@ namespace Gadz.Tetris {
         [TestMethod]
         public void DeveConseguirMedirOTempoDaPartida() {
 
-            Assert.AreEqual(0, app.Time.Ticks);
+            Assert.AreEqual(0, app.Duration.Ticks);
 
             app.Start();
 
             Thread.Sleep(50);
 
-            Assert.AreNotEqual(0,app.Time.Ticks);
+            Assert.AreNotEqual(0,app.Duration.Ticks);
         }
 
         [TestMethod]

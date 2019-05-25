@@ -9,14 +9,14 @@ namespace Gadz.Tetris {
 
         #region fields
 
-        Tabuleiro _tabuleiro;
+        readonly Board _board;
 
         #endregion
 
         #region eventos
 
         public event GameActionEventHandler OnRefresh;
-        public event GameActionEventHandler OnEnd;
+        public event GameActionEventHandler OnFinish;
         public event GameActionEventHandler OnClear;
         public event GameActionEventHandler OnMove;
         public event GameActionEventHandler OnSlide;
@@ -25,84 +25,84 @@ namespace Gadz.Tetris {
 
         #region properties
 
-        public bool Playing => _tabuleiro.EstaJogando;
-        public int BoardWidth => _tabuleiro.Largura;
-        public int BoardHeight => _tabuleiro.Altura;
-        public int Speed => _tabuleiro.Velocidade;
-        public int Lines => _tabuleiro.Linhas;
-        public Bloco[,] Matrix => _tabuleiro.Matriz;
-        public TimeSpan Time => _tabuleiro.Duracao;
-        public int Score => _tabuleiro.Pontos;
-        public int Level => _tabuleiro.Nivel;
-        public ITabuleiroEstado State => _tabuleiro.Estado;
-        public Ponto CurrentPiecePosition => _tabuleiro.PecaAtual.Posicao;
-        public Tabuleiro CurrentBoard => _tabuleiro;
+        public bool Playing => _board.IsPlaying;
+        public int BoardWidth => _board.Width;
+        public int BoardHeight => _board.Height;
+        public int Speed => _board.Speed;
+        public int Lines => _board.Lines;
+        public Block[,] Matrix => _board.Matrix;
+        public TimeSpan Duration => _board.Duration;
+        public int Score => _board.Score;
+        public int Level => _board.Level;
+        public IBoardState State => _board.State;
+        public Point CurrentPiecePosition => _board.CurrentPiece.Position;
+        public Board CurrentBoard => _board;
 
         #endregion
 
         #region constructors
 
-        private GameController(int largura, int altura) {
+        private GameController(int width, int height) {
 
-            if(largura < 10) {
-                throw new ArgumentException(nameof(largura));
+            if(width < 10) {
+                throw new ArgumentException(nameof(width));
             }
 
-            if(altura < 10) {
-                throw new ArgumentException(nameof(altura));
+            if(height < 10) {
+                throw new ArgumentException(nameof(height));
             }
 
-            _tabuleiro = new Tabuleiro(new EstatisticasRepository(), largura, altura);
-            _tabuleiro.QuandoAtualizar += ()=> { OnRefresh?.Invoke(); };
-            _tabuleiro.QuandoTerminar += ()=> { OnEnd?.Invoke();  };
-            _tabuleiro.QuandoLimpar += ()=> { OnClear?.Invoke(); };
-            _tabuleiro.QuandoMover += ()=> { OnMove?.Invoke(); };
-            _tabuleiro.QuandoDeslizar += ()=> { OnSlide?.Invoke(); };
+            _board = new Board(new StatsRepository(), width, height);
+            _board.OnRefresh += ()=> { OnRefresh?.Invoke(); };
+            _board.OnFinish += ()=> { OnFinish?.Invoke();  };
+            _board.OnClear += ()=> { OnClear?.Invoke(); };
+            _board.OnMove += ()=> { OnMove?.Invoke(); };
+            _board.OnSlide += ()=> { OnSlide?.Invoke(); };
         }
 
         #endregion
 
-        public static GameController Create(int largura, int altura) {
-            return new GameController(largura, altura);
+        public static GameController Create(int width, int height) {
+            return new GameController(width, height);
         }
 
         public void SmashDown() {
-            _tabuleiro.Cair();
+            _board.SmashDown();
         }
 
-        public void RunRight()=> _tabuleiro.CorrerDireita();
+        public void RunRight()=> _board.SlideRight();
 
-        public void RunLeft()=> _tabuleiro.CorrerEsquerda();
+        public void RunLeft()=> _board.SlideLeft();
 
-        public void Start() => _tabuleiro.Iniciar();
+        public void Start() => _board.Start();
 
-        public void MoveDown() => _tabuleiro.MoverBaixo();
+        public void MoveDown() => _board.MoveDown();
 
-        public void MoveRight()=> _tabuleiro.MoverDireita();
+        public void MoveRight()=> _board.MoveRight();
 
-        public void MoveLeft()=> _tabuleiro.MoverEsquerda();
+        public void MoveLeft()=> _board.MoveLeft();
 
-        public void Pause()=> _tabuleiro.Pausar();
+        public void Pause()=> _board.Pause();
 
-        public void Save()=> _tabuleiro.Salvar();
+        public void Save()=> _board.Save();
 
         public void Exit() {
-            _tabuleiro.Terminar();
+            _board.Finish();
             Save();
         }
 
-        public void Rotate()=> _tabuleiro.Rotacionar();
+        public void Rotate()=> _board.Rotate();
 
-        public void Continue()=> _tabuleiro.Continuar();
+        public void Continue()=> _board.Continue();
 
-        public void Restart() => _tabuleiro.Reiniciar();
+        public void Restart() => _board.Restart();
 
-        public IEnumerable<Bloco> GetActualBlocks()=> _tabuleiro.PecaAtual.Blocos;
+        public IEnumerable<Block> GetActualBlocks()=> _board.CurrentPiece.Blocks;
 
-        public IEnumerable<Bloco> GetNextBlocks()=> _tabuleiro.ProximaPeca.Blocos;
+        public IEnumerable<Block> GetNextBlocks()=> _board.NextPiece.Blocks;
 
         public int GetMaxScore() {
-            return _tabuleiro.RecordeMaximo;
+            return _board.Record;
         }
     }
 }
