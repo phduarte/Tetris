@@ -97,6 +97,18 @@
     <EmbeddedResource Include="Choose.resx">
       <DependentUpon>Choose.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Imagens\BACKGROUND_TETRIS.png" />
+    <EmbeddedResource Include="Imagens\BG_FADED.png" />
+    <EmbeddedResource Include="Imagens\block_blue.png" />
+    <EmbeddedResource Include="Imagens\BLOCK_CLASSIC.png" />
+    <EmbeddedResource Include="Imagens\BLOCK_CLASSIC_FADED.png" />
+    <EmbeddedResource Include="Imagens\block_cyan.png" />
+    <EmbeddedResource Include="Imagens\block_green.png" />
+    <EmbeddedResource Include="Imagens\block_orange.png" />
+    <EmbeddedResource Include="Imagens\block_purple.png" />
+    <EmbeddedResource Include="Imagens\block_red.png" />
+    <EmbeddedResource Include="Imagens\block_yellow.png" />
+    <EmbeddedResource Include="Imagens\GAME_OVER_LAYER.png" />
     <EmbeddedResource Include="Play.resx">
       <DependentUpon>Play.cs</DependentUpon>
     </EmbeddedResource>
@@ -132,19 +144,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Imagens\GAME_OVER_LAYER.png" />
-    <EmbeddedResource Include="Imagens\block_yellow.png" />
-    <EmbeddedResource Include="Imagens\block_red.png" />
-    <EmbeddedResource Include="Imagens\block_purple.png" />
-    <EmbeddedResource Include="Imagens\block_orange.png" />
-    <EmbeddedResource Include="Imagens\block_green.png" />
-    <EmbeddedResource Include="Imagens\block_cyan.png" />
-    <EmbeddedResource Include="Imagens\BLOCK_CLASSIC_FADED.png" />
-    <EmbeddedResource Include="Imagens\BLOCK_CLASSIC.png" />
-    <EmbeddedResource Include="Imagens\block_blue.png" />
-    <EmbeddedResource Include="Imagens\BG_FADED.png" />
-    <EmbeddedResource Include="Imagens\BACKGROUND_TETRIS.png" />
-    <Content Include="Sounds\Clear.wav" />
+    <Content Include="Sounds\Clean.wav" />
     <Content Include="Sounds\Dock.wav" />
     <Content Include="Sounds\Ending.wav" />
     <Content Include="Sounds\LevelUp.wav" />

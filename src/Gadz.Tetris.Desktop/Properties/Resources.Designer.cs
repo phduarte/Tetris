@@ -173,9 +173,9 @@ namespace Gadz.Tetris.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
-        internal static System.IO.UnmanagedMemoryStream Clear {
+        internal static System.IO.UnmanagedMemoryStream Clean {
             get {
-                return ResourceManager.GetStream("Clear", resourceCulture);
+                return ResourceManager.GetStream("Clean", resourceCulture);
             }
         }
         

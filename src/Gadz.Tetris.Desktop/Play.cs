@@ -78,7 +78,7 @@ namespace Gadz.Tetris.Desktop {
         void ListenEvents() {
             _controller.OnRefresh += PaintScreen;
             _controller.OnRefresh += UpdateScreenTextAsync;
-            _controller.OnEnd += ExitAsync;
+            _controller.OnFinish += ExitAsync;
 
             _controller.OnClear += PaintScreen;
             _controller.OnClear += Program.SoundPlayer.Clear;
@@ -91,7 +91,7 @@ namespace Gadz.Tetris.Desktop {
             await Task.Factory.StartNew(() => {
                 lbLevel.Text = _controller.Level.ToString();
                 lbPoints.Text = _controller.Score.ToString();
-                lbTime.Text = _controller.Time.ToString(@"hh\:mm\:ss");
+                lbTime.Text = _controller.Duration.ToString(@"hh\:mm\:ss");
                 lbLines.Text = _controller.Lines.ToString();
                 lbSpeed.Text = _controller.Speed.ToString();
             }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
@@ -152,19 +152,20 @@ namespace Gadz.Tetris.Desktop {
             await Task.Factory.StartNew(() => {
                 for (int y = 0; y < _controller.BoardHeight; y++) {
                     for (int x = 0; x < _controller.BoardWidth; x++) {
-                        PaintBlock(x, y, _controller.Matrix[x, y].Cor.ToString(), mainBoardPanel);
+                        PaintBlock(x, y, _controller.Matrix[x, y].Color.ToString(), mainBoardPanel);
                     }
                 }
             }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
         }
 
         static PictureBox CreateBlock(int x, int y, string cor) {
-            var block = new PictureBox {
-                Location = new Point(x * BLOCK_SIZE, y * BLOCK_SIZE),
+            var block = new PictureBox
+            {
+                Location = new System.Drawing.Point(x * BLOCK_SIZE, y * BLOCK_SIZE),
                 BackgroundImage = GetBackgroundImage(cor),
                 BackgroundImageLayout = ImageLayout.Stretch,
                 Name = BLOCK_PREFIX + (_index++).ToString(),
-                Size = new Size(BLOCK_SIZE, BLOCK_SIZE),
+                Size = new System.Drawing.Size(BLOCK_SIZE, BLOCK_SIZE),
                 BorderStyle = BorderStyle.None,
                 TabIndex = 0,
                 TabStop = false
@@ -175,16 +176,16 @@ namespace Gadz.Tetris.Desktop {
 
         static Image GetBackgroundImage(string cor) {
 
-            if ("Transparente".Equals(cor) || string.Empty.Equals(cor)) {
+            if ("None".Equals(cor) || string.Empty.Equals(cor)) {
                 return Program.ClassicMode ? Properties.Resources.BLOCK_CLASSIC_FADED : null;
             } else {
                 return Program.ClassicMode ? Properties.Resources.BLOCK_CLASSIC : _imageCache[cor];
             }
         }
 
-        void PaintBlock(IEnumerable<Bloco> blocos, Panel panel) {
+        void PaintBlock(IEnumerable<Block> blocos, Panel panel) {
             foreach (var bloco in blocos) {
-                PaintBlock(bloco.X, bloco.Y, bloco.Cor.ToString(), panel);
+                PaintBlock(bloco.X, bloco.Y, bloco.Color.ToString(), panel);
             }
         }
 

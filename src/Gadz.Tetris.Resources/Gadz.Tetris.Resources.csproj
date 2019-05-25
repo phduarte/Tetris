@@ -107,25 +107,25 @@
     <EmbeddedResource Include="Imagens\GAME_OVER_LAYER.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Sons\Clear.wav" />
+    <EmbeddedResource Include="Sounds\Clean.wav" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Sons\Dock.wav" />
+    <EmbeddedResource Include="Sounds\Dock.wav" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Sons\Ending.wav" />
+    <EmbeddedResource Include="Sounds\Ending.wav" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Sons\LevelUp.wav" />
+    <EmbeddedResource Include="Sounds\LevelUp.wav" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Sons\Move.wav" />
+    <EmbeddedResource Include="Sounds\Move.wav" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Sons\Run.wav" />
+    <EmbeddedResource Include="Sounds\Run.wav" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Sons\Start.wav" />
+    <EmbeddedResource Include="Sounds\Start.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
