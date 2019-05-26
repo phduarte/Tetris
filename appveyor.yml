@@ -4,5 +4,6 @@ before_build:
  - nuget restore
  
 build:
+  project: src\Gadz.Tetris.sln
   verbosity: minimal
   publish_wap: true
