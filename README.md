@@ -1,4 +1,8 @@
-# O Jogo
+# Tetris
+
+[![Build status](https://ci.appveyor.com/api/projects/status/3nuqatrkvb5g3ige?svg=true)](https://ci.appveyor.com/project/phduarte/tetris) [![BCH compliance](https://bettercodehub.com/edge/badge/phduarte/Tetris?branch=master)](https://bettercodehub.com/)
+
+## O Jogo
 
   O Jogo foi desenvolvido em C# com propósito único de estudo e prática dos processos de Engenharia de Software.
 O projeto utiliza o jogo Tetris como cenário justamente por ser comum para maioria das pessoas, facilitando a correlação das regras no mundo real com os códigos que aqui são escritos.
@@ -10,7 +14,7 @@ O Core é responsável pelo backbone do software, provém o Modelo de Domínio e
 
   Enquanto eu modelava o Modelo de Domínio, a neutralidade tecnológica e o desacoplamento das responsabilidades foi algo fundamental, por isso o Domínio não tem ligações externas com camadas de Infraestrutura ou Interface por exemplo. Afinal, não podemos permitir que regras do jogo sejam manipuladas pelo usuário, e nem ficar preso num modelo de Interface só. Provavelmente teremos versões para outros dispositivos de IHC, como Mobile por exemplo. No entanto, não isolei o Domain Model em uma DLL à parte (simplesmente porque não faz nenhum sentido pra mim fazer isso nesse projeto), mas isolei todas as classes, métodos e propriedades que precisavam simplesmente usando operadores de visibilidade *Internal* e *Private*.
 
-# Características
+## Características
 
 - **Tema Clássico**: Opção para selecionar o tema similar ao do jogo original da década de 80.
 - **Tema Brickgame**: Opção para selecionar o tema similar ao do video-game de bolso, famoso na década de 90.
@@ -24,11 +28,11 @@ O Core é responsável pelo backbone do software, provém o Modelo de Domínio e
   + 3 linhas completas na mesma jogada valem 300 pontos
   + TETRIS (4 linhas completas na mesma jogada) vale 1.200 pontos
 
-# Gráfico
+## Gráfico
 
 ![img1](doc/tela2.png)
 
-# Links úteis
+## Links úteis
 
 - [Baixar](Tetris.zip)
 - [Ferramentas usadas](doc/ferramentas.md)
