@@ -1,24 +1,27 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Gadz.Tetris.Model {
-
+namespace Gadz.Tetris.Model.Tests
+{
     [TestClass]
-    public class IdentidadeTests {
-
+    public class IdentidadeTests
+    {
         [TestMethod]
-        public void DeveInstanciar() {
+        public void DeveInstanciar()
+        {
             var id = new Identity();
             Assert.IsNotNull(id);
         }
 
         [TestMethod]
-        public void DeveGerarNova() {
+        public void DeveGerarNova()
+        {
             var id = Identity.New();
             Assert.IsNotNull(id);
         }
 
         [TestMethod]
-        public void DeveConverterIdentidadeParaInteiro() {
+        public void DeveConverterIdentidadeParaInteiro()
+        {
             var id = new Identity(0);
             var inteiro = 1;
             inteiro = id;
@@ -26,7 +29,8 @@ namespace Gadz.Tetris.Model {
         }
 
         [TestMethod]
-        public void DeveConverterIdentidadeParaTexto() {
+        public void DeveConverterIdentidadeParaTexto()
+        {
             var id = new Identity("A");
             var texto = "B";
             texto = id;
@@ -34,7 +38,8 @@ namespace Gadz.Tetris.Model {
         }
 
         [TestMethod]
-        public void DeveConverterTextoParIdentidade() {
+        public void DeveConverterTextoParIdentidade()
+        {
             var id = new Identity(0);
             var texto = "B";
             id = texto;
@@ -42,7 +47,8 @@ namespace Gadz.Tetris.Model {
         }
 
         [TestMethod]
-        public void DeveConverterInteiroParaIdentidade() {
+        public void DeveConverterInteiroParaIdentidade()
+        {
             var id = new Identity("A");
             var inteiro = 1;
             id = inteiro;

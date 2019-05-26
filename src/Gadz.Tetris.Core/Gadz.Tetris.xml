@@ -1,0 +1,194 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gadz.Tetris</name>
+    </assembly>
+    <members>
+        <member name="T:Gadz.Tetris.Model.Block">
+            <summary>
+            Bloco
+            </summary>
+        </member>
+        <member name="T:Gadz.Tetris.GameController">
+            <summary>
+            Controlador do Jogo. <para>Fornece uma interface para aplicação cliente.</para>
+            </summary>
+        </member>
+        <member name="E:Gadz.Tetris.GameController.OnRefresh">
+            <summary>
+            Ocorre a cada alteração visual, de estado do jogo ou suas estatísticas
+            </summary>
+        </member>
+        <member name="E:Gadz.Tetris.GameController.OnFinish">
+            <summary>
+            Ocorre quando o jogo é finalizado
+            </summary>
+        </member>
+        <member name="E:Gadz.Tetris.GameController.OnClear">
+            <summary>
+            Ocorre quando uma linha é destruída
+            </summary>
+        </member>
+        <member name="E:Gadz.Tetris.GameController.OnMove">
+            <summary>
+            Ocorre quando uma peça é movimentada
+            </summary>
+        </member>
+        <member name="E:Gadz.Tetris.GameController.OnSlide">
+            <summary>
+            Ocorre quando uma peça desliza na tela
+            </summary>
+        </member>
+        <member name="P:Gadz.Tetris.GameController.Playing">
+            <summary>
+            Informa se o jogo está rodando
+            </summary>
+        </member>
+        <member name="P:Gadz.Tetris.GameController.BoardWidth">
+            <summary>
+            Largura do tabuleiro
+            </summary>
+        </member>
+        <member name="P:Gadz.Tetris.GameController.BoardHeight">
+            <summary>
+            Altura do tabuleiro
+            </summary>
+        </member>
+        <member name="P:Gadz.Tetris.GameController.Speed">
+            <summary>
+            Velocidade do jogo
+            </summary>
+        </member>
+        <member name="P:Gadz.Tetris.GameController.Lines">
+            <summary>
+            Quantidade de linhas destruídas
+            </summary>
+        </member>
+        <member name="P:Gadz.Tetris.GameController.Matrix">
+            <summary>
+            Matriz do tabuleiro
+            </summary>
+        </member>
+        <member name="P:Gadz.Tetris.GameController.Duration">
+            <summary>
+            Tempo de duração total do jogo atual
+            </summary>
+        </member>
+        <member name="P:Gadz.Tetris.GameController.Score">
+            <summary>
+            Pontuação do jogador no jogo atual
+            </summary>
+        </member>
+        <member name="P:Gadz.Tetris.GameController.Level">
+            <summary>
+            Nível de dificuldade
+            </summary>
+        </member>
+        <member name="P:Gadz.Tetris.GameController.State">
+            <summary>
+            Estado do jogo
+            </summary>
+        </member>
+        <member name="P:Gadz.Tetris.GameController.CurrentPiecePosition">
+            <summary>
+            Posição da peça atual
+            </summary>
+        </member>
+        <member name="P:Gadz.Tetris.GameController.CurrentBoard">
+            <summary>
+            Tabuleiro atual
+            </summary>
+        </member>
+        <member name="M:Gadz.Tetris.GameController.Create(System.Int32,System.Int32)">
+            <summary>
+            Cria um novo Controlador do Jogo
+            </summary>
+            <param name="width">Largura do tabuleiro</param>
+            <param name="height">Algura do tabuleiro</param>
+            <returns>Uma instância do Controlador do Jogo</returns>
+        </member>
+        <member name="M:Gadz.Tetris.GameController.SmashDown">
+            <summary>
+            Desliza o bloco atual para baixo até encontrar um obstáculo
+            </summary>
+        </member>
+        <member name="M:Gadz.Tetris.GameController.RunRight">
+            <summary>
+            Desliza o bloco atual para a direita até encontrar um obstáculo
+            </summary>
+        </member>
+        <member name="M:Gadz.Tetris.GameController.RunLeft">
+            <summary>
+            Desliza o bloco atual para a esquerda até encontrar um obstáculo
+            </summary>
+        </member>
+        <member name="M:Gadz.Tetris.GameController.Start">
+            <summary>
+            Inicia o jogo
+            </summary>
+        </member>
+        <member name="M:Gadz.Tetris.GameController.MoveDown">
+            <summary>
+            Movimenta o bloco atual para baixo
+            </summary>
+        </member>
+        <member name="M:Gadz.Tetris.GameController.MoveRight">
+            <summary>
+            Movimenta o bloco atual para a direita
+            </summary>
+        </member>
+        <member name="M:Gadz.Tetris.GameController.MoveLeft">
+            <summary>
+            Movimenta o bloco atual para a esquerda
+            </summary>
+        </member>
+        <member name="M:Gadz.Tetris.GameController.Pause">
+            <summary>
+            Pausa o jogo
+            </summary>
+        </member>
+        <member name="M:Gadz.Tetris.GameController.Save">
+            <summary>
+            Salva o progresso do jogo
+            </summary>
+        </member>
+        <member name="M:Gadz.Tetris.GameController.Exit">
+            <summary>
+            Sai do j ogo
+            </summary>
+        </member>
+        <member name="M:Gadz.Tetris.GameController.Rotate">
+            <summary>
+            Gira a peça atual
+            </summary>
+        </member>
+        <member name="M:Gadz.Tetris.GameController.Continue">
+            <summary>
+            Continua um jogo pausado
+            </summary>
+        </member>
+        <member name="M:Gadz.Tetris.GameController.Restart">
+            <summary>
+            Reinicia um jogo
+            </summary>
+        </member>
+        <member name="M:Gadz.Tetris.GameController.GetActualBlocks">
+            <summary>
+            Blocos da peça atual
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gadz.Tetris.GameController.GetNextBlocks">
+            <summary>
+            Blocos da próxima peça.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gadz.Tetris.GameController.GetMaxScore">
+            <summary>
+            Maior pontuação registrada
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

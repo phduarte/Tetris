@@ -1,20 +1,22 @@
-﻿using Gadz.Tetris.Model;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Gadz.Tetris.Model {
-
+namespace Gadz.Tetris.Model.Tests
+{
     [TestClass]
-    public class PontoTests {
+    public class PontoTests
+    {
 
         [TestMethod]
-        public void DeveInstanciar() {
-            var ponto = new Point(0,0);
+        public void DeveInstanciar()
+        {
+            var ponto = new Point(0, 0);
             Assert.AreEqual(0, ponto.X);
             Assert.AreEqual(0, ponto.Y);
         }
 
         [TestMethod]
-        public void DeveSerIguais() {
+        public void DeveSerIguais()
+        {
             var pontoA = new Point(0, 0);
             var pontoB = new Point(0, 0);
             Assert.IsTrue(pontoA.Equals(pontoB));
@@ -23,7 +25,8 @@ namespace Gadz.Tetris.Model {
         }
 
         [TestMethod]
-        public void DeveSerDiferentes() {
+        public void DeveSerDiferentes()
+        {
             var pontoA = new Point(0, 0);
             var pontoB = new Point(1, 0);
             Assert.IsFalse(pontoA.Equals(pontoB));
@@ -31,14 +34,16 @@ namespace Gadz.Tetris.Model {
         }
 
         [TestMethod]
-        public void DevemColidir() {
+        public void DevemColidir()
+        {
             var pontoA = new Point(0, 0);
             var pontoB = new Point(0, 0);
             Assert.IsTrue(pontoA.ColideCom(pontoB));
         }
 
         [TestMethod]
-        public void NaoDevemColidir() {
+        public void NaoDevemColidir()
+        {
             var pontoA = new Point(0, 0);
             var pontoB = new Point(1, 0);
             Assert.IsFalse(pontoA.ColideCom(pontoB));

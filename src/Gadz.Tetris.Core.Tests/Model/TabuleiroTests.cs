@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gadz.Tetris.Model {
-    public class TabuleiroTests {
+namespace Gadz.Tetris.Model.Tests
+{
+    public class TabuleiroTests
+    {
     }
 }

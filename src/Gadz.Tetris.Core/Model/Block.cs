@@ -1,5 +1,8 @@
 ﻿namespace Gadz.Tetris.Model
 {
+    /// <summary>
+    /// Bloco
+    /// </summary>
     public struct Block
     {
         public Point Point { get; private set; }
@@ -13,7 +16,7 @@
             Color = color;
         }
 
-        public bool ColideCom(Block block)
+        public bool CollideWith(Block block)
         {
             return Point.ColideCom(block.Point);
         }

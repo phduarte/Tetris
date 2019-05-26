@@ -1,4 +1,5 @@
-﻿using Gadz.Tetris.Model;
+﻿
+using Gadz.Tetris.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,11 +8,19 @@ using System.Threading.Tasks;
 
 namespace Gadz.Tetris.Data
 {
-    internal class StatsRepository : IStatsRepository {
+    internal class StatsRepository : IStatsRepository
+    {
 
         #region fields
 
-        const string FILE_NAME = "stats.mc";
+        private static string StatsFilePath
+        {
+            get
+            {
+                var dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Gadesi\Tetris\stats.mc";
+                return dir;
+            }
+        }
         const char DELIMITADOR = '\t';
         const int COL_ID = 0;
         const int COL_POINTS = 1;
@@ -27,7 +36,8 @@ namespace Gadz.Tetris.Data
 
         #region constructors
 
-        public StatsRepository() {
+        public StatsRepository()
+        {
             _cache = new List<Stats>();
         }
 
@@ -35,11 +45,13 @@ namespace Gadz.Tetris.Data
 
         #region public methods
 
-        public async void Save(Stats stats) {
+        public async void Save(Stats stats)
+        {
 
             await Task.Factory.StartNew(() => {
 
-                using (var file = new StreamWriter(FILE_NAME, true)) {
+                using(var file = new StreamWriter(StatsFilePath, true))
+                {
 
                     var cols = new string[8];
 
@@ -60,19 +72,25 @@ namespace Gadz.Tetris.Data
             _cache.Add(stats);
         }
 
-        public Stats Load(Identity id) {
+        public Stats Load(Identity id)
+        {
             return All().First(x => x.Id.Equals(id));
         }
 
-        public int MaxScore() {
-            try {
+        public int MaxScore()
+        {
+            try
+            {
                 return All().Max(x => x.Score);
-            } catch (InvalidOperationException) {
+            }
+            catch(InvalidOperationException)
+            {
                 return 0;
             }
         }
 
-        public IEnumerable<Stats> All() {
+        public IEnumerable<Stats> All()
+        {
             return _cache;
         }
 
@@ -80,18 +98,21 @@ namespace Gadz.Tetris.Data
 
         #region private methods
 
-        static async Task<IList<Stats>> LoadCache() {
+        static async Task<IList<Stats>> LoadCache()
+        {
 
             var results = new List<Stats>();
 
             await Task.Factory.StartNew(() => {
 
-                if (!File.Exists(FILE_NAME))
+                if(!File.Exists(StatsFilePath))
                     return;
 
-                using (var file = new StreamReader(FILE_NAME)) {
+                using(var file = new StreamReader(StatsFilePath))
+                {
 
-                    while (!file.EndOfStream) {
+                    while(!file.EndOfStream)
+                    {
 
                         var cols = file.ReadLine().Split(DELIMITADOR);
 

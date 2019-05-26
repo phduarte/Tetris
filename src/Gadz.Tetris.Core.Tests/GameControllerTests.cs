@@ -3,33 +3,37 @@ using System;
 using System.Linq;
 using System.Threading;
 
-namespace Gadz.Tetris {
-
+namespace Gadz.Tetris.Tests
+{
     [TestClass]
-    public class GameControllerTests {
-
+    public class GameControllerTests
+    {
         GameController app;
 
         [TestInitialize]
-        public void Setup() {
+        public void Setup()
+        {
             app = GameController.Create(10, 20);
         }
 
         [TestMethod]
-        public void DeveInstanciar() {
+        public void DeveInstanciar()
+        {
             Assert.IsNotNull(app);
-            Assert.AreEqual(10,app.BoardWidth);
+            Assert.AreEqual(10, app.BoardWidth);
             Assert.AreEqual(20, app.BoardHeight);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void NaoDeveInstanciar() {
+        public void NaoDeveInstanciar()
+        {
             var app = GameController.Create(4, 4);
         }
 
         [TestMethod]
-        public void DeveIniciar() {
+        public void DeveIniciar()
+        {
             app.Start();
 
             Assert.AreEqual("Jogando", app.State.ToString());
@@ -37,7 +41,8 @@ namespace Gadz.Tetris {
         }
 
         [TestMethod]
-        public void DeveReiniciar() {
+        public void DeveReiniciar()
+        {
             app.Start();
             Assert.AreEqual("Jogando", app.State.ToString(), "Não está iniciando");
             app.Pause();
@@ -47,16 +52,18 @@ namespace Gadz.Tetris {
         }
 
         [TestMethod]
-        public void DevePausar() {
+        public void DevePausar()
+        {
             app.Start();
             Assert.AreEqual("Jogando", app.State.ToString(), "Não está iniciando");
             app.Pause();
             Assert.AreEqual("Parado", app.State.ToString(), "Não está pausando");
-            Assert.IsFalse(app.Playing,"Está informando que está jogando.");
+            Assert.IsFalse(app.Playing, "Está informando que está jogando.");
         }
 
         [TestMethod]
-        public void DeveContinuar() {
+        public void DeveContinuar()
+        {
             app.Start();
             Assert.AreEqual("Jogando", app.State.ToString(), "Não está iniciando");
             app.Pause();
@@ -66,20 +73,23 @@ namespace Gadz.Tetris {
         }
 
         [TestMethod]
-        public void DeveIniciarComNivelUm() {
+        public void DeveIniciarComNivelUm()
+        {
             app.Start();
 
             Assert.AreEqual(1, app.Level);
         }
 
         [TestMethod]
-        public void DeveIniciarNaVelocidadeMaisAlta() {
+        public void DeveIniciarNaVelocidadeMaisAlta()
+        {
             app.Start();
 
             Assert.AreEqual(1000, app.Speed);
         }
         [TestMethod]
-        public void DeveConseguirMedirOTempoDaPartida() {
+        public void DeveConseguirMedirOTempoDaPartida()
+        {
 
             Assert.AreEqual(0, app.Duration.Ticks);
 
@@ -87,30 +97,34 @@ namespace Gadz.Tetris {
 
             Thread.Sleep(50);
 
-            Assert.AreNotEqual(0,app.Duration.Ticks);
+            Assert.AreNotEqual(0, app.Duration.Ticks);
         }
 
         [TestMethod]
-        public void DeveIniciarComPlacarEmBranco() {
+        public void DeveIniciarComPlacarEmBranco()
+        {
             app.Start();
             Assert.AreEqual(0, app.Score);
         }
 
         [TestMethod]
-        public void DeveIniciarSemNenhumaLinhaPreenchida() {
+        public void DeveIniciarSemNenhumaLinhaPreenchida()
+        {
             app.Start();
             Assert.AreEqual(0, app.Lines);
         }
 
         [TestMethod]
-        public void DeveIniciarComBlocoNaPosicaoZero() {
+        public void DeveIniciarComBlocoNaPosicaoZero()
+        {
             app.Start();
-            Assert.AreEqual(0, app.CurrentPiecePosition.X,"Posição X não está em 0");
-            Assert.AreEqual(0, app.CurrentPiecePosition.Y,"Posição Y não está em 0");
+            Assert.AreEqual(0, app.CurrentPiecePosition.X, "Posição X não está em 0");
+            Assert.AreEqual(0, app.CurrentPiecePosition.Y, "Posição Y não está em 0");
         }
 
         [TestMethod]
-        public void DeveMoverParaDireita() {
+        public void DeveMoverParaDireita()
+        {
             app.Start();
             Assert.AreEqual(0, app.CurrentPiecePosition.X);
             app.MoveRight();
@@ -118,7 +132,8 @@ namespace Gadz.Tetris {
         }
 
         [TestMethod]
-        public void DeveMoverParaEsquerda() {
+        public void DeveMoverParaEsquerda()
+        {
 
             DeveMoverParaDireita();
 
@@ -127,15 +142,17 @@ namespace Gadz.Tetris {
         }
 
         [TestMethod]
-        public void DeveMoverParaBaixo() {
+        public void DeveMoverParaBaixo()
+        {
             app.Start();
             Assert.AreEqual(0, app.CurrentPiecePosition.Y);
             app.MoveDown();
             Assert.AreEqual(2, app.CurrentPiecePosition.Y);
         }
-        
+
         [TestMethod]
-        public void DeveCorrerParaDireita() {
+        public void DeveCorrerParaDireita()
+        {
             app.Start();
             app.RunRight();
             Thread.Sleep(100);
@@ -143,7 +160,8 @@ namespace Gadz.Tetris {
         }
 
         [TestMethod]
-        public void DeveCorrerParaEsquerda() {
+        public void DeveCorrerParaEsquerda()
+        {
             DeveCorrerParaDireita();
             app.RunLeft();
             Thread.Sleep(100);
@@ -151,7 +169,8 @@ namespace Gadz.Tetris {
         }
 
         [TestMethod]
-        public void DeveCorrerParaBaixo() {
+        public void DeveCorrerParaBaixo()
+        {
             app.Start();
             app.SmashDown();
             Thread.Sleep(100);
@@ -159,19 +178,22 @@ namespace Gadz.Tetris {
         }
 
         [TestMethod]
-        public void DeveListarProximosBlocos() {
+        public void DeveListarProximosBlocos()
+        {
             app.Start();
             Assert.AreEqual(4, app.GetNextBlocks().Count());
         }
 
         [TestMethod]
-        public void DeveListarOsBlocosAtuais() {
+        public void DeveListarOsBlocosAtuais()
+        {
             app.Start();
             Assert.AreEqual(4, app.GetActualBlocks().Count());
         }
 
         [TestMethod]
-        public void DeveGuardarORecordeMaximo() {
+        public void DeveGuardarORecordeMaximo()
+        {
             app.Start();
             //app.CurrentBoard.Estatisticas.Pontuar(1);
             app.Exit();

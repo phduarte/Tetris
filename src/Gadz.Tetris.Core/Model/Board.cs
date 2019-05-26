@@ -402,7 +402,7 @@ namespace Gadz.Tetris.Model
             {
                 foreach(var b in peca.Blocks)
                 {
-                    if(a.ColideCom(b))
+                    if(a.CollideWith(b))
                     {
                         return true;
                     }
