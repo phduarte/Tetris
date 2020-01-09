@@ -1,7 +1,5 @@
 # Tetris
 
-[![Build status](https://ci.appveyor.com/api/projects/status/3nuqatrkvb5g3ige?svg=true)](https://ci.appveyor.com/project/phduarte/tetris) [![BCH compliance](https://bettercodehub.com/edge/badge/phduarte/Tetris?branch=master)](https://bettercodehub.com/)
-
 ## O Jogo
 
   O Jogo foi desenvolvido em C# com propósito único de estudo e prática dos processos de Engenharia de Software.
