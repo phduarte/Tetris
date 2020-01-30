@@ -1,5 +1,7 @@
 # Tetris
 
+![.NET 4.6](https://github.com/phduarte/Tetris/workflows/.NET%204.6/badge.svg)
+
 ## O Jogo
 
   O Jogo foi desenvolvido em C# com propósito único de estudo e prática dos processos de Engenharia de Software.
