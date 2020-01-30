@@ -10,4 +10,4 @@ jobs:
         uses: actions/checkout@v1
       - name: Build DotNET461
         run: |
-           "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe" $Env:GITHUB_WORKSPACE\phduarte\tetris\src
+         "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe" "D:\a\Tetris\Tetris\src\"
