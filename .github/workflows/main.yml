@@ -10,6 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Run a one-line script
+      run:  echo "clonning!"
 
     - name: Setup MSBuild.exe
       uses: warrenbuckley/Setup-MSBuild@v1
