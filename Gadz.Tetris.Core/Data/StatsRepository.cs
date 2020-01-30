@@ -30,15 +30,15 @@ namespace Gadz.Tetris.Data
         const int COL_MOVES = 5;
         const int COL_BLOCKS = 6;
         const int COL_TIME = 7;
-        static IList<Stats> _cache = LoadCache().Result;
+        static IList<Stats> _cache;
 
         #endregion
 
         #region constructors
 
-        public StatsRepository()
+        static StatsRepository()
         {
-            _cache = new List<Stats>();
+            _cache = LoadCache();
         }
 
         #endregion
@@ -50,7 +50,7 @@ namespace Gadz.Tetris.Data
 
             await Task.Factory.StartNew(() => {
 
-                using(var file = new StreamWriter(StatsFilePath, true))
+                using (var file = new StreamWriter(StatsFilePath, true))
                 {
 
                     var cols = new string[8];
@@ -83,7 +83,7 @@ namespace Gadz.Tetris.Data
             {
                 return All().Max(x => x.Score);
             }
-            catch(InvalidOperationException)
+            catch (InvalidOperationException)
             {
                 return 0;
             }
@@ -98,37 +98,33 @@ namespace Gadz.Tetris.Data
 
         #region private methods
 
-        static async Task<IList<Stats>> LoadCache()
+        static List<Stats> LoadCache()
         {
-
             var results = new List<Stats>();
 
-            await Task.Factory.StartNew(() => {
+            if (!File.Exists(StatsFilePath))
+                return results;
 
-                if(!File.Exists(StatsFilePath))
-                    return;
+            using (var file = new StreamReader(StatsFilePath))
+            {
 
-                using(var file = new StreamReader(StatsFilePath))
+                while (!file.EndOfStream)
                 {
 
-                    while(!file.EndOfStream)
-                    {
+                    var cols = file.ReadLine().Split(DELIMITADOR);
 
-                        var cols = file.ReadLine().Split(DELIMITADOR);
+                    Identity id = cols[COL_ID];
+                    int.TryParse(cols[COL_POINTS], out int score);
+                    int.TryParse(cols[COL_LEVEL], out int level);
+                    int.TryParse(cols[COL_LINES], out int lines);
+                    int.TryParse(cols[COL_SPEED], out int speed);
+                    int.TryParse(cols[COL_MOVES], out int moves);
+                    int.TryParse(cols[COL_BLOCKS], out int blocks);
+                    long.TryParse(cols[COL_TIME], out long duration);
 
-                        Identity id = cols[COL_ID];
-                        int.TryParse(cols[COL_POINTS], out int score);
-                        int.TryParse(cols[COL_LEVEL], out int level);
-                        int.TryParse(cols[COL_LINES], out int lines);
-                        int.TryParse(cols[COL_SPEED], out int speed);
-                        int.TryParse(cols[COL_MOVES], out int moves);
-                        int.TryParse(cols[COL_BLOCKS], out int blocks);
-                        long.TryParse(cols[COL_TIME], out long duration);
-
-                        results.Add(new Stats(id, score, lines, level, speed, moves, blocks, duration));
-                    }
+                    results.Add(new Stats(id, score, lines, level, speed, moves, blocks, duration));
                 }
-            }).ConfigureAwait(false);
+            }
 
             return results;
         }
