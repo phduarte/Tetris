@@ -55,6 +55,10 @@ Global
 		{ECE9CC5F-FE77-43ED-8BDF-3E9D095A2498} = {1199745F-C8F1-427A-BC0A-DBAC201D8659}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
+		BuildVersion_UpdateFileVersion = False
+		BuildVersion_UpdateAssemblyVersion = False
+		BuildVersion_BuildVersioningStyle = None.None.Increment.YearMonthStamp
+		BuildVersion_StartDate = 2018/6/10
 		SolutionGuid = {191B99D4-B21C-425D-9A96-E3FCAF658284}
 	EndGlobalSection
 EndGlobal

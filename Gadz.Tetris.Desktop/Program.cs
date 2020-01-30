@@ -15,5 +15,6 @@ namespace Gadz.Tetris.Desktop {
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Choose());
         }
+
     }
 }
