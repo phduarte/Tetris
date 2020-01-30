@@ -21,13 +21,13 @@ namespace Gadz.Tetris.Desktop {
         static IDictionary<string, Image> _imageCache = new Dictionary<string, Image> {
             {string.Empty, Properties.Resources.BLOCK_CLASSIC},
             {"Transparente", Properties.Resources.BLOCK_CLASSIC},
-            {"Amarelo", Properties.Resources.BLOCK_YELLOW},
-            {"Vermelho", Properties.Resources.BLOCK_RED},
-            {"Roxo", Properties.Resources.BLOCK_PURPLE},
-            {"Verde", Properties.Resources.BLOCK_GREEN},
-            {"Laranja", Properties.Resources.BLOCK_ORANGE},
-            {"Azul", Properties.Resources.BLOCK_BLUE },
-            {"Ciano", Properties.Resources.BLOCK_CYAN }
+            {"Yellow", Properties.Resources.BLOCK_YELLOW},
+            {"Red", Properties.Resources.BLOCK_RED},
+            {"Purple", Properties.Resources.BLOCK_PURPLE},
+            {"Green", Properties.Resources.BLOCK_GREEN},
+            {"Orange", Properties.Resources.BLOCK_ORANGE},
+            {"Blue", Properties.Resources.BLOCK_BLUE },
+            {"Cyan", Properties.Resources.BLOCK_CYAN }
         };
 
         #endregion
