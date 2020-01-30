@@ -1,0 +1,19 @@
+name: .NET 4.6
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@master
+    - name: Run a one-line script
+
+    - name: Setup MSBuild.exe
+      uses: warrenbuckley/Setup-MSBuild@v1
+
+    - name: MSBuild
+      working-directory: src
+      run: msbuild Gadz.Tetris.sln
