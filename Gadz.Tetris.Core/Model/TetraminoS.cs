@@ -2,12 +2,14 @@
 {
     internal class TetraminoS : Tetramino
     {
+
         public TetraminoS(Point position, int rotation, PieceColor color)
         {
+
             var blocks = new Block[4];
             int x = position.X, y = position.Y;
 
-            switch (rotation)
+            switch(rotation)
             {
                 case 0:
                 case 2:

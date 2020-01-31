@@ -6,12 +6,14 @@ namespace Gadz.Tetris.Model.Tests
     [TestClass]
     public class PecaTests
     {
-        private Piece peca;
-        private Board tabuleiro;
+
+        Piece peca;
+        Board tabuleiro;
 
         [TestInitialize]
         public void Setup()
         {
+
             tabuleiro = GameController.Create(10, 20).CurrentBoard;
 
             peca = new PieceBuilder()

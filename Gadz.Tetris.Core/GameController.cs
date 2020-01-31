@@ -10,11 +10,12 @@ namespace Gadz.Tetris
     /// </summary>
     public class GameController
     {
+
         #region fields
 
-        private readonly Board _board;
+        readonly Board _board;
 
-        #endregion fields
+        #endregion
 
         #region eventos
 
@@ -22,28 +23,24 @@ namespace Gadz.Tetris
         /// Ocorre a cada alteração visual, de estado do jogo ou suas estatísticas
         /// </summary>
         public event GameActionEventHandler OnRefresh;
-
         /// <summary>
         /// Ocorre quando o jogo é finalizado
         /// </summary>
         public event GameActionEventHandler OnFinish;
-
         /// <summary>
         /// Ocorre quando uma linha é destruída
         /// </summary>
         public event GameActionEventHandler OnClear;
-
         /// <summary>
         /// Ocorre quando uma peça é movimentada
         /// </summary>
         public event GameActionEventHandler OnMove;
-
         /// <summary>
         /// Ocorre quando uma peça desliza na tela
         /// </summary>
         public event GameActionEventHandler OnSlide;
 
-        #endregion eventos
+        #endregion
 
         #region properties
 
@@ -51,74 +48,64 @@ namespace Gadz.Tetris
         /// Informa se o jogo está rodando
         /// </summary>
         public bool Playing => _board.IsPlaying;
-
         /// <summary>
         /// Largura do tabuleiro
         /// </summary>
         public int BoardWidth => _board.Width;
-
         /// <summary>
         /// Altura do tabuleiro
         /// </summary>
         public int BoardHeight => _board.Height;
-
         /// <summary>
         /// Velocidade do jogo
         /// </summary>
         public int Speed => _board.Speed;
-
         /// <summary>
         /// Quantidade de linhas destruídas
         /// </summary>
         public int Lines => _board.Lines;
-
         /// <summary>
         /// Matriz do tabuleiro
         /// </summary>
         public Block[,] Matrix => _board.Matrix;
-
         /// <summary>
         /// Tempo de duração total do jogo atual
         /// </summary>
         public TimeSpan Duration => _board.Duration;
-
         /// <summary>
         /// Pontuação do jogador no jogo atual
         /// </summary>
         public int Score => _board.Score;
-
         /// <summary>
         /// Nível de dificuldade
         /// </summary>
         public int Level => _board.Level;
-
         /// <summary>
         /// Estado do jogo
         /// </summary>
         public IBoardState State => _board.State;
-
         /// <summary>
         /// Posição da peça atual
         /// </summary>
         public Point CurrentPiecePosition => _board.CurrentPiece.Position;
-
         /// <summary>
         /// Tabuleiro atual
         /// </summary>
         public Board CurrentBoard => _board;
 
-        #endregion properties
+        #endregion
 
         #region constructors
 
         private GameController(int width, int height)
         {
-            if (width < 10)
+
+            if(width < 10)
             {
                 throw new ArgumentException(nameof(width));
             }
 
-            if (height < 10)
+            if(height < 10)
             {
                 throw new ArgumentException(nameof(height));
             }
@@ -131,7 +118,7 @@ namespace Gadz.Tetris
             _board.OnSlide += () => { OnSlide?.Invoke(); };
         }
 
-        #endregion constructors
+        #endregion
 
         #region public methods
 
@@ -239,6 +226,6 @@ namespace Gadz.Tetris
             return _board.Record;
         }
 
-        #endregion public methods
+        #endregion
     }
 }

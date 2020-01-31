@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace Gadz.Tetris.Model
-{
-    public class Piece
-    {
-        private static IDictionary<PieceType, PieceColor> _colors = new Dictionary<PieceType, PieceColor> {
+namespace Gadz.Tetris.Model {
+    public class Piece {
+
+        static IDictionary<PieceType, PieceColor> _colors = new Dictionary<PieceType, PieceColor> {
                 { PieceType.I, PieceColor.Cyan },
                 { PieceType.T, PieceColor.Purple},
                 { PieceType.L, PieceColor.Orange},
@@ -24,126 +23,105 @@ namespace Gadz.Tetris.Model
         public Board Board { get; private set; }
         public Block[] Blocks => Shape.Blocks;
 
-        #endregion properties
+        #endregion
 
         #region constructors
 
-        internal Piece(PieceType type, Point position, int rotation, Board board)
-        {
+        internal Piece(PieceType type, Point position, int rotation, Board board) {
             Type = type;
             Position = position;
             Board = board;
             Rotation = rotation;
         }
 
-        private Piece(Piece clone)
-        {
+        private Piece(Piece clone) {
             Rotation = clone.Rotation;
             Position = clone.Position;
             Type = clone.Type;
             Board = clone.Board;
         }
 
-        #endregion constructors
+        #endregion
 
         #region methods
 
-        public void Rotate()
-        {
+        public void Rotate() {
+
             Rotation = Rotation == 3 ? 0 : ++Rotation;
 
             int maxX = Position.X;
             int minX = Position.X;
 
-            foreach (var b in Blocks)
-            {
-                if (b.X > maxX)
-                {
+            foreach(var b in Blocks) {
+                if(b.X > maxX) {
                     maxX = b.X;
                 }
             }
 
-            foreach (var b in Blocks)
-            {
-                if (b.X < minX)
-                {
+            foreach (var b in Blocks) {
+                if (b.X < minX) {
                     minX = b.X;
                 }
             }
 
-            if (maxX > Board.Width - 1)
-            {
+            if(maxX > Board.Width-1) {
+
                 int excesso = maxX - (Board.Width - 1);
-                for (int i = 0; i < excesso; i++)
-                {
+                for (int i = 0; i < excesso; i++) {
                     MoveLeft();
                 }
             }
 
-            if (minX < 0)
-            {
-                for (int i = minX; i < 0; i++)
-                {
+            if(minX < 0) {
+                for (int i = minX; i < 0; i++) {
                     MoveRight();
                 }
             }
         }
 
-        public void MoveDown()
-        {
+        public void MoveDown() {
             Position = new Point(Position.X, Position.Y + 1);
         }
 
-        public void MoveRight()
-        {
+        public void MoveRight() {
             Position = new Point(Position.X + 1, Position.Y);
         }
 
-        public void MoveLeft()
-        {
+        public void MoveLeft() {
             Position = new Point(Position.X - 1, Position.Y);
         }
 
-        public Piece Clone()
-        {
+        public Piece Clone() {
             return new Piece(this);
         }
-
-        public static PieceColor GetPieceColor(PieceType index)
-        {
-            try
-            {
+                
+        public static PieceColor GetPieceColor(PieceType index) {
+            try {
                 return _colors[index];
-            }
-            catch (KeyNotFoundException)
-            {
+            } catch (KeyNotFoundException) {
                 return PieceColor.None;
             }
         }
 
-        #endregion methods
+        #endregion
 
         #region overrided methods
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return $"{Type.ToString()} ({Shape.ToString()})";
         }
 
-        public override bool Equals(object obj)
-        {
-            if (obj is Piece p)
-            {
+        public override bool Equals(object obj) {
+            if(obj is Piece p) {
                 return ToString().Equals(p.ToString());
             }
             return false;
         }
 
-        public override int GetHashCode()
-        {
+        public override int GetHashCode() {
             return ToString().GetHashCode();
         }
 
-        #endregion overrided methods
+        #endregion
     }
 }

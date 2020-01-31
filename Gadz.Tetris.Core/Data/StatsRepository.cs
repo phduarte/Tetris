@@ -1,4 +1,5 @@
-﻿using Gadz.Tetris.Model;
+﻿
+using Gadz.Tetris.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,6 +10,7 @@ namespace Gadz.Tetris.Data
 {
     internal class StatsRepository : IStatsRepository
     {
+
         #region fields
 
         private static string StatsFilePath
@@ -19,19 +21,18 @@ namespace Gadz.Tetris.Data
                 return dir;
             }
         }
+        const char DELIMITADOR = '\t';
+        const int COL_ID = 0;
+        const int COL_POINTS = 1;
+        const int COL_LEVEL = 2;
+        const int COL_LINES = 3;
+        const int COL_SPEED = 4;
+        const int COL_MOVES = 5;
+        const int COL_BLOCKS = 6;
+        const int COL_TIME = 7;
+        static IList<Stats> _cache;
 
-        private const char DELIMITADOR = '\t';
-        private const int COL_ID = 0;
-        private const int COL_POINTS = 1;
-        private const int COL_LEVEL = 2;
-        private const int COL_LINES = 3;
-        private const int COL_SPEED = 4;
-        private const int COL_MOVES = 5;
-        private const int COL_BLOCKS = 6;
-        private const int COL_TIME = 7;
-        private static IList<Stats> _cache;
-
-        #endregion fields
+        #endregion
 
         #region constructors
 
@@ -40,16 +41,18 @@ namespace Gadz.Tetris.Data
             _cache = LoadCache();
         }
 
-        #endregion constructors
+        #endregion
 
         #region public methods
 
         public async void Save(Stats stats)
         {
-            await Task.Factory.StartNew(() =>
-            {
+
+            await Task.Factory.StartNew(() => {
+
                 using (var file = new StreamWriter(StatsFilePath, true))
                 {
+
                     var cols = new string[8];
 
                     cols[COL_ID] = stats.Id;
@@ -63,6 +66,7 @@ namespace Gadz.Tetris.Data
 
                     file.WriteLine(string.Join(DELIMITADOR.ToString(), cols));
                 }
+
             });
 
             _cache.Add(stats);
@@ -90,11 +94,11 @@ namespace Gadz.Tetris.Data
             return _cache;
         }
 
-        #endregion public methods
+        #endregion
 
         #region private methods
 
-        private static List<Stats> LoadCache()
+        static List<Stats> LoadCache()
         {
             var results = new List<Stats>();
 
@@ -103,8 +107,10 @@ namespace Gadz.Tetris.Data
 
             using (var file = new StreamReader(StatsFilePath))
             {
+
                 while (!file.EndOfStream)
                 {
+
                     var cols = file.ReadLine().Split(DELIMITADOR);
 
                     Identity id = cols[COL_ID];
@@ -123,6 +129,6 @@ namespace Gadz.Tetris.Data
             return results;
         }
 
-        #endregion private methods
+        #endregion
     }
 }

@@ -1,9 +1,8 @@
-﻿namespace Gadz.Tetris.Model
-{
-    internal class TetraminoO : Tetramino
-    {
-        public TetraminoO(Point position, PieceColor color)
-        {
+﻿namespace Gadz.Tetris.Model {
+    internal class TetraminoO : Tetramino {
+
+        public TetraminoO(Point position, PieceColor color) {
+
             var blocks = new Block[4];
             int x = position.X, y = position.Y;
 

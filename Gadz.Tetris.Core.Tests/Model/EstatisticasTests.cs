@@ -6,7 +6,7 @@ namespace Gadz.Tetris.Model.Tests
     [TestClass]
     public class EstatisticasTests
     {
-        private Stats stats;
+        Stats stats;
 
         [TestInitialize]
         public void Setup()
@@ -88,7 +88,6 @@ namespace Gadz.Tetris.Model.Tests
             stats.CountMovement();
             Assert.AreEqual(1, stats.Moves);
         }
-
         [TestMethod]
         public void DeveConseguirPausarPartida()
         {
