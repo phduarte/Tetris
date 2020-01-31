@@ -5,18 +5,17 @@ using System.Threading;
 
 namespace Gadz.Tetris.Model
 {
-
     public class Board
     {
         #region fields
 
-        IStatsRepository _repository;
+        private IStatsRepository _repository;
         bool _atingiuTopo => ThereIsCollision(NextPiece);
-        const int MAXIMO_LINHAS_POSSIVEIS = 4;
-        IList<Block> _playedBlocks = new List<Block>();
+        private const int MAXIMO_LINHAS_POSSIVEIS = 4;
+        private IList<Block> _playedBlocks = new List<Block>();
 
         //o propósito dessa variável é evitar que ocorra 2 avaliações ao mesmo tempo sem precisar de nenhum lock.
-        bool _refreshing;
+        private bool _refreshing;
 
         #endregion
 
@@ -45,9 +44,13 @@ namespace Gadz.Tetris.Model
         #region events
 
         public event GameActionEventHandler OnRefresh;
+
         public event GameActionEventHandler OnFinish;
+
         public event GameActionEventHandler OnClear;
+
         public event GameActionEventHandler OnMove;
+
         public event GameActionEventHandler OnSlide;
 
         #endregion
@@ -70,8 +73,7 @@ namespace Gadz.Tetris.Model
 
         public void SmashDown()
         {
-
-            while(CanMoveDown(CurrentPiece))
+            while (CanMoveDown(CurrentPiece))
             {
                 CurrentPiece.MoveDown();
             }
@@ -82,11 +84,10 @@ namespace Gadz.Tetris.Model
 
         public void SlideRight()
         {
-
-            if(!CanMoveRight(CurrentPiece))
+            if (!CanMoveRight(CurrentPiece))
                 return;
 
-            while(CanMoveRight(CurrentPiece))
+            while (CanMoveRight(CurrentPiece))
             {
                 CurrentPiece.MoveRight();
             }
@@ -96,11 +97,10 @@ namespace Gadz.Tetris.Model
 
         public void SlideLeft()
         {
-
-            if(!CanMoveLeft(CurrentPiece))
+            if (!CanMoveLeft(CurrentPiece))
                 return;
 
-            while(CanMoveLeft(CurrentPiece))
+            while (CanMoveLeft(CurrentPiece))
             {
                 CurrentPiece.MoveLeft();
             }
@@ -157,7 +157,7 @@ namespace Gadz.Tetris.Model
 
         public void MoveDown()
         {
-            if(CanMoveDown(CurrentPiece))
+            if (CanMoveDown(CurrentPiece))
             {
                 CurrentPiece.MoveDown();
                 OnMove?.Invoke();
@@ -168,7 +168,7 @@ namespace Gadz.Tetris.Model
 
         public void MoveRight()
         {
-            if(CanMoveRight(CurrentPiece))
+            if (CanMoveRight(CurrentPiece))
             {
                 CurrentPiece.MoveRight();
                 OnMove?.Invoke();
@@ -178,7 +178,7 @@ namespace Gadz.Tetris.Model
 
         public void MoveLeft()
         {
-            if(CanMoveLeft(CurrentPiece))
+            if (CanMoveLeft(CurrentPiece))
             {
                 CurrentPiece.MoveLeft();
                 OnMove?.Invoke();
@@ -188,8 +188,7 @@ namespace Gadz.Tetris.Model
 
         public void Rotate()
         {
-
-            if(!State.CanMove || ThereIsCollision(CurrentPiece))
+            if (!State.CanMove || ThereIsCollision(CurrentPiece))
             {
                 return;
             }
@@ -203,10 +202,9 @@ namespace Gadz.Tetris.Model
 
         #region private methods
 
-        bool CanMoveLeft(Piece piece)
+        private bool CanMoveLeft(Piece piece)
         {
-
-            if(!State.CanMove)
+            if (!State.CanMove)
                 return false;
 
             var newPosition = new Point(piece.Position.X - 1, piece.Position.Y);
@@ -218,9 +216,9 @@ namespace Gadz.Tetris.Model
                                     .Build();
 
             //check if current piece's blocks don't go out the board width edge
-            foreach(var i in testPiece.Blocks)
+            foreach (var i in testPiece.Blocks)
             {
-                if(i.X < 0)
+                if (i.X < 0)
                 {
                     return false;
                 }
@@ -229,10 +227,9 @@ namespace Gadz.Tetris.Model
             return !ThereIsCollision(testPiece);
         }
 
-        bool CanMoveRight(Piece piece)
+        private bool CanMoveRight(Piece piece)
         {
-
-            if(!State.CanMove)
+            if (!State.CanMove)
                 return false;
 
             var newPosition = new Point(piece.Position.X + 1, piece.Position.Y);
@@ -244,9 +241,9 @@ namespace Gadz.Tetris.Model
                 .Build();
 
             //check if current piece's blocks don't go out the board width edge
-            foreach(var i in testPiece.Blocks)
+            foreach (var i in testPiece.Blocks)
             {
-                if(i.X > Dimension.Width - 1)
+                if (i.X > Dimension.Width - 1)
                 {
                     return false;
                 }
@@ -255,9 +252,9 @@ namespace Gadz.Tetris.Model
             return !ThereIsCollision(testPiece);
         }
 
-        bool CanMoveDown(Piece piece)
+        private bool CanMoveDown(Piece piece)
         {
-            if(!State.CanMove)
+            if (!State.CanMove)
                 return false;
 
             var newPosition = new Point(piece.Position.X, piece.Position.Y + 1);
@@ -269,9 +266,9 @@ namespace Gadz.Tetris.Model
                 .Build();
 
             //check if current piece's blocks don't go out the board height edge
-            foreach(var i in testPiece.Blocks)
+            foreach (var i in testPiece.Blocks)
             {
-                if(i.Y > Dimension.Height - 1)
+                if (i.Y > Dimension.Height - 1)
                 {
                     return false;
                 }
@@ -280,15 +277,14 @@ namespace Gadz.Tetris.Model
             return !ThereIsCollision(testPiece);
         }
 
-        void Checkout()
+        private void Checkout()
         {
-
-            if(!IsPlaying)
+            if (!IsPlaying)
             {
                 return;
             }
 
-            if(_refreshing)
+            if (_refreshing)
             {
                 return;
             }
@@ -297,19 +293,18 @@ namespace Gadz.Tetris.Model
 
             //o movimento não será válido se as casas horizontais do tabuleiro já estiverem sido percorridas
             //neste caso, o hogo é finalizado
-            if(!CanMoveDown(CurrentPiece))
+            if (!CanMoveDown(CurrentPiece))
             {
-                if(_atingiuTopo)
+                if (_atingiuTopo)
                 {
                     Finish();
                     return;
                 }
                 else
                 {
-
                     TrocarPecaAtual();
 
-                    if(_atingiuTopo)
+                    if (_atingiuTopo)
                     {
                         Finish();
                         return;
@@ -327,36 +322,35 @@ namespace Gadz.Tetris.Model
             _refreshing = false;
         }
 
-        void VerificarSePreencheuLinha()
+        private void VerificarSePreencheuLinha()
         {
-
             var linhas = LimparLinhas();
 
-            if(linhas > 0)
+            if (linhas > 0)
             {
                 Pontuar(linhas);
             }
         }
 
-        void ResetMatrix()
+        private void ResetMatrix()
         {
             //limpar a matriz
-            for(int y = 0; y < Dimension.Height; y++)
+            for (int y = 0; y < Dimension.Height; y++)
             {
-                for(int x = 0; x < Dimension.Width; x++)
+                for (int x = 0; x < Dimension.Width; x++)
                 {
                     Matrix[x, y] = new Block(x, y, PieceColor.None);
                 }
             }
 
             //pintar os blocos que já saíram
-            foreach(var i in _playedBlocks)
+            foreach (var i in _playedBlocks)
             {
                 Matrix[i.X, i.Y] = i;
             }
 
             //pinta o bloco atual
-            foreach(var i in CurrentPiece.Blocks)
+            foreach (var i in CurrentPiece.Blocks)
             {
                 Matrix[i.X, i.Y] = i;
             }
@@ -364,11 +358,11 @@ namespace Gadz.Tetris.Model
             OnRefresh?.Invoke();
         }
 
-        void RefreshAsync()
+        private void RefreshAsync()
         {
-
-            new Thread(() => {
-                while(IsPlaying)
+            new Thread(() =>
+            {
+                while (IsPlaying)
                 {
                     Thread.Sleep(Frequency);
                     Checkout();
@@ -377,7 +371,7 @@ namespace Gadz.Tetris.Model
             { IsBackground = true }.Start();
         }
 
-        Piece CreateRandomBlock()
+        private Piece CreateRandomBlock()
         {
             var x = new Random().Next(0, 7);
             var tipo = (PieceType)x;
@@ -392,17 +386,16 @@ namespace Gadz.Tetris.Model
             return peca.Clone();
         }
 
-        bool ThereIsCollision(Piece peca)
+        private bool ThereIsCollision(Piece peca)
         {
-
-            if(_playedBlocks.Count <= 1)
+            if (_playedBlocks.Count <= 1)
                 return false;
 
-            foreach(var a in _playedBlocks)
+            foreach (var a in _playedBlocks)
             {
-                foreach(var b in peca.Blocks)
+                foreach (var b in peca.Blocks)
                 {
-                    if(a.CollideWith(b))
+                    if (a.CollideWith(b))
                     {
                         return true;
                     }
@@ -412,7 +405,7 @@ namespace Gadz.Tetris.Model
             return false;
         }
 
-        void TrocarPecaAtual()
+        private void TrocarPecaAtual()
         {
             GuardarBlocos();
             CurrentPiece = NextPiece.Clone();
@@ -421,22 +414,21 @@ namespace Gadz.Tetris.Model
             OnRefresh?.Invoke();
         }
 
-        void GuardarBlocos()
+        private void GuardarBlocos()
         {
-            foreach(var i in CurrentPiece.Clone().Shape.Blocks)
+            foreach (var i in CurrentPiece.Clone().Shape.Blocks)
             {
                 _playedBlocks.Add(i);
             }
         }
 
-        int LimparLinhas()
+        private int LimparLinhas()
         {
-
             var linhas = 0;
 
             //note que se no tabuleiro houver menos de 10 blocos, logicamente não haverá linha total preenchida
             //então isso economiza um pouco o processamento
-            if(_playedBlocks.Count < 10)
+            if (_playedBlocks.Count < 10)
                 return linhas;
 
             var linha = Dimension.Height - 1;
@@ -444,11 +436,10 @@ namespace Gadz.Tetris.Model
             //esse laço é invertido (decremental) para que a validação de linhas completadas ocorra debaixo pra cima.
             do
             {
-
-                if(linhas == MAXIMO_LINHAS_POSSIVEIS)
+                if (linhas == MAXIMO_LINHAS_POSSIVEIS)
                     break;
 
-                if(ContarBlocosVaziosNaLinha(linha) > 0)
+                if (ContarBlocosVaziosNaLinha(linha) > 0)
                 {
                     linha--;
                 }
@@ -458,40 +449,38 @@ namespace Gadz.Tetris.Model
                     RemoverLinha(linha);
                     MoverBlocosParaBaixo(linha);
                 }
-
-            } while(linha >= 0);
+            } while (linha >= 0);
 
             return linhas;
         }
 
-        int ContarBlocosVaziosNaLinha(int linha)
+        private int ContarBlocosVaziosNaLinha(int linha)
         {
             return Dimension.Width - _playedBlocks.Count(_ => _.Y == linha);
         }
 
-        void MoverBlocosParaBaixo(int linha)
+        private void MoverBlocosParaBaixo(int linha)
         {
-            for(var i = 0; i < _playedBlocks.Count; i++)
+            for (var i = 0; i < _playedBlocks.Count; i++)
             {
-                if(_playedBlocks[i].Y < linha)
+                if (_playedBlocks[i].Y < linha)
                 {
                     _playedBlocks[i] = new Block(_playedBlocks[i].X, _playedBlocks[i].Y + 1, _playedBlocks[i].Color);
                 }
             }
         }
 
-        void RemoverLinha(int linha)
+        private void RemoverLinha(int linha)
         {
-
             var blocosExcluidos = _playedBlocks.Where(x => x.Y == linha).ToList();
 
-            foreach(var bloco in blocosExcluidos)
+            foreach (var bloco in blocosExcluidos)
             {
                 _playedBlocks.Remove(bloco);
             }
         }
 
-        void Pontuar(int linhas)
+        private void Pontuar(int linhas)
         {
             Stats.Gain(linhas);
             OnClear?.Invoke();

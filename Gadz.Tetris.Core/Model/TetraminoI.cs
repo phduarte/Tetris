@@ -4,12 +4,11 @@
     {
         public TetraminoI(Point position, int rotation, PieceColor color)
         {
-
             var blocks = new Block[4];
             var x = position.X;
             var y = position.Y;
 
-            if(rotation == 0 || rotation == 2)
+            if (rotation == 0 || rotation == 2)
             {
                 blocks[0] = new Block(x, y, color);
                 blocks[1] = new Block(x, y + 1, color);

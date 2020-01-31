@@ -1,5 +1,4 @@
-﻿namespace Gadz.Tetris {
-
+﻿namespace Gadz.Tetris
+{
     public delegate void GameActionEventHandler();
-
 }

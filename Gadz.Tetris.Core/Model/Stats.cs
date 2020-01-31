@@ -1,20 +1,19 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Gadz.Tetris.Model
 {
     public class Stats : Entity
     {
-
         #region fields
 
-        const int REFRESH_INTERVAL = 1;
+        private const int REFRESH_INTERVAL = 1;
 
-        IDictionary<DateTime, long> _durationHistory;
-        DateTime? _startTime;
-        int stageLines = 0;
-        int goal = 20;
+        private IDictionary<DateTime, long> _durationHistory;
+        private DateTime? _startTime;
+        private int stageLines = 0;
+        private int goal = 20;
 
         #endregion
 
@@ -39,7 +38,7 @@ namespace Gadz.Tetris.Model
             Speed = 1;
         }
 
-        public Stats(Identity id) 
+        public Stats(Identity id)
             : base(id)
         {
             _durationHistory = new Dictionary<DateTime, long>();
@@ -92,7 +91,7 @@ namespace Gadz.Tetris.Model
 
         public void Finish()
         {
-            if(_startTime.HasValue)
+            if (_startTime.HasValue)
             {
                 long milisecondsDuration = DateTime.Now.Ticks - _startTime.Value.Ticks;
                 _durationHistory.Add(new KeyValuePair<DateTime, long>(_startTime.Value, milisecondsDuration));
@@ -109,21 +108,20 @@ namespace Gadz.Tetris.Model
 
         #region private methods
 
-        TimeSpan CalculateTime()
+        private TimeSpan CalculateTime()
         {
-
             long duracao = 0;
 
             duracao += _durationHistory.Sum(_ => _.Value);
-            if(_startTime.HasValue)
+            if (_startTime.HasValue)
                 duracao += (DateTime.Now - _startTime.Value).Ticks;
 
             return new TimeSpan(duracao);
         }
 
-        void CheckLevel()
+        private void CheckLevel()
         {
-            if(stageLines >= goal)
+            if (stageLines >= goal)
             {
                 LevelUp();
                 stageLines = 0;
@@ -131,11 +129,11 @@ namespace Gadz.Tetris.Model
             }
         }
 
-        void LevelUp()
+        private void LevelUp()
         {
             Level++;
 
-            if(Speed == 1)
+            if (Speed == 1)
                 Speed = REFRESH_INTERVAL;
             else
             {
@@ -143,16 +141,19 @@ namespace Gadz.Tetris.Model
             }
         }
 
-        int CalculateScore(int linhas)
+        private int CalculateScore(int linhas)
         {
-            switch(linhas)
+            switch (linhas)
             {
                 case 1:
                     return 40;
+
                 case 2:
                     return 100;
+
                 case 3:
                     return 300;
+
                 case 4:
                     return 1200;
             }

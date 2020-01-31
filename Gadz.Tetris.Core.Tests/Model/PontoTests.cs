@@ -5,7 +5,6 @@ namespace Gadz.Tetris.Model.Tests
     [TestClass]
     public class PontoTests
     {
-
         [TestMethod]
         public void DeveInstanciar()
         {

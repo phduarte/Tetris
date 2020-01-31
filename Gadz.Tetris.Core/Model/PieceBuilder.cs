@@ -1,37 +1,44 @@
-﻿namespace Gadz.Tetris.Model {
-    public class PieceBuilder {
-
+﻿namespace Gadz.Tetris.Model
+{
+    public class PieceBuilder
+    {
         #region fields
 
-        PieceType _pieceType;
-        Point _position;
-        int _rotation;
-        Board _board;
+        private PieceType _pieceType;
+        private Point _position;
+        private int _rotation;
+        private Board _board;
 
         #endregion
 
         #region methods
 
-        public PieceBuilder OfType(PieceType type) {
+        public PieceBuilder OfType(PieceType type)
+        {
             _pieceType = type;
             return this;
         }
-        public PieceBuilder OnPosition(Point position) {
+
+        public PieceBuilder OnPosition(Point position)
+        {
             _position = position;
             return this;
         }
 
-        public PieceBuilder WithRotation(int rotation) {
+        public PieceBuilder WithRotation(int rotation)
+        {
             _rotation = rotation;
             return this;
         }
 
-        public PieceBuilder OnBoard(Board board) {
+        public PieceBuilder OnBoard(Board board)
+        {
             _board = board;
             return this;
         }
 
-        public Piece Build() {
+        public Piece Build()
+        {
             return new Piece(_pieceType, _position, _rotation, _board);
         }
 
