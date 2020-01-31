@@ -1,6 +1,7 @@
 # Tetris
 
 ![.NET 4.6](https://github.com/phduarte/Tetris/workflows/.NET%204.6/badge.svg)
+[![CodeFactor](https://www.codefactor.io/repository/github/phduarte/tetris/badge)](https://www.codefactor.io/repository/github/phduarte/tetris)
 [![BCH compliance](https://bettercodehub.com/edge/badge/phduarte/Tetris?branch=master)](https://bettercodehub.com/)
 
 ## O Jogo
