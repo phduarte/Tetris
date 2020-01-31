@@ -8,7 +8,7 @@ namespace Gadz.Tetris.Tests
     [TestClass]
     public class GameControllerTests
     {
-        GameController app;
+        private GameController app;
 
         [TestInitialize]
         public void Setup()
@@ -87,10 +87,10 @@ namespace Gadz.Tetris.Tests
 
             Assert.AreEqual(1000, app.Speed);
         }
+
         [TestMethod]
         public void DeveConseguirMedirOTempoDaPartida()
         {
-
             Assert.AreEqual(0, app.Duration.Ticks);
 
             app.Start();
@@ -134,7 +134,6 @@ namespace Gadz.Tetris.Tests
         [TestMethod]
         public void DeveMoverParaEsquerda()
         {
-
             DeveMoverParaDireita();
 
             app.MoveLeft();

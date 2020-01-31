@@ -1,12 +1,14 @@
-﻿namespace Gadz.Tetris.Model {
-    internal class TetraminoZ : Tetramino {
-        
-        public TetraminoZ(Point position, int rotation, PieceColor color) {
-
+﻿namespace Gadz.Tetris.Model
+{
+    internal class TetraminoZ : Tetramino
+    {
+        public TetraminoZ(Point position, int rotation, PieceColor color)
+        {
             var blocks = new Block[4];
             int x = position.X, y = position.Y;
 
-            switch (rotation) {
+            switch (rotation)
+            {
                 case 0:
                 case 2:
 

@@ -7,18 +7,20 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Texto = Gadz.Tetris.Resources.Textos.Jogo;
 
-namespace Gadz.Tetris.Desktop {
-    public partial class Play : Form {
-
+namespace Gadz.Tetris.Desktop
+{
+    public partial class Play : Form
+    {
         #region fields
 
-        Form _baseForm;
-        static int _index = 0;
-        readonly TaskScheduler _threadPrincipal;
-        readonly GameController _controller;
-        const int BLOCK_SIZE = 22;
-        const string BLOCK_PREFIX = "block";
-        static IDictionary<string, Image> _imageCache = new Dictionary<string, Image> {
+        private Form _baseForm;
+        private static int _index = 0;
+        private readonly TaskScheduler _threadPrincipal;
+        private readonly GameController _controller;
+        private const int BLOCK_SIZE = 22;
+        private const string BLOCK_PREFIX = "block";
+
+        private static IDictionary<string, Image> _imageCache = new Dictionary<string, Image> {
             {string.Empty, Properties.Resources.BLOCK_CLASSIC},
             {"Transparente", Properties.Resources.BLOCK_CLASSIC},
             {"Yellow", Properties.Resources.BLOCK_YELLOW},
@@ -30,10 +32,10 @@ namespace Gadz.Tetris.Desktop {
             {"Cyan", Properties.Resources.BLOCK_CYAN }
         };
 
-        #endregion
+        #endregion fields
 
-        public Play(Form formBase) {
-
+        public Play(Form formBase)
+        {
             _baseForm = formBase;
             _threadPrincipal = TaskScheduler.FromCurrentSynchronizationContext();
             _controller = GameController.Create(10, 20);
@@ -43,23 +45,25 @@ namespace Gadz.Tetris.Desktop {
             SetScreenText();
             ListenEvents();
 
-            if (!Program.ClassicMode) {
-                mainBoardPanel.BackgroundImage =  Properties.Resources.BACKGROUND_TETRIS;
+            if (!Program.ClassicMode)
+            {
+                mainBoardPanel.BackgroundImage = Properties.Resources.BACKGROUND_TETRIS;
                 BackColor = Color.White;
             }
 
             Start();
         }
 
-
-        void Start() {
+        private void Start()
+        {
             _controller.Start();
             DrawScreen();
             PaintScreen();
             PlayStartSound();
         }
 
-        void SetScreenText() {
+        private void SetScreenText()
+        {
             label2.Text = Texto.Pontuacao.ToUpper();
             label3.Text = Texto.Tempo.ToUpper();
             label4.Text = Texto.Linhas.ToUpper();
@@ -71,11 +75,13 @@ namespace Gadz.Tetris.Desktop {
             Text = Texto.Nome.ToUpper();
         }
 
-        void PlayStartSound() {
+        private void PlayStartSound()
+        {
             Program.SoundPlayer.Start();
         }
 
-        void ListenEvents() {
+        private void ListenEvents()
+        {
             _controller.OnRefresh += PaintScreen;
             _controller.OnRefresh += UpdateScreenTextAsync;
             _controller.OnFinish += ExitAsync;
@@ -87,8 +93,10 @@ namespace Gadz.Tetris.Desktop {
             _controller.OnSlide += Program.SoundPlayer.Slide;
         }
 
-        async void UpdateScreenTextAsync() {
-            await Task.Factory.StartNew(() => {
+        private async void UpdateScreenTextAsync()
+        {
+            await Task.Factory.StartNew(() =>
+            {
                 lbLevel.Text = _controller.Level.ToString();
                 lbPoints.Text = _controller.Score.ToString();
                 lbTime.Text = _controller.Duration.ToString(@"hh\:mm\:ss");
@@ -97,8 +105,10 @@ namespace Gadz.Tetris.Desktop {
             }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
         }
 
-        async void ExitAsync() {
-            await Task.Factory.StartNew(() => {
+        private async void ExitAsync()
+        {
+            await Task.Factory.StartNew(() =>
+            {
                 MouseMove -= Play_MouseMove;
                 Program.SoundPlayer.End();
                 Hide();
@@ -107,58 +117,73 @@ namespace Gadz.Tetris.Desktop {
             }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
         }
 
-        void DrawScreen() {
-
+        private void DrawScreen()
+        {
             mainBoardPanel.Controls.Clear();
             mainBoardPanel.Width = _controller.BoardWidth * BLOCK_SIZE;
             mainBoardPanel.Height = _controller.BoardHeight * BLOCK_SIZE;
 
-            for (int y = 0; y < _controller.BoardHeight; y++) {
-                for (int x = 0; x < _controller.BoardWidth; x++) {
+            for (int y = 0; y < _controller.BoardHeight; y++)
+            {
+                for (int x = 0; x < _controller.BoardWidth; x++)
+                {
                     mainBoardPanel.Controls.Add(CreateBlock(x, y, string.Empty));
                 }
             }
 
             nextBlockPanel.Controls.Clear();
 
-            for (int y = 0; y < 4; y++) {
-                for (int x = 0; x < 4; x++) {
+            for (int y = 0; y < 4; y++)
+            {
+                for (int x = 0; x < 4; x++)
+                {
                     nextBlockPanel.Controls.Add(CreateBlock(x, y, string.Empty));
                 }
             }
         }
 
-        void PaintScreen() {
+        private void PaintScreen()
+        {
             PaintBoardAsync();
             PaintNextPieceAsync();
         }
 
-        async void PaintNextPieceAsync() {
-            await Task.Factory.StartNew(() => {
+        private async void PaintNextPieceAsync()
+        {
+            await Task.Factory.StartNew(() =>
+            {
                 ClearNextPiece();
                 PaintBlock(_controller.GetNextBlocks(), nextBlockPanel);
             });
         }
 
-        void ClearNextPiece() {
-            for (int y = 0; y < 4; y++) {
-                for (int x = 0; x < 4; x++) {
+        private void ClearNextPiece()
+        {
+            for (int y = 0; y < 4; y++)
+            {
+                for (int x = 0; x < 4; x++)
+                {
                     PaintBlock(x, y, string.Empty, nextBlockPanel);
                 }
             }
         }
 
-        async void PaintBoardAsync() {
-            await Task.Factory.StartNew(() => {
-                for (int y = 0; y < _controller.BoardHeight; y++) {
-                    for (int x = 0; x < _controller.BoardWidth; x++) {
+        private async void PaintBoardAsync()
+        {
+            await Task.Factory.StartNew(() =>
+            {
+                for (int y = 0; y < _controller.BoardHeight; y++)
+                {
+                    for (int x = 0; x < _controller.BoardWidth; x++)
+                    {
                         PaintBlock(x, y, _controller.Matrix[x, y].Color.ToString(), mainBoardPanel);
                     }
                 }
             }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
         }
 
-        static PictureBox CreateBlock(int x, int y, string cor) {
+        private static PictureBox CreateBlock(int x, int y, string cor)
+        {
             var block = new PictureBox
             {
                 Location = new System.Drawing.Point(x * BLOCK_SIZE, y * BLOCK_SIZE),
@@ -174,26 +199,34 @@ namespace Gadz.Tetris.Desktop {
             return block;
         }
 
-        static Image GetBackgroundImage(string cor) {
-
-            if ("None".Equals(cor) || string.Empty.Equals(cor)) {
+        private static Image GetBackgroundImage(string cor)
+        {
+            if ("None".Equals(cor) || string.Empty.Equals(cor))
+            {
                 return Program.ClassicMode ? Properties.Resources.BLOCK_CLASSIC_FADED : null;
-            } else {
+            }
+            else
+            {
                 return Program.ClassicMode ? Properties.Resources.BLOCK_CLASSIC : _imageCache[cor];
             }
         }
 
-        void PaintBlock(IEnumerable<Block> blocos, Panel panel) {
-            foreach (var bloco in blocos) {
+        private void PaintBlock(IEnumerable<Block> blocos, Panel panel)
+        {
+            foreach (var bloco in blocos)
+            {
                 PaintBlock(bloco.X, bloco.Y, bloco.Color.ToString(), panel);
             }
         }
 
-        void PaintBlock(int x, int y, string color, Panel panel) {
-            foreach (Control i in panel.Controls) {
+        private void PaintBlock(int x, int y, string color, Panel panel)
+        {
+            foreach (Control i in panel.Controls)
+            {
                 if (i.Name.StartsWith(BLOCK_PREFIX)
                     && i.Location.X == x * BLOCK_SIZE
-                    && i.Location.Y == y * BLOCK_SIZE) {
+                    && i.Location.Y == y * BLOCK_SIZE)
+                {
                     i.BackColor = Color.Transparent;
                     i.BackgroundImage = GetBackgroundImage(color);
                     break;
@@ -201,9 +234,12 @@ namespace Gadz.Tetris.Desktop {
             }
         }
 
-        private void Jogo_KeyDown(object sender, KeyEventArgs e) {
-            switch (e.KeyCode) {
-                case Keys.Down: {
+        private void Jogo_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Down:
+                    {
                         if (e.Control)
                             _controller.SmashDown();
                         else
@@ -211,7 +247,8 @@ namespace Gadz.Tetris.Desktop {
 
                         break;
                     }
-                case Keys.Left: {
+                case Keys.Left:
+                    {
                         if (e.Control)
                             _controller.RunLeft();
                         else
@@ -219,7 +256,8 @@ namespace Gadz.Tetris.Desktop {
 
                         break;
                     }
-                case Keys.Right: {
+                case Keys.Right:
+                    {
                         if (e.Control)
                             _controller.RunRight();
                         else
@@ -227,29 +265,37 @@ namespace Gadz.Tetris.Desktop {
 
                         break;
                     }
-                case Keys.Up: {
+                case Keys.Up:
+                    {
                         _controller.Rotate();
                         break;
                     }
-                case Keys.Escape: {
+                case Keys.Escape:
+                    {
                         _controller.Exit();
                         break;
                     }
-                case Keys.Enter: {
-                        if (_controller.Playing) {
+                case Keys.Enter:
+                    {
+                        if (_controller.Playing)
+                        {
                             _controller.Pause();
                             ShowPausedScreen();
-                        } else {
+                        }
+                        else
+                        {
                             HidePausedScreen();
                             _controller.Continue();
                         }
                         break;
                     }
-                case Keys.ShiftKey: {
+                case Keys.ShiftKey:
+                    {
                         Program.SoundPlayer.ToggleMute();
                         break;
                     }
-                case Keys.Space: {
+                case Keys.Space:
+                    {
                         _controller.SmashDown();
                         break;
                     }
@@ -259,15 +305,18 @@ namespace Gadz.Tetris.Desktop {
             }
         }
 
-        private void Jogo_FormClosed(object sender, FormClosedEventArgs e) {
+        private void Jogo_FormClosed(object sender, FormClosedEventArgs e)
+        {
             _baseForm.Show();
         }
 
-        private void Jogo_Load(object sender, EventArgs e) {
+        private void Jogo_Load(object sender, EventArgs e)
+        {
             Cursor.Hide();
         }
 
-        private void HideMouseWhenIsOverScreen() {
+        private void HideMouseWhenIsOverScreen()
+        {
             var left = Left;
             var right = Left + Width;
             var top = Top;
@@ -275,37 +324,44 @@ namespace Gadz.Tetris.Desktop {
 
             Cursor.Show();
 
-            if (CursorIsOverScreen(left, right, top, down)) {
+            if (CursorIsOverScreen(left, right, top, down))
+            {
                 Cursor.Hide();
             }
         }
 
-        private static bool CursorIsOverScreen(int left, int right, int top, int down) {
+        private static bool CursorIsOverScreen(int left, int right, int top, int down)
+        {
             var y = Cursor.Position.Y;
             var x = Cursor.Position.X;
 
             return (y >= top && y <= down) && (x >= left && x <= right);
         }
 
-        private void Play_MouseMove(object sender, MouseEventArgs e) {
+        private void Play_MouseMove(object sender, MouseEventArgs e)
+        {
             HideMouseWhenIsOverScreen();
         }
 
-        private void Play_Deactivate(object sender, EventArgs e) {
-            if (_controller.Playing) {
+        private void Play_Deactivate(object sender, EventArgs e)
+        {
+            if (_controller.Playing)
+            {
                 _controller.Pause();
                 ShowPausedScreen();
             }
         }
 
-        void ShowPausedScreen() {
+        private void ShowPausedScreen()
+        {
             picPause.Left = 0;
             picPause.Top = 0;
             lbPause.Visible = true;
             picPause.Visible = true;
         }
 
-        void HidePausedScreen() {
+        private void HidePausedScreen()
+        {
             lbPause.Visible = false;
             picPause.Visible = false;
         }

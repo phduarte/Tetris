@@ -8,10 +8,9 @@ namespace Gadz.Tetris.Desktop
 {
     public class SoundPlayer
     {
-
         public bool Mute { get; private set; }
 
-        static IDictionary<string, UnmanagedMemoryStream> _sounds =
+        private static IDictionary<string, UnmanagedMemoryStream> _sounds =
             new Dictionary<string, UnmanagedMemoryStream> {
             { "clean", Properties.Resources.Clean},
             {"intro", Properties.Resources.Start },
@@ -22,22 +21,22 @@ namespace Gadz.Tetris.Desktop
         };
 
         [DllImport("winmm.dll")]
-        static extern Int32 mciSendString(string command, StringBuilder buffer, int bufferSize, IntPtr hwndCallback);
+        private static extern Int32 mciSendString(string command, StringBuilder buffer, int bufferSize, IntPtr hwndCallback);
 
         public SoundPlayer()
         {
             GenerateFilesAsync();
         }
 
-        async static void GenerateFilesAsync()
+        private static async void GenerateFilesAsync()
         {
-            foreach(var sound in _sounds)
+            foreach (var sound in _sounds)
             {
                 var filePath = Path.Combine(Path.GetTempPath(), sound.Key + ".wav");
 
-                if(!File.Exists(filePath))
+                if (!File.Exists(filePath))
                 {
-                    using(var file = new StreamWriter(filePath, false))
+                    using (var file = new StreamWriter(filePath, false))
                     {
                         await sound.Value.CopyToAsync(file.BaseStream);
                     }
@@ -49,7 +48,7 @@ namespace Gadz.Tetris.Desktop
 
         public void Start()
         {
-            if(!Mute)
+            if (!Mute)
             {
                 mciSendString(@"stop ending", null, 0, IntPtr.Zero);
                 mciSendString(@"play intro from 0", null, 0, IntPtr.Zero);
@@ -58,7 +57,7 @@ namespace Gadz.Tetris.Desktop
 
         public void Clear()
         {
-            if(!Mute)
+            if (!Mute)
             {
                 mciSendString(@"play clean from 0", null, 0, IntPtr.Zero);
             }
@@ -66,7 +65,7 @@ namespace Gadz.Tetris.Desktop
 
         public void Move()
         {
-            if(!Mute)
+            if (!Mute)
             {
                 mciSendString(@"play move from 0", null, 0, IntPtr.Zero);
             }
@@ -74,7 +73,7 @@ namespace Gadz.Tetris.Desktop
 
         public void Slide()
         {
-            if(!Mute)
+            if (!Mute)
             {
                 mciSendString(@"play run from 0", null, 0, IntPtr.Zero);
             }
@@ -82,7 +81,7 @@ namespace Gadz.Tetris.Desktop
 
         public void End()
         {
-            if(!Mute)
+            if (!Mute)
             {
                 mciSendString(@"stop intro", null, 0, IntPtr.Zero);
                 mciSendString(@"play ending from 0", null, 0, IntPtr.Zero);
@@ -93,7 +92,7 @@ namespace Gadz.Tetris.Desktop
         {
             Mute = !Mute;
 
-            if(Mute)
+            if (Mute)
             {
                 StopAll();
             }
@@ -115,15 +114,15 @@ namespace Gadz.Tetris.Desktop
 
         public void Dock()
         {
-            if(!Mute)
+            if (!Mute)
             {
                 mciSendString(@"play dock from 0", null, 0, IntPtr.Zero);
             }
         }
 
-        void StopAll()
+        private void StopAll()
         {
-            foreach(var sound in _sounds)
+            foreach (var sound in _sounds)
             {
                 mciSendString($@"stop {sound.Key}", null, 0, IntPtr.Zero);
             }

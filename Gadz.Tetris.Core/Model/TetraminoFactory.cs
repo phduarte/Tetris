@@ -2,18 +2,17 @@
 
 namespace Gadz.Tetris.Model
 {
-    class TetraminoFactory
+    internal class TetraminoFactory
     {
         private TetraminoFactory()
         {
-
         }
 
         public static Tetramino Draw(PieceType type, Point position, int rotation)
         {
             var cor = Piece.GetPieceColor(type);
 
-            switch(type)
+            switch (type)
             {
                 case PieceType.T:
                     return new TetraminoT(position, rotation, cor);
@@ -39,7 +38,6 @@ namespace Gadz.Tetris.Model
                 default:
                     throw new NotImplementedException();
             }
-
         }
     }
 }
