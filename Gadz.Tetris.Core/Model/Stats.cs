@@ -241,6 +241,8 @@ namespace Gadz.Tetris.Model
 
                 case 4:
                     return 1200;
+                default:
+                    return 0;
             }
 
             throw new IndexOutOfRangeException();
