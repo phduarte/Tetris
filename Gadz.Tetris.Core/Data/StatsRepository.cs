@@ -15,7 +15,7 @@ namespace Gadz.Tetris.Data
         {
             get
             {
-                var dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Gadesi\Tetris\stats.mc";
+                var dir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Tetris\stats.mc";
                 return dir;
             }
         }
@@ -46,6 +46,9 @@ namespace Gadz.Tetris.Data
 
         public async void Save(Stats stats)
         {
+            if (!File.Exists(StatsFilePath))
+                return;
+
             await Task.Factory.StartNew(() =>
             {
                 using (var file = new StreamWriter(StatsFilePath, true))
@@ -98,7 +101,7 @@ namespace Gadz.Tetris.Data
         {
             var results = new List<Stats>();
 
-            if (!File.Exists(StatsFilePath))
+            if (!StatsFileExists())
                 return results;
 
             using (var file = new StreamReader(StatsFilePath))
@@ -121,6 +124,21 @@ namespace Gadz.Tetris.Data
             }
 
             return results;
+        }
+
+        private static bool StatsFileExists()
+        {
+            var fi = new FileInfo(StatsFilePath);
+
+            if (!fi.Exists)
+            {
+                if (!fi.Directory.Exists)
+                    fi.Directory.Create();
+
+                fi.Create();
+            }
+
+            return fi.Exists;
         }
 
         #endregion
