@@ -39,6 +39,7 @@ namespace Gadz.Tetris.Model
             return new Identity(Guid.NewGuid().ToString());
         }
 
+
         public static implicit operator Identity(int id)
         {
             return new Identity(id);

@@ -15,8 +15,8 @@ namespace Gadz.Tetris.Desktop.Commands
 
         public override void Execute() => _gameController.SmashDown();
 
-        public override bool Match(Keys key, bool control)
-            => key == Keys.Space || (key == Keys.Down && control);
+        public override bool Match(Keys key, bool control) 
+            => key == Keys.Space || key == Keys.Down && control;
 
         public override string ToString()
         {
