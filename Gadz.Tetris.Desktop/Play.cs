@@ -1,4 +1,5 @@
-﻿using Gadz.Tetris.Model;
+﻿using Gadz.Tetris.Desktop.Commands;
+using Gadz.Tetris.Model;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -17,6 +18,7 @@ namespace Gadz.Tetris.Desktop
         private static int _index = 0;
         private readonly TaskScheduler _threadPrincipal;
         private readonly GameController _controller;
+        private readonly CommandFactory _commandFactory;
         private const int BLOCK_SIZE = 22;
         private const string BLOCK_PREFIX = "block";
 
@@ -39,6 +41,7 @@ namespace Gadz.Tetris.Desktop
             _baseForm = formBase;
             _threadPrincipal = TaskScheduler.FromCurrentSynchronizationContext();
             _controller = GameController.Create(10, 20);
+            _commandFactory = new CommandFactory(_controller);
 
             InitializeComponent();
             HidePausedScreen();
@@ -236,73 +239,8 @@ namespace Gadz.Tetris.Desktop
 
         private void Jogo_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.KeyCode)
-            {
-                case Keys.Down:
-                    {
-                        if (e.Control)
-                            _controller.SmashDown();
-                        else
-                            _controller.MoveDown();
-
-                        break;
-                    }
-                case Keys.Left:
-                    {
-                        if (e.Control)
-                            _controller.RunLeft();
-                        else
-                            _controller.MoveLeft();
-
-                        break;
-                    }
-                case Keys.Right:
-                    {
-                        if (e.Control)
-                            _controller.RunRight();
-                        else
-                            _controller.MoveRight();
-
-                        break;
-                    }
-                case Keys.Up:
-                    {
-                        _controller.Rotate();
-                        break;
-                    }
-                case Keys.Escape:
-                    {
-                        _controller.Exit();
-                        break;
-                    }
-                case Keys.Enter:
-                    {
-                        if (_controller.Playing)
-                        {
-                            _controller.Pause();
-                            ShowPausedScreen();
-                        }
-                        else
-                        {
-                            HidePausedScreen();
-                            _controller.Continue();
-                        }
-                        break;
-                    }
-                case Keys.ShiftKey:
-                    {
-                        Program.SoundPlayer.ToggleMute();
-                        break;
-                    }
-                case Keys.Space:
-                    {
-                        _controller.SmashDown();
-                        break;
-                    }
-
-                default:
-                    return;
-            }
+            foreach (var cmd in _commandFactory.GetAll(e.KeyCode, e.Control))
+                cmd.Execute();
         }
 
         private void Jogo_FormClosed(object sender, FormClosedEventArgs e)

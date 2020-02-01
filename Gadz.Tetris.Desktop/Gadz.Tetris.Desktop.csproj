@@ -52,6 +52,19 @@
     <Compile Include="About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
+    <Compile Include="Commands\Command.cs" />
+    <Compile Include="Commands\CommandFactory.cs" />
+    <Compile Include="Commands\ContinueCommand.cs" />
+    <Compile Include="Commands\ExitCommand.cs" />
+    <Compile Include="Commands\MoveDownCommand.cs" />
+    <Compile Include="Commands\MoveLeftCommand.cs" />
+    <Compile Include="Commands\MoveRightCommand.cs" />
+    <Compile Include="Commands\PauseCommand.cs" />
+    <Compile Include="Commands\RotateCommand.cs" />
+    <Compile Include="Commands\RunLeftCommand.cs" />
+    <Compile Include="Commands\RunRightCommand.cs" />
+    <Compile Include="Commands\SmashDownCommand.cs" />
+    <Compile Include="Commands\ToggleMuteCommand.cs" />
     <Compile Include="GameOver.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -155,7 +168,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.YearMonthStamp" BuildVersion_StartDate="2018/6/10" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_StartDate="2018/6/10" BuildVersion_BuildVersioningStyle="None.None.Increment.YearMonthStamp" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
