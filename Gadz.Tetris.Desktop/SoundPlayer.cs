@@ -38,7 +38,7 @@ namespace Gadz.Tetris.Desktop
                 {
                     using (var file = new StreamWriter(filePath, false))
                     {
-                        await sound.Value.CopyToAsync(file.BaseStream);
+                        await sound.Value.CopyToAsync(file.BaseStream).ConfigureAwait(false);
                     }
                 }
 
