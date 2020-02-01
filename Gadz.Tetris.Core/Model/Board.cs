@@ -53,6 +53,10 @@ namespace Gadz.Tetris.Model
 
         public event GameActionEventHandler OnSlide;
 
+        public event GameActionEventHandler OnPause;
+
+        public event GameActionEventHandler OnContinue;
+
         #endregion
 
         #region constructors
@@ -110,12 +114,14 @@ namespace Gadz.Tetris.Model
 
         public void Pause()
         {
+            OnPause?.Invoke();
             State = new PausedState();
             Stats.Pause();
         }
 
         public void Continue()
         {
+            OnContinue?.Invoke();
             State = new PlayingState();
             Stats.Continue();
             RefreshAsync();

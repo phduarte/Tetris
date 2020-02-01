@@ -43,6 +43,16 @@ namespace Gadz.Tetris
         /// </summary>
         public event GameActionEventHandler OnSlide;
 
+        /// <summary>
+        /// Ocorre quando o jogador pausa o jogo.
+        /// </summary>
+        public event GameActionEventHandler OnPause;
+
+        /// <summary>
+        /// Ocorre quando o jogo é reiniciado após estar pausado.
+        /// </summary>
+        public event GameActionEventHandler OnContinue;
+
         #endregion
 
         #region properties
@@ -129,6 +139,8 @@ namespace Gadz.Tetris
             _board.OnClear += () => { OnClear?.Invoke(); };
             _board.OnMove += () => { OnMove?.Invoke(); };
             _board.OnSlide += () => { OnSlide?.Invoke(); };
+            _board.OnPause += () => { OnPause?.Invoke(); };
+            _board.OnContinue += () => { OnContinue?.Invoke(); };
         }
 
         #endregion

@@ -94,6 +94,9 @@ namespace Gadz.Tetris.Desktop
 
             _controller.OnMove += Program.SoundPlayer.Move;
             _controller.OnSlide += Program.SoundPlayer.Slide;
+
+            _controller.OnPause += ShowPausedScreen;
+            _controller.OnContinue += HidePausedScreen;
         }
 
         private async void UpdateScreenTextAsync()
@@ -240,7 +243,10 @@ namespace Gadz.Tetris.Desktop
         private void Jogo_KeyDown(object sender, KeyEventArgs e)
         {
             foreach (var cmd in _commandFactory.GetAll(e.KeyCode, e.Control))
+            {
                 cmd.Execute();
+                break;
+            }
         }
 
         private void Jogo_FormClosed(object sender, FormClosedEventArgs e)

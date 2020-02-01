@@ -15,6 +15,6 @@ namespace Gadz.Tetris.Desktop.Commands
 
         public override void Execute() => _gameController.Pause();
 
-        public override bool Match(Keys key, bool control) => key == Key && _gameController.Playing;
+        public override bool Match(Keys key, bool control)=> key == Key && _gameController.Playing;
     }
 }

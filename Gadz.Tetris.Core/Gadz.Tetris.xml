@@ -39,6 +39,16 @@
             Ocorre quando uma peça desliza na tela
             </summary>
         </member>
+        <member name="E:Gadz.Tetris.GameController.OnPause">
+            <summary>
+            Ocorre quando o jogador pausa o jogo.
+            </summary>
+        </member>
+        <member name="E:Gadz.Tetris.GameController.OnContinue">
+            <summary>
+            Ocorre quando o jogo é reiniciado após estar pausado.
+            </summary>
+        </member>
         <member name="P:Gadz.Tetris.GameController.Playing">
             <summary>
             Informa se o jogo está rodando

@@ -8,7 +8,7 @@ namespace Gadz.Tetris.Desktop.Commands
 
         public abstract Keys Key { get; }
         public abstract bool Control { get; }
-        
+
         protected Command(GameController game)
         {
             _gameController = game;
@@ -17,6 +17,8 @@ namespace Gadz.Tetris.Desktop.Commands
         public abstract void Execute();
 
         public virtual bool Match(Keys key, bool control)
-            => Key == key && Control == control;
+        {
+            return Key == key && Control == control;
+        }
     }
 }
