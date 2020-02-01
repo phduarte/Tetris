@@ -44,7 +44,6 @@
             return false;
         }
 
-
         public static bool operator ==(Point a, Point b)
         {
             return a.Equals(b);
