@@ -3,12 +3,25 @@ using System.Linq;
 
 namespace Gadz.Tetris.Model.Tests
 {
+    /// <summary>
+    /// Defines the <see cref="PecaTests" />
+    /// </summary>
     [TestClass]
     public class PecaTests
     {
+        /// <summary>
+        /// Defines the peca
+        /// </summary>
         private Piece peca;
+
+        /// <summary>
+        /// Defines the tabuleiro
+        /// </summary>
         private Board tabuleiro;
 
+        /// <summary>
+        /// The Setup
+        /// </summary>
         [TestInitialize]
         public void Setup()
         {
@@ -21,6 +34,9 @@ namespace Gadz.Tetris.Model.Tests
                 .Build();
         }
 
+        /// <summary>
+        /// The DeveInstanciar
+        /// </summary>
         [TestMethod]
         public void DeveInstanciar()
         {
@@ -33,6 +49,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual(0, peca.Rotation, "A rotação da peça não é 0.");
         }
 
+        /// <summary>
+        /// The DeveGirar
+        /// </summary>
         [TestMethod]
         public void DeveGirar()
         {
@@ -40,6 +59,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual(1, peca.Rotation);
         }
 
+        /// <summary>
+        /// The DeveMoverParaDireita
+        /// </summary>
         [TestMethod]
         public void DeveMoverParaDireita()
         {
@@ -47,6 +69,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual(1, peca.Position.X);
         }
 
+        /// <summary>
+        /// The DeveMoverParaEsquerda
+        /// </summary>
         [TestMethod]
         public void DeveMoverParaEsquerda()
         {
@@ -56,6 +81,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual(0, peca.Position.X);
         }
 
+        /// <summary>
+        /// The DeveMoverParaBaixo
+        /// </summary>
         [TestMethod]
         public void DeveMoverParaBaixo()
         {
@@ -63,6 +91,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual(1, peca.Position.Y);
         }
 
+        /// <summary>
+        /// The DeveSerClonada
+        /// </summary>
         [TestMethod]
         public void DeveSerClonada()
         {
@@ -71,6 +102,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreNotSame(peca, pecaB, "São as mesmas");
         }
 
+        /// <summary>
+        /// The NaoDeveSerClonada
+        /// </summary>
         [TestMethod]
         public void NaoDeveSerClonada()
         {

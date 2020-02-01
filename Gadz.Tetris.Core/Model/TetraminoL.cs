@@ -1,7 +1,16 @@
 ﻿namespace Gadz.Tetris.Model
 {
+    /// <summary>
+    /// Defines the <see cref="TetraminoL" />
+    /// </summary>
     internal class TetraminoL : Tetramino
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TetraminoL"/> class.
+        /// </summary>
+        /// <param name="position">The position<see cref="Point"/></param>
+        /// <param name="rotation">The rotation<see cref="int"/></param>
+        /// <param name="color">The color<see cref="PieceColor"/></param>
         public TetraminoL(Point position, int rotation, PieceColor color)
         {
             var blocks = new Block[4];

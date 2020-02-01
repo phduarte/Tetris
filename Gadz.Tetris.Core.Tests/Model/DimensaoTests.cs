@@ -2,9 +2,15 @@
 
 namespace Gadz.Tetris.Model.Tests
 {
+    /// <summary>
+    /// Defines the <see cref="DimensaoTests" />
+    /// </summary>
     [TestClass]
     public class DimensaoTests
     {
+        /// <summary>
+        /// The DeveInstanciar
+        /// </summary>
         [TestMethod]
         public void DeveInstanciar()
         {

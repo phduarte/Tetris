@@ -7,10 +7,14 @@ using System.Threading.Tasks;
 
 namespace Gadz.Tetris.Data
 {
+    /// <summary>
+    /// Defines the <see cref="StatsRepository" />
+    /// </summary>
     internal class StatsRepository : IStatsRepository
     {
-        #region fields
-
+        /// <summary>
+        /// Gets the StatsFilePath
+        /// </summary>
         private static string StatsFilePath
         {
             get
@@ -20,30 +24,68 @@ namespace Gadz.Tetris.Data
             }
         }
 
+        /// <summary>
+        /// Defines the DELIMITADOR
+        /// </summary>
         private const char DELIMITADOR = '\t';
+
+        /// <summary>
+        /// Defines the COL_ID
+        /// </summary>
         private const int COL_ID = 0;
+
+        /// <summary>
+        /// Defines the COL_POINTS
+        /// </summary>
         private const int COL_POINTS = 1;
+
+        /// <summary>
+        /// Defines the COL_LEVEL
+        /// </summary>
         private const int COL_LEVEL = 2;
+
+        /// <summary>
+        /// Defines the COL_LINES
+        /// </summary>
         private const int COL_LINES = 3;
+
+        /// <summary>
+        /// Defines the COL_SPEED
+        /// </summary>
         private const int COL_SPEED = 4;
+
+        /// <summary>
+        /// Defines the COL_MOVES
+        /// </summary>
         private const int COL_MOVES = 5;
+
+        /// <summary>
+        /// Defines the COL_BLOCKS
+        /// </summary>
         private const int COL_BLOCKS = 6;
+
+        /// <summary>
+        /// Defines the COL_TIME
+        /// </summary>
         private const int COL_TIME = 7;
+
+        /// <summary>
+        /// Defines the _cache
+        /// </summary>
         private static IList<Stats> _cache;
 
-        #endregion
-
-        #region constructors
-
+        /// <summary>
+        /// Initializes static members of the <see cref="StatsRepository"/> class.
+        /// </summary>
         static StatsRepository()
         {
             _cache = LoadCache();
         }
 
-        #endregion
-
-        #region public methods
-
+        /// <summary>
+        /// The Save
+        /// </summary>
+        /// <param name="stats">The stats<see cref="Stats"/></param>
         public async void Save(Stats stats)
         {
             if (!File.Exists(StatsFilePath))
@@ -71,11 +113,20 @@ namespace Gadz.Tetris.Data
             _cache.Add(stats);
         }
 
+        /// <summary>
+        /// The Load
+        /// </summary>
+        /// <param name="id">The id<see cref="Identity"/></param>
+        /// <returns>The <see cref="Stats"/></returns>
         public Stats Load(Identity id)
         {
             return All().First(x => x.Id.Equals(id));
         }
 
+        /// <summary>
+        /// The MaxScore
+        /// </summary>
+        /// <returns>The <see cref="int"/></returns>
         public int MaxScore()
         {
             try
@@ -88,15 +139,19 @@ namespace Gadz.Tetris.Data
             }
         }
 
+        /// <summary>
+        /// The All
+        /// </summary>
+        /// <returns>The <see cref="IEnumerable{Stats}"/></returns>
         public IEnumerable<Stats> All()
         {
             return _cache;
         }
 
-        #endregion
-
-        #region private methods
-
+        /// <summary>
+        /// The LoadCache
+        /// </summary>
+        /// <returns>The <see cref="List{Stats}"/></returns>
         private static List<Stats> LoadCache()
         {
             var results = new List<Stats>();
@@ -126,6 +181,10 @@ namespace Gadz.Tetris.Data
             return results;
         }
 
+        /// <summary>
+        /// The StatsFileExists
+        /// </summary>
+        /// <returns>The <see cref="bool"/></returns>
         private static bool StatsFileExists()
         {
             var fi = new FileInfo(StatsFilePath);
@@ -140,7 +199,5 @@ namespace Gadz.Tetris.Data
 
             return fi.Exists;
         }
-
-        #endregion
     }
 }

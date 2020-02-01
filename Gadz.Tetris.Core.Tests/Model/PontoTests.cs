@@ -2,9 +2,15 @@
 
 namespace Gadz.Tetris.Model.Tests
 {
+    /// <summary>
+    /// Defines the <see cref="PontoTests" />
+    /// </summary>
     [TestClass]
     public class PontoTests
     {
+        /// <summary>
+        /// The DeveInstanciar
+        /// </summary>
         [TestMethod]
         public void DeveInstanciar()
         {
@@ -13,6 +19,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual(0, ponto.Y);
         }
 
+        /// <summary>
+        /// The DeveSerIguais
+        /// </summary>
         [TestMethod]
         public void DeveSerIguais()
         {
@@ -23,6 +32,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.IsTrue(pontoA == pontoB);
         }
 
+        /// <summary>
+        /// The DeveSerDiferentes
+        /// </summary>
         [TestMethod]
         public void DeveSerDiferentes()
         {
@@ -32,6 +44,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.IsTrue(pontoA != pontoB);
         }
 
+        /// <summary>
+        /// The DevemColidir
+        /// </summary>
         [TestMethod]
         public void DevemColidir()
         {
@@ -40,6 +55,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.IsTrue(pontoA.ColideCom(pontoB));
         }
 
+        /// <summary>
+        /// The NaoDevemColidir
+        /// </summary>
         [TestMethod]
         public void NaoDevemColidir()
         {

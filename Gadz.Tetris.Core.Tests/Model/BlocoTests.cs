@@ -2,9 +2,15 @@
 
 namespace Gadz.Tetris.Model
 {
+    /// <summary>
+    /// Defines the <see cref="BlocoTests" />
+    /// </summary>
     [TestClass]
     public class BlocoTests
     {
+        /// <summary>
+        /// The DeveColidir
+        /// </summary>
         [TestMethod]
         public void DeveColidir()
         {
@@ -15,6 +21,9 @@ namespace Gadz.Tetris.Model
             Assert.IsTrue(blocoA.CollideWith(blocoB));
         }
 
+        /// <summary>
+        /// The NaoDeveColidir
+        /// </summary>
         [TestMethod]
         public void NaoDeveColidir()
         {
@@ -25,6 +34,9 @@ namespace Gadz.Tetris.Model
             Assert.IsFalse(blocoA.CollideWith(blocoB));
         }
 
+        /// <summary>
+        /// The DeveInstanciar
+        /// </summary>
         [TestMethod]
         public void DeveInstanciar()
         {

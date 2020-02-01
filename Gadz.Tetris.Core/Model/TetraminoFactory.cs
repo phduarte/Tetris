@@ -2,12 +2,25 @@
 
 namespace Gadz.Tetris.Model
 {
+    /// <summary>
+    /// Defines the <see cref="TetraminoFactory" />
+    /// </summary>
     internal class TetraminoFactory
     {
+        /// <summary>
+        /// Prevents a default instance of the <see cref="TetraminoFactory"/> class from being created.
+        /// </summary>
         private TetraminoFactory()
         {
         }
 
+        /// <summary>
+        /// The Draw
+        /// </summary>
+        /// <param name="type">The type<see cref="PieceType"/></param>
+        /// <param name="position">The position<see cref="Point"/></param>
+        /// <param name="rotation">The rotation<see cref="int"/></param>
+        /// <returns>The <see cref="Tetramino"/></returns>
         public static Tetramino Draw(PieceType type, Point position, int rotation)
         {
             var cor = Piece.GetPieceColor(type);

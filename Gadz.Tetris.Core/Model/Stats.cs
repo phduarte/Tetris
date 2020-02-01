@@ -4,33 +4,74 @@ using System.Linq;
 
 namespace Gadz.Tetris.Model
 {
+    /// <summary>
+    /// Defines the <see cref="Stats" />
+    /// </summary>
     public class Stats : Entity
     {
-        #region fields
-
+        /// <summary>
+        /// Defines the REFRESH_INTERVAL
+        /// </summary>
         private const int REFRESH_INTERVAL = 1;
 
+        /// <summary>
+        /// Defines the _durationHistory
+        /// </summary>
         private IDictionary<DateTime, long> _durationHistory;
+
+        /// <summary>
+        /// Defines the _startTime
+        /// </summary>
         private DateTime? _startTime;
+
+        /// <summary>
+        /// Defines the stageLines
+        /// </summary>
         private int stageLines = 0;
+
+        /// <summary>
+        /// Defines the goal
+        /// </summary>
         private int goal = 20;
 
-        #endregion
-
-        #region properties
-
+        /// <summary>
+        /// Gets the Lines
+        /// </summary>
         public int Lines { get; private set; }
+
+        /// <summary>
+        /// Gets the Score
+        /// </summary>
         public int Score { get; private set; }
+
+        /// <summary>
+        /// Gets the Level
+        /// </summary>
         public int Level { get; private set; }
+
+        /// <summary>
+        /// Gets the Speed
+        /// </summary>
         public int Speed { get; private set; }
+
+        /// <summary>
+        /// Gets the Moves
+        /// </summary>
         public int Moves { get; private set; }
+
+        /// <summary>
+        /// Gets the Blocks
+        /// </summary>
         public int Blocks { get; private set; }
+
+        /// <summary>
+        /// Gets the Duration
+        /// </summary>
         public TimeSpan Duration => CalculateTime();
 
-        #endregion
-
-        #region constructors
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Stats"/> class.
+        /// </summary>
         public Stats()
             : this(Identity.New())
         {
@@ -38,12 +79,27 @@ namespace Gadz.Tetris.Model
             Speed = 1;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Stats"/> class.
+        /// </summary>
+        /// <param name="id">The id<see cref="Identity"/></param>
         public Stats(Identity id)
             : base(id)
         {
             _durationHistory = new Dictionary<DateTime, long>();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Stats"/> class.
+        /// </summary>
+        /// <param name="id">The id<see cref="Identity"/></param>
+        /// <param name="points">The points<see cref="int"/></param>
+        /// <param name="lines">The lines<see cref="int"/></param>
+        /// <param name="level">The level<see cref="int"/></param>
+        /// <param name="speed">The speed<see cref="int"/></param>
+        /// <param name="moves">The moves<see cref="int"/></param>
+        /// <param name="blocks">The blocks<see cref="int"/></param>
+        /// <param name="duration">The duration<see cref="long"/></param>
         public Stats(Identity id, int points, int lines, int level, int speed, int moves, int blocks, long duration) : this(id)
         {
             Score = points;
@@ -55,10 +111,10 @@ namespace Gadz.Tetris.Model
             _durationHistory.Add(DateTime.Now, duration);
         }
 
-        #endregion
-
-        #region public methods
-
+        /// <summary>
+        /// The Gain
+        /// </summary>
+        /// <param name="lines">The lines<see cref="int"/></param>
         public void Gain(int lines)
         {
             Lines += lines;
@@ -67,16 +123,25 @@ namespace Gadz.Tetris.Model
             CheckLevel();
         }
 
+        /// <summary>
+        /// The CountMovement
+        /// </summary>
         public void CountMovement()
         {
             Moves++;
         }
 
+        /// <summary>
+        /// The Start
+        /// </summary>
         public void Start()
         {
             _startTime = DateTime.Now;
         }
 
+        /// <summary>
+        /// The Pause
+        /// </summary>
         public void Pause()
         {
             long milisecondsDuration = DateTime.Now.Ticks - _startTime.Value.Ticks;
@@ -84,11 +149,17 @@ namespace Gadz.Tetris.Model
             _startTime = null;
         }
 
+        /// <summary>
+        /// The Continue
+        /// </summary>
         public void Continue()
         {
             _startTime = DateTime.Now;
         }
 
+        /// <summary>
+        /// The Finish
+        /// </summary>
         public void Finish()
         {
             if (_startTime.HasValue)
@@ -99,15 +170,18 @@ namespace Gadz.Tetris.Model
             }
         }
 
+        /// <summary>
+        /// The IncludeBlock
+        /// </summary>
         public void IncludeBlock()
         {
             Blocks++;
         }
 
-        #endregion
-
-        #region private methods
-
+        /// <summary>
+        /// The CalculateTime
+        /// </summary>
+        /// <returns>The <see cref="TimeSpan"/></returns>
         private TimeSpan CalculateTime()
         {
             long duracao = 0;
@@ -119,6 +193,9 @@ namespace Gadz.Tetris.Model
             return new TimeSpan(duracao);
         }
 
+        /// <summary>
+        /// The CheckLevel
+        /// </summary>
         private void CheckLevel()
         {
             if (stageLines >= goal)
@@ -129,6 +206,9 @@ namespace Gadz.Tetris.Model
             }
         }
 
+        /// <summary>
+        /// The LevelUp
+        /// </summary>
         private void LevelUp()
         {
             Level++;
@@ -141,6 +221,11 @@ namespace Gadz.Tetris.Model
             }
         }
 
+        /// <summary>
+        /// The CalculateScore
+        /// </summary>
+        /// <param name="linhas">The linhas<see cref="int"/></param>
+        /// <returns>The <see cref="int"/></returns>
         private int CalculateScore(int linhas)
         {
             switch (linhas)
@@ -160,7 +245,5 @@ namespace Gadz.Tetris.Model
 
             throw new IndexOutOfRangeException();
         }
-
-        #endregion
     }
 }

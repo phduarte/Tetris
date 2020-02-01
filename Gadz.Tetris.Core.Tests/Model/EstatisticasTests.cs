@@ -3,17 +3,29 @@ using System.Threading;
 
 namespace Gadz.Tetris.Model.Tests
 {
+    /// <summary>
+    /// Defines the <see cref="EstatisticasTests" />
+    /// </summary>
     [TestClass]
     public class EstatisticasTests
     {
+        /// <summary>
+        /// Defines the stats
+        /// </summary>
         private Stats stats;
 
+        /// <summary>
+        /// The Setup
+        /// </summary>
         [TestInitialize]
         public void Setup()
         {
             stats = new Stats();
         }
 
+        /// <summary>
+        /// The DeveInstanciar
+        /// </summary>
         [TestMethod]
         public void DeveInstanciar()
         {
@@ -21,6 +33,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.IsNotNull(stats);
         }
 
+        /// <summary>
+        /// The DeveRecuperarValoresDeOutraPartida
+        /// </summary>
         [TestMethod]
         public void DeveRecuperarValoresDeOutraPartida()
         {
@@ -35,6 +50,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual(452165, stats.Duration.Ticks);
         }
 
+        /// <summary>
+        /// The DevePontuar40PontosPorUmaLinha
+        /// </summary>
         [TestMethod]
         public void DevePontuar40PontosPorUmaLinha()
         {
@@ -42,6 +60,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual(40, stats.Score);
         }
 
+        /// <summary>
+        /// The DevePontuar100PontosPorDuasLinhas
+        /// </summary>
         [TestMethod]
         public void DevePontuar100PontosPorDuasLinhas()
         {
@@ -49,6 +70,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual(100, stats.Score);
         }
 
+        /// <summary>
+        /// The DevePontuar300PontosPorTresLinhas
+        /// </summary>
         [TestMethod]
         public void DevePontuar300PontosPorTresLinhas()
         {
@@ -56,6 +80,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual(300, stats.Score);
         }
 
+        /// <summary>
+        /// The DevePontuar1200PontosPorQuatroLinhas
+        /// </summary>
         [TestMethod]
         public void DevePontuar1200PontosPorQuatroLinhas()
         {
@@ -63,6 +90,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual(1200, stats.Score);
         }
 
+        /// <summary>
+        /// The DeveContabilizarTempoDaPartida
+        /// </summary>
         [TestMethod]
         public void DeveContabilizarTempoDaPartida()
         {
@@ -72,6 +102,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreNotEqual(0, stats.Duration.Ticks);
         }
 
+        /// <summary>
+        /// The DevePararDeContabilizarTempoAoTerminarPartida
+        /// </summary>
         [TestMethod]
         public void DevePararDeContabilizarTempoAoTerminarPartida()
         {
@@ -82,6 +115,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual(x, stats.Duration.Ticks);
         }
 
+        /// <summary>
+        /// The DeveContabilizarMovimentos
+        /// </summary>
         [TestMethod]
         public void DeveContabilizarMovimentos()
         {
@@ -89,6 +125,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual(1, stats.Moves);
         }
 
+        /// <summary>
+        /// The DeveConseguirPausarPartida
+        /// </summary>
         [TestMethod]
         public void DeveConseguirPausarPartida()
         {
@@ -102,6 +141,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual(x, stats.Duration.Ticks);
         }
 
+        /// <summary>
+        /// The DeveConseguirContinuarPartida
+        /// </summary>
         [TestMethod]
         public void DeveConseguirContinuarPartida()
         {

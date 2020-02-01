@@ -10,13 +10,10 @@ namespace Gadz.Tetris
     /// </summary>
     public class GameController
     {
-        #region fields
-
+        /// <summary>
+        /// Defines the _board
+        /// </summary>
         private readonly Board _board;
-
-        #endregion
-
-        #region eventos
 
         /// <summary>
         /// Ocorre a cada alteração visual, de estado do jogo ou suas estatísticas
@@ -53,74 +50,83 @@ namespace Gadz.Tetris
         /// </summary>
         public event GameActionEventHandler OnContinue;
 
-        #endregion
-
-        #region properties
-
         /// <summary>
+        /// Gets a value indicating whether Playing
         /// Informa se o jogo está rodando
         /// </summary>
         public bool Playing => _board.IsPlaying;
 
         /// <summary>
+        /// Gets the BoardWidth
         /// Largura do tabuleiro
         /// </summary>
         public int BoardWidth => _board.Width;
 
         /// <summary>
+        /// Gets the BoardHeight
         /// Altura do tabuleiro
         /// </summary>
         public int BoardHeight => _board.Height;
 
         /// <summary>
+        /// Gets the Speed
         /// Velocidade do jogo
         /// </summary>
         public int Speed => _board.Speed;
 
         /// <summary>
+        /// Gets the Lines
         /// Quantidade de linhas destruídas
         /// </summary>
         public int Lines => _board.Lines;
 
         /// <summary>
+        /// Gets the Matrix
         /// Matriz do tabuleiro
         /// </summary>
         public Block[,] Matrix => _board.Matrix;
 
         /// <summary>
+        /// Gets the Duration
         /// Tempo de duração total do jogo atual
         /// </summary>
         public TimeSpan Duration => _board.Duration;
 
         /// <summary>
+        /// Gets the Score
         /// Pontuação do jogador no jogo atual
         /// </summary>
         public int Score => _board.Score;
 
         /// <summary>
+        /// Gets the Level
         /// Nível de dificuldade
         /// </summary>
         public int Level => _board.Level;
 
         /// <summary>
+        /// Gets the State
         /// Estado do jogo
         /// </summary>
         public IBoardState State => _board.State;
 
         /// <summary>
+        /// Gets the CurrentPiecePosition
         /// Posição da peça atual
         /// </summary>
         public Point CurrentPiecePosition => _board.CurrentPiece.Position;
 
         /// <summary>
+        /// Gets the CurrentBoard
         /// Tabuleiro atual
         /// </summary>
         public Board CurrentBoard => _board;
 
-        #endregion
-
-        #region constructors
-
+        /// <summary>
+        /// Prevents a default instance of the <see cref="GameController"/> class from being created.
+        /// </summary>
+        /// <param name="width">The width<see cref="int"/></param>
+        /// <param name="height">The height<see cref="int"/></param>
         private GameController(int width, int height)
         {
             if (width < 10)
@@ -142,10 +148,6 @@ namespace Gadz.Tetris
             _board.OnPause += () => { OnPause?.Invoke(); };
             _board.OnContinue += () => { OnContinue?.Invoke(); };
         }
-
-        #endregion
-
-        #region public methods
 
         /// <summary>
         /// Cria um novo Controlador do Jogo
@@ -250,7 +252,5 @@ namespace Gadz.Tetris
         {
             return _board.Record;
         }
-
-        #endregion
     }
 }

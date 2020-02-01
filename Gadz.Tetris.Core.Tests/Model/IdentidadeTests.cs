@@ -2,9 +2,15 @@
 
 namespace Gadz.Tetris.Model.Tests
 {
+    /// <summary>
+    /// Defines the <see cref="IdentidadeTests" />
+    /// </summary>
     [TestClass]
     public class IdentidadeTests
     {
+        /// <summary>
+        /// The DeveInstanciar
+        /// </summary>
         [TestMethod]
         public void DeveInstanciar()
         {
@@ -12,6 +18,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.IsNotNull(id);
         }
 
+        /// <summary>
+        /// The DeveGerarNova
+        /// </summary>
         [TestMethod]
         public void DeveGerarNova()
         {
@@ -19,6 +28,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.IsNotNull(id);
         }
 
+        /// <summary>
+        /// The DeveConverterIdentidadeParaInteiro
+        /// </summary>
         [TestMethod]
         public void DeveConverterIdentidadeParaInteiro()
         {
@@ -28,6 +40,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual(0, inteiro);
         }
 
+        /// <summary>
+        /// The DeveConverterIdentidadeParaTexto
+        /// </summary>
         [TestMethod]
         public void DeveConverterIdentidadeParaTexto()
         {
@@ -37,6 +52,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual("A", texto);
         }
 
+        /// <summary>
+        /// The DeveConverterTextoParIdentidade
+        /// </summary>
         [TestMethod]
         public void DeveConverterTextoParIdentidade()
         {
@@ -46,6 +64,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual("B", id);
         }
 
+        /// <summary>
+        /// The DeveConverterInteiroParaIdentidade
+        /// </summary>
         [TestMethod]
         public void DeveConverterInteiroParaIdentidade()
         {

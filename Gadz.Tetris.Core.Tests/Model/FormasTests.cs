@@ -4,9 +4,15 @@ using System.Linq;
 
 namespace Gadz.Tetris.Model.Tests
 {
+    /// <summary>
+    /// Defines the <see cref="FormasTests" />
+    /// </summary>
     [TestClass]
     public class FormasTests
     {
+        /// <summary>
+        /// The DeveDesenharFormaI
+        /// </summary>
         [TestMethod]
         public void DeveDesenharFormaI()
         {
@@ -15,6 +21,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual("0+0,0+1,0+2,0+3", forma.ToString());
         }
 
+        /// <summary>
+        /// The DeveDesenharFormaJ
+        /// </summary>
         [TestMethod]
         public void DeveDesenharFormaJ()
         {
@@ -23,6 +32,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual("1+0,1+1,1+2,0+2", forma.ToString());
         }
 
+        /// <summary>
+        /// The DeveDesenharFormaL
+        /// </summary>
         [TestMethod]
         public void DeveDesenharFormaL()
         {
@@ -30,6 +42,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual("0+0,0+1,0+2,1+2", forma.ToString());
         }
 
+        /// <summary>
+        /// The DeveDesenharFormaO
+        /// </summary>
         [TestMethod]
         public void DeveDesenharFormaO()
         {
@@ -38,6 +53,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual("0+0,0+1,1+0,1+1", forma.ToString());
         }
 
+        /// <summary>
+        /// The DeveDesenharFormaS
+        /// </summary>
         [TestMethod]
         public void DeveDesenharFormaS()
         {
@@ -45,6 +63,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual("0+0,0+1,1+1,1+2", forma.ToString());
         }
 
+        /// <summary>
+        /// The DeveDesenharFormaT
+        /// </summary>
         [TestMethod]
         public void DeveDesenharFormaT()
         {
@@ -53,6 +74,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual("0+0,0+1,0+2,1+1", forma.ToString());
         }
 
+        /// <summary>
+        /// The DeveDesenharFormaZ
+        /// </summary>
         [TestMethod]
         public void DeveDesenharFormaZ()
         {
@@ -61,6 +85,9 @@ namespace Gadz.Tetris.Model.Tests
             Assert.AreEqual("1+0,1+1,0+1,0+2", forma.ToString());
         }
 
+        /// <summary>
+        /// The NaoDeveDesenharNenhumaForma
+        /// </summary>
         [TestMethod]
         [ExpectedException(typeof(NotImplementedException))]
         public void NaoDeveDesenharNenhumaForma()
