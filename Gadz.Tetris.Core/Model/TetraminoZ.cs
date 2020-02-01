@@ -39,7 +39,7 @@
                     break;
 
                 default:
-                    throw new System.Exception("Unexpected Case");
+                    throw new System.NotImplementedException($"Rotation {rotation}");
             }
 
             Blocks = blocks;
