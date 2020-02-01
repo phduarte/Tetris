@@ -108,7 +108,7 @@ namespace Gadz.Tetris.Data
 
                     file.WriteLine(string.Join(DELIMITADOR.ToString(), cols));
                 }
-            });
+            }).ConfigureAwait(false);
 
             _cache.Add(stats);
         }
