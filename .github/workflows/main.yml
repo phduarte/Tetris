@@ -9,6 +9,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@master
+    - uses: nuget/setup-nuget@v1
     - name: Run a one-line script
       run:  echo "clonning!"
 
@@ -16,7 +17,7 @@ jobs:
       uses: warrenbuckley/Setup-MSBuild@v1
 
     - name: update-packages
-      run: update-package
+      run: nuget restore Gadz.Tetris.sln
       
     - name: MSBuild
       run: msbuild Gadz.Tetris.sln
