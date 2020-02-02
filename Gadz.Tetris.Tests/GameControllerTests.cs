@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Threading;
 
-namespace Gadz.Tetris.Tests
+namespace Gadz.Tetris
 {
     /// <summary>
     /// Defines the <see cref="GameControllerTests" />

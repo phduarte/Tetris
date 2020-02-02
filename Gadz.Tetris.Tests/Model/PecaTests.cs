@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
-namespace Gadz.Tetris.Model.Tests
+namespace Gadz.Tetris.Model
 {
     /// <summary>
     /// Defines the <see cref="PecaTests" />

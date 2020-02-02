@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace Gadz.Tetris.Model.Tests
+namespace Gadz.Tetris.Model
 {
     /// <summary>
     /// Defines the <see cref="FormasTests" />

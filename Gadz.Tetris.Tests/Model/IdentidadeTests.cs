@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Gadz.Tetris.Model.Tests
+namespace Gadz.Tetris.Model
 {
     /// <summary>
     /// Defines the <see cref="IdentidadeTests" />

@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading;
 
-namespace Gadz.Tetris.Model.Tests
+namespace Gadz.Tetris.Model
 {
     /// <summary>
     /// Defines the <see cref="EstatisticasTests" />
