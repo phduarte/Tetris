@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Gadz.Tetris.Model
 {
@@ -88,30 +89,18 @@ namespace Gadz.Tetris.Model
         public void Rotate()
         {
             Rotation = Rotation == 3 ? 0 : ++Rotation;
+            PreventOverlap();
+        }
 
-            int maxX = Position.X;
-            int minX = Position.X;
-
-            foreach (var b in Blocks)
-            {
-                if (b.X > maxX)
-                {
-                    maxX = b.X;
-                }
-            }
-
-            foreach (var b in Blocks)
-            {
-                if (b.X < minX)
-                {
-                    minX = b.X;
-                }
-            }
+        private void PreventOverlap()
+        {
+            int maxX = Blocks.Max(x => x.X);
+            int minX = Blocks.Min(x => x.X);
 
             if (maxX > Board.Width - 1)
             {
-                int excesso = maxX - (Board.Width - 1);
-                for (int i = 0; i < excesso; i++)
+                int excess = maxX - (Board.Width - 1);
+                for (int i = 0; i < excess; i++)
                 {
                     MoveLeft();
                 }
@@ -182,7 +171,7 @@ namespace Gadz.Tetris.Model
         /// <returns>The <see cref="string"/></returns>
         public override string ToString()
         {
-            return $"{Type.ToString()} ({Shape.ToString()})";
+            return $"{Type} ({Shape})";
         }
 
         /// <summary>
