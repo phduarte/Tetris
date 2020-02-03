@@ -3,7 +3,7 @@ image: Visual Studio 2017
 configuration: Release
 platform: Any CPU
 build:
-  project: src\Gadz.Tetris.sln
+  project: Gadz.Tetris.sln
   publish_nuget: true
   include_nuget_references: true
   verbosity: minimal
