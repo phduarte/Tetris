@@ -37,5 +37,5 @@ O Core é responsável pelo backbone do software, provém o Modelo de Domínio e
 
 ## Links úteis
 
-- [Baixar](Tetris.zip)
-- [Ferramentas usadas](doc/ferramentas.md)
+- [Baixar](https://github.com/phduarte/Tetris/releases/latest)
+- [Documentação](https://github.com/phduarte/Tetris/wiki)
