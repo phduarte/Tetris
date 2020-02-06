@@ -18,6 +18,6 @@ jobs:
 
     - name: update-packages
       run: nuget restore Gadz.Tetris.sln
-      
+
     - name: MSBuild
       run: msbuild Gadz.Tetris.sln
