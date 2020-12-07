@@ -61,7 +61,7 @@ namespace Gadz.Tetris.Model
             var id = new Identity(0);
             var texto = "B";
             id = texto;
-            Assert.AreEqual("B", id);
+            Assert.IsTrue("B" == id);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Gadz.Tetris.Model
             var id = new Identity("A");
             var inteiro = 1;
             id = inteiro;
-            Assert.AreEqual(1, id);
+            Assert.IsTrue(1 == id);
         }
     }
 }

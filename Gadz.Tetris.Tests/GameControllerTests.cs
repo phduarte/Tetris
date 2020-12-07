@@ -54,7 +54,7 @@ namespace Gadz.Tetris
         {
             app.Start();
 
-            Assert.AreEqual("Jogando", app.State.ToString());
+            Assert.AreEqual("Playing", app.State.ToString());
             Assert.IsTrue(app.Playing);
         }
 
@@ -65,11 +65,11 @@ namespace Gadz.Tetris
         public void DeveReiniciar()
         {
             app.Start();
-            Assert.AreEqual("Jogando", app.State.ToString(), "Não está iniciando");
+            Assert.AreEqual("Playing", app.State.ToString(), "Não está iniciando");
             app.Pause();
             Assert.AreEqual("Parado", app.State.ToString(), "Não está pausando");
             app.Restart();
-            Assert.AreEqual("Jogando", app.State.ToString(), "Não está continuando");
+            Assert.AreEqual("Playing", app.State.ToString(), "Não está continuando");
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Gadz.Tetris
         public void DevePausar()
         {
             app.Start();
-            Assert.AreEqual("Jogando", app.State.ToString(), "Não está iniciando");
+            Assert.AreEqual("Playing", app.State.ToString(), "Não está iniciando");
             app.Pause();
             Assert.AreEqual("Parado", app.State.ToString(), "Não está pausando");
             Assert.IsFalse(app.Playing, "Está informando que está jogando.");
@@ -92,11 +92,11 @@ namespace Gadz.Tetris
         public void DeveContinuar()
         {
             app.Start();
-            Assert.AreEqual("Jogando", app.State.ToString(), "Não está iniciando");
+            Assert.AreEqual("Playing", app.State.ToString(), "Não está iniciando");
             app.Pause();
             Assert.AreEqual("Parado", app.State.ToString(), "Não está pausando");
             app.Continue();
-            Assert.AreEqual("Jogando", app.State.ToString(), "Não está continuando");
+            Assert.AreEqual("Playing", app.State.ToString(), "Não está continuando");
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace Gadz.Tetris
         {
             app.Start();
 
-            Assert.AreEqual(1000, app.Speed);
+            Assert.AreEqual(1, app.Speed);
         }
 
         /// <summary>
