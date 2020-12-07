@@ -190,7 +190,7 @@ namespace Gadz.Tetris.Desktop
 
         private static PictureBox CreateBlock(int x, int y, string cor)
         {
-            var block = new PictureBox
+            return new PictureBox
             {
                 Location = new System.Drawing.Point(x * BLOCK_SIZE, y * BLOCK_SIZE),
                 BackgroundImage = GetBackgroundImage(cor),
@@ -201,8 +201,6 @@ namespace Gadz.Tetris.Desktop
                 TabIndex = 0,
                 TabStop = false
             };
-
-            return block;
         }
 
         private static Image GetBackgroundImage(string cor)
@@ -229,9 +227,10 @@ namespace Gadz.Tetris.Desktop
         {
             foreach (Control i in panel.Controls)
             {
-                if (i.Name.StartsWith(BLOCK_PREFIX)
-                    && i.Location.X == x * BLOCK_SIZE
-                    && i.Location.Y == y * BLOCK_SIZE)
+                var isSameLocation = i.Location.X == x * BLOCK_SIZE && i.Location.Y == y * BLOCK_SIZE;
+                var isSameBlock = i.Name.StartsWith(BLOCK_PREFIX) && isSameLocation;
+
+                if (isSameBlock)
                 {
                     i.BackColor = Color.Transparent;
                     i.BackgroundImage = GetBackgroundImage(color);
@@ -300,14 +299,12 @@ namespace Gadz.Tetris.Desktop
         {
             picPause.Left = 0;
             picPause.Top = 0;
-            lbPause.Visible = true;
-            picPause.Visible = true;
+            lbPause.Visible = picPause.Visible = true;
         }
 
         private void HidePausedScreen()
         {
-            lbPause.Visible = false;
-            picPause.Visible = false;
+            lbPause.Visible = picPause.Visible = false;
         }
     }
 }
