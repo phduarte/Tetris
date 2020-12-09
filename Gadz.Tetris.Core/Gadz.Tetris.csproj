@@ -40,6 +40,7 @@
     <Compile Include="Data\StatsRepository.cs" />
     <Compile Include="Delegates.cs" />
     <Compile Include="Model\Entity.cs" />
+    <Compile Include="Model\StatsRecord.cs" />
     <Compile Include="Model\Tetramino.cs" />
     <Compile Include="Model\TetraminoFactory.cs" />
     <Compile Include="Model\Identity.cs" />
@@ -71,7 +72,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.DeltaBaseDateInDays" BuildVersion_DetectChanges="True" BuildVersion_IncrementBeforeBuild="True" BuildVersion_StartDate="2018/6/10" />
+      <UserProperties BuildVersion_StartDate="2018/6/10" BuildVersion_IncrementBeforeBuild="True" BuildVersion_DetectChanges="True" BuildVersion_BuildVersioningStyle="None.None.Increment.DeltaBaseDateInDays" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

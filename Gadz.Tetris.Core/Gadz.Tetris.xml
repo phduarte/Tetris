@@ -138,6 +138,51 @@
             </summary>
             <returns>The <see cref="T:System.String"/></returns>
         </member>
+        <member name="T:Gadz.Tetris.Model.StatsRecord">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gadz.Tetris.Model.StatsRecord.Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gadz.Tetris.Model.StatsRecord.Score">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gadz.Tetris.Model.StatsRecord.Lines">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gadz.Tetris.Model.StatsRecord.Level">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gadz.Tetris.Model.StatsRecord.Speed">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gadz.Tetris.Model.StatsRecord.Moves">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gadz.Tetris.Model.StatsRecord.Blocks">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gadz.Tetris.Model.StatsRecord.Seconds">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:Gadz.Tetris.Model.Tetramino">
             <summary>
             Defines the <see cref="T:Gadz.Tetris.Model.Tetramino" />
@@ -232,6 +277,13 @@
             The New
             </summary>
             <returns>The <see cref="T:Gadz.Tetris.Model.Identity"/></returns>
+        </member>
+        <member name="M:Gadz.Tetris.Model.Identity.Parse(System.String)">
+            <summary>
+            Converts the string representation of a identity in a instance of identity.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
         </member>
         <member name="M:Gadz.Tetris.Model.Identity.ToString">
             <summary>
@@ -707,7 +759,7 @@
             </summary>
             <param name="id">The id<see cref="T:Gadz.Tetris.Model.Identity"/></param>
         </member>
-        <member name="M:Gadz.Tetris.Model.Stats.#ctor(Gadz.Tetris.Model.Identity,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int64)">
+        <member name="M:Gadz.Tetris.Model.Stats.#ctor(Gadz.Tetris.Model.StatsRecord)">
             <summary>
             Initializes a new instance of the <see cref="T:Gadz.Tetris.Model.Stats"/> class.
             </summary>
@@ -778,6 +830,13 @@
             </summary>
             <param name="linhas">The linhas<see cref="T:System.Int32"/></param>
             <returns>The <see cref="T:System.Int32"/></returns>
+        </member>
+        <member name="M:Gadz.Tetris.Model.Stats.Load(Gadz.Tetris.Model.StatsRecord)">
+            <summary>
+            Carrega uma estatística baseada num registro de estatística salvo anteriormente.
+            </summary>
+            <param name="record"></param>
+            <returns></returns>
         </member>
         <member name="T:Gadz.Tetris.Model.IStatsRepository">
             <summary>

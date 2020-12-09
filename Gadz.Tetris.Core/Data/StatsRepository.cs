@@ -95,18 +95,8 @@ namespace Gadz.Tetris.Data
             {
                 using (var file = new StreamWriter(StatsFilePath, true))
                 {
-                    var cols = new string[8];
-
-                    cols[COL_ID] = stats.Id;
-                    cols[COL_POINTS] = stats.Score.ToString();
-                    cols[COL_LEVEL] = stats.Level.ToString();
-                    cols[COL_LINES] = stats.Lines.ToString();
-                    cols[COL_SPEED] = stats.Speed.ToString();
-                    cols[COL_MOVES] = stats.Moves.ToString();
-                    cols[COL_BLOCKS] = stats.Blocks.ToString();
-                    cols[COL_TIME] = stats.Duration.Ticks.ToString();
-
-                    file.WriteLine(string.Join(DELIMITADOR.ToString(), cols));
+                    var line = Map(stats);
+                    file.WriteLine(line);
                 }
             }).ConfigureAwait(false);
 
@@ -161,24 +151,48 @@ namespace Gadz.Tetris.Data
 
             using (var file = new StreamReader(StatsFilePath))
             {
-                while (!file.EndOfStream)
+                string line = null;
+                while ((line = file.ReadLine()) != null)
                 {
-                    var cols = file.ReadLine().Split(DELIMITADOR);
-
-                    Identity id = cols[COL_ID];
-                    int.TryParse(cols[COL_POINTS], out int score);
-                    int.TryParse(cols[COL_LEVEL], out int level);
-                    int.TryParse(cols[COL_LINES], out int lines);
-                    int.TryParse(cols[COL_SPEED], out int speed);
-                    int.TryParse(cols[COL_MOVES], out int moves);
-                    int.TryParse(cols[COL_BLOCKS], out int blocks);
-                    long.TryParse(cols[COL_TIME], out long duration);
-
-                    results.Add(new Stats(id, score, lines, level, speed, moves, blocks, duration));
+                    var stats = Stats.Load(Map(line));
+                    results.Add(stats);
                 }
             }
 
             return results;
+        }
+
+        private static StatsRecord Map(string line)
+        {
+            var cols = line.Split(DELIMITADOR);
+
+            return new StatsRecord
+            {
+                Id = Identity.Parse(cols[COL_ID]),
+                Score = int.Parse(cols[COL_POINTS]),
+                Level = int.Parse(cols[COL_LEVEL]),
+                Lines = int.Parse(cols[COL_LINES]),
+                Speed = int.Parse(cols[COL_SPEED]),
+                Moves = int.Parse(cols[COL_MOVES]),
+                Blocks = int.Parse(cols[COL_BLOCKS]),
+                Seconds = long.Parse(cols[COL_TIME])
+            };
+        }
+
+        private static string Map(Stats stats)
+        {
+            var cols = new string[8];
+
+            cols[COL_ID] = stats.Id;
+            cols[COL_POINTS] = stats.Score.ToString();
+            cols[COL_LEVEL] = stats.Level.ToString();
+            cols[COL_LINES] = stats.Lines.ToString();
+            cols[COL_SPEED] = stats.Speed.ToString();
+            cols[COL_MOVES] = stats.Moves.ToString();
+            cols[COL_BLOCKS] = stats.Blocks.ToString();
+            cols[COL_TIME] = stats.Duration.Ticks.ToString();
+
+            return string.Join(DELIMITADOR.ToString(), cols);
         }
 
         /// <summary>

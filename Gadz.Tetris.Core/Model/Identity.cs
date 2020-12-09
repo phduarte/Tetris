@@ -61,6 +61,17 @@ namespace Gadz.Tetris.Model
         {
             return new Identity(id);
         }
+
+        /// <summary>
+        /// Converts the string representation of a identity in a instance of identity.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static Identity Parse(string id)
+        {
+            return new Identity(id);
+        }
+
         /// <summary>
         /// The ToString
         /// </summary>

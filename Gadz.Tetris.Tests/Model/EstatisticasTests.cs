@@ -39,7 +39,17 @@ namespace Gadz.Tetris.Model
         [TestMethod]
         public void DeveRecuperarValoresDeOutraPartida()
         {
-            var stats = new Stats(Identity.New(), 1000, 15, 10, 1000, 15, 520, 452165);
+            var stats = Stats.Load(new StatsRecord
+            {
+                Id = Identity.New(),
+                Score = 1000,
+                Lines = 15,
+                Level = 10,
+                Speed = 1000,
+                Moves = 15,
+                Blocks = 520,
+                Seconds = 452165
+            });
 
             Assert.AreEqual(1000, stats.Score);
             Assert.AreEqual(15, stats.Lines);

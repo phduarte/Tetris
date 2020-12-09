@@ -100,15 +100,16 @@ namespace Gadz.Tetris.Model
         /// <param name="moves">The moves<see cref="int"/></param>
         /// <param name="blocks">The blocks<see cref="int"/></param>
         /// <param name="duration">The duration<see cref="long"/></param>
-        public Stats(Identity id, int points, int lines, int level, int speed, int moves, int blocks, long duration) : this(id)
+        private Stats(StatsRecord record) 
+            : this(record.Id)
         {
-            Score = points;
-            Lines = lines;
-            Level = level;
-            Speed = speed;
-            Moves = moves;
-            Blocks = blocks;
-            _durationHistory.Add(DateTime.Now, duration);
+            Score = record.Score;
+            Lines = record.Lines;
+            Level = record.Level;
+            Speed = record.Speed;
+            Moves = record.Moves;
+            Blocks = record.Blocks;
+            _durationHistory.Add(DateTime.Now, record.Seconds);
         }
 
         /// <summary>
@@ -246,6 +247,16 @@ namespace Gadz.Tetris.Model
             }
 
             throw new IndexOutOfRangeException();
+        }
+
+        /// <summary>
+        /// Carrega uma estatística baseada num registro de estatística salvo anteriormente.
+        /// </summary>
+        /// <param name="record"></param>
+        /// <returns></returns>
+        public static Stats Load(StatsRecord record)
+        {
+            return new Stats(record);
         }
     }
 }
