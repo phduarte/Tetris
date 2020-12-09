@@ -94,6 +94,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ShakeFormExtensions.cs" />
     <Compile Include="SoundPlayer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -168,7 +169,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_StartDate="2018/6/10" BuildVersion_BuildVersioningStyle="None.None.Increment.YearMonthStamp" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.YearMonthStamp" BuildVersion_StartDate="2018/6/10" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

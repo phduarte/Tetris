@@ -94,7 +94,12 @@ namespace Gadz.Tetris.Desktop
 
             _controller.OnMove += Program.SoundPlayer.Move;
             _controller.OnSlide += Program.SoundPlayer.Slide;
-
+            _controller.OnDrop += Program.SoundPlayer.Dock;
+            _controller.OnDrop += () =>
+            {
+                this.ShakeDown(2);
+            };
+             
             _controller.OnPause += ShowPausedScreen;
             _controller.OnContinue += HidePausedScreen;
         }

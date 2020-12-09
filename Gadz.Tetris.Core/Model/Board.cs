@@ -150,6 +150,11 @@ namespace Gadz.Tetris.Model
         public event GameActionEventHandler OnSlide;
 
         /// <summary>
+        /// Defines the OnDrop
+        /// </summary>
+        public event GameActionEventHandler OnDrop;
+
+        /// <summary>
         /// Defines the OnPause
         /// </summary>
         public event GameActionEventHandler OnPause;
@@ -183,10 +188,11 @@ namespace Gadz.Tetris.Model
             while (CanMoveDown(CurrentPiece))
             {
                 CurrentPiece.MoveDown();
+                OnSlide?.Invoke();
             }
 
             Checkout();
-            OnSlide?.Invoke();
+            OnDrop?.Invoke();
         }
 
         /// <summary>

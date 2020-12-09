@@ -41,6 +41,11 @@ namespace Gadz.Tetris
         public event GameActionEventHandler OnSlide;
 
         /// <summary>
+        /// Ocorre quando uma peça desliza na tela
+        /// </summary>
+        public event GameActionEventHandler OnDrop;
+
+        /// <summary>
         /// Ocorre quando o jogador pausa o jogo.
         /// </summary>
         public event GameActionEventHandler OnPause;
@@ -140,13 +145,14 @@ namespace Gadz.Tetris
             }
 
             _board = new Board(new StatsRepository(), width, height);
-            _board.OnRefresh += () => { OnRefresh?.Invoke(); };
-            _board.OnFinish += () => { OnFinish?.Invoke(); };
-            _board.OnClear += () => { OnClear?.Invoke(); };
-            _board.OnMove += () => { OnMove?.Invoke(); };
-            _board.OnSlide += () => { OnSlide?.Invoke(); };
-            _board.OnPause += () => { OnPause?.Invoke(); };
-            _board.OnContinue += () => { OnContinue?.Invoke(); };
+            _board.OnRefresh += () => OnRefresh?.Invoke();
+            _board.OnFinish += () => OnFinish?.Invoke();
+            _board.OnClear += () => OnClear?.Invoke();
+            _board.OnMove += () => OnMove?.Invoke();
+            _board.OnSlide += () => OnSlide?.Invoke();
+            _board.OnPause += () => OnPause?.Invoke();
+            _board.OnContinue += () => OnContinue?.Invoke();
+            _board.OnDrop += () => OnDrop?.Invoke();
         }
 
         /// <summary>

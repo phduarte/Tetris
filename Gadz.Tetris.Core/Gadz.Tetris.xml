@@ -996,6 +996,11 @@
             Defines the OnSlide
             </summary>
         </member>
+        <member name="E:Gadz.Tetris.Model.Board.OnDrop">
+            <summary>
+            Defines the OnDrop
+            </summary>
+        </member>
         <member name="E:Gadz.Tetris.Model.Board.OnPause">
             <summary>
             Defines the OnPause
@@ -1465,6 +1470,11 @@
             </summary>
         </member>
         <member name="E:Gadz.Tetris.GameController.OnSlide">
+            <summary>
+            Ocorre quando uma peça desliza na tela
+            </summary>
+        </member>
+        <member name="E:Gadz.Tetris.GameController.OnDrop">
             <summary>
             Ocorre quando uma peça desliza na tela
             </summary>
