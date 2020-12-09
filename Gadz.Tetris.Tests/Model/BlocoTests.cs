@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Gadz.Tetris.Model.Pieces;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Gadz.Tetris.Model
 {

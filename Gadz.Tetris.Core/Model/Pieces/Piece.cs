@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using Gadz.Tetris.Model.Boards;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace Gadz.Tetris.Model
+namespace Gadz.Tetris.Model.Pieces
 {
     /// <summary>
     /// Defines the <see cref="Piece" />
     /// </summary>
-    public class Piece
+    public class Piece : Entity
     {
         /// <summary>
         /// Defines the _colors
@@ -43,7 +44,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// Gets the Type
         /// </summary>
-        public PieceType Type { get; private set; }
+        public PieceType Type { get; protected set; }
 
         /// <summary>
         /// Gets the Board

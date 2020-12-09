@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Gadz.Tetris.Model.Pieces;
+using Gadz.Tetris.Model.Statistics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace Gadz.Tetris.Model
+namespace Gadz.Tetris.Model.Boards
 {
     /// <summary>
     /// Defines the <see cref="Board" />

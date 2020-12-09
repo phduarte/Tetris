@@ -1,4 +1,4 @@
-﻿namespace Gadz.Tetris.Model
+﻿namespace Gadz.Tetris.Model.Pieces
 {
     /// <summary>
     /// Defines the <see cref="TetraminoS" />

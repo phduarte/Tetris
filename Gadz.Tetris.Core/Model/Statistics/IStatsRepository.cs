@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace Gadz.Tetris.Model
+namespace Gadz.Tetris.Model.Statistics
 {
     /// <summary>
     /// Defines the <see cref="IStatsRepository" />
     /// </summary>
-    public interface IStatsRepository
+    public interface IStatsRepository : IRepository
     {
         /// <summary>
         /// The Save

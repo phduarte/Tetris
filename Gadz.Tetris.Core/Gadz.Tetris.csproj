@@ -40,32 +40,33 @@
     <Compile Include="Data\StatsRepository.cs" />
     <Compile Include="Delegates.cs" />
     <Compile Include="Model\Entity.cs" />
-    <Compile Include="Model\StatsRecord.cs" />
-    <Compile Include="Model\Tetramino.cs" />
-    <Compile Include="Model\TetraminoConfiguration.cs" />
-    <Compile Include="Model\TetraminoFactory.cs" />
+    <Compile Include="Model\IRepository.cs" />
+    <Compile Include="Model\Statistics\StatsRecord.cs" />
+    <Compile Include="Model\Pieces\Tetramino.cs" />
+    <Compile Include="Model\Pieces\TetraminoConfiguration.cs" />
+    <Compile Include="Model\Pieces\TetraminoFactory.cs" />
     <Compile Include="Model\Identity.cs" />
-    <Compile Include="Model\Block.cs" />
-    <Compile Include="Model\PieceColor.cs" />
-    <Compile Include="Model\PieceBuilder.cs" />
-    <Compile Include="Model\TetraminoI.cs" />
-    <Compile Include="Model\TetraminoJ.cs" />
-    <Compile Include="Model\TetraminoL.cs" />
-    <Compile Include="Model\TetraminoO.cs" />
-    <Compile Include="Model\TetraminoS.cs" />
-    <Compile Include="Model\TetraminoT.cs" />
-    <Compile Include="Model\TetraminoZ.cs" />
-    <Compile Include="Model\Piece.cs" />
-    <Compile Include="Model\PieceType.cs" />
-    <Compile Include="Point.cs" />
-    <Compile Include="Size.cs" />
-    <Compile Include="Model\Stats.cs" />
-    <Compile Include="Model\IStatsRepository.cs" />
-    <Compile Include="Model\Board.cs" />
-    <Compile Include="Model\IBoardState.cs" />
-    <Compile Include="Model\PlayingState.cs" />
-    <Compile Include="Model\PausedState.cs" />
-    <Compile Include="Model\FinishedState.cs" />
+    <Compile Include="Model\Pieces\Block.cs" />
+    <Compile Include="Model\Pieces\PieceColor.cs" />
+    <Compile Include="Model\Pieces\PieceBuilder.cs" />
+    <Compile Include="Model\Pieces\TetraminoI.cs" />
+    <Compile Include="Model\Pieces\TetraminoJ.cs" />
+    <Compile Include="Model\Pieces\TetraminoL.cs" />
+    <Compile Include="Model\Pieces\TetraminoO.cs" />
+    <Compile Include="Model\Pieces\TetraminoS.cs" />
+    <Compile Include="Model\Pieces\TetraminoT.cs" />
+    <Compile Include="Model\Pieces\TetraminoZ.cs" />
+    <Compile Include="Model\Pieces\Piece.cs" />
+    <Compile Include="Model\Pieces\PieceType.cs" />
+    <Compile Include="Model\Point.cs" />
+    <Compile Include="Model\Size.cs" />
+    <Compile Include="Model\Statistics\Stats.cs" />
+    <Compile Include="Model\Statistics\IStatsRepository.cs" />
+    <Compile Include="Model\Boards\Board.cs" />
+    <Compile Include="Model\Boards\IBoardState.cs" />
+    <Compile Include="Model\Boards\PlayingState.cs" />
+    <Compile Include="Model\Boards\PausedState.cs" />
+    <Compile Include="Model\Boards\FinishedState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GameController.cs" />
   </ItemGroup>
@@ -73,7 +74,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_StartDate="2018/6/10" BuildVersion_IncrementBeforeBuild="True" BuildVersion_DetectChanges="True" BuildVersion_BuildVersioningStyle="None.None.Increment.DeltaBaseDateInDays" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.DeltaBaseDateInDays" BuildVersion_DetectChanges="True" BuildVersion_IncrementBeforeBuild="True" BuildVersion_StartDate="2018/6/10" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

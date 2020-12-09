@@ -1,4 +1,6 @@
-﻿namespace Gadz.Tetris.Model
+﻿using Gadz.Tetris.Model.Boards;
+
+namespace Gadz.Tetris.Model.Pieces
 {
     /// <summary>
     /// Defines the <see cref="PieceBuilder" />

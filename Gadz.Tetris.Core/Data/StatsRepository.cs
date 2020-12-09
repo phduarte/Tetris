@@ -1,4 +1,5 @@
 ﻿using Gadz.Tetris.Model;
+using Gadz.Tetris.Model.Statistics;
 using System;
 using System.Collections.Generic;
 using System.IO;

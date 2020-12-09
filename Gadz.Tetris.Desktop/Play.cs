@@ -1,5 +1,6 @@
 ﻿using Gadz.Tetris.Desktop.Commands;
 using Gadz.Tetris.Model;
+using Gadz.Tetris.Model.Pieces;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

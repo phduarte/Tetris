@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Gadz.Tetris.Model
+namespace Gadz.Tetris.Model.Statistics
 {
     /// <summary>
     /// Defines the <see cref="Stats" />

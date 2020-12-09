@@ -1,5 +1,6 @@
 ﻿using Gadz.Tetris.Data;
-using Gadz.Tetris.Model;
+using Gadz.Tetris.Model.Boards;
+using Gadz.Tetris.Model.Pieces;
 using System;
 using System.Collections.Generic;
 
@@ -21,7 +22,7 @@ namespace Gadz.Tetris
         public event GameActionEventHandler OnRefresh;
 
         /// <summary>
-        /// Ocorre quando o jogo é finalizado
+        /// Ocorre quando o jogo é finalizado.
         /// </summary>
         public event GameActionEventHandler OnFinish;
 
@@ -54,6 +55,11 @@ namespace Gadz.Tetris
         /// Ocorre quando o jogo é reiniciado após estar pausado.
         /// </summary>
         public event GameActionEventHandler OnContinue;
+
+        /// <summary>
+        /// Ocorre quando o jogador perde.
+        /// </summary>
+        public event GameActionEventHandler OnLose;
 
         /// <summary>
         /// Gets a value indicating whether Playing
@@ -169,10 +175,7 @@ namespace Gadz.Tetris
         /// <summary>
         /// Desliza o bloco atual para baixo até encontrar um obstáculo
         /// </summary>
-        public void SmashDown()
-        {
-            _board.SmashDown();
-        }
+        public void SmashDown() => _board.SmashDown();
 
         /// <summary>
         /// Desliza o bloco atual para a direita até encontrar um obstáculo
