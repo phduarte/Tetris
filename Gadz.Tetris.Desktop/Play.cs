@@ -126,6 +126,7 @@ namespace Gadz.Tetris.Desktop
                 MouseMove -= Play_MouseMove;
                 Hide();
                 new GameOver().ShowDialog();
+                new Deserve(_controller.Board.Stats).ShowDialog();
                 Close();
             }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
         }

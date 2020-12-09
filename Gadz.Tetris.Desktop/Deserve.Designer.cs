@@ -70,7 +70,7 @@ namespace Gadz.Tetris.Desktop
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(176, 45);
             this.label1.TabIndex = 9;
-            this.label1.Text = "DESISTIU?";
+            this.label1.Text = "TETRIS";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // button3
