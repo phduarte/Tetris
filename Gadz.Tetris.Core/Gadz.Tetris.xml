@@ -941,6 +941,11 @@
             Defines the OnContinue
             </summary>
         </member>
+        <member name="E:Gadz.Tetris.Model.Boards.Board.OnLose">
+            <summary>
+            Defines the OnContinue
+            </summary>
+        </member>
         <member name="M:Gadz.Tetris.Model.Boards.Board.#ctor(Gadz.Tetris.Model.Statistics.IStatsRepository,System.Int32,System.Int32)">
             <summary>
             Initializes a new instance of the <see cref="T:Gadz.Tetris.Model.Boards.Board"/> class.
@@ -975,6 +980,11 @@
             </summary>
         </member>
         <member name="M:Gadz.Tetris.Model.Boards.Board.Finish">
+            <summary>
+            The Finish
+            </summary>
+        </member>
+        <member name="M:Gadz.Tetris.Model.Boards.Board.Lose">
             <summary>
             The Finish
             </summary>

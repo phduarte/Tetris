@@ -169,6 +169,11 @@ namespace Gadz.Tetris.Model.Boards
         public event GameActionEventHandler OnContinue;
 
         /// <summary>
+        /// Defines the OnContinue
+        /// </summary>
+        public event GameActionEventHandler OnLose;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Board"/> class.
         /// </summary>
         /// <param name="repository">The repository<see cref="IStatsRepository"/></param>
@@ -262,6 +267,18 @@ namespace Gadz.Tetris.Model.Boards
             Stats.Finish();
             State = new FinishedState();
             OnFinish?.Invoke();
+        }
+
+        /// <summary>
+        /// The Finish
+        /// </summary>
+        public void Lose()
+        {
+            OnRefresh?.Invoke();
+            Stats.Finish();
+            State = new FinishedState();
+            //OnFinish?.Invoke();
+            OnLose?.Invoke();
         }
 
         /// <summary>
@@ -471,7 +488,7 @@ namespace Gadz.Tetris.Model.Boards
             {
                 if (_atingiuTopo)
                 {
-                    Finish();
+                    Lose();
                     return;
                 }
                 else
@@ -480,7 +497,7 @@ namespace Gadz.Tetris.Model.Boards
 
                     if (_atingiuTopo)
                     {
-                        Finish();
+                        Lose();
                         return;
                     }
                 }

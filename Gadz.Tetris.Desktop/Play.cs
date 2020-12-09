@@ -89,6 +89,8 @@ namespace Gadz.Tetris.Desktop
             _controller.OnRefresh += PaintScreen;
             _controller.OnRefresh += UpdateScreenTextAsync;
             _controller.OnFinish += ExitAsync;
+            _controller.OnLose += ShowGameOver;
+            _controller.OnLose += Program.SoundPlayer.End;
 
             _controller.OnClear += PaintScreen;
             _controller.OnClear += Program.SoundPlayer.Clear;
@@ -100,7 +102,7 @@ namespace Gadz.Tetris.Desktop
             {
                 this.ShakeDown(2);
             };
-             
+
             _controller.OnPause += ShowPausedScreen;
             _controller.OnContinue += HidePausedScreen;
         }
@@ -117,14 +119,22 @@ namespace Gadz.Tetris.Desktop
             }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
         }
 
+        private async void ShowGameOver()
+        {
+            await Task.Factory.StartNew(() =>
+            {
+                MouseMove -= Play_MouseMove;
+                Hide();
+                new GameOver().ShowDialog();
+                Close();
+            }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
+        }
+
         private async void ExitAsync()
         {
             await Task.Factory.StartNew(() =>
             {
                 MouseMove -= Play_MouseMove;
-                Program.SoundPlayer.End();
-                Hide();
-                new GameOver().ShowDialog();
                 Close();
             }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
         }

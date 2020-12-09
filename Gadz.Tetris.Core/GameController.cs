@@ -153,6 +153,7 @@ namespace Gadz.Tetris
             _board = new Board(new StatsRepository(), width, height);
             _board.OnRefresh += () => OnRefresh?.Invoke();
             _board.OnFinish += () => OnFinish?.Invoke();
+            _board.OnLose += () => OnLose?.Invoke();
             _board.OnClear += () => OnClear?.Invoke();
             _board.OnMove += () => OnMove?.Invoke();
             _board.OnSlide += () => OnSlide?.Invoke();
