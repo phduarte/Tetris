@@ -43,8 +43,7 @@
     <Compile Include="Model\IRepository.cs" />
     <Compile Include="Model\Statistics\StatsRecord.cs" />
     <Compile Include="Model\Pieces\Tetramino.cs" />
-    <Compile Include="Model\Pieces\TetraminoConfiguration.cs" />
-    <Compile Include="Model\Pieces\TetraminoFactory.cs" />
+    <Compile Include="Model\Pieces\PieceConfiguration.cs" />
     <Compile Include="Model\Identity.cs" />
     <Compile Include="Model\Pieces\Block.cs" />
     <Compile Include="Model\Pieces\PieceColor.cs" />

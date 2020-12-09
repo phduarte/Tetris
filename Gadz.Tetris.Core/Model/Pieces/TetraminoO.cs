@@ -1,4 +1,6 @@
-﻿namespace Gadz.Tetris.Model.Pieces
+﻿using Gadz.Tetris.Model.Boards;
+
+namespace Gadz.Tetris.Model.Pieces
 {
     /// <summary>
     /// Defines the <see cref="TetraminoO" />
@@ -8,18 +10,26 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="TetraminoO"/> class.
         /// </summary>
-        /// <param name="config">The position<see cref="TetraminoConfiguration"/></param>
-        public TetraminoO(TetraminoConfiguration config)
+        /// <param name="config">The position<see cref="PieceConfiguration"/></param>
+        public TetraminoO(Board board, PieceConfiguration config)
+            : base(board, config)
         {
-            var blocks = new Block[4];
-            int x = config.Position.X, y = config.Position.Y;
-            
-            blocks[0] = new Block(x, y, config.Color);
-            blocks[1] = new Block(x, y + 1, config.Color);
-            blocks[2] = new Block(x + 1, y, config.Color);
-            blocks[3] = new Block(x + 1, y + 1, config.Color);
+        }
 
-            Blocks = blocks;
+        public override Block[] Blocks
+        {
+            get
+            {
+                var blocks = new Block[4];
+                int x = Position.X, y = Position.Y;
+
+                blocks[0] = new Block(x, y, Color);
+                blocks[1] = new Block(x, y + 1, Color);
+                blocks[2] = new Block(x + 1, y, Color);
+                blocks[3] = new Block(x + 1, y + 1, Color);
+
+                return blocks;
+            }
         }
     }
 }

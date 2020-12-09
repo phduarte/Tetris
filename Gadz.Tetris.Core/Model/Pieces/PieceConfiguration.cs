@@ -3,7 +3,7 @@
     /// <summary>
     /// TetraminoConfiguration
     /// </summary>
-    public struct TetraminoConfiguration
+    public struct PieceConfiguration
     {
         public PieceType Type;
         public Point Position;

@@ -1,4 +1,5 @@
 ﻿using Gadz.Tetris.Model.Boards;
+using System;
 
 namespace Gadz.Tetris.Model.Pieces
 {
@@ -26,6 +27,11 @@ namespace Gadz.Tetris.Model.Pieces
         /// Defines the _board
         /// </summary>
         private Board _board;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public PieceConfiguration Configuration => new PieceConfiguration { Type = _pieceType, Position = _position, Rotation = _rotation };
 
         /// <summary>
         /// The OfType
@@ -77,7 +83,32 @@ namespace Gadz.Tetris.Model.Pieces
         /// <returns>The <see cref="Piece"/></returns>
         public Piece Build()
         {
-            return new Piece(_pieceType, _position, _rotation, _board);
+            switch (_pieceType)
+            {
+                case PieceType.T:
+                    return new TetraminoT(_board, Configuration);
+
+                case PieceType.O:
+                    return new TetraminoO(_board, Configuration);
+
+                case PieceType.I:
+                    return new TetraminoI(_board, Configuration);
+
+                case PieceType.L:
+                    return new TetraminoL(_board, Configuration);
+
+                case PieceType.J:
+                    return new TetraminoJ(_board, Configuration);
+
+                case PieceType.S:
+                    return new TetraminoS(_board, Configuration);
+
+                case PieceType.Z:
+                    return new TetraminoZ(_board, Configuration);
+
+                default:
+                    throw new NotImplementedException();
+            }
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Gadz.Tetris.Model
         [TestInitialize]
         public void Setup()
         {
-            tabuleiro = GameController.Create(10, 20).CurrentBoard;
+            tabuleiro = GameController.Create(10, 20).Board;
 
             peca = new PieceBuilder()
                 .OfType(PieceType.I)

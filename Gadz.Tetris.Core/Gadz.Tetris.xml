@@ -378,40 +378,12 @@
             Defines the <see cref="T:Gadz.Tetris.Model.Pieces.Tetramino" />
             </summary>
         </member>
-        <member name="P:Gadz.Tetris.Model.Pieces.Tetramino.Blocks">
+        <member name="M:Gadz.Tetris.Model.Pieces.Tetramino.#ctor(Gadz.Tetris.Model.Boards.Board,Gadz.Tetris.Model.Pieces.PieceConfiguration)">
             <summary>
-            Gets or sets the Blocks
+            
             </summary>
-        </member>
-        <member name="M:Gadz.Tetris.Model.Pieces.Tetramino.Draw(Gadz.Tetris.Model.Pieces.TetraminoConfiguration)">
-            <summary>
-            The Draw
-            </summary>
-            <param name="configuration">The configuration<see cref="T:Gadz.Tetris.Model.Pieces.TetraminoConfiguration"/></param>
-            <returns>The <see cref="T:Gadz.Tetris.Model.Pieces.Tetramino"/></returns>
-        </member>
-        <member name="M:Gadz.Tetris.Model.Pieces.Tetramino.Draw(Gadz.Tetris.Model.Pieces.PieceType)">
-            <summary>
-            The Draw
-            </summary>
-            <param name="type">The type<see cref="T:Gadz.Tetris.Model.Pieces.PieceType"/></param>
-            <returns>The <see cref="T:Gadz.Tetris.Model.Pieces.Tetramino"/></returns>
-        </member>
-        <member name="M:Gadz.Tetris.Model.Pieces.Tetramino.Draw(Gadz.Tetris.Model.Pieces.PieceType,Gadz.Tetris.Point)">
-            <summary>
-            The Draw
-            </summary>
-            <param name="type">The type<see cref="T:Gadz.Tetris.Model.Pieces.PieceType"/></param>
-            <param name="point">The point<see cref="T:Gadz.Tetris.Point"/></param>
-            <returns>The <see cref="T:Gadz.Tetris.Model.Pieces.Tetramino"/></returns>
-        </member>
-        <member name="M:Gadz.Tetris.Model.Pieces.Tetramino.Draw(Gadz.Tetris.Model.Pieces.PieceType,System.Int32)">
-            <summary>
-            The Draw
-            </summary>
-            <param name="type">The type<see cref="T:Gadz.Tetris.Model.Pieces.PieceType"/></param>
-            <param name="rotation">The rotation<see cref="T:System.Int32"/></param>
-            <returns>The <see cref="T:Gadz.Tetris.Model.Pieces.Tetramino"/></returns>
+            <param name="board"></param>
+            <param name="configuration"></param>
         </member>
         <member name="M:Gadz.Tetris.Model.Pieces.Tetramino.ToString">
             <summary>
@@ -419,27 +391,10 @@
             </summary>
             <returns>The <see cref="T:System.String"/></returns>
         </member>
-        <member name="T:Gadz.Tetris.Model.Pieces.TetraminoConfiguration">
+        <member name="T:Gadz.Tetris.Model.Pieces.PieceConfiguration">
             <summary>
             TetraminoConfiguration
             </summary>
-        </member>
-        <member name="T:Gadz.Tetris.Model.Pieces.TetraminoFactory">
-            <summary>
-            Defines the <see cref="T:Gadz.Tetris.Model.Pieces.TetraminoFactory" />
-            </summary>
-        </member>
-        <member name="M:Gadz.Tetris.Model.Pieces.TetraminoFactory.#ctor">
-            <summary>
-            Prevents a default instance of the <see cref="T:Gadz.Tetris.Model.Pieces.TetraminoFactory"/> class from being created.
-            </summary>
-        </member>
-        <member name="M:Gadz.Tetris.Model.Pieces.TetraminoFactory.Draw(Gadz.Tetris.Model.Pieces.TetraminoConfiguration)">
-            <summary>
-            The Draw
-            </summary>
-            <param name="config">The position<see cref="T:Gadz.Tetris.Model.Pieces.TetraminoConfiguration"/></param>
-            <returns>The <see cref="T:Gadz.Tetris.Model.Pieces.Tetramino"/></returns>
         </member>
         <member name="T:Gadz.Tetris.Model.Pieces.Block">
             <summary>
@@ -557,6 +512,11 @@
             Defines the _board
             </summary>
         </member>
+        <member name="P:Gadz.Tetris.Model.Pieces.PieceBuilder.Configuration">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:Gadz.Tetris.Model.Pieces.PieceBuilder.OfType(Gadz.Tetris.Model.Pieces.PieceType)">
             <summary>
             The OfType
@@ -596,77 +556,79 @@
             Defines the <see cref="T:Gadz.Tetris.Model.Pieces.TetraminoI" />
             </summary>
         </member>
-        <member name="M:Gadz.Tetris.Model.Pieces.TetraminoI.#ctor(Gadz.Tetris.Model.Pieces.TetraminoConfiguration)">
+        <member name="M:Gadz.Tetris.Model.Pieces.TetraminoI.#ctor(Gadz.Tetris.Model.Boards.Board,Gadz.Tetris.Model.Pieces.PieceConfiguration)">
             <summary>
             Initializes a new instance of the <see cref="T:Gadz.Tetris.Model.Pieces.TetraminoI"/> class.
             </summary>
-            <param name="config">The configuration<see cref="T:Gadz.Tetris.Model.Pieces.TetraminoConfiguration"/></param>
+            <param name="config">The configuration<see cref="T:Gadz.Tetris.Model.Pieces.PieceConfiguration"/></param>
         </member>
         <member name="T:Gadz.Tetris.Model.Pieces.TetraminoJ">
             <summary>
             Defines the <see cref="T:Gadz.Tetris.Model.Pieces.TetraminoJ" />
             </summary>
         </member>
-        <member name="M:Gadz.Tetris.Model.Pieces.TetraminoJ.#ctor(Gadz.Tetris.Model.Pieces.TetraminoConfiguration)">
+        <member name="M:Gadz.Tetris.Model.Pieces.TetraminoJ.#ctor(Gadz.Tetris.Model.Boards.Board,Gadz.Tetris.Model.Pieces.PieceConfiguration)">
             <summary>
             Initializes a new instance of the <see cref="T:Gadz.Tetris.Model.Pieces.TetraminoJ"/> class.
             </summary>
-            <param name="config">The configuration<see cref="T:Gadz.Tetris.Model.Pieces.TetraminoConfiguration"/></param>
+            <param name="board">The parent board<see cref="T:Gadz.Tetris.Model.Boards.Board"/></param>
+            <param name="config">The configuration<see cref="T:Gadz.Tetris.Model.Pieces.PieceConfiguration"/></param>
         </member>
         <member name="T:Gadz.Tetris.Model.Pieces.TetraminoL">
             <summary>
             Defines the <see cref="T:Gadz.Tetris.Model.Pieces.TetraminoL" />
             </summary>
         </member>
-        <member name="M:Gadz.Tetris.Model.Pieces.TetraminoL.#ctor(Gadz.Tetris.Model.Pieces.TetraminoConfiguration)">
+        <member name="M:Gadz.Tetris.Model.Pieces.TetraminoL.#ctor(Gadz.Tetris.Model.Boards.Board,Gadz.Tetris.Model.Pieces.PieceConfiguration)">
             <summary>
             Initializes a new instance of the <see cref="T:Gadz.Tetris.Model.Pieces.TetraminoL"/> class.
             </summary>
-            <param name="config">The configuration<see cref="T:Gadz.Tetris.Model.Pieces.TetraminoConfiguration"/></param>
+            <param name="board">The parent board<see cref="T:Gadz.Tetris.Model.Boards.Board"/></param>
+            <param name="config">The configuration<see cref="T:Gadz.Tetris.Model.Pieces.PieceConfiguration"/></param>
         </member>
         <member name="T:Gadz.Tetris.Model.Pieces.TetraminoO">
             <summary>
             Defines the <see cref="T:Gadz.Tetris.Model.Pieces.TetraminoO" />
             </summary>
         </member>
-        <member name="M:Gadz.Tetris.Model.Pieces.TetraminoO.#ctor(Gadz.Tetris.Model.Pieces.TetraminoConfiguration)">
+        <member name="M:Gadz.Tetris.Model.Pieces.TetraminoO.#ctor(Gadz.Tetris.Model.Boards.Board,Gadz.Tetris.Model.Pieces.PieceConfiguration)">
             <summary>
             Initializes a new instance of the <see cref="T:Gadz.Tetris.Model.Pieces.TetraminoO"/> class.
             </summary>
-            <param name="config">The position<see cref="T:Gadz.Tetris.Model.Pieces.TetraminoConfiguration"/></param>
+            <param name="config">The position<see cref="T:Gadz.Tetris.Model.Pieces.PieceConfiguration"/></param>
         </member>
         <member name="T:Gadz.Tetris.Model.Pieces.TetraminoS">
             <summary>
             Defines the <see cref="T:Gadz.Tetris.Model.Pieces.TetraminoS" />
             </summary>
         </member>
-        <member name="M:Gadz.Tetris.Model.Pieces.TetraminoS.#ctor(Gadz.Tetris.Model.Pieces.TetraminoConfiguration)">
+        <member name="M:Gadz.Tetris.Model.Pieces.TetraminoS.#ctor(Gadz.Tetris.Model.Boards.Board,Gadz.Tetris.Model.Pieces.PieceConfiguration)">
             <summary>
             Initializes a new instance of the <see cref="T:Gadz.Tetris.Model.Pieces.TetraminoS"/> class.
             </summary>
-            <param name="config">The position<see cref="T:Gadz.Tetris.Model.Pieces.TetraminoConfiguration"/></param>
+            <param name="config">The position<see cref="T:Gadz.Tetris.Model.Pieces.PieceConfiguration"/></param>
         </member>
         <member name="T:Gadz.Tetris.Model.Pieces.TetraminoT">
             <summary>
             Defines the <see cref="T:Gadz.Tetris.Model.Pieces.TetraminoT" />
             </summary>
         </member>
-        <member name="M:Gadz.Tetris.Model.Pieces.TetraminoT.#ctor(Gadz.Tetris.Model.Pieces.TetraminoConfiguration)">
+        <member name="M:Gadz.Tetris.Model.Pieces.TetraminoT.#ctor(Gadz.Tetris.Model.Boards.Board,Gadz.Tetris.Model.Pieces.PieceConfiguration)">
             <summary>
             Initializes a new instance of the <see cref="T:Gadz.Tetris.Model.Pieces.TetraminoT"/> class.
             </summary>
-            <param name="config">The position<see cref="T:Gadz.Tetris.Model.Pieces.TetraminoConfiguration"/></param>
+            <param name="config">The position<see cref="T:Gadz.Tetris.Model.Pieces.PieceConfiguration"/></param>
         </member>
         <member name="T:Gadz.Tetris.Model.Pieces.TetraminoZ">
             <summary>
             Defines the <see cref="T:Gadz.Tetris.Model.Pieces.TetraminoZ" />
             </summary>
         </member>
-        <member name="M:Gadz.Tetris.Model.Pieces.TetraminoZ.#ctor(Gadz.Tetris.Model.Pieces.TetraminoConfiguration)">
+        <member name="M:Gadz.Tetris.Model.Pieces.TetraminoZ.#ctor(Gadz.Tetris.Model.Boards.Board,Gadz.Tetris.Model.Pieces.PieceConfiguration)">
             <summary>
             Initializes a new instance of the <see cref="T:Gadz.Tetris.Model.Pieces.TetraminoZ"/> class.
             </summary>
-            <param name="config">The position<see cref="T:Gadz.Tetris.Model.Pieces.TetraminoConfiguration"/></param>
+            <param name="config">The position<see cref="T:Gadz.Tetris.Model.Pieces.PieceConfiguration"/></param>
         </member>
         <member name="T:Gadz.Tetris.Model.Pieces.Piece">
             <summary>
@@ -686,11 +648,6 @@
         <member name="P:Gadz.Tetris.Model.Pieces.Piece.Color">
             <summary>
             Gets the Color
-            </summary>
-        </member>
-        <member name="P:Gadz.Tetris.Model.Pieces.Piece.Shape">
-            <summary>
-            Gets the Shape
             </summary>
         </member>
         <member name="P:Gadz.Tetris.Model.Pieces.Piece.Position">
@@ -713,20 +670,12 @@
             Gets the Blocks
             </summary>
         </member>
-        <member name="M:Gadz.Tetris.Model.Pieces.Piece.#ctor(Gadz.Tetris.Model.Pieces.PieceType,Gadz.Tetris.Point,System.Int32,Gadz.Tetris.Model.Boards.Board)">
+        <member name="M:Gadz.Tetris.Model.Pieces.Piece.#ctor(Gadz.Tetris.Model.Boards.Board,Gadz.Tetris.Model.Pieces.PieceConfiguration)">
             <summary>
             Initializes a new instance of the <see cref="T:Gadz.Tetris.Model.Pieces.Piece"/> class.
             </summary>
-            <param name="type">The type<see cref="T:Gadz.Tetris.Model.Pieces.PieceType"/></param>
-            <param name="position">The position<see cref="T:Gadz.Tetris.Point"/></param>
-            <param name="rotation">The rotation<see cref="T:System.Int32"/></param>
             <param name="board">The board<see cref="P:Gadz.Tetris.Model.Pieces.Piece.Board"/></param>
-        </member>
-        <member name="M:Gadz.Tetris.Model.Pieces.Piece.#ctor(Gadz.Tetris.Model.Pieces.Piece)">
-            <summary>
-            Prevents a default instance of the <see cref="T:Gadz.Tetris.Model.Pieces.Piece"/> class from being created.
-            </summary>
-            <param name="clone">The clone<see cref="T:Gadz.Tetris.Model.Pieces.Piece"/></param>
+            <param name="configuration">The configuration<see cref="T:Gadz.Tetris.Model.Pieces.PieceConfiguration"/></param>
         </member>
         <member name="M:Gadz.Tetris.Model.Pieces.Piece.Rotate">
             <summary>
@@ -760,12 +709,6 @@
             </summary>
             <param name="index">The index<see cref="T:Gadz.Tetris.Model.Pieces.PieceType"/></param>
             <returns>The <see cref="T:Gadz.Tetris.Model.Pieces.PieceColor"/></returns>
-        </member>
-        <member name="M:Gadz.Tetris.Model.Pieces.Piece.ToString">
-            <summary>
-            The ToString
-            </summary>
-            <returns>The <see cref="T:System.String"/></returns>
         </member>
         <member name="M:Gadz.Tetris.Model.Pieces.Piece.Equals(System.Object)">
             <summary>
@@ -1565,7 +1508,7 @@
             Posição da peça atual
             </summary>
         </member>
-        <member name="P:Gadz.Tetris.GameController.CurrentBoard">
+        <member name="P:Gadz.Tetris.GameController.Board">
             <summary>
             Gets the CurrentBoard
             Tabuleiro atual

@@ -11,16 +11,25 @@ namespace Gadz.Tetris.Model
     [TestClass]
     public class FormasTests
     {
+        private PieceBuilder _pieceBuilder;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            var game = GameController.Create(10, 10);
+            _pieceBuilder = new PieceBuilder()
+                .OnBoard(game.Board);
+        }
+
         /// <summary>
         /// The DeveDesenharFormaI
         /// </summary>
         [TestMethod]
         public void DeveDesenharFormaI()
         {
-            var config = new TetraminoConfiguration { Type = PieceType.I};
-            var forma = Tetramino.Draw(config);
-            Assert.AreEqual(4, forma.Blocks.Count());
-            Assert.AreEqual("0+0,0+1,0+2,0+3", forma.ToString());
+            var piece = _pieceBuilder.OfType(PieceType.I).Build();
+            Assert.AreEqual(4, piece.Blocks.Count());
+            Assert.AreEqual("0+0,0+1,0+2,0+3", piece.ToString());
         }
 
         /// <summary>
@@ -29,8 +38,7 @@ namespace Gadz.Tetris.Model
         [TestMethod]
         public void DeveDesenharFormaJ()
         {
-            var config = new TetraminoConfiguration { Type = PieceType.J};
-            var forma = Tetramino.Draw(config);
+            var forma = _pieceBuilder.OfType(PieceType.J).Build();
             Assert.AreEqual(4, forma.Blocks.Count());
             Assert.AreEqual("1+0,1+1,1+2,0+2", forma.ToString());
         }
@@ -41,8 +49,7 @@ namespace Gadz.Tetris.Model
         [TestMethod]
         public void DeveDesenharFormaL()
         {
-            var config = new TetraminoConfiguration { Type = PieceType.L};
-            var forma = Tetramino.Draw(config);
+            var forma = _pieceBuilder.OfType(PieceType.L).Build();
             Assert.AreEqual("0+0,0+1,0+2,1+2", forma.ToString());
         }
 
@@ -52,10 +59,9 @@ namespace Gadz.Tetris.Model
         [TestMethod]
         public void DeveDesenharFormaO()
         {
-            var config = new TetraminoConfiguration { Type = PieceType.O};
-            var forma = Tetramino.Draw(config);
-            Assert.AreEqual(4, forma.Blocks.Count());
-            Assert.AreEqual("0+0,0+1,1+0,1+1", forma.ToString());
+            var piece = _pieceBuilder.OfType(PieceType.O).Build();
+            Assert.AreEqual(4, piece.Blocks.Count());
+            Assert.AreEqual("0+0,0+1,1+0,1+1", piece.ToString());
         }
 
         /// <summary>
@@ -64,9 +70,8 @@ namespace Gadz.Tetris.Model
         [TestMethod]
         public void DeveDesenharFormaS()
         {
-            var config = new TetraminoConfiguration { Type = PieceType.S};
-            var forma = Tetramino.Draw(config);
-            Assert.AreEqual("0+0,0+1,1+1,1+2", forma.ToString());
+            var piece = _pieceBuilder.OfType(PieceType.S).Build();
+            Assert.AreEqual("0+0,0+1,1+1,1+2", piece.ToString());
         }
 
         /// <summary>
@@ -75,10 +80,9 @@ namespace Gadz.Tetris.Model
         [TestMethod]
         public void DeveDesenharFormaT()
         {
-            var config = new TetraminoConfiguration { Type = PieceType.T };
-            var forma = Tetramino.Draw(config);
-            Assert.AreEqual(4, forma.Blocks.Count());
-            Assert.AreEqual("0+0,0+1,0+2,1+1", forma.ToString());
+            var piece = _pieceBuilder.OfType(PieceType.T).Build();
+            Assert.AreEqual(4, piece.Blocks.Count());
+            Assert.AreEqual("0+0,0+1,0+2,1+1", piece.ToString());
         }
 
         /// <summary>
@@ -87,10 +91,9 @@ namespace Gadz.Tetris.Model
         [TestMethod]
         public void DeveDesenharFormaZ()
         {
-            var config = new TetraminoConfiguration { Type = PieceType.Z};
-            var forma = Tetramino.Draw(config);
-            Assert.AreEqual(4, forma.Blocks.Count());
-            Assert.AreEqual("1+0,1+1,0+1,0+2", forma.ToString());
+            var piece = _pieceBuilder.OfType(PieceType.Z).Build();
+            Assert.AreEqual(4, piece.Blocks.Count());
+            Assert.AreEqual("1+0,1+1,0+1,0+2", piece.ToString());
         }
 
         /// <summary>
@@ -100,7 +103,7 @@ namespace Gadz.Tetris.Model
         [ExpectedException(typeof(NotImplementedException))]
         public void NaoDeveDesenharNenhumaForma()
         {
-            var forma = Tetramino.Draw(new TetraminoConfiguration { Type = (PieceType)8});
+            _pieceBuilder.OfType((PieceType)8).Build();
         }
     }
 }

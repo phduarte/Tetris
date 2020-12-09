@@ -27,7 +27,7 @@
         /// <returns>The <see cref="string"/></returns>
         public override string ToString()
         {
-            return $"{X}+{Y}";
+            return $"{X}x{Y}";
         }
 
         /// <summary>

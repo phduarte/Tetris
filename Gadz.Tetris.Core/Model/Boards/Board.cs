@@ -10,8 +10,10 @@ namespace Gadz.Tetris.Model.Boards
     /// <summary>
     /// Defines the <see cref="Board" />
     /// </summary>
-    public class Board
+    public class Board : Entity
     {
+        private PieceBuilder _pieceBuilder;
+
         /// <summary>
         /// Defines the _repository
         /// </summary>
@@ -30,7 +32,7 @@ namespace Gadz.Tetris.Model.Boards
         /// <summary>
         /// Defines the _playedBlocks
         /// </summary>
-        private IList<Block> _playedBlocks = new List<Block>();
+        private List<Block> _playedBlocks = new List<Block>();
 
         //o propósito dessa variável é evitar que ocorra 2 avaliações ao mesmo tempo sem precisar de nenhum lock.
         /// <summary>
@@ -89,7 +91,7 @@ namespace Gadz.Tetris.Model.Boards
         /// <summary>
         /// Gets the Blocks
         /// </summary>
-        public IList<Block> Blocks => _playedBlocks;
+        public IReadOnlyList<Block> Blocks => _playedBlocks;
 
         /// <summary>
         /// Gets the Record
@@ -175,6 +177,7 @@ namespace Gadz.Tetris.Model.Boards
         public Board(IStatsRepository repository, int width, int height)
         {
             _repository = repository;
+            _pieceBuilder = new PieceBuilder().OnBoard(this);
             Dimension = new Size(width, height);
             Stats = new Stats();
             State = new PausedState();
@@ -561,10 +564,9 @@ namespace Gadz.Tetris.Model.Boards
             var tipo = (PieceType)x;
             var rotacao = new Random().Next(0, 4);
             var posicao = new Point(0, 0);
-            var peca = new PieceBuilder().OfType(tipo)
+            var peca = _pieceBuilder.OfType(tipo)
                 .OnPosition(posicao)
                 .WithRotation(rotacao)
-                .OnBoard(this)
                 .Build();
 
             return peca.Clone();
@@ -611,7 +613,7 @@ namespace Gadz.Tetris.Model.Boards
         /// </summary>
         private void GuardarBlocos()
         {
-            foreach (var i in CurrentPiece.Clone().Shape.Blocks)
+            foreach (var i in CurrentPiece.Blocks)
             {
                 _playedBlocks.Add(i);
             }

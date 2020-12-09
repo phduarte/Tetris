@@ -131,7 +131,7 @@ namespace Gadz.Tetris
         /// Gets the CurrentBoard
         /// Tabuleiro atual
         /// </summary>
-        public Board CurrentBoard => _board;
+        public Board Board => _board;
 
         /// <summary>
         /// Prevents a default instance of the <see cref="GameController"/> class from being created.

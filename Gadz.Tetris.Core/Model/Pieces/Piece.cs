@@ -7,7 +7,7 @@ namespace Gadz.Tetris.Model.Pieces
     /// <summary>
     /// Defines the <see cref="Piece" />
     /// </summary>
-    public class Piece : Entity
+    public abstract class Piece : Entity
     {
         /// <summary>
         /// Defines the _colors
@@ -33,10 +33,6 @@ namespace Gadz.Tetris.Model.Pieces
         public PieceColor Color => GetPieceColor(Type);
 
         /// <summary>
-        /// Gets the Shape
-        /// </summary>
-        public Tetramino Shape => TetraminoFactory.Draw(new TetraminoConfiguration { Position = Position, Rotation = Rotation, Type = Type });
-        /// <summary>
         /// Gets the Position
         /// </summary>
         public Point Position { get; private set; }
@@ -54,33 +50,19 @@ namespace Gadz.Tetris.Model.Pieces
         /// <summary>
         /// Gets the Blocks
         /// </summary>
-        public Block[] Blocks => Shape.Blocks;
+        public abstract Block[] Blocks { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Piece"/> class.
         /// </summary>
-        /// <param name="type">The type<see cref="PieceType"/></param>
-        /// <param name="position">The position<see cref="Point"/></param>
-        /// <param name="rotation">The rotation<see cref="int"/></param>
         /// <param name="board">The board<see cref="Board"/></param>
-        internal Piece(PieceType type, Point position, int rotation, Board board)
+        /// <param name="configuration">The configuration<see cref="PieceConfiguration"/></param>
+        protected Piece(Board board, PieceConfiguration configuration)
         {
-            Type = type;
-            Position = position;
             Board = board;
-            Rotation = rotation;
-        }
-
-        /// <summary>
-        /// Prevents a default instance of the <see cref="Piece"/> class from being created.
-        /// </summary>
-        /// <param name="clone">The clone<see cref="Piece"/></param>
-        private Piece(Piece clone)
-        {
-            Rotation = clone.Rotation;
-            Position = clone.Position;
-            Type = clone.Type;
-            Board = clone.Board;
+            Type = configuration.Type;
+            Position = configuration.Position;
+            Rotation = configuration.Rotation;
         }
 
         /// <summary>
@@ -143,9 +125,9 @@ namespace Gadz.Tetris.Model.Pieces
         /// The Clone
         /// </summary>
         /// <returns>The <see cref="Piece"/></returns>
-        public Piece Clone()
+        public virtual Piece Clone()
         {
-            return new Piece(this);
+            return new PieceBuilder().OnBoard(Board).OfType(Type).OnPosition(Position).WithRotation(Rotation).Build();
         }
 
         /// <summary>
@@ -163,15 +145,6 @@ namespace Gadz.Tetris.Model.Pieces
             {
                 return PieceColor.None;
             }
-        }
-
-        /// <summary>
-        /// The ToString
-        /// </summary>
-        /// <returns>The <see cref="string"/></returns>
-        public override string ToString()
-        {
-            return $"{Type} ({Shape})";
         }
 
         /// <summary>

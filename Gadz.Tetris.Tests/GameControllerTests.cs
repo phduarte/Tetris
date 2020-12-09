@@ -234,10 +234,10 @@ namespace Gadz.Tetris
         public void DeveCorrerParaBaixo()
         {
             app.Start();
-            var p = app.CurrentBoard.CurrentPiece;
+            var p = app.Board.CurrentPiece;
             app.SmashDown();
             //Thread.Sleep(100);
-            Assert.AreNotEqual(app.CurrentBoard.CurrentPiece, p, $"Uma nova peça não foi introduzida no jogo.");
+            Assert.AreNotEqual(app.Board.CurrentPiece, p, $"Uma nova peça não foi introduzida no jogo.");
         }
 
         /// <summary>
