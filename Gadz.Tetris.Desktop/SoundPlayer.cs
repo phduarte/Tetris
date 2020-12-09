@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Gadz.Tetris.Desktop
 {
@@ -13,12 +12,12 @@ namespace Gadz.Tetris.Desktop
 
         private static IDictionary<string, UnmanagedMemoryStream> _sounds =
             new Dictionary<string, UnmanagedMemoryStream> {
-            { "clean", Properties.Resources.Clean},
-            {"intro", Properties.Resources.Start },
-            { "move", Properties.Resources.Move},
-            {"run", Properties.Resources.Run },
-            {"ending", Properties.Resources.Ending },
-            {"dock", Properties.Resources.Dock }
+            { "clean", Resources.Properties.Resources.Clean},
+            { "intro", Resources.Properties.Resources.Start },
+            { "move", Resources.Properties.Resources.Move},
+            { "run", Resources.Properties.Resources.Run },
+            { "ending", Resources.Properties.Resources.Ending },
+            { "dock", Resources.Properties.Resources.Dock }
         };
 
         [DllImport("winmm.dll")]

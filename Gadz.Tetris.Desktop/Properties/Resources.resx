@@ -151,28 +151,7 @@
   <data name="BLOCK_YELLOW" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Imagens\block_yellow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Clean" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Sounds\Clean.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Dock" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Sounds\Dock.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Ending" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Sounds\Ending.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="GAME_OVER_LAYER" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Imagens\GAME_OVER_LAYER.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="LevelUp" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Sounds\LevelUp.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Move" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Sounds\Move.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Run" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Sounds\Run.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Start" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Sounds\Start.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>
