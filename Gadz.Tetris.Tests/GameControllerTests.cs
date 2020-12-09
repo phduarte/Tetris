@@ -234,9 +234,10 @@ namespace Gadz.Tetris
         public void DeveCorrerParaBaixo()
         {
             app.Start();
+            var p = app.CurrentBoard.CurrentPiece;
             app.SmashDown();
-            Thread.Sleep(100);
-            Assert.IsTrue(app.CurrentPiecePosition.Y > 15, $"A posição atual da peça no eixo Y é {app.CurrentPiecePosition.Y}");
+            //Thread.Sleep(100);
+            Assert.AreNotEqual(app.CurrentBoard.CurrentPiece, p, $"Uma nova peça não foi introduzida no jogo.");
         }
 
         /// <summary>
