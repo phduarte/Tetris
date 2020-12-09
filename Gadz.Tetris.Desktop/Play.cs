@@ -260,25 +260,28 @@ namespace Gadz.Tetris.Desktop
 
         private void HideMouseWhenIsOverScreen()
         {
-            var left = Left;
-            var right = Left + Width;
-            var top = Top;
-            var down = Top + Height;
+            var rect = new Rectangle
+            {
+                X = Left,
+                Width = Width,
+                Y = Top,
+                Height = Height
+            };
 
             Cursor.Show();
 
-            if (CursorIsOverScreen(left, right, top, down))
+            if (CursorIsOverScreen(rect))
             {
                 Cursor.Hide();
             }
         }
 
-        private static bool CursorIsOverScreen(int left, int right, int top, int down)
+        private static bool CursorIsOverScreen(Rectangle rectangle)
         {
             var y = Cursor.Position.Y;
             var x = Cursor.Position.X;
 
-            return (y >= top && y <= down) && (x >= left && x <= right);
+            return (y >= rectangle.Top && y <= rectangle.Bottom) && (x >= rectangle.Left && x <= rectangle.Right);
         }
 
         private void Play_MouseMove(object sender, MouseEventArgs e)
