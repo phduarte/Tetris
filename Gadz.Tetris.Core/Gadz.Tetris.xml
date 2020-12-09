@@ -373,24 +373,6 @@
             </summary>
             <returns>The <see cref="T:System.Collections.Generic.IEnumerable`1"/></returns>
         </member>
-        <member name="T:Gadz.Tetris.Model.Pieces.Tetramino">
-            <summary>
-            Defines the <see cref="T:Gadz.Tetris.Model.Pieces.Tetramino" />
-            </summary>
-        </member>
-        <member name="M:Gadz.Tetris.Model.Pieces.Tetramino.#ctor(Gadz.Tetris.Model.Boards.Board,Gadz.Tetris.Model.Pieces.PieceConfiguration)">
-            <summary>
-            
-            </summary>
-            <param name="board"></param>
-            <param name="configuration"></param>
-        </member>
-        <member name="M:Gadz.Tetris.Model.Pieces.Tetramino.ToString">
-            <summary>
-            The ToString
-            </summary>
-            <returns>The <see cref="T:System.String"/></returns>
-        </member>
         <member name="T:Gadz.Tetris.Model.Pieces.PieceConfiguration">
             <summary>
             TetraminoConfiguration

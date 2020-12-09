@@ -5,7 +5,7 @@ namespace Gadz.Tetris.Model.Pieces
     /// <summary>
     /// Defines the <see cref="TetraminoZ" />
     /// </summary>
-    internal class TetraminoZ : Tetramino
+    internal class TetraminoZ : Piece
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TetraminoZ"/> class.
