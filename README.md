@@ -7,6 +7,10 @@
 
 Tetris é um jogo comercializado pela Nintendo em 1989 e um dos jogos de vídeo-game mais famosos de todos os tempos.
 
+Essa versão foi inicialmente inspirada nos brick-games e foi desenvolvido com propósito único de estudo e prática das disciplinas de Engenharia de Software.
+
+O projeto utiliza o jogo Tetris como cenário justamente por ser muito conhecido, o que facilita a correlação das regras no mundo real com os códigos que aqui são escritos.
+
 ## História
 
 Em 1984, no Centro de Computação da Academia de Ciências Soviética, o matemático russo Alexey Pajintov estudava uma teoria de análise combinatória dos pentaminós de Solomon Golomb. Os pentaminós eram peças compostas por cinco blocos, que poderiam alterar sua forma para combinarem entre si. Pajintov criou sua versão simplificada da teoria criando peças de 4 blocos, os tetraminós. 
@@ -25,13 +29,12 @@ Um fato curioso é que Steve Wozniak, cofundador da Apple foi um dos maiores rec
 
 ## Arquitetura
 
-  O Jogo foi desenvolvido em C# com propósito único de estudo e prática dos processos de Engenharia de Software.
-O projeto utiliza o jogo Tetris como cenário justamente por ser comum para maioria das pessoas, facilitando a correlação das regras no mundo real com os códigos que aqui são escritos.
+  O propósito deste projeto é simplificar a aplicação das métodologias, padrões e princípios em destaque atualmente. Toda implementação leva em consideração as boas práticas do Clean Code, Design Patterns e princípios como SOLID, mas com a preocupação de se evitar o over-engineering. Então mesmo que algum padrão possa ser aplicado, ainda será avaliado seu custo benefício. O projeto sempre estará aberto a refatoração.
 
-  Também é propósito desse projeto ser simples. Usar apenas o que agrega valor para a solução e que seja justificadamente necessário. Naturalmente podem haver pontos que se desviam desse propósito, mas assim que percebidos serão refatorados. 
+  A Solution inicial é composta por somente dois pacotes principais, o Core e o Desktop.
+O Core é tem responsabilidades transversais, ele provém o Modelo de Domínio e os Acessos a Dados. 
 
-  Notem que a Solution inicial é composta por somente dois projetos principais, o Core e o Desktop.
-O Core é responsável pelo backbone do software, provém o Modelo de Domínio e os Acessos a Dados (Que aqui só persiste informações das estatísticas). O projeto Desktop faz parte da camada de Interfaces e é a IHC para desktops Windows. Suas preocupações são apenas nesse escopo - lidar com as entradas vindas dos dispositivos e com as capacidades de respostas visuais mais agradáveis e relevantes possível ao usuário.
+O projeto Desktop contém as IHC, como parte da camada de Interfaces, aqui fornecendo interface para usuários desktop Windows. Sua preocupação se limita em lidar com as entradas vindas dos dispositivos e fornecer respostas visuais amigáveis à um cliente humano.
 
   Enquanto eu modelava o Modelo de Domínio, a neutralidade tecnológica e o desacoplamento das responsabilidades foi algo fundamental, por isso o Domínio não tem ligações externas com camadas de Infraestrutura ou Interface por exemplo. Afinal, não podemos permitir que regras do jogo sejam manipuladas pelo usuário, e nem ficar preso num modelo de Interface só. Provavelmente teremos versões para outros dispositivos de IHC, como Mobile por exemplo. No entanto, não isolei o Domain Model em uma DLL à parte (simplesmente porque não faz nenhum sentido pra mim fazer isso nesse projeto), mas isolei todas as classes, métodos e propriedades que precisavam simplesmente usando operadores de visibilidade *Internal* e *Private*.
 
