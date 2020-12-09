@@ -560,9 +560,9 @@ namespace Gadz.Tetris.Model.Boards
         /// <returns>The <see cref="Piece"/></returns>
         private Piece CreateRandomBlock()
         {
-            var x = new Random().Next(0, 7);
+            var x = new Random(DateTime.Now.Millisecond).Next(0, 7);
             var tipo = (PieceType)x;
-            var rotacao = new Random().Next(0, 4);
+            var rotacao = new Random(DateTime.Now.Millisecond).Next(0, 4);
             var posicao = new Point(0, 0);
             var peca = _pieceBuilder.OfType(tipo)
                 .OnPosition(posicao)
