@@ -135,6 +135,7 @@ namespace Gadz.Tetris.Desktop
             await Task.Factory.StartNew(() =>
             {
                 MouseMove -= Play_MouseMove;
+                new Deserve(_controller.Board.Stats).ShowDialog();
                 Close();
             }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
         }
