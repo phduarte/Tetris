@@ -267,7 +267,6 @@ namespace Gadz.Tetris
         public void DeveGuardarORecordeMaximo()
         {
             app.Start();
-            //app.CurrentBoard.Estatisticas.Pontuar(1);
             app.Exit();
             Assert.AreNotEqual(0, app.GetMaxScore());
         }
