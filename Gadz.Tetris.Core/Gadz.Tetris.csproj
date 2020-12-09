@@ -42,6 +42,7 @@
     <Compile Include="Model\Entity.cs" />
     <Compile Include="Model\StatsRecord.cs" />
     <Compile Include="Model\Tetramino.cs" />
+    <Compile Include="Model\TetraminoConfiguration.cs" />
     <Compile Include="Model\TetraminoFactory.cs" />
     <Compile Include="Model\Identity.cs" />
     <Compile Include="Model\Block.cs" />

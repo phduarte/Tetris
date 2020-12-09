@@ -17,36 +17,32 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The Draw
         /// </summary>
-        /// <param name="type">The type<see cref="PieceType"/></param>
-        /// <param name="position">The position<see cref="Point"/></param>
-        /// <param name="rotation">The rotation<see cref="int"/></param>
+        /// <param name="config">The position<see cref="TetraminoConfiguration"/></param>
         /// <returns>The <see cref="Tetramino"/></returns>
-        public static Tetramino Draw(PieceType type, Point position, int rotation)
+        public static Tetramino Draw(TetraminoConfiguration config)
         {
-            var cor = Piece.GetPieceColor(type);
-
-            switch (type)
+            switch (config.Type)
             {
                 case PieceType.T:
-                    return new TetraminoT(position, rotation, cor);
+                    return new TetraminoT(config);
 
                 case PieceType.O:
-                    return new TetraminoO(position, cor);
+                    return new TetraminoO(config);
 
                 case PieceType.I:
-                    return new TetraminoI(position, rotation, cor);
+                    return new TetraminoI(config);
 
                 case PieceType.L:
-                    return new TetraminoL(position, rotation, cor);
+                    return new TetraminoL(config);
 
                 case PieceType.J:
-                    return new TetraminoJ(position, rotation, cor);
+                    return new TetraminoJ(config);
 
                 case PieceType.S:
-                    return new TetraminoS(position, rotation, cor);
+                    return new TetraminoS(config);
 
                 case PieceType.Z:
-                    return new TetraminoZ(position, rotation, cor);
+                    return new TetraminoZ(config);
 
                 default:
                     throw new NotImplementedException();

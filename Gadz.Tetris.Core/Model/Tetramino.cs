@@ -13,13 +13,11 @@
         /// <summary>
         /// The Draw
         /// </summary>
-        /// <param name="type">The type<see cref="PieceType"/></param>
-        /// <param name="point">The point<see cref="Point"/></param>
-        /// <param name="rotation">The rotation<see cref="int"/></param>
+        /// <param name="configuration">The configuration<see cref="TetraminoConfiguration"/></param>
         /// <returns>The <see cref="Tetramino"/></returns>
-        public static Tetramino Draw(PieceType type, Point point, int rotation)
+        public static Tetramino Draw(TetraminoConfiguration configuration)
         {
-            return TetraminoFactory.Draw(type, point, rotation);
+            return TetraminoFactory.Draw(configuration);
         }
 
         /// <summary>
@@ -29,7 +27,7 @@
         /// <returns>The <see cref="Tetramino"/></returns>
         public static Tetramino Draw(PieceType type)
         {
-            return Draw(type, new Point(0, 0), 0);
+            return Draw(new TetraminoConfiguration { Type = type});
         }
 
         /// <summary>
@@ -40,7 +38,7 @@
         /// <returns>The <see cref="Tetramino"/></returns>
         public static Tetramino Draw(PieceType type, Point point)
         {
-            return Draw(type, point, 0);
+            return Draw(new TetraminoConfiguration { Type = type, Position = point});
         }
 
         /// <summary>
@@ -51,7 +49,7 @@
         /// <returns>The <see cref="Tetramino"/></returns>
         public static Tetramino Draw(PieceType type, int rotation)
         {
-            return Draw(type, new Point(0, 0), rotation);
+            return Draw(new TetraminoConfiguration { Type = type, Rotation = rotation });
         }
 
         /// <summary>

@@ -34,8 +34,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// Gets the Shape
         /// </summary>
-        public Tetramino Shape => TetraminoFactory.Draw(Type, Position, Rotation);
-
+        public Tetramino Shape => TetraminoFactory.Draw(new TetraminoConfiguration { Position = Position, Rotation = Rotation, Type = Type });
         /// <summary>
         /// Gets the Position
         /// </summary>

@@ -8,41 +8,39 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="TetraminoL"/> class.
         /// </summary>
-        /// <param name="position">The position<see cref="Point"/></param>
-        /// <param name="rotation">The rotation<see cref="int"/></param>
-        /// <param name="color">The color<see cref="PieceColor"/></param>
-        public TetraminoL(Point position, int rotation, PieceColor color)
+        /// <param name="config">The configuration<see cref="TetraminoConfiguration"/></param>
+        public TetraminoL(TetraminoConfiguration config)
         {
             var blocks = new Block[4];
-            int x = position.X, y = position.Y;
+            int x = config.Position.X, y = config.Position.Y;
 
-            if (rotation == 0)
+            if (config.Rotation == 0)
             {
-                blocks[0] = new Block(x, y, color);
-                blocks[1] = new Block(x, y + 1, color);
-                blocks[2] = new Block(x, y + 2, color);
-                blocks[3] = new Block(x + 1, y + 2, color);
+                blocks[0] = new Block(x, y, config.Color);
+                blocks[1] = new Block(x, y + 1, config.Color);
+                blocks[2] = new Block(x, y + 2, config.Color);
+                blocks[3] = new Block(x + 1, y + 2, config.Color);
             }
-            else if (rotation == 1)
+            else if (config.Rotation == 1)
             {
-                blocks[0] = new Block(x, y + 1, color);
-                blocks[1] = new Block(x + 1, y + 1, color);
-                blocks[2] = new Block(x + 2, y + 1, color);
-                blocks[3] = new Block(x + 2, y, color);
+                blocks[0] = new Block(x, y + 1, config.Color);
+                blocks[1] = new Block(x + 1, y + 1, config.Color);
+                blocks[2] = new Block(x + 2, y + 1, config.Color);
+                blocks[3] = new Block(x + 2, y, config.Color);
             }
-            else if (rotation == 2)
+            else if (config.Rotation == 2)
             {
-                blocks[0] = new Block(x, y, color);
-                blocks[1] = new Block(x + 1, y, color);
-                blocks[2] = new Block(x + 1, y + 1, color);
-                blocks[3] = new Block(x + 1, y + 2, color);
+                blocks[0] = new Block(x, y, config.Color);
+                blocks[1] = new Block(x + 1, y, config.Color);
+                blocks[2] = new Block(x + 1, y + 1, config.Color);
+                blocks[3] = new Block(x + 1, y + 2, config.Color);
             }
-            else if (rotation == 3)
+            else if (config.Rotation == 3)
             {
-                blocks[0] = new Block(x, y, color);
-                blocks[1] = new Block(x + 1, y, color);
-                blocks[2] = new Block(x + 2, y, color);
-                blocks[3] = new Block(x, y + 1, color);
+                blocks[0] = new Block(x, y, config.Color);
+                blocks[1] = new Block(x + 1, y, config.Color);
+                blocks[2] = new Block(x + 2, y, config.Color);
+                blocks[3] = new Block(x, y + 1, config.Color);
             }
 
             Blocks = blocks;

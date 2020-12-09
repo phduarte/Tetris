@@ -193,13 +193,11 @@
             Gets or sets the Blocks
             </summary>
         </member>
-        <member name="M:Gadz.Tetris.Model.Tetramino.Draw(Gadz.Tetris.Model.PieceType,Gadz.Tetris.Point,System.Int32)">
+        <member name="M:Gadz.Tetris.Model.Tetramino.Draw(Gadz.Tetris.Model.TetraminoConfiguration)">
             <summary>
             The Draw
             </summary>
-            <param name="type">The type<see cref="T:Gadz.Tetris.Model.PieceType"/></param>
-            <param name="point">The point<see cref="T:Gadz.Tetris.Point"/></param>
-            <param name="rotation">The rotation<see cref="T:System.Int32"/></param>
+            <param name="configuration">The configuration<see cref="T:Gadz.Tetris.Model.TetraminoConfiguration"/></param>
             <returns>The <see cref="T:Gadz.Tetris.Model.Tetramino"/></returns>
         </member>
         <member name="M:Gadz.Tetris.Model.Tetramino.Draw(Gadz.Tetris.Model.PieceType)">
@@ -231,6 +229,11 @@
             </summary>
             <returns>The <see cref="T:System.String"/></returns>
         </member>
+        <member name="T:Gadz.Tetris.Model.TetraminoConfiguration">
+            <summary>
+            TetraminoConfiguration
+            </summary>
+        </member>
         <member name="T:Gadz.Tetris.Model.TetraminoFactory">
             <summary>
             Defines the <see cref="T:Gadz.Tetris.Model.TetraminoFactory" />
@@ -241,13 +244,11 @@
             Prevents a default instance of the <see cref="T:Gadz.Tetris.Model.TetraminoFactory"/> class from being created.
             </summary>
         </member>
-        <member name="M:Gadz.Tetris.Model.TetraminoFactory.Draw(Gadz.Tetris.Model.PieceType,Gadz.Tetris.Point,System.Int32)">
+        <member name="M:Gadz.Tetris.Model.TetraminoFactory.Draw(Gadz.Tetris.Model.TetraminoConfiguration)">
             <summary>
             The Draw
             </summary>
-            <param name="type">The type<see cref="T:Gadz.Tetris.Model.PieceType"/></param>
-            <param name="position">The position<see cref="T:Gadz.Tetris.Point"/></param>
-            <param name="rotation">The rotation<see cref="T:System.Int32"/></param>
+            <param name="config">The position<see cref="T:Gadz.Tetris.Model.TetraminoConfiguration"/></param>
             <returns>The <see cref="T:Gadz.Tetris.Model.Tetramino"/></returns>
         </member>
         <member name="T:Gadz.Tetris.Model.Identity">
@@ -446,90 +447,77 @@
             Defines the <see cref="T:Gadz.Tetris.Model.TetraminoI" />
             </summary>
         </member>
-        <member name="M:Gadz.Tetris.Model.TetraminoI.#ctor(Gadz.Tetris.Point,System.Int32,Gadz.Tetris.Model.PieceColor)">
+        <member name="M:Gadz.Tetris.Model.TetraminoI.#ctor(Gadz.Tetris.Model.TetraminoConfiguration)">
             <summary>
             Initializes a new instance of the <see cref="T:Gadz.Tetris.Model.TetraminoI"/> class.
             </summary>
-            <param name="position">The position<see cref="T:Gadz.Tetris.Point"/></param>
-            <param name="rotation">The rotation<see cref="T:System.Int32"/></param>
-            <param name="color">The color<see cref="T:Gadz.Tetris.Model.PieceColor"/></param>
+            <param name="config">The configuration<see cref="T:Gadz.Tetris.Model.TetraminoConfiguration"/></param>
         </member>
         <member name="T:Gadz.Tetris.Model.TetraminoJ">
             <summary>
             Defines the <see cref="T:Gadz.Tetris.Model.TetraminoJ" />
             </summary>
         </member>
-        <member name="M:Gadz.Tetris.Model.TetraminoJ.#ctor(Gadz.Tetris.Point,System.Int32,Gadz.Tetris.Model.PieceColor)">
+        <member name="M:Gadz.Tetris.Model.TetraminoJ.#ctor(Gadz.Tetris.Model.TetraminoConfiguration)">
             <summary>
             Initializes a new instance of the <see cref="T:Gadz.Tetris.Model.TetraminoJ"/> class.
             </summary>
-            <param name="position">The position<see cref="T:Gadz.Tetris.Point"/></param>
-            <param name="rotation">The rotation<see cref="T:System.Int32"/></param>
-            <param name="color">The color<see cref="T:Gadz.Tetris.Model.PieceColor"/></param>
+            <param name="config">The configuration<see cref="T:Gadz.Tetris.Model.TetraminoConfiguration"/></param>
         </member>
         <member name="T:Gadz.Tetris.Model.TetraminoL">
             <summary>
             Defines the <see cref="T:Gadz.Tetris.Model.TetraminoL" />
             </summary>
         </member>
-        <member name="M:Gadz.Tetris.Model.TetraminoL.#ctor(Gadz.Tetris.Point,System.Int32,Gadz.Tetris.Model.PieceColor)">
+        <member name="M:Gadz.Tetris.Model.TetraminoL.#ctor(Gadz.Tetris.Model.TetraminoConfiguration)">
             <summary>
             Initializes a new instance of the <see cref="T:Gadz.Tetris.Model.TetraminoL"/> class.
             </summary>
-            <param name="position">The position<see cref="T:Gadz.Tetris.Point"/></param>
-            <param name="rotation">The rotation<see cref="T:System.Int32"/></param>
-            <param name="color">The color<see cref="T:Gadz.Tetris.Model.PieceColor"/></param>
+            <param name="config">The configuration<see cref="T:Gadz.Tetris.Model.TetraminoConfiguration"/></param>
         </member>
         <member name="T:Gadz.Tetris.Model.TetraminoO">
             <summary>
             Defines the <see cref="T:Gadz.Tetris.Model.TetraminoO" />
             </summary>
         </member>
-        <member name="M:Gadz.Tetris.Model.TetraminoO.#ctor(Gadz.Tetris.Point,Gadz.Tetris.Model.PieceColor)">
+        <member name="M:Gadz.Tetris.Model.TetraminoO.#ctor(Gadz.Tetris.Model.TetraminoConfiguration)">
             <summary>
             Initializes a new instance of the <see cref="T:Gadz.Tetris.Model.TetraminoO"/> class.
             </summary>
-            <param name="position">The position<see cref="T:Gadz.Tetris.Point"/></param>
-            <param name="color">The color<see cref="T:Gadz.Tetris.Model.PieceColor"/></param>
+            <param name="config">The position<see cref="T:Gadz.Tetris.Model.TetraminoConfiguration"/></param>
         </member>
         <member name="T:Gadz.Tetris.Model.TetraminoS">
             <summary>
             Defines the <see cref="T:Gadz.Tetris.Model.TetraminoS" />
             </summary>
         </member>
-        <member name="M:Gadz.Tetris.Model.TetraminoS.#ctor(Gadz.Tetris.Point,System.Int32,Gadz.Tetris.Model.PieceColor)">
+        <member name="M:Gadz.Tetris.Model.TetraminoS.#ctor(Gadz.Tetris.Model.TetraminoConfiguration)">
             <summary>
             Initializes a new instance of the <see cref="T:Gadz.Tetris.Model.TetraminoS"/> class.
             </summary>
-            <param name="position">The position<see cref="T:Gadz.Tetris.Point"/></param>
-            <param name="rotation">The rotation<see cref="T:System.Int32"/></param>
-            <param name="color">The color<see cref="T:Gadz.Tetris.Model.PieceColor"/></param>
+            <param name="config">The position<see cref="T:Gadz.Tetris.Model.TetraminoConfiguration"/></param>
         </member>
         <member name="T:Gadz.Tetris.Model.TetraminoT">
             <summary>
             Defines the <see cref="T:Gadz.Tetris.Model.TetraminoT" />
             </summary>
         </member>
-        <member name="M:Gadz.Tetris.Model.TetraminoT.#ctor(Gadz.Tetris.Point,System.Int32,Gadz.Tetris.Model.PieceColor)">
+        <member name="M:Gadz.Tetris.Model.TetraminoT.#ctor(Gadz.Tetris.Model.TetraminoConfiguration)">
             <summary>
             Initializes a new instance of the <see cref="T:Gadz.Tetris.Model.TetraminoT"/> class.
             </summary>
-            <param name="position">The position<see cref="T:Gadz.Tetris.Point"/></param>
-            <param name="rotation">The rotation<see cref="T:System.Int32"/></param>
-            <param name="color">The color<see cref="T:Gadz.Tetris.Model.PieceColor"/></param>
+            <param name="config">The position<see cref="T:Gadz.Tetris.Model.TetraminoConfiguration"/></param>
         </member>
         <member name="T:Gadz.Tetris.Model.TetraminoZ">
             <summary>
             Defines the <see cref="T:Gadz.Tetris.Model.TetraminoZ" />
             </summary>
         </member>
-        <member name="M:Gadz.Tetris.Model.TetraminoZ.#ctor(Gadz.Tetris.Point,System.Int32,Gadz.Tetris.Model.PieceColor)">
+        <member name="M:Gadz.Tetris.Model.TetraminoZ.#ctor(Gadz.Tetris.Model.TetraminoConfiguration)">
             <summary>
             Initializes a new instance of the <see cref="T:Gadz.Tetris.Model.TetraminoZ"/> class.
             </summary>
-            <param name="position">The position<see cref="T:Gadz.Tetris.Point"/></param>
-            <param name="rotation">The rotation<see cref="T:System.Int32"/></param>
-            <param name="color">The color<see cref="T:Gadz.Tetris.Model.PieceColor"/></param>
+            <param name="config">The position<see cref="T:Gadz.Tetris.Model.TetraminoConfiguration"/></param>
         </member>
         <member name="T:Gadz.Tetris.Model.Piece">
             <summary>
