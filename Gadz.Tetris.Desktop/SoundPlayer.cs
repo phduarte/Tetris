@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Gadz.Tetris.Desktop
 {
@@ -23,12 +24,7 @@ namespace Gadz.Tetris.Desktop
         [DllImport("winmm.dll")]
         private static extern Int32 mciSendString(string command, StringBuilder buffer, int bufferSize, IntPtr hwndCallback);
 
-        public SoundPlayer()
-        {
-            GenerateFilesAsync();
-        }
-
-        private static async void GenerateFilesAsync()
+        static SoundPlayer()
         {
             foreach (var sound in _sounds)
             {
@@ -38,7 +34,7 @@ namespace Gadz.Tetris.Desktop
                 {
                     using (var file = new StreamWriter(filePath, false))
                     {
-                        await sound.Value.CopyToAsync(file.BaseStream).ConfigureAwait(false);
+                        sound.Value.CopyTo(file.BaseStream);
                     }
                 }
 
