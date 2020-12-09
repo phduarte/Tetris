@@ -8,7 +8,7 @@
         /// <summary>
         /// Gets the Id
         /// </summary>
-        public Identity Id { get; private set; }
+        public Identity Id { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Entity"/> class.

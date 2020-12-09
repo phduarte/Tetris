@@ -127,7 +127,9 @@ namespace Gadz.Tetris.Model.Pieces
         /// <returns>The <see cref="Piece"/></returns>
         public virtual Piece Clone()
         {
-            return new PieceBuilder().OnBoard(Board).OfType(Type).OnPosition(Position).WithRotation(Rotation).Build();
+            var clone = new PieceBuilder().OnBoard(Board).OfType(Type).OnPosition(Position).WithRotation(Rotation).Build();
+            clone.Id = Id;
+            return clone;
         }
 
         /// <summary>
@@ -168,6 +170,11 @@ namespace Gadz.Tetris.Model.Pieces
         public override int GetHashCode()
         {
             return ToString().GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return $"{Blocks[0]},{Blocks[1]},{Blocks[2]},{Blocks[3]}";
         }
     }
 }

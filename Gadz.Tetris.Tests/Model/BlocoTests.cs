@@ -42,7 +42,7 @@ namespace Gadz.Tetris.Model
         public void DeveInstanciar()
         {
             var bloco = new Block(1, 2, PieceColor.None);
-            Assert.AreEqual("1+2", bloco.ToString());
+            Assert.AreEqual("1x2", bloco.ToString());
         }
     }
 }

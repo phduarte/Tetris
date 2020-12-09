@@ -15,7 +15,7 @@ namespace Gadz.Tetris.Model
         public void DeveInstanciar()
         {
             var dimensao = new Size(10, 20);
-            Assert.AreEqual("10x20", dimensao.ToString());
+            Assert.AreEqual("10:20", dimensao.ToString());
         }
     }
 }
