@@ -37,5 +37,13 @@
         /// 
         /// </summary>
         public long Seconds;
+        /// <summary>
+        /// 
+        /// </summary>
+        public int Tetris { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public float TetrisRate { get; set; }
     }
 }

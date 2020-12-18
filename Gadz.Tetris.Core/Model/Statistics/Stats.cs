@@ -70,6 +70,13 @@ namespace Gadz.Tetris.Model.Statistics
         public TimeSpan Duration => CalculateTime();
 
         /// <summary>
+        /// 
+        /// </summary>
+        public int Tetris { get; private set; }
+
+        public float TetrisRate => Score > 0 ? (float)Tetris / (float)Score : 0F;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Stats"/> class.
         /// </summary>
         public Stats()
@@ -100,7 +107,7 @@ namespace Gadz.Tetris.Model.Statistics
         /// <param name="moves">The moves<see cref="int"/></param>
         /// <param name="blocks">The blocks<see cref="int"/></param>
         /// <param name="duration">The duration<see cref="long"/></param>
-        private Stats(StatsRecord record) 
+        private Stats(StatsRecord record)
             : this(record.Id)
         {
             Score = record.Score;
@@ -241,6 +248,7 @@ namespace Gadz.Tetris.Model.Statistics
                     return 300;
 
                 case 4:
+                    Tetris += 1200;
                     return 1200;
                 default:
                     return 0;

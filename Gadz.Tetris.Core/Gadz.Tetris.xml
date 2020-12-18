@@ -188,6 +188,16 @@
             
             </summary>
         </member>
+        <member name="P:Gadz.Tetris.Model.Statistics.StatsRecord.Tetris">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gadz.Tetris.Model.Statistics.StatsRecord.TetrisRate">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:Gadz.Tetris.Model.Statistics.Stats">
             <summary>
             Defines the <see cref="T:Gadz.Tetris.Model.Statistics.Stats" />
@@ -251,6 +261,11 @@
         <member name="P:Gadz.Tetris.Model.Statistics.Stats.Duration">
             <summary>
             Gets the Duration
+            </summary>
+        </member>
+        <member name="P:Gadz.Tetris.Model.Statistics.Stats.Tetris">
+            <summary>
+            
             </summary>
         </member>
         <member name="M:Gadz.Tetris.Model.Statistics.Stats.#ctor">
@@ -901,6 +916,16 @@
             Gets the Frequency
             </summary>
         </member>
+        <member name="P:Gadz.Tetris.Model.Boards.Board.Tetris">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gadz.Tetris.Model.Boards.Board.TetrisRate">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="E:Gadz.Tetris.Model.Boards.Board.OnRefresh">
             <summary>
             Defines the OnRefresh
@@ -1504,6 +1529,16 @@
             <summary>
             Gets the CurrentBoard
             Tabuleiro atual
+            </summary>
+        </member>
+        <member name="P:Gadz.Tetris.GameController.Tetris">
+            <summary>
+            Gets the Amount Tetris in the game
+            </summary>
+        </member>
+        <member name="P:Gadz.Tetris.GameController.TetrisRate">
+            <summary>
+            
             </summary>
         </member>
         <member name="M:Gadz.Tetris.GameController.#ctor(System.Int32,System.Int32)">

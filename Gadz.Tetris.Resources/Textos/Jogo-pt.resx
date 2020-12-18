@@ -159,6 +159,9 @@
   <data name="SomLigado" xml:space="preserve">
     <value>Sound On</value>
   </data>
+  <data name="TaxaTetris" xml:space="preserve">
+    <value>Tetris</value>
+  </data>
   <data name="Tempo" xml:space="preserve">
     <value>Time</value>
   </data>

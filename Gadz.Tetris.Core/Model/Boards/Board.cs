@@ -129,6 +129,16 @@ namespace Gadz.Tetris.Model.Boards
         public int Frequency => Stats.Speed <= 1000 ? 1000 - Stats.Speed : 0;
 
         /// <summary>
+        /// 
+        /// </summary>
+        public int Tetris => Stats.Tetris;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public float TetrisRate => Stats.TetrisRate;
+
+        /// <summary>
         /// Defines the OnRefresh
         /// </summary>
         public event GameActionEventHandler OnRefresh;

@@ -24,9 +24,10 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Play));
             this.mainBoardPanel = new System.Windows.Forms.Panel();
+            this.picPause = new System.Windows.Forms.PictureBox();
             this.lbPause = new System.Windows.Forms.Label();
+            this.lbPauseDescription = new System.Windows.Forms.Label();
             this.lbLevel = new System.Windows.Forms.Label();
             this.lbLines = new System.Windows.Forms.Label();
             this.lbPoints = new System.Windows.Forms.Label();
@@ -37,10 +38,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.lbSpeed = new System.Windows.Forms.Label();
+            this.lbTetris = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.picPause = new System.Windows.Forms.PictureBox();
-            this.lbPauseDescription = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picPause)).BeginInit();
             this.picPause.SuspendLayout();
             this.SuspendLayout();
@@ -55,6 +54,17 @@
             this.mainBoardPanel.Size = new System.Drawing.Size(220, 440);
             this.mainBoardPanel.TabIndex = 0;
             // 
+            // picPause
+            // 
+            this.picPause.BackColor = System.Drawing.Color.Transparent;
+            this.picPause.Controls.Add(this.lbPause);
+            this.picPause.Controls.Add(this.lbPauseDescription);
+            this.picPause.Location = new System.Drawing.Point(0, 0);
+            this.picPause.Name = "picPause";
+            this.picPause.Size = new System.Drawing.Size(340, 440);
+            this.picPause.TabIndex = 11;
+            this.picPause.TabStop = false;
+            // 
             // lbPause
             // 
             this.lbPause.BackColor = System.Drawing.Color.Transparent;
@@ -66,6 +76,18 @@
             this.lbPause.TabIndex = 99;
             this.lbPause.Text = "PAUSADO";
             this.lbPause.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lbPauseDescription
+            // 
+            this.lbPauseDescription.BackColor = System.Drawing.Color.Transparent;
+            this.lbPauseDescription.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.lbPauseDescription.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbPauseDescription.Location = new System.Drawing.Point(0, 215);
+            this.lbPauseDescription.Name = "lbPauseDescription";
+            this.lbPauseDescription.Size = new System.Drawing.Size(340, 43);
+            this.lbPauseDescription.TabIndex = 100;
+            this.lbPauseDescription.Text = "Pressione ENTER para continuar";
+            this.lbPauseDescription.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lbLevel
             // 
@@ -182,20 +204,20 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(106, 21);
             this.label6.TabIndex = 9;
-            this.label6.Text = "SPEED";
+            this.label6.Text = "TETRIS";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lbSpeed
+            // lbTetris
             // 
-            this.lbSpeed.BackColor = System.Drawing.Color.Transparent;
-            this.lbSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbSpeed.ForeColor = System.Drawing.Color.Black;
-            this.lbSpeed.Location = new System.Drawing.Point(235, 328);
-            this.lbSpeed.Name = "lbSpeed";
-            this.lbSpeed.Size = new System.Drawing.Size(86, 30);
-            this.lbSpeed.TabIndex = 8;
-            this.lbSpeed.Text = "0";
-            this.lbSpeed.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbTetris.BackColor = System.Drawing.Color.Transparent;
+            this.lbTetris.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbTetris.ForeColor = System.Drawing.Color.Black;
+            this.lbTetris.Location = new System.Drawing.Point(235, 328);
+            this.lbTetris.Name = "lbTetris";
+            this.lbTetris.Size = new System.Drawing.Size(86, 30);
+            this.lbTetris.TabIndex = 8;
+            this.lbTetris.Text = "0";
+            this.lbTetris.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label8
             // 
@@ -209,30 +231,6 @@
             this.label8.Text = "NEXT";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lbPauseDescription
-            // 
-            this.lbPauseDescription.BackColor = System.Drawing.Color.Transparent;
-            this.lbPauseDescription.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.lbPauseDescription.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbPauseDescription.Location = new System.Drawing.Point(0, 215);
-            this.lbPauseDescription.Name = "lbPauseDescription";
-            this.lbPauseDescription.Size = new System.Drawing.Size(340, 43);
-            this.lbPauseDescription.TabIndex = 100;
-            this.lbPauseDescription.Text = "Pressione ENTER para continuar";
-            this.lbPauseDescription.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // picPause
-            // 
-            this.picPause.BackColor = System.Drawing.Color.Transparent;
-            //this.picPause.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("picPause.BackgroundImage")));
-            this.picPause.Controls.Add(this.lbPause);
-            this.picPause.Controls.Add(this.lbPauseDescription);
-            this.picPause.Location = new System.Drawing.Point(0, 0);
-            this.picPause.Name = "picPause";
-            this.picPause.Size = new System.Drawing.Size(340, 440);
-            this.picPause.TabIndex = 11;
-            this.picPause.TabStop = false;
-            // 
             // Play
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -243,7 +241,7 @@
             this.Controls.Add(this.mainBoardPanel);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.lbSpeed);
+            this.Controls.Add(this.lbTetris);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.lbLevel);
             this.Controls.Add(this.label4);
@@ -283,7 +281,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label lbSpeed;
+        private System.Windows.Forms.Label lbTetris;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.PictureBox picPause;
         private System.Windows.Forms.Label lbPause;

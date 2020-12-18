@@ -14,6 +14,7 @@ namespace Gadz.Tetris.Desktop
             lbLevel.Text = stats.Level.ToString();
             lbPieces.Text = stats.Blocks.ToString();
             lbTime.Text = stats.Duration.ToString();
+            lbTetris.Text = stats.TetrisRate.ToString("P0");
         }
 
         private void btnStart_Click(object sender, EventArgs e)

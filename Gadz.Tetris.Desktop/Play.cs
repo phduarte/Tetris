@@ -72,7 +72,7 @@ namespace Gadz.Tetris.Desktop
             label3.Text = Texto.Tempo.ToUpper();
             label4.Text = Texto.Linhas.ToUpper();
             label5.Text = Texto.Nivel.ToUpper();
-            label6.Text = Texto.Velocidade.ToUpper();
+            label6.Text = Texto.TaxaTetris.ToUpper();
             label8.Text = Texto.Proximo.ToUpper();
             lbPause.Text = Texto.Pausado;
             lbPauseDescription.Text = Texto.PressioneEnterParaContinuar;
@@ -115,7 +115,7 @@ namespace Gadz.Tetris.Desktop
                 lbPoints.Text = _controller.Score.ToString();
                 lbTime.Text = _controller.Duration.ToString(@"hh\:mm\:ss");
                 lbLines.Text = _controller.Lines.ToString();
-                lbSpeed.Text = _controller.Speed.ToString();
+                lbTetris.Text = _controller.TetrisRate.ToString("P0");
             }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
         }
 
@@ -325,6 +325,8 @@ namespace Gadz.Tetris.Desktop
 
         private void HidePausedScreen()
         {
+            picPause.Left = 0;
+            picPause.Top = 0;
             lbPause.Visible = picPause.Visible = false;
         }
     }

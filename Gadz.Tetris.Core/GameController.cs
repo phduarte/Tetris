@@ -134,6 +134,16 @@ namespace Gadz.Tetris
         public Board Board => _board;
 
         /// <summary>
+        /// Gets the Amount Tetris in the game
+        /// </summary>
+        public int Tetris => _board.Tetris;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public float TetrisRate => _board.TetrisRate;
+
+        /// <summary>
         /// Prevents a default instance of the <see cref="GameController"/> class from being created.
         /// </summary>
         /// <param name="width">The width<see cref="int"/></param>
