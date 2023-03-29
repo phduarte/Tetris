@@ -86,7 +86,7 @@ Alguns estavam escritos em apenas uma classe ou método, você pode não se assu
 Muitos abusavam de desvios condicionais e loops, gerando uma complexidade ciclomática muito alta. 
 O uso de números mágicos e comentários também foram coisas que não quis fazer aqui.
 
-No final me parece que talvez colocar todos os arquivos do meu projeto em apenas 1 arquivo é mais fácil do que separar um arquivo só em vários outros quando precisar dar manutenção.
+No final a minha impressão é que colocar tudo junto num arquivo só é mais fácil e rápido quando está criando, em contra partida separar em uma estrutura legível dará mais trabalho e demorará mais, porém, esse esforço e tempo inverte após o projeto ser concluído e passa a ser mantido. Então se a manutenção do seu sistema for algo mais importante ou representar a maior parte do ciclo de vida da aplicação, o uso de um estilo arquitetural em camadas e principalmente com uma ênfase em Domínio do problema, é uma escolha normalmente mais eficiente.
 
 ### SOLID
 
