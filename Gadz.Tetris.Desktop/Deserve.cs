@@ -1,6 +1,4 @@
-﻿using Gadz.Tetris.Model.Statistics;
-using System;
-using System.Windows.Forms;
+﻿using Gadz.Tetris.Domain.Models.Statistics;
 
 namespace Gadz.Tetris.Desktop
 {

@@ -1,17 +1,17 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Gadz.Tetris.Domain.Models;
+using NUnit.Framework;
 
-namespace Gadz.Tetris.Model
+namespace Gadz.Tetris.Tests.Model
 {
     /// <summary>
     /// Defines the <see cref="DimensaoTests" />
     /// </summary>
-    [TestClass]
     public class DimensaoTests
     {
         /// <summary>
         /// The DeveInstanciar
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveInstanciar()
         {
             var dimensao = new Size(10, 20);

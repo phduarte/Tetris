@@ -1,14 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Linq;
-using System.Threading;
+﻿using Gadz.Tetris.Application;
+using NUnit.Framework;
 
-namespace Gadz.Tetris
+namespace Gadz.Tetris.Tests
 {
     /// <summary>
     /// Defines the <see cref="GameControllerTests" />
     /// </summary>
-    [TestClass]
     public class GameControllerTests
     {
         /// <summary>
@@ -19,7 +16,7 @@ namespace Gadz.Tetris
         /// <summary>
         /// The Setup
         /// </summary>
-        [TestInitialize]
+        [SetUp]
         public void Setup()
         {
             app = GameController.Create(10, 20);
@@ -28,7 +25,7 @@ namespace Gadz.Tetris
         /// <summary>
         /// The DeveInstanciar
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveInstanciar()
         {
             Assert.IsNotNull(app);
@@ -39,17 +36,16 @@ namespace Gadz.Tetris
         /// <summary>
         /// The NaoDeveInstanciar
         /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void NaoDeveInstanciar()
         {
-            var app = GameController.Create(4, 4);
+            Assert.Throws<ArgumentException>(() => GameController.Create(4, 4));
         }
 
         /// <summary>
         /// The DeveIniciar
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveIniciar()
         {
             app.Start();
@@ -61,7 +57,7 @@ namespace Gadz.Tetris
         /// <summary>
         /// The DeveReiniciar
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveReiniciar()
         {
             app.Start();
@@ -75,7 +71,7 @@ namespace Gadz.Tetris
         /// <summary>
         /// The DevePausar
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DevePausar()
         {
             app.Start();
@@ -88,7 +84,7 @@ namespace Gadz.Tetris
         /// <summary>
         /// The DeveContinuar
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveContinuar()
         {
             app.Start();
@@ -102,7 +98,7 @@ namespace Gadz.Tetris
         /// <summary>
         /// The DeveIniciarComNivelUm
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveIniciarComNivelUm()
         {
             app.Start();
@@ -113,7 +109,7 @@ namespace Gadz.Tetris
         /// <summary>
         /// The DeveIniciarNaVelocidadeMaisAlta
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveIniciarNaVelocidadeMaisAlta()
         {
             app.Start();
@@ -124,7 +120,7 @@ namespace Gadz.Tetris
         /// <summary>
         /// The DeveConseguirMedirOTempoDaPartida
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveConseguirMedirOTempoDaPartida()
         {
             Assert.AreEqual(0, app.Duration.Ticks);
@@ -139,7 +135,7 @@ namespace Gadz.Tetris
         /// <summary>
         /// The DeveIniciarComPlacarEmBranco
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveIniciarComPlacarEmBranco()
         {
             app.Start();
@@ -149,7 +145,7 @@ namespace Gadz.Tetris
         /// <summary>
         /// The DeveIniciarSemNenhumaLinhaPreenchida
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveIniciarSemNenhumaLinhaPreenchida()
         {
             app.Start();
@@ -159,7 +155,7 @@ namespace Gadz.Tetris
         /// <summary>
         /// The DeveIniciarComBlocoNaPosicaoZero
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveIniciarComBlocoNaPosicaoZero()
         {
             app.Start();
@@ -170,7 +166,7 @@ namespace Gadz.Tetris
         /// <summary>
         /// The DeveMoverParaDireita
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveMoverParaDireita()
         {
             app.Start();
@@ -182,7 +178,7 @@ namespace Gadz.Tetris
         /// <summary>
         /// The DeveMoverParaEsquerda
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveMoverParaEsquerda()
         {
             DeveMoverParaDireita();
@@ -194,7 +190,7 @@ namespace Gadz.Tetris
         /// <summary>
         /// The DeveMoverParaBaixo
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveMoverParaBaixo()
         {
             app.Start();
@@ -206,7 +202,7 @@ namespace Gadz.Tetris
         /// <summary>
         /// The DeveCorrerParaDireita
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveCorrerParaDireita()
         {
             app.Start();
@@ -218,7 +214,7 @@ namespace Gadz.Tetris
         /// <summary>
         /// The DeveCorrerParaEsquerda
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveCorrerParaEsquerda()
         {
             DeveCorrerParaDireita();
@@ -230,7 +226,7 @@ namespace Gadz.Tetris
         /// <summary>
         /// The DeveCorrerParaBaixo
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveCorrerParaBaixo()
         {
             app.Start();
@@ -243,7 +239,7 @@ namespace Gadz.Tetris
         /// <summary>
         /// The DeveListarProximosBlocos
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveListarProximosBlocos()
         {
             app.Start();
@@ -253,7 +249,7 @@ namespace Gadz.Tetris
         /// <summary>
         /// The DeveListarOsBlocosAtuais
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveListarOsBlocosAtuais()
         {
             app.Start();
@@ -263,7 +259,7 @@ namespace Gadz.Tetris
         /// <summary>
         /// The DeveGuardarORecordeMaximo
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveGuardarORecordeMaximo()
         {
             app.Start();

@@ -1,17 +1,17 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Gadz.Tetris.Domain.Models;
+using NUnit.Framework;
 
-namespace Gadz.Tetris.Model
+namespace Gadz.Tetris.Tests.Model
 {
     /// <summary>
     /// Defines the <see cref="IdentidadeTests" />
     /// </summary>
-    [TestClass]
     public class IdentidadeTests
     {
         /// <summary>
         /// The DeveInstanciar
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveInstanciar()
         {
             var id = new Identity();
@@ -21,7 +21,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The DeveGerarNova
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveGerarNova()
         {
             var id = Identity.New();
@@ -31,7 +31,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The DeveConverterIdentidadeParaInteiro
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveConverterIdentidadeParaInteiro()
         {
             var id = new Identity(0);
@@ -43,7 +43,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The DeveConverterIdentidadeParaTexto
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveConverterIdentidadeParaTexto()
         {
             var id = new Identity("A");
@@ -55,7 +55,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The DeveConverterTextoParIdentidade
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveConverterTextoParIdentidade()
         {
             var id = new Identity(0);
@@ -67,7 +67,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The DeveConverterInteiroParaIdentidade
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveConverterInteiroParaIdentidade()
         {
             var id = new Identity("A");

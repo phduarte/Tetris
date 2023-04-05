@@ -1,18 +1,17 @@
-﻿using Gadz.Tetris.Model.Pieces;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Gadz.Tetris.Domain.Models.Pieces;
+using NUnit.Framework;
 
-namespace Gadz.Tetris.Model
+namespace Gadz.Tetris.Tests.Model
 {
     /// <summary>
     /// Defines the <see cref="BlocoTests" />
     /// </summary>
-    [TestClass]
     public class BlocoTests
     {
         /// <summary>
         /// The DeveColidir
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveColidir()
         {
             var blocoA = new Block(0, 0, PieceColor.Yellow);
@@ -25,7 +24,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The NaoDeveColidir
         /// </summary>
-        [TestMethod]
+        [Test]
         public void NaoDeveColidir()
         {
             var blocoA = new Block(0, 0, PieceColor.Yellow);
@@ -38,7 +37,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The DeveInstanciar
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveInstanciar()
         {
             var bloco = new Block(1, 2, PieceColor.None);

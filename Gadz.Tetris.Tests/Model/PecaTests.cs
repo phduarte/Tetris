@@ -1,14 +1,13 @@
-﻿using Gadz.Tetris.Model.Boards;
-using Gadz.Tetris.Model.Pieces;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
+﻿using Gadz.Tetris.Application;
+using Gadz.Tetris.Domain.Models.Boards;
+using Gadz.Tetris.Domain.Models.Pieces;
+using NUnit.Framework;
 
-namespace Gadz.Tetris.Model
+namespace Gadz.Tetris.Tests.Model
 {
     /// <summary>
     /// Defines the <see cref="PecaTests" />
     /// </summary>
-    [TestClass]
     public class PecaTests
     {
         /// <summary>
@@ -24,7 +23,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The Setup
         /// </summary>
-        [TestInitialize]
+        [SetUp]
         public void Setup()
         {
             tabuleiro = GameController.Create(10, 20).Board;
@@ -39,7 +38,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The DeveInstanciar
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveInstanciar()
         {
             Assert.IsNotNull(peca, "A peça não foi instanciada.");
@@ -54,7 +53,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The DeveGirar
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveGirar()
         {
             peca.Rotate();
@@ -64,7 +63,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The DeveMoverParaDireita
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveMoverParaDireita()
         {
             peca.MoveRight();
@@ -74,7 +73,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The DeveMoverParaEsquerda
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveMoverParaEsquerda()
         {
             DeveMoverParaDireita();
@@ -86,7 +85,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The DeveMoverParaBaixo
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveMoverParaBaixo()
         {
             peca.MoveDown();
@@ -96,7 +95,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The DeveSerClonada
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveSerClonada()
         {
             var pecaB = peca.Clone();
@@ -107,7 +106,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The NaoDeveSerClonada
         /// </summary>
-        [TestMethod]
+        [Test]
         public void NaoDeveSerClonada()
         {
             var pecaB = peca;

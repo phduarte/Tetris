@@ -1,4 +1,4 @@
-﻿namespace Gadz.Tetris.Model
+﻿namespace Gadz.Tetris.Tests.Model
 {
     /// <summary>
     /// Defines the <see cref="TabuleiroTests" />

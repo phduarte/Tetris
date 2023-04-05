@@ -1,13 +1,9 @@
-﻿using Gadz.Tetris.Desktop.Commands;
-using Gadz.Tetris.Model;
-using Gadz.Tetris.Model.Pieces;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Texto = Gadz.Tetris.Resources.Textos.Jogo;
+﻿using Gadz.Tetris.Application;
+using Gadz.Tetris.Application.Commands;
+using Gadz.Tetris.Desktop.Extensions;
+using Gadz.Tetris.Domain.Models.Pieces;
+using Gadz.Tetris.SoundPlayer;
+using Texto = Gadz.Tetris.Desktop.Textos.Jogo;
 
 namespace Gadz.Tetris.Desktop
 {
@@ -81,7 +77,7 @@ namespace Gadz.Tetris.Desktop
 
         private void PlayStartSound()
         {
-            Program.SoundPlayer.Start();
+            SoundPlayerAdapter.Start();
         }
 
         private void ListenEvents()
@@ -90,14 +86,14 @@ namespace Gadz.Tetris.Desktop
             _controller.OnRefresh += UpdateScreenTextAsync;
             _controller.OnFinish += ExitAsync;
             _controller.OnLose += ShowGameOver;
-            _controller.OnLose += Program.SoundPlayer.End;
+            _controller.OnLose += SoundPlayerAdapter.End;
 
             _controller.OnClear += PaintScreen;
-            _controller.OnClear += Program.SoundPlayer.Clear;
+            _controller.OnClear += SoundPlayerAdapter.Clear;
 
-            _controller.OnMove += Program.SoundPlayer.Move;
-            _controller.OnSlide += Program.SoundPlayer.Slide;
-            _controller.OnDrop += Program.SoundPlayer.Dock;
+            _controller.OnMove += SoundPlayerAdapter.Move;
+            _controller.OnSlide += SoundPlayerAdapter.Slide;
+            _controller.OnDrop += SoundPlayerAdapter.Dock;
             _controller.OnDrop += () =>
             {
                 this.ShakeDown(2);
@@ -259,7 +255,7 @@ namespace Gadz.Tetris.Desktop
 
         private void Jogo_KeyDown(object sender, KeyEventArgs e)
         {
-            foreach (var cmd in _commandFactory.GetAll(e.KeyCode, e.Control))
+            foreach (var cmd in _commandFactory.GetAll((Key)e.KeyCode, e.Control))
             {
                 cmd.Execute();
                 break;

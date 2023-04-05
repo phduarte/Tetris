@@ -1,6 +1,5 @@
-﻿using System;
-using System.Windows.Forms;
-using Texto = Gadz.Tetris.Resources.Textos.Jogo;
+﻿using Gadz.Tetris.SoundPlayer;
+using Texto = Gadz.Tetris.Desktop.Textos.Jogo;
 
 namespace Gadz.Tetris.Desktop
 {
@@ -49,11 +48,11 @@ namespace Gadz.Tetris.Desktop
             chkSound.Text = chkSound.Checked ? Texto.SomLigado : Texto.SomDesligado;
             if (chkSound.Checked)
             {
-                Program.SoundPlayer.TurnSoundOn();
+                SoundPlayerAdapter.TurnSoundOn();
             }
             else
             {
-                Program.SoundPlayer.TurnSoundOff();
+                SoundPlayerAdapter.TurnSoundOff();
             }
         }
 

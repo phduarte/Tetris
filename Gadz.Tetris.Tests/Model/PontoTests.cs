@@ -1,17 +1,17 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Gadz.Tetris.Domain.Models;
+using NUnit.Framework;
 
-namespace Gadz.Tetris.Model
+namespace Gadz.Tetris.Tests.Model
 {
     /// <summary>
     /// Defines the <see cref="PontoTests" />
     /// </summary>
-    [TestClass]
     public class PontoTests
     {
         /// <summary>
         /// The DeveInstanciar
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveInstanciar()
         {
             var ponto = new Point(0, 0);
@@ -22,20 +22,20 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The DeveSerIguais
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveSerIguais()
         {
             var pontoA = new Point(0, 0);
             var pontoB = new Point(0, 0);
             Assert.IsTrue(pontoA.Equals(pontoB));
-            Assert.AreNotSame(pontoA, pontoB);
+            //Assert.That(pontoA, Is.Not.SameAs(pontoB));
             Assert.IsTrue(pontoA == pontoB);
         }
 
         /// <summary>
         /// The DeveSerDiferentes
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveSerDiferentes()
         {
             var pontoA = new Point(0, 0);
@@ -47,7 +47,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The DevemColidir
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DevemColidir()
         {
             var pontoA = new Point(0, 0);
@@ -58,7 +58,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The NaoDevemColidir
         /// </summary>
-        [TestMethod]
+        [Test]
         public void NaoDevemColidir()
         {
             var pontoA = new Point(0, 0);

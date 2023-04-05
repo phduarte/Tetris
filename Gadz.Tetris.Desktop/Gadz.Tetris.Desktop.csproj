@@ -1,179 +1,60 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{873BF7EB-D323-4B5C-BEB6-8C350EFE3447}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>Gadz.Tetris.Desktop</RootNamespace>
-    <AssemblyName>Tetris</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>Gadz.Tetris.Desktop.Program</StartupObject>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>ksirtet.ico</ApplicationIcon>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="About.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="About.Designer.cs">
-      <DependentUpon>About.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Commands\Command.cs" />
-    <Compile Include="Commands\CommandFactory.cs" />
-    <Compile Include="Commands\ContinueCommand.cs" />
-    <Compile Include="Commands\ExitCommand.cs" />
-    <Compile Include="Commands\MoveDownCommand.cs" />
-    <Compile Include="Commands\MoveLeftCommand.cs" />
-    <Compile Include="Commands\MoveRightCommand.cs" />
-    <Compile Include="Commands\PauseCommand.cs" />
-    <Compile Include="Commands\RotateCommand.cs" />
-    <Compile Include="Commands\RunLeftCommand.cs" />
-    <Compile Include="Commands\RunRightCommand.cs" />
-    <Compile Include="Commands\SmashDownCommand.cs" />
-    <Compile Include="Commands\ToggleMuteCommand.cs" />
-    <Compile Include="Deserve.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Deserve.Designer.cs">
-      <DependentUpon>Deserve.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GameOver.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GameOver.Designer.cs">
-      <DependentUpon>GameOver.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Help.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Help.Designer.cs">
-      <DependentUpon>Help.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Choose.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Choose.Designer.cs">
-      <DependentUpon>Choose.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Play.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Play.Designer.cs">
-      <DependentUpon>Play.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="ShakeFormExtensions.cs" />
-    <Compile Include="SoundPlayer.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="About.resx">
-      <DependentUpon>About.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Deserve.resx">
-      <DependentUpon>Deserve.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GameOver.resx">
-      <DependentUpon>GameOver.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Help.resx">
-      <DependentUpon>Help.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Choose.resx">
-      <DependentUpon>Choose.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Imagens\BACKGROUND_TETRIS.png" />
-    <EmbeddedResource Include="Imagens\BG_FADED.png" />
-    <EmbeddedResource Include="Imagens\block_blue.png" />
-    <EmbeddedResource Include="Imagens\BLOCK_CLASSIC.png" />
-    <EmbeddedResource Include="Imagens\BLOCK_CLASSIC_FADED.png" />
-    <EmbeddedResource Include="Imagens\block_cyan.png" />
-    <EmbeddedResource Include="Imagens\block_green.png" />
-    <EmbeddedResource Include="Imagens\block_orange.png" />
-    <EmbeddedResource Include="Imagens\block_purple.png" />
-    <EmbeddedResource Include="Imagens\block_red.png" />
-    <EmbeddedResource Include="Imagens\block_yellow.png" />
-    <EmbeddedResource Include="Imagens\GAME_OVER_LAYER.png" />
-    <EmbeddedResource Include="Play.resx">
-      <DependentUpon>Play.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <SubType>Designer</SubType>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Gadz.Tetris.Core\Gadz.Tetris.csproj">
-      <Project>{a4339a4a-68e5-48f0-be05-a51dac5cc569}</Project>
-      <Name>Gadz.Tetris</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Gadz.Tetris.Resources\Gadz.Tetris.Resources.csproj">
-      <Project>{110b4184-4a4c-41f6-b86f-0a96cf1a7e8a}</Project>
-      <Name>Gadz.Tetris.Resources</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ksirtet.ico" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <ProjectExtensions>
-    <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.YearMonthStamp" BuildVersion_StartDate="2018/6/10" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
-    </VisualStudio>
-  </ProjectExtensions>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWindowsForms>true</UseWindowsForms>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Gadz.Tetris.Application\Gadz.Tetris.Application.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Properties\Resources.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Resources.resx</DependentUpon>
+	  </Compile>
+	  <Compile Update="Properties\Settings.Designer.cs">
+	    <DesignTimeSharedInput>True</DesignTimeSharedInput>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Settings.settings</DependentUpon>
+	  </Compile>
+	  <Compile Update="Textos\Jogo-pt.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Jogo-pt.resx</DependentUpon>
+	  </Compile>
+	  <Compile Update="Textos\Jogo.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Jogo.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Properties\Resources.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	  <EmbeddedResource Update="Textos\Jogo-pt.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Jogo-pt.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	  <EmbeddedResource Update="Textos\Jogo.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Jogo.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Properties\Settings.settings">
+	    <Generator>SettingsSingleFileGenerator</Generator>
+	    <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+	  </None>
+	</ItemGroup>
+
 </Project>

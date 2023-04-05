@@ -1,19 +1,17 @@
-﻿using Gadz.Tetris.Model.Pieces;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Linq;
+﻿using Gadz.Tetris.Application;
+using Gadz.Tetris.Domain.Models.Pieces;
+using NUnit.Framework;
 
-namespace Gadz.Tetris.Model
+namespace Gadz.Tetris.Tests.Model
 {
     /// <summary>
     /// Defines the <see cref="FormasTests" />
     /// </summary>
-    [TestClass]
     public class FormasTests
     {
         private PieceBuilder _pieceBuilder;
 
-        [TestInitialize]
+        [SetUp]
         public void Setup()
         {
             var game = GameController.Create(10, 10);
@@ -24,7 +22,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The DeveDesenharFormaI
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveDesenharFormaI()
         {
             var piece = _pieceBuilder.OfType(PieceType.I).Build();
@@ -35,7 +33,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The DeveDesenharFormaJ
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveDesenharFormaJ()
         {
             var forma = _pieceBuilder.OfType(PieceType.J).Build();
@@ -46,7 +44,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The DeveDesenharFormaL
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveDesenharFormaL()
         {
             var forma = _pieceBuilder.OfType(PieceType.L).Build();
@@ -56,7 +54,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The DeveDesenharFormaO
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveDesenharFormaO()
         {
             var piece = _pieceBuilder.OfType(PieceType.O).Build();
@@ -67,7 +65,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The DeveDesenharFormaS
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveDesenharFormaS()
         {
             var piece = _pieceBuilder.OfType(PieceType.S).Build();
@@ -77,7 +75,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The DeveDesenharFormaT
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveDesenharFormaT()
         {
             var piece = _pieceBuilder.OfType(PieceType.T).Build();
@@ -88,7 +86,7 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The DeveDesenharFormaZ
         /// </summary>
-        [TestMethod]
+        [Test]
         public void DeveDesenharFormaZ()
         {
             var piece = _pieceBuilder.OfType(PieceType.Z).Build();
@@ -99,11 +97,10 @@ namespace Gadz.Tetris.Model
         /// <summary>
         /// The NaoDeveDesenharNenhumaForma
         /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
+        [Test]
         public void NaoDeveDesenharNenhumaForma()
         {
-            _pieceBuilder.OfType((PieceType)8).Build();
+            Assert.Throws<NotImplementedException>(() => _pieceBuilder.OfType((PieceType)8).Build());
         }
     }
 }

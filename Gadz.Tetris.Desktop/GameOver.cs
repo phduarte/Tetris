@@ -1,5 +1,4 @@
-﻿using System.Windows.Forms;
-using Texto = Gadz.Tetris.Resources.Textos.Jogo;
+﻿using Texto = Gadz.Tetris.Desktop.Textos.Jogo;
 
 namespace Gadz.Tetris.Desktop
 {
