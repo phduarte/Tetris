@@ -51,6 +51,7 @@ O projeto Desktop contém as IHC, como parte da camada de Interfaces, aqui forne
   + 2 linhas completas na mesma jogada valem 100 pontos
   + 3 linhas completas na mesma jogada valem 300 pontos
   + TETRIS (4 linhas completas na mesma jogada) vale 1.200 pontos
+- **Níveis e velocidade**: o nível sobe ao completar a meta de linhas (20 no primeiro nível, crescendo 25% a cada nível). No nível 1 a peça desce a cada 1.000 ms, e esse intervalo diminui 50 ms por nível até o mínimo de 100 ms.
 
 ## Gráfico
 

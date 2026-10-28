@@ -16,11 +16,6 @@ public class Board : Entity
     private IStatsRepository _repository;
 
     /// <summary>
-    /// Gets a value indicating whether _atingiuTopo
-    /// </summary>
-    internal bool _atingiuTopo => ThereIsCollision(NextPiece);
-
-    /// <summary>
     /// Defines the MAXIMO_LINHAS_POSSIVEIS
     /// </summary>
     private const int MAXIMO_LINHAS_POSSIVEIS = 4;
@@ -30,11 +25,16 @@ public class Board : Entity
     /// </summary>
     private List<Block> _playedBlocks = [];
 
-    //o propósito dessa variável é evitar que ocorra 2 avaliações ao mesmo tempo sem precisar de nenhum lock.
     /// <summary>
-    /// Defines the _refreshing
+    /// Serializa as mutações do tabuleiro: o loop roda em background e os comandos chegam pela thread da UI.
     /// </summary>
-    private bool _refreshing;
+    private readonly Lock _sync = new();
+
+    /// <summary>
+    /// Identifica o loop vigente. Cada <see cref="RefreshAsync"/> incrementa o valor e o loop anterior se encerra,
+    /// evitando dois loops simultâneos após <see cref="Restart"/> ou <see cref="Continue"/>.
+    /// </summary>
+    private int _loopGeneration;
 
     /// <summary>
     /// Gets the Dimension
@@ -120,9 +120,9 @@ public class Board : Entity
     public int Score => Stats.Score;
 
     /// <summary>
-    /// Gets the Frequency
+    /// Intervalo, em milissegundos, entre as descidas automáticas da peça (ver <see cref="Stats.Interval"/>).
     /// </summary>
-    public int Frequency => Stats.Speed <= 1000 ? 1000 - Stats.Speed : 0;
+    public int Frequency => Stats.Interval;
 
     /// <summary>
     /// 
@@ -203,14 +203,17 @@ public class Board : Entity
     /// </summary>
     public void SmashDown()
     {
-        while (CanMoveDown(CurrentPiece))
+        lock (_sync)
         {
-            CurrentPiece.MoveDown();
-            OnSlide?.Invoke();
-        }
+            while (CanMoveDown(CurrentPiece))
+            {
+                CurrentPiece.MoveDown();
+                OnSlide?.Invoke();
+            }
 
-        Checkout();
-        OnDrop?.Invoke();
+            Checkout();
+            OnDrop?.Invoke();
+        }
     }
 
     /// <summary>
@@ -218,15 +221,18 @@ public class Board : Entity
     /// </summary>
     public void SlideRight()
     {
-        if (!CanMoveRight(CurrentPiece))
-            return;
-
-        while (CanMoveRight(CurrentPiece))
+        lock (_sync)
         {
-            CurrentPiece.MoveRight();
+            if (!CanMoveRight(CurrentPiece))
+                return;
+
+            while (CanMoveRight(CurrentPiece))
+            {
+                CurrentPiece.MoveRight();
+            }
+            Checkout();
+            OnSlide?.Invoke();
         }
-        Checkout();
-        OnSlide?.Invoke();
     }
 
     /// <summary>
@@ -234,15 +240,18 @@ public class Board : Entity
     /// </summary>
     public void SlideLeft()
     {
-        if (!CanMoveLeft(CurrentPiece))
-            return;
-
-        while (CanMoveLeft(CurrentPiece))
+        lock (_sync)
         {
-            CurrentPiece.MoveLeft();
+            if (!CanMoveLeft(CurrentPiece))
+                return;
+
+            while (CanMoveLeft(CurrentPiece))
+            {
+                CurrentPiece.MoveLeft();
+            }
+            Checkout();
+            OnSlide?.Invoke();
         }
-        Checkout();
-        OnSlide?.Invoke();
     }
 
     /// <summary>
@@ -250,9 +259,12 @@ public class Board : Entity
     /// </summary>
     public void Pause()
     {
-        OnPause?.Invoke();
-        State = new PausedState();
-        Stats.Pause();
+        lock (_sync)
+        {
+            OnPause?.Invoke();
+            State = new PausedState();
+            Stats.Pause();
+        }
     }
 
     /// <summary>
@@ -260,10 +272,13 @@ public class Board : Entity
     /// </summary>
     public void Continue()
     {
-        OnContinue?.Invoke();
-        State = new PlayingState();
-        Stats.Continue();
-        RefreshAsync();
+        lock (_sync)
+        {
+            OnContinue?.Invoke();
+            State = new PlayingState();
+            Stats.Continue();
+            RefreshAsync();
+        }
     }
 
     /// <summary>
@@ -271,10 +286,13 @@ public class Board : Entity
     /// </summary>
     public void Finish()
     {
-        OnRefresh?.Invoke();
-        Stats.Finish();
-        State = new FinishedState();
-        OnFinish?.Invoke();
+        lock (_sync)
+        {
+            OnRefresh?.Invoke();
+            Stats.Finish();
+            State = new FinishedState();
+            OnFinish?.Invoke();
+        }
     }
 
     /// <summary>
@@ -282,11 +300,14 @@ public class Board : Entity
     /// </summary>
     public void Lose()
     {
-        OnRefresh?.Invoke();
-        Stats.Finish();
-        State = new FinishedState();
-        //OnFinish?.Invoke();
-        OnLose?.Invoke();
+        lock (_sync)
+        {
+            OnRefresh?.Invoke();
+            Stats.Finish();
+            State = new FinishedState();
+            //OnFinish?.Invoke();
+            OnLose?.Invoke();
+        }
     }
 
     /// <summary>
@@ -294,12 +315,16 @@ public class Board : Entity
     /// </summary>
     public void Start()
     {
-        CurrentPiece = CreateRandomBlock();
-        NextPiece = CreateRandomBlock();
-        Stats.Start();
-        ResetMatrix();
-        State = new PlayingState();
-        RefreshAsync();
+        lock (_sync)
+        {
+            CurrentPiece = CreateRandomBlock();
+            NextPiece = CreateRandomBlock();
+            Stats.Start();
+            _playedBlocks.Clear();
+            ResetMatrix();
+            State = new PlayingState();
+            RefreshAsync();
+        }
     }
 
     /// <summary>
@@ -307,8 +332,11 @@ public class Board : Entity
     /// </summary>
     public void Restart()
     {
-        Finish();
-        Start();
+        lock (_sync)
+        {
+            Finish();
+            Start();
+        }
     }
 
     /// <summary>
@@ -325,7 +353,10 @@ public class Board : Entity
     /// <param name="id">The id<see cref="Identity"/></param>
     public void Load(Identity id)
     {
-        Stats = _repository.Load(id);
+        lock (_sync)
+        {
+            Stats = _repository.Load(id);
+        }
     }
 
     /// <summary>
@@ -333,13 +364,16 @@ public class Board : Entity
     /// </summary>
     public void MoveDown()
     {
-        if (CanMoveDown(CurrentPiece))
+        lock (_sync)
         {
-            CurrentPiece.MoveDown();
-            OnMove?.Invoke();
-        }
+            if (CanMoveDown(CurrentPiece))
+            {
+                CurrentPiece.MoveDown();
+                OnMove?.Invoke();
+            }
 
-        Checkout();
+            Checkout();
+        }
     }
 
     /// <summary>
@@ -347,11 +381,14 @@ public class Board : Entity
     /// </summary>
     public void MoveRight()
     {
-        if (CanMoveRight(CurrentPiece))
+        lock (_sync)
         {
-            CurrentPiece.MoveRight();
-            OnMove?.Invoke();
-            ResetMatrix();
+            if (CanMoveRight(CurrentPiece))
+            {
+                CurrentPiece.MoveRight();
+                OnMove?.Invoke();
+                ResetMatrix();
+            }
         }
     }
 
@@ -360,11 +397,14 @@ public class Board : Entity
     /// </summary>
     public void MoveLeft()
     {
-        if (CanMoveLeft(CurrentPiece))
+        lock (_sync)
         {
-            CurrentPiece.MoveLeft();
-            OnMove?.Invoke();
-            ResetMatrix();
+            if (CanMoveLeft(CurrentPiece))
+            {
+                CurrentPiece.MoveLeft();
+                OnMove?.Invoke();
+                ResetMatrix();
+            }
         }
     }
 
@@ -373,14 +413,59 @@ public class Board : Entity
     /// </summary>
     public void Rotate()
     {
-        if (!State.CanMove || ThereIsCollision(CurrentPiece))
+        lock (_sync)
         {
-            return;
+            if (!State.CanMove)
+            {
+                return;
+            }
+
+            // a colisão é testada numa cópia já girada; testar a peça atual deixaria a rotação sobrepor blocos
+            var rotated = CurrentPiece.Clone();
+            rotated.Rotate();
+
+            if (!Fits(rotated))
+            {
+                return;
+            }
+
+            CurrentPiece = rotated;
+            OnMove?.Invoke();
+            ResetMatrix();
+        }
+    }
+
+    /// <summary>
+    /// Substitui a peça atual e os blocos assentados. Permite que os testes montem cenários determinísticos.
+    /// </summary>
+    /// <param name="currentPiece">A peça que passa a ser controlada pelo jogador.</param>
+    /// <param name="settledBlocks">Os blocos que passam a estar assentados no tabuleiro.</param>
+    internal void Arrange(Piece currentPiece, IEnumerable<Block> settledBlocks)
+    {
+        lock (_sync)
+        {
+            CurrentPiece = currentPiece;
+            _playedBlocks = [.. settledBlocks];
+            ResetMatrix();
+        }
+    }
+
+    /// <summary>
+    /// Verifica se a peça cabe no tabuleiro: todos os blocos dentro das bordas e sem sobrepor blocos assentados.
+    /// </summary>
+    /// <param name="piece">A peça a verificar.</param>
+    /// <returns><c>true</c> se a peça cabe na posição e rotação informadas.</returns>
+    private bool Fits(Piece piece)
+    {
+        foreach (var block in piece.Blocks)
+        {
+            if (block.X < 0 || block.X > Dimension.Width - 1 || block.Y < 0 || block.Y > Dimension.Height - 1)
+            {
+                return false;
+            }
         }
 
-        CurrentPiece.Rotate();
-        OnMove?.Invoke();
-        ResetMatrix();
+        return !ThereIsCollision(piece);
     }
 
     /// <summary>
@@ -483,42 +568,24 @@ public class Board : Entity
             return;
         }
 
-        if (_refreshing)
+        if (CanMoveDown(CurrentPiece))
         {
-            return;
+            CurrentPiece.MoveDown();
         }
-
-        _refreshing = true;
-
-        //o movimento não será válido se as casas horizontais do tabuleiro já estiverem sido percorridas
-        //neste caso, o hogo é finalizado
-        if (!CanMoveDown(CurrentPiece))
+        else
         {
-            if (_atingiuTopo)
+            TrocarPecaAtual();
+
+            // o jogo termina quando a peça que acabou de entrar já nasce sobre blocos assentados
+            if (ThereIsCollision(CurrentPiece))
             {
                 Lose();
                 return;
             }
-            else
-            {
-                TrocarPecaAtual();
-
-                if (_atingiuTopo)
-                {
-                    Lose();
-                    return;
-                }
-            }
-        }
-        else
-        {
-            CurrentPiece.MoveDown();
         }
 
         ResetMatrix();
         VerificarSePreencheuLinha();
-
-        _refreshing = false;
     }
 
     /// <summary>
@@ -568,12 +635,23 @@ public class Board : Entity
     /// </summary>
     private void RefreshAsync()
     {
+        var generation = ++_loopGeneration;
+
         new Thread(() =>
         {
-            while (IsPlaying)
+            while (true)
             {
                 Thread.Sleep(Frequency);
-                Checkout();
+
+                lock (_sync)
+                {
+                    if (!IsPlaying || generation != _loopGeneration)
+                    {
+                        return;
+                    }
+
+                    Checkout();
+                }
             }
         })
         { IsBackground = true }.Start();

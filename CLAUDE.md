@@ -67,6 +67,7 @@ Desktop ──► Application ──► Domain
 - 7 peças com cores fixas: I=Cyan, T=Purple, L=Orange, J=Blue, O=Yellow, S=Green, Z=Red. Rotação cicla 0→3→0.
 - Pontuação por jogada: 1 linha = 40, 2 = 100, 3 = 300, 4 (TETRIS) = 1200. No máximo 4 linhas por jogada.
 - Nível sobe ao completar a meta de linhas (inicia em 20 e cresce 25% a cada nível).
+- Velocidade: a peça desce a cada `Stats.Interval` ms — 1000 no nível 1, menos 50 por nível, mínimo de 100.
 - Estados: `Playing` ↔ `Parado` (pausado) → `Finished`. Os textos de `ToString()` dos estados são verificados nos testes.
 - Teclas: ←/→ movem, Ctrl+←/→ deslizam até o limite, ↓ desce, Espaço derruba (smash down), ↑ gira, Enter pausa, Esc encerra o jogo e salva as estatísticas, Shift liga/desliga som.
 
