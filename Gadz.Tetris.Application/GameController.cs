@@ -250,6 +250,11 @@ public class GameController
     public void Continue() => _board.Continue();
 
     /// <summary>
+    /// Pausa o jogo em andamento ou continua o jogo pausado
+    /// </summary>
+    public void TogglePause() => _board.TogglePause();
+
+    /// <summary>
     /// Reinicia um jogo
     /// </summary>
     public void Restart() => _board.Restart();

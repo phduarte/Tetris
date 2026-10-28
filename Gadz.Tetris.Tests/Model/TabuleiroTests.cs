@@ -118,6 +118,60 @@ public class TabuleiroTests
     }
 
     /// <summary>
+    /// Com um único bloco assentado, a peça não pode se mover para a célula ocupada por ele.
+    /// </summary>
+    [Test]
+    public void NaoDeveMoverSobreUmUnicoBlocoAssentado()
+    {
+        _board.Arrange(CreatePiece(PieceType.I, new Point(1, 5), 0), [new Block(0, 6, PieceColor.Red)]);
+
+        _board.MoveLeft();
+
+        Assert.AreEqual(1, _board.CurrentPiece.Position.X);
+        Assert.IsFalse(HasOverlap(), "A peça atual sobrepôs o bloco assentado.");
+    }
+
+    /// <summary>
+    /// Pausar um jogo finalizado não altera o estado.
+    /// </summary>
+    [Test]
+    public void NaoDevePausarJogoFinalizado()
+    {
+        _board.Finish();
+
+        _board.Pause();
+
+        Assert.AreEqual("Finished", _board.State.ToString());
+    }
+
+    /// <summary>
+    /// Continuar um jogo finalizado não altera o estado nem reinicia o loop.
+    /// </summary>
+    [Test]
+    public void NaoDeveContinuarJogoFinalizado()
+    {
+        _board.Finish();
+
+        _board.Continue();
+
+        Assert.AreEqual("Finished", _board.State.ToString());
+        Assert.IsFalse(_board.IsPlaying);
+    }
+
+    /// <summary>
+    /// Alternar a pausa de um jogo finalizado não altera o estado.
+    /// </summary>
+    [Test]
+    public void NaoDeveAlternarPausaDeJogoFinalizado()
+    {
+        _board.Finish();
+
+        _board.TogglePause();
+
+        Assert.AreEqual("Finished", _board.State.ToString());
+    }
+
+    /// <summary>
     /// Comandos disparados de várias threads ao mesmo tempo que o loop não lançam exceção nem sobrepõem blocos.
     /// </summary>
     [Test]

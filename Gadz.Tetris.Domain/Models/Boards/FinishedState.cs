@@ -31,6 +31,11 @@ internal class FinishedState : IBoardState
     public bool CanPause => false;
 
     /// <summary>
+    /// Gets a value indicating whether CanContinue
+    /// </summary>
+    public bool CanContinue => false;
+
+    /// <summary>
     /// Gets a value indicating whether CanRestart
     /// </summary>
     public bool CanRestart => true;

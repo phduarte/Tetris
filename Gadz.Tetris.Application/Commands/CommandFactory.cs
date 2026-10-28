@@ -14,8 +14,7 @@ public class CommandFactory(GameController gameController)
         new MoveRightCommand(_gameController),
         new RotateCommand(_gameController),
         new ExitCommand(_gameController),
-        new PauseCommand(_gameController),
-        new ContinueCommand(_gameController),
+        new TogglePauseCommand(_gameController),
         new ToggleMuteCommand(_gameController)
     ];
 
