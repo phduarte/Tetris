@@ -21,6 +21,11 @@ public interface IBoardState
     bool CanPause { get; }
 
     /// <summary>
+    /// Gets a value indicating whether CanContinue
+    /// </summary>
+    bool CanContinue { get; }
+
+    /// <summary>
     /// Gets a value indicating whether CanFinish
     /// </summary>
     bool CanFinish { get; }

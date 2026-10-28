@@ -1,4 +1,5 @@
 ﻿using Gadz.Tetris.Application;
+using Gadz.Tetris.Application.Commands;
 using NUnit.Framework;
 
 namespace Gadz.Tetris.Tests;
@@ -92,6 +93,35 @@ public class GameControllerTests
         app.Pause();
         Assert.AreEqual("Parado", app.State.ToString(), "Não está pausando");
         app.Continue();
+        Assert.AreEqual("Playing", app.State.ToString(), "Não está continuando");
+    }
+
+    /// <summary>
+    /// Alternar a pausa vai de Playing para Parado e de volta para Playing.
+    /// </summary>
+    [Test]
+    public void DeveAlternarPausa()
+    {
+        app.Start();
+        app.TogglePause();
+        Assert.AreEqual("Parado", app.State.ToString(), "Não está pausando");
+        app.TogglePause();
+        Assert.AreEqual("Playing", app.State.ToString(), "Não está continuando");
+    }
+
+    /// <summary>
+    /// A tecla Enter corresponde a um único comando, que pausa e continua o jogo.
+    /// </summary>
+    [Test]
+    public void DeveTerUmUnicoComandoParaEnter()
+    {
+        app.Start();
+        var commands = new CommandFactory(app).GetAll(Key.Enter, false).ToList();
+
+        Assert.AreEqual(1, commands.Count);
+        commands[0].Execute();
+        Assert.AreEqual("Parado", app.State.ToString(), "Não está pausando");
+        commands[0].Execute();
         Assert.AreEqual("Playing", app.State.ToString(), "Não está continuando");
     }
 

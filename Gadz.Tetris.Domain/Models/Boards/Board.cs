@@ -261,6 +261,11 @@ public class Board : Entity
     {
         lock (_sync)
         {
+            if (!State.CanPause)
+            {
+                return;
+            }
+
             OnPause?.Invoke();
             State = new PausedState();
             Stats.Pause();
@@ -274,10 +279,33 @@ public class Board : Entity
     {
         lock (_sync)
         {
+            if (!State.CanContinue)
+            {
+                return;
+            }
+
             OnContinue?.Invoke();
             State = new PlayingState();
             Stats.Continue();
             RefreshAsync();
+        }
+    }
+
+    /// <summary>
+    /// Pausa o jogo em andamento ou continua o jogo pausado, conforme o estado atual.
+    /// </summary>
+    public void TogglePause()
+    {
+        lock (_sync)
+        {
+            if (State.CanPause)
+            {
+                Pause();
+            }
+            else
+            {
+                Continue();
+            }
         }
     }
 
@@ -681,9 +709,6 @@ public class Board : Entity
     /// <returns>The <see cref="bool"/></returns>
     private bool ThereIsCollision(Piece peca)
     {
-        if (_playedBlocks.Count <= 1)
-            return false;
-
         foreach (var a in _playedBlocks)
         {
             foreach (var b in peca.Blocks)
