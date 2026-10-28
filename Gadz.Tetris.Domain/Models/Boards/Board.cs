@@ -120,9 +120,9 @@ public class Board : Entity
     public int Score => Stats.Score;
 
     /// <summary>
-    /// Gets the Frequency
+    /// Intervalo, em milissegundos, entre as descidas automáticas da peça (ver <see cref="Stats.Interval"/>).
     /// </summary>
-    public int Frequency => Stats.Speed <= 1000 ? 1000 - Stats.Speed : 0;
+    public int Frequency => Stats.Interval;
 
     /// <summary>
     /// 

@@ -101,6 +101,41 @@ public class EstatisticasTests
     }
 
     /// <summary>
+    /// O intervalo do nível 1 é de 1000 ms.
+    /// </summary>
+    [Test]
+    public void DeveIniciarComIntervaloDeMilMilissegundos()
+    {
+        Assert.AreEqual(1000, stats.Interval);
+    }
+
+    /// <summary>
+    /// Completar a meta de linhas sobe o nível e reduz o intervalo em 50 ms.
+    /// </summary>
+    [Test]
+    public void DeveReduzirOIntervaloAoSubirDeNivel()
+    {
+        for (var i = 0; i < 5; i++)
+        {
+            stats.Gain(4);
+        }
+
+        Assert.AreEqual(2, stats.Level);
+        Assert.AreEqual(950, stats.Interval);
+    }
+
+    /// <summary>
+    /// O intervalo nunca fica abaixo do mínimo de 100 ms.
+    /// </summary>
+    [Test]
+    public void NaoDeveReduzirOIntervaloAbaixoDoMinimo()
+    {
+        var stats = Stats.Load(new StatsRecord { Id = Identity.New(), Level = 50 });
+
+        Assert.AreEqual(100, stats.Interval);
+    }
+
+    /// <summary>
     /// The DeveContabilizarTempoDaPartida
     /// </summary>
     [Test]

@@ -10,9 +10,19 @@
 public class Stats(Identity id) : Entity(id)
 {
     /// <summary>
-    /// Defines the REFRESH_INTERVAL
+    /// Intervalo, em milissegundos, entre as descidas automáticas da peça no nível 1.
     /// </summary>
-    private const int REFRESH_INTERVAL = 1;
+    private const int BASE_INTERVAL_MS = 1000;
+
+    /// <summary>
+    /// Quanto o intervalo diminui, em milissegundos, a cada nível.
+    /// </summary>
+    private const int INTERVAL_STEP_MS = 50;
+
+    /// <summary>
+    /// Menor intervalo possível, em milissegundos, para o jogo continuar jogável.
+    /// </summary>
+    private const int MIN_INTERVAL_MS = 100;
 
     /// <summary>
     /// Defines the _durationHistory
@@ -68,6 +78,12 @@ public class Stats(Identity id) : Entity(id)
     /// Gets the Duration
     /// </summary>
     public TimeSpan Duration => CalculateTime();
+
+    /// <summary>
+    /// Intervalo, em milissegundos, entre as descidas automáticas da peça.
+    /// Diminui <see cref="INTERVAL_STEP_MS"/> a cada nível até o mínimo de <see cref="MIN_INTERVAL_MS"/>.
+    /// </summary>
+    public int Interval => Math.Max(MIN_INTERVAL_MS, BASE_INTERVAL_MS - ((Level - 1) * INTERVAL_STEP_MS));
 
     /// <summary>
     /// 
@@ -213,13 +229,7 @@ public class Stats(Identity id) : Entity(id)
     private void LevelUp()
     {
         Level++;
-
-        if (Speed == 1)
-            Speed = REFRESH_INTERVAL;
-        else
-        {
-            Speed += REFRESH_INTERVAL;
-        }
+        Speed++;
     }
 
     /// <summary>
