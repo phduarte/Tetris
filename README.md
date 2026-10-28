@@ -55,7 +55,7 @@ O projeto Desktop contém as IHC, como parte da camada de Interfaces, aqui forne
 
 ## Gráfico
 
-![img1](doc/tela2.png)
+![img1](docs/screenshots/tela2.1.png)
 
 ## Conclusão
 

@@ -1,0 +1,719 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jornada do Jogador</title>
+<style>
+  :root {
+    --bg-canvas: #1e1e1e;
+    --dot: #2f2f2f;
+    --panel: #2c2c2c;
+    --panel-2: #383838;
+    --border: #444;
+    --text: #e6e6e6;
+    --muted: #9a9a9a;
+    --accent: #0d99ff;
+    --flow: #a259ff;
+    --back: #8a8a8a;
+    --legacy: #f2994a;
+    --danger: #f24822;
+    --sticky: #ffe86b;
+    --sec-1: rgba(13,153,255,.07);
+    --sec-1-b: rgba(13,153,255,.35);
+    --sec-2: rgba(162,89,255,.07);
+    --sec-2-b: rgba(162,89,255,.35);
+    --sec-3: rgba(242,72,34,.07);
+    --sec-3-b: rgba(242,72,34,.35);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
+  body {
+    background: var(--bg-canvas);
+    color: var(--text);
+    font: 12px/1.45 "Inter", "Segoe UI", system-ui, sans-serif;
+    display: grid;
+    grid-template-rows: 48px 1fr;
+    grid-template-columns: 240px 1fr 280px;
+    grid-template-areas: "top top top" "left canvas right";
+  }
+
+  /* ---------- Barra superior ---------- */
+  .toolbar {
+    grid-area: top;
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px; padding: 0 12px;
+  }
+  .logo { width: 24px; height: 24px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; }
+  .logo i { border-radius: 2px; }
+  .logo i:nth-child(1) { background: #f24822; } .logo i:nth-child(2) { background: #ff7262; }
+  .logo i:nth-child(3) { background: #a259ff; } .logo i:nth-child(4) { background: #1abcfe; }
+  .crumbs { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .crumbs b { color: var(--text); font-weight: 600; }
+  .tools { display: flex; gap: 4px; margin: 0 auto; }
+  .tool, .btn {
+    background: transparent; color: var(--text); border: 0; border-radius: 6px;
+    padding: 6px 10px; font: inherit; cursor: pointer;
+  }
+  .tool:hover, .btn:hover { background: var(--panel-2); }
+  .tool[aria-pressed="true"] { background: var(--accent); color: #fff; }
+  .zoom { min-width: 56px; text-align: center; }
+  .btn.primary { background: var(--accent); color: #fff; font-weight: 600; }
+  .btn.primary:hover { filter: brightness(1.1); }
+
+  /* ---------- Painéis laterais ---------- */
+  aside {
+    background: var(--panel);
+    overflow-y: auto;
+    z-index: 2;
+  }
+  .left { grid-area: left; border-right: 1px solid var(--border); }
+  .right { grid-area: right; border-left: 1px solid var(--border); }
+  .panel-title {
+    font-weight: 600; padding: 12px 14px 6px; font-size: 11px;
+    text-transform: uppercase; letter-spacing: .04em; color: var(--muted);
+  }
+  .layer {
+    display: flex; align-items: center; gap: 8px;
+    padding: 5px 14px; cursor: pointer; white-space: nowrap;
+  }
+  .layer:hover { background: var(--panel-2); }
+  .layer.active { background: rgba(13,153,255,.25); }
+  .layer.section { font-weight: 600; margin-top: 4px; }
+  .layer.child { padding-left: 30px; }
+  .layer .ico { width: 12px; text-align: center; color: var(--muted); font-size: 11px; }
+  .page { padding: 5px 14px; }
+  .page.active { font-weight: 600; }
+  hr { border: 0; border-top: 1px solid var(--border); margin: 8px 0; }
+
+  .props { padding: 0 14px 14px; }
+  .props h3 { font-size: 14px; margin: 4px 0 10px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 12px; }
+  .field { background: var(--panel-2); border-radius: 4px; padding: 5px 8px; display: flex; gap: 8px; }
+  .field span { color: var(--muted); }
+  .props p { color: #cfcfcf; margin: 0 0 12px; }
+  .inter { list-style: none; padding: 0; margin: 0 0 12px; }
+  .inter li {
+    background: var(--panel-2); border-radius: 6px; padding: 7px 9px; margin-bottom: 6px;
+    cursor: pointer; display: grid; gap: 2px;
+  }
+  .inter li:hover { outline: 1px solid var(--accent); }
+  .inter .trg { color: var(--muted); font-size: 11px; }
+  .inter .dst::before { content: "→ "; color: var(--flow); }
+  .inter li.in .dst::before { content: "← "; color: var(--back); }
+  .empty { color: var(--muted); font-style: italic; }
+  .legend { display: grid; gap: 6px; padding: 0 14px 14px; }
+  .legend div { display: flex; align-items: center; gap: 8px; }
+  .legend svg { flex: none; }
+
+  /* ---------- Canvas ---------- */
+  #viewport {
+    grid-area: canvas;
+    position: relative; overflow: hidden;
+    background-color: var(--bg-canvas);
+    background-image: radial-gradient(var(--dot) 1px, transparent 1px);
+    cursor: grab;
+    touch-action: none;
+  }
+  #viewport.panning { cursor: grabbing; }
+  #world { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+  #world.fly { transition: transform .8s cubic-bezier(.65,0,.35,1); }
+
+  .section-box {
+    position: absolute; border-radius: 4px; border: 1px solid;
+  }
+  .section-box .sec-label {
+    position: absolute; left: 0; bottom: 100%; padding-bottom: .4em;
+    font-size: calc(16px / max(var(--z, 1), .3)); font-weight: 700; white-space: nowrap;
+  }
+  .section-box .sec-label small { font-weight: 400; color: var(--muted); font-size: .75em; margin-left: .5em; }
+
+  .frame { position: absolute; cursor: pointer; }
+  .frame .name {
+    position: absolute; left: 0; bottom: 100%; padding-bottom: 6px;
+    color: var(--muted); font-size: calc(12px / var(--z, 1)); white-space: nowrap;
+  }
+  .frame .name b { color: var(--text); font-weight: 500; }
+  .frame img {
+    display: block;
+    box-shadow: 0 2px 14px rgba(0,0,0,.55);
+    -webkit-user-drag: none; user-select: none;
+  }
+  .frame::after {
+    content: ""; position: absolute; inset: -3px; border: 3px solid transparent; border-radius: 2px;
+    pointer-events: none; transition: border-color .2s;
+  }
+  .frame:hover::after { border-color: rgba(13,153,255,.5); }
+  .frame.selected::after { border-color: var(--accent); }
+  .frame.selected .name b { color: var(--accent); }
+  .frame .size {
+    position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 8px;
+    background: var(--accent); color: #fff; padding: 1px 6px; border-radius: 3px; font-size: 12px;
+    display: none; white-space: nowrap;
+  }
+  .frame.selected .size { display: block; }
+  .badge {
+    --s: calc(30px / max(var(--z, 1), .3));
+    position: absolute; top: calc(var(--s) / -2); right: calc(var(--s) / -2);
+    width: var(--s); height: var(--s); border-radius: 50%;
+    background: var(--flow); color: #fff; font-weight: 700; font-size: calc(var(--s) * .5);
+    display: grid; place-items: center; box-shadow: 0 2px 8px rgba(0,0,0,.4);
+  }
+
+  body.story-on .frame:not(.spot) img { filter: grayscale(.8) brightness(.45); transition: filter .4s; }
+  body.story-on .frame img { transition: filter .4s; }
+  body.story-on .conn:not(.spot) { opacity: .15; }
+  body.story-on .conn-label:not(.spot) { opacity: .15; }
+
+  #links { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+  .conn { transition: opacity .3s; }
+  .conn path.line { fill: none; stroke-width: 2.5; vector-effect: non-scaling-stroke; }
+  .conn.spot path.line { stroke-width: 4; }
+  .conn-label {
+    position: absolute; transform: translate(-50%, -50%);
+    background: var(--panel); border: 2px solid; border-radius: 14px;
+    padding: .3em .8em; font-size: calc(13px / max(var(--z, 1), .4)); white-space: nowrap; transition: opacity .3s;
+    box-shadow: 0 2px 6px rgba(0,0,0,.4);
+  }
+  .conn-label kbd {
+    background: var(--panel-2); border: 1px solid var(--border); border-bottom-width: 2px;
+    border-radius: 4px; padding: 0 .4em; font: 600 .9em/1.5 Consolas, monospace;
+  }
+
+  .sticky {
+    position: absolute; width: 230px; padding: 14px 16px 18px;
+    background: var(--sticky); color: #333; font-size: 14px; line-height: 1.4;
+    box-shadow: 0 4px 12px rgba(0,0,0,.45); transform: rotate(-1.5deg);
+  }
+  .sticky b { display: block; margin-bottom: 4px; }
+  .sticky .who { margin-top: 10px; font-size: 11px; color: #776a1a; }
+
+  /* ---------- Narração (modo história) ---------- */
+  .story {
+    position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%);
+    width: min(620px, calc(100% - 32px));
+    background: rgba(44,44,44,.97); border: 1px solid var(--border); border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.5); padding: 14px 16px 12px; z-index: 3;
+  }
+  .story[hidden] { display: none; }
+  .story .chapter { color: var(--flow); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; }
+  .story h2 { font-size: 17px; margin: 2px 0 6px; }
+  .story p { margin: 0 0 12px; color: #d4d4d4; font-size: 13px; }
+  .story .nav { display: flex; align-items: center; gap: 8px; }
+  .dots { display: flex; gap: 5px; margin-right: auto; }
+  .dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--panel-2); cursor: pointer; }
+  .dots i.on { background: var(--flow); }
+  .hint {
+    position: absolute; left: 12px; bottom: 12px; color: var(--muted); font-size: 11px;
+    background: rgba(44,44,44,.85); padding: 6px 10px; border-radius: 6px; z-index: 3;
+  }
+
+  @media (max-width: 900px) {
+    body { grid-template-columns: 1fr; grid-template-areas: "top" "canvas"; }
+    aside { display: none; }
+    .tools .tool:not(.keep) { display: none; }
+    .hint { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="toolbar">
+  <div class="logo" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div class="crumbs">Gadz.Tetris / <b>Jornada do jogador</b></div>
+  <div class="tools">
+    <button class="tool keep" id="btnDesign" aria-pressed="true" title="Navegar livremente (V)">✥ Design</button>
+    <button class="tool keep" id="btnProto" aria-pressed="false" title="Contar a história (P)">▶ Storytelling</button>
+  </div>
+  <button class="btn" id="btnFit" title="Ajustar à tela (Shift+1)">⤢</button>
+  <button class="btn zoom" id="zoomLabel" title="Zoom 100% — resolução original (Shift+0)">100%</button>
+  <button class="btn primary" id="btnPlay">▶ Apresentar</button>
+</header>
+
+<aside class="left">
+  <div class="panel-title">Páginas</div>
+  <div class="page active">📄 Jornada do jogador</div>
+  <div class="page" style="color:var(--muted)">📄 Arquitetura (docs/adr)</div>
+  <hr>
+  <div class="panel-title">Camadas</div>
+  <div id="layers"></div>
+</aside>
+
+<main id="viewport">
+  <div id="world">
+    <svg id="links" width="1" height="1"></svg>
+  </div>
+  <div class="hint">Arraste para mover · Roda do mouse para zoom · Duplo clique em uma tela = 100% · ← → navegam na história</div>
+  <section class="story" id="story" hidden>
+    <div class="chapter" id="stChapter"></div>
+    <h2 id="stTitle"></h2>
+    <p id="stText"></p>
+    <div class="nav">
+      <div class="dots" id="stDots"></div>
+      <button class="btn" id="stPrev">← Anterior</button>
+      <button class="btn primary" id="stNext">Próximo →</button>
+      <button class="btn" id="stClose" title="Sair (Esc)">✕</button>
+    </div>
+  </section>
+</main>
+
+<aside class="right">
+  <div class="panel-title">Design</div>
+  <div class="props" id="props"></div>
+  <hr>
+  <div class="panel-title">Legenda</div>
+  <div class="legend">
+    <div><svg width="36" height="8"><line x1="0" y1="4" x2="36" y2="4" stroke="#a259ff" stroke-width="3"/></svg> Fluxo principal</div>
+    <div><svg width="36" height="8"><line x1="0" y1="4" x2="36" y2="4" stroke="#f24822" stroke-width="3"/></svg> Fim de partida</div>
+    <div><svg width="36" height="8"><line x1="0" y1="4" x2="36" y2="4" stroke="#8a8a8a" stroke-width="3" stroke-dasharray="6 4"/></svg> Retorno</div>
+    <div><svg width="36" height="8"><line x1="0" y1="4" x2="36" y2="4" stroke="#f2994a" stroke-width="3" stroke-dasharray="2 4"/></svg> Evolução do visual</div>
+  </div>
+</aside>
+
+<script>
+/** Pasta das capturas, relativa a este arquivo. */
+const SHOTS = "screenshots/";
+
+/** Capítulos da jornada (viram as "sections" do canvas). */
+const SECTIONS = [
+  { id: "chegada",  title: "1 · Chegada",  sub: "o jogador abre o jogo", fill: "var(--sec-1)", stroke: "var(--sec-1-b)" },
+  { id: "partida",  title: "2 · Partida",  sub: "o jogo em si",           fill: "var(--sec-2)", stroke: "var(--sec-2-b)" },
+  { id: "desfecho", title: "3 · Desfecho", sub: "fim e recomeço",          fill: "var(--sec-3)", stroke: "var(--sec-3-b)" },
+];
+
+/** Telas no tamanho original da captura (w × h em pixels) e posição no canvas. */
+const FRAMES = [
+  { id: "help",     sec: "chegada",  file: "tela6.png",   name: "Ajuda",            form: "Help",     w: 414, h: 553, x: 0,    y: 0,
+    desc: "Manual curto com os controles: setas, barra de espaço, Ctrl + setas, Enter e Esc. Aberto como diálogo a partir do menu." },
+  { id: "about",    sec: "chegada",  file: "tela7.png",   name: "Sobre",            form: "About",    w: 414, h: 556, x: 520,  y: 0,
+    desc: "Propósito do projeto (estudo de engenharia de software) e a licença MIT." },
+  { id: "menu",     sec: "chegada",  file: "tela1.png",   name: "Menu inicial",     form: "Choose",   w: 417, h: 552, x: 260,  y: 820,
+    desc: "Porta de entrada. O jogador escolhe o estilo visual (BRICK GAME ou TETRIS), liga ou desliga o som e inicia a partida." },
+  { id: "legacy",   sec: "partida",  file: "tela2.png",   name: "Brick Game · versão original", form: "Play", w: 345, h: 461, x: 1100, y: -280,
+    desc: "Primeira versão do tabuleiro (2018), com fonte de display LCD e o indicador de velocidade. Serve de referência para a evolução do visual." },
+  { id: "brick",    sec: "partida",  file: "tela2.1.png", name: "Partida · BRICK GAME", form: "Play",   w: 398, h: 542, x: 1100, y: 300,
+    desc: "Estilo monocromático que lembra os minigames de bolso. Painel lateral com pontos, linhas, próxima peça, nível, taxa de TETRIS e tempo." },
+  { id: "classic",  sec: "partida",  file: "tela2.2.png", name: "Partida · TETRIS",  form: "Play",     w: 399, h: 537, x: 1100, y: 1000,
+    desc: "Estilo colorido: cada tetraminó tem sua cor fixa (I ciano, T roxo, L laranja, J azul, O amarelo, S verde, Z vermelho)." },
+  { id: "pause",    sec: "partida",  file: "tela3.png",   name: "Pausado",          form: "Play",     w: 402, h: 538, x: 1760, y: -420,
+    desc: "Camada sobre o tabuleiro que esconde as peças. Entra com Enter ou automaticamente quando a janela perde o foco." },
+  { id: "gameover", sec: "desfecho", file: "tela4.png",   name: "Game Over",        form: "GameOver", w: 412, h: 545, x: 2400, y: 650,
+    desc: "A peça nova não cabe mais no tabuleiro. Momento de impacto visual antes de mostrar o resultado." },
+  { id: "result",   sec: "desfecho", file: "tela5.png",   name: "Resultado",        form: "Deserve",  w: 416, h: 551, x: 3060, y: 650,
+    desc: "Resumo da partida (placar, % TETRIS, nível, peças e tempo) e uma avaliação em estrelas. FEITO! fecha e volta ao menu." },
+];
+
+/**
+ * Conexões de protótipo: origem/destino com lado (t, r, b, l) e posição relativa no lado (0–1).
+ * `bend` força a curvatura; `at` posiciona o rótulo ao longo da curva (padrão 0,5).
+ */
+const LINKS = [
+  { id: "toHelp",   from: ["menu", "t", .3],  to: ["help", "b", .5],      kind: "flow",   label: "Link <b>Ajuda</b> · <kbd>X</kbd> volta" },
+  { id: "toAbout",  from: ["menu", "t", .7],  to: ["about", "b", .5],     kind: "flow",   label: "Link <b>Sobre</b> · <kbd>X</kbd> volta" },
+  { id: "playBrick",from: ["menu", "r", .35], to: ["brick", "l", .5],     kind: "flow",   label: "Iniciar · BRICK GAME" },
+  { id: "playTet",  from: ["menu", "r", .65], to: ["classic", "l", .5],   kind: "flow",   label: "Iniciar · TETRIS" },
+  { id: "evolve",   from: ["legacy", "b", .5],to: ["brick", "t", .5],     kind: "legacy", label: "evolução do visual" },
+  { id: "pauseB",   from: ["brick", "r", .2], to: ["pause", "b", .3],     kind: "flow",   label: "<kbd>Enter</kbd> ou perde o foco" },
+  { id: "pauseT",   from: ["classic", "r", .15], to: ["pause", "b", .75], kind: "flow",   label: "<kbd>Enter</kbd>", at: .3 },
+  { id: "resume",   from: ["pause", "l", .5], to: ["brick", "t", .85],    kind: "back",   label: "<kbd>Enter</kbd> retoma" },
+  { id: "loseB",    from: ["brick", "r", .75],to: ["gameover", "l", .35], kind: "end",    label: "peça encosta no topo" },
+  { id: "loseT",    from: ["classic", "r", .6], to: ["gameover", "l", .65], kind: "end",  label: "peça encosta no topo" },
+  { id: "quit",     from: ["classic", "b", .5], to: ["result", "b", .3],  kind: "end",    label: "<kbd>Esc</kbd> encerra e salva", bend: 380 },
+  { id: "anyKey",   from: ["gameover", "r", .5], to: ["result", "l", .5], kind: "end",    label: "qualquer tecla" },
+  { id: "again",    from: ["result", "b", .75], to: ["menu", "b", .5],    kind: "back",   label: "<b>FEITO!</b> · nova partida", bend: 900 },
+];
+
+/** Notas de design espalhadas pelo canvas. */
+const STICKIES = [
+  { x: -330, y: 940, title: "Som em qualquer tela", text: "Shift liga/desliga o som. O checkbox do menu só reflete o estado atual." },
+  { x: 2240, y: 120, title: "Pausa sem flags", text: "Enter usa um único comando (TogglePause) que pergunta ao estado se pode pausar ou continuar — padrão State." },
+  { x: 3560, y: 700, title: "Estatísticas salvas", text: "Ao sair, a partida é gravada em stats.mc e o recorde passa a valer nas próximas sessões." },
+];
+
+/** Roteiro do modo storytelling: cada passo foca telas e conexões. */
+const STORY = [
+  { sec: "Capítulo 1 · Chegada", title: "Tudo começa no menu", focus: ["menu"], links: [],
+    text: "O jogador abre o Tetris e encontra uma tela limpa: escolher o estilo, conferir o som e apertar Iniciar. Nada além do necessário para começar a jogar." },
+  { sec: "Capítulo 1 · Chegada", title: "Antes de jogar, entender", focus: ["menu", "help", "about"], links: ["toHelp", "toAbout"],
+    text: "Quem tem dúvida abre a Ajuda e aprende os controles em segundos. O Sobre conta o porquê do projeto: um estudo de DDD, Clean Code e padrões de projeto." },
+  { sec: "Capítulo 2 · Partida", title: "Dois estilos, o mesmo jogo", focus: ["menu", "brick", "classic"], links: ["playBrick", "playTet"],
+    text: "A escolha do menu muda só a pele: BRICK GAME evoca o minigame de bolso, TETRIS traz as cores clássicas. As regras são exatamente as mesmas — vivem no domínio." },
+  { sec: "Capítulo 2 · Partida", title: "De onde viemos", focus: ["legacy", "brick"], links: ["evolve"],
+    text: "A primeira versão tinha a cara de um LCD antigo. O layout evoluiu, ganhou a taxa de TETRIS no lugar da velocidade, e a identidade monocromática foi preservada." },
+  { sec: "Capítulo 2 · Partida", title: "Uma pausa para respirar", focus: ["brick", "classic", "pause"], links: ["pauseB", "pauseT", "resume"],
+    text: "Enter pausa e esconde o tabuleiro — sem espiar a próxima jogada. Se o jogador trocar de janela, o jogo pausa sozinho. Outro Enter e a partida continua de onde parou." },
+  { sec: "Capítulo 3 · Desfecho", title: "Game Over", focus: ["brick", "classic", "gameover"], links: ["loseB", "loseT"],
+    text: "Quando uma nova peça não cabe mais, a partida acaba com um GAME OVER em pixel art. É o clímax da história: tensão máxima, e então o silêncio." },
+  { sec: "Capítulo 3 · Desfecho", title: "O placar conta a sua história", focus: ["gameover", "result", "classic"], links: ["anyKey", "quit"],
+    text: "Qualquer tecla leva ao resultado: placar, % de TETRIS, nível, peças e tempo. Quem prefere parar antes aperta Esc — a partida também é salva." },
+  { sec: "Epílogo", title: "Só mais uma partida", focus: ["result", "menu"], links: ["again"],
+    text: "FEITO! fecha o resultado e devolve o jogador ao menu. A jornada fecha o ciclo — e o recorde salvo é o convite para tentar de novo." },
+];
+
+const COLORS = { flow: "#a259ff", end: "#f24822", back: "#8a8a8a", legacy: "#f2994a" };
+const DASH = { back: "8 6", legacy: "2 6" };
+const PAD = 80;
+const LABEL_SPACE = 60;
+const MIN_ZOOM = 0.08;
+const MAX_ZOOM = 4;
+
+const viewport = document.getElementById("viewport");
+const world = document.getElementById("world");
+const svg = document.getElementById("links");
+const byId = Object.fromEntries(FRAMES.map(f => [f.id, f]));
+const cam = { x: 0, y: 0, z: 1 };
+let selected = null;
+let step = -1;
+/** O primeiro enquadramento é instantâneo; os seguintes "voam" até o destino. */
+let animate = false;
+
+/* ---------- Construção do canvas ---------- */
+
+function sectionBounds(sec) {
+  const fs = FRAMES.filter(f => f.sec === sec.id);
+  const x1 = Math.min(...fs.map(f => f.x)) - PAD;
+  const y1 = Math.min(...fs.map(f => f.y)) - PAD - LABEL_SPACE / 2;
+  const x2 = Math.max(...fs.map(f => f.x + f.w)) + PAD;
+  const y2 = Math.max(...fs.map(f => f.y + f.h)) + PAD;
+  return { x: x1, y: y1, w: x2 - x1, h: y2 - y1 };
+}
+
+function buildSections() {
+  for (const s of SECTIONS) {
+    const b = sectionBounds(s);
+    const el = document.createElement("div");
+    el.className = "section-box";
+    Object.assign(el.style, { left: b.x + "px", top: b.y + "px", width: b.w + "px", height: b.h + "px",
+      background: s.fill, borderColor: s.stroke });
+    el.innerHTML = `<div class="sec-label">${s.title}<small>${s.sub}</small></div>`;
+    world.insertBefore(el, svg);
+  }
+}
+
+function buildFrames() {
+  FRAMES.forEach((f, i) => {
+    const el = document.createElement("div");
+    el.className = "frame";
+    el.id = "f-" + f.id;
+    Object.assign(el.style, { left: f.x + "px", top: f.y + "px", width: f.w + "px", height: f.h + "px" });
+    el.innerHTML = `
+      <div class="name"><b>${f.name}</b> · ${f.form}.cs</div>
+      <img src="${SHOTS + f.file}" width="${f.w}" height="${f.h}" alt="${f.name}" draggable="false">
+      <div class="size">${f.w} × ${f.h}</div>`;
+    el.addEventListener("click", e => { e.stopPropagation(); select(f.id); });
+    el.addEventListener("dblclick", e => { e.stopPropagation(); focusFrames([f.id], 1); });
+    world.appendChild(el);
+  });
+}
+
+function buildStickies() {
+  for (const s of STICKIES) {
+    const el = document.createElement("div");
+    el.className = "sticky";
+    Object.assign(el.style, { left: s.x + "px", top: s.y + "px" });
+    el.innerHTML = `<b>${s.title}</b>${s.text}<div class="who">nota de design</div>`;
+    world.appendChild(el);
+  }
+}
+
+/** Ponto de ancoragem e direção de saída de um lado do frame. */
+function anchor([id, side, t]) {
+  const f = byId[id];
+  switch (side) {
+    case "t": return { x: f.x + f.w * t, y: f.y,       dx: 0,  dy: -1 };
+    case "b": return { x: f.x + f.w * t, y: f.y + f.h, dx: 0,  dy: 1 };
+    case "l": return { x: f.x,           y: f.y + f.h * t, dx: -1, dy: 0 };
+    default:  return { x: f.x + f.w,     y: f.y + f.h * t, dx: 1,  dy: 0 };
+  }
+}
+
+/** Ponto de uma curva de Bézier cúbica no parâmetro t. */
+function bezier(p0, p1, p2, p3, t) {
+  const u = 1 - t;
+  return {
+    x: u*u*u*p0.x + 3*u*u*t*p1.x + 3*u*t*t*p2.x + t*t*t*p3.x,
+    y: u*u*u*p0.y + 3*u*u*t*p1.y + 3*u*t*t*p2.y + t*t*t*p3.y,
+  };
+}
+
+function buildLinks() {
+  const ns = "http://www.w3.org/2000/svg";
+  for (const l of LINKS) {
+    const a = anchor(l.from), b = anchor(l.to);
+    const dist = Math.hypot(b.x - a.x, b.y - a.y);
+    const k = l.bend ?? Math.max(90, dist * 0.4);
+    const c1 = { x: a.x + a.dx * k, y: a.y + a.dy * k };
+    const c2 = { x: b.x + b.dx * k, y: b.y + b.dy * k };
+    const color = COLORS[l.kind];
+
+    const g = document.createElementNS(ns, "g");
+    g.setAttribute("class", "conn");
+    g.id = "l-" + l.id;
+
+    const path = document.createElementNS(ns, "path");
+    path.setAttribute("class", "line");
+    path.setAttribute("d", `M${a.x},${a.y} C${c1.x},${c1.y} ${c2.x},${c2.y} ${b.x},${b.y}`);
+    path.setAttribute("stroke", color);
+    if (DASH[l.kind]) path.setAttribute("stroke-dasharray", DASH[l.kind]);
+
+    // Ponta da seta alinhada à direção de chegada (oposta à saída do lado de destino).
+    const ang = Math.atan2(-b.dy, -b.dx);
+    const s = 14;
+    const head = document.createElementNS(ns, "path");
+    const p1 = { x: b.x - s * Math.cos(ang - .45), y: b.y - s * Math.sin(ang - .45) };
+    const p2 = { x: b.x - s * Math.cos(ang + .45), y: b.y - s * Math.sin(ang + .45) };
+    head.setAttribute("d", `M${b.x},${b.y} L${p1.x},${p1.y} L${p2.x},${p2.y} Z`);
+    head.setAttribute("fill", color);
+
+    const dot = document.createElementNS(ns, "circle");
+    dot.setAttribute("cx", a.x); dot.setAttribute("cy", a.y); dot.setAttribute("r", 6);
+    dot.setAttribute("fill", "#fff"); dot.setAttribute("stroke", color); dot.setAttribute("stroke-width", 3);
+
+    g.append(path, head, dot);
+    svg.appendChild(g);
+
+    const mid = bezier(a, c1, c2, b, l.at ?? 0.5);
+    const lab = document.createElement("div");
+    lab.className = "conn-label";
+    lab.id = "lb-" + l.id;
+    lab.style.left = mid.x + "px";
+    lab.style.top = mid.y + "px";
+    lab.style.borderColor = color;
+    lab.innerHTML = l.label;
+    world.appendChild(lab);
+  }
+}
+
+function buildLayers() {
+  const root = document.getElementById("layers");
+  for (const s of SECTIONS) {
+    const sec = document.createElement("div");
+    sec.className = "layer section";
+    sec.innerHTML = `<span class="ico">▾</span>⬚ ${s.title}`;
+    sec.onclick = () => focusFrames(FRAMES.filter(f => f.sec === s.id).map(f => f.id));
+    root.appendChild(sec);
+    for (const f of FRAMES.filter(f => f.sec === s.id)) {
+      const it = document.createElement("div");
+      it.className = "layer child";
+      it.dataset.id = f.id;
+      it.innerHTML = `<span class="ico">#</span>${f.name}`;
+      it.onclick = () => { select(f.id); focusFrames([f.id]); };
+      root.appendChild(it);
+    }
+  }
+}
+
+/* ---------- Seleção e painel de propriedades ---------- */
+
+function plain(html) { return html.replace(/<[^>]+>/g, ""); }
+
+function select(id) {
+  selected = id;
+  document.querySelectorAll(".frame").forEach(el => el.classList.toggle("selected", el.id === "f-" + id));
+  document.querySelectorAll(".layer.child").forEach(el => el.classList.toggle("active", el.dataset.id === id));
+  renderProps();
+}
+
+function renderProps() {
+  const box = document.getElementById("props");
+  if (!selected) {
+    box.innerHTML = `<p class="empty">Selecione uma tela no canvas ou nas camadas.</p>
+      <p>${FRAMES.length} telas · ${LINKS.length} conexões · ${STORY.length} passos de história.</p>`;
+    return;
+  }
+  const f = byId[selected];
+  const out = LINKS.filter(l => l.from[0] === f.id);
+  const inc = LINKS.filter(l => l.to[0] === f.id);
+  const li = (l, dir) => {
+    const other = byId[dir === "out" ? l.to[0] : l.from[0]];
+    return `<li class="${dir === "in" ? "in" : ""}" data-go="${other.id}">
+      <span class="trg">${plain(l.label)}</span><span class="dst">${other.name}</span></li>`;
+  };
+  box.innerHTML = `
+    <h3>${f.name}</h3>
+    <div class="grid2">
+      <div class="field"><span>W</span>${f.w}</div><div class="field"><span>H</span>${f.h}</div>
+      <div class="field"><span>X</span>${f.x}</div><div class="field"><span>Y</span>${f.y}</div>
+    </div>
+    <div class="grid2">
+      <div class="field"><span>Form</span>${f.form}</div><div class="field"><span>📷</span>${f.file}</div>
+    </div>
+    <p>${f.desc}</p>
+    <div class="panel-title" style="padding:0 0 6px">Interações · saída</div>
+    <ul class="inter">${out.map(l => li(l, "out")).join("") || '<li class="empty">nenhuma</li>'}</ul>
+    <div class="panel-title" style="padding:0 0 6px">Interações · entrada</div>
+    <ul class="inter">${inc.map(l => li(l, "in")).join("") || '<li class="empty">nenhuma</li>'}</ul>`;
+  box.querySelectorAll("[data-go]").forEach(el => el.onclick = () => { select(el.dataset.go); focusFrames([el.dataset.go]); });
+}
+
+/* ---------- Câmera (pan e zoom) ---------- */
+
+function applyCam() {
+  world.style.transform = `translate(${cam.x}px, ${cam.y}px) scale(${cam.z})`;
+  world.style.setProperty("--z", cam.z);
+  const g = 22 * cam.z;
+  viewport.style.backgroundSize = `${g}px ${g}px`;
+  viewport.style.backgroundPosition = `${cam.x}px ${cam.y}px`;
+  document.getElementById("zoomLabel").textContent = Math.round(cam.z * 100) + "%";
+}
+
+function fly(on) {
+  world.classList.toggle("fly", on);
+  if (on) setTimeout(() => world.classList.remove("fly"), 850);
+}
+
+function zoomAt(px, py, z) {
+  z = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, z));
+  cam.x = px - (px - cam.x) * (z / cam.z);
+  cam.y = py - (py - cam.y) * (z / cam.z);
+  cam.z = z;
+  applyCam();
+}
+
+/** Enquadra um conjunto de telas; com `zoom` fixo centraliza nesse zoom. */
+function focusFrames(ids, zoom) {
+  const fs = ids.map(id => byId[id]);
+  const x1 = Math.min(...fs.map(f => f.x)), y1 = Math.min(...fs.map(f => f.y)) - 30;
+  const x2 = Math.max(...fs.map(f => f.x + f.w)), y2 = Math.max(...fs.map(f => f.y + f.h)) + 30;
+  fitBox(x1, y1, x2, y2, zoom);
+}
+
+function fitBox(x1, y1, x2, y2, zoom) {
+  const vw = viewport.clientWidth, vh = viewport.clientHeight;
+  const storyH = document.body.classList.contains("story-on") ? 190 : 0;
+  const m = 70;
+  const z = zoom ?? Math.min(1, (vw - m * 2) / (x2 - x1), (vh - storyH - m * 2) / (y2 - y1));
+  cam.z = Math.max(MIN_ZOOM, z);
+  cam.x = vw / 2 - ((x1 + x2) / 2) * cam.z;
+  cam.y = (vh - storyH) / 2 - ((y1 + y2) / 2) * cam.z;
+  fly(animate);
+  applyCam();
+}
+
+function fitAll() {
+  const bs = SECTIONS.map(sectionBounds);
+  fitBox(Math.min(...bs.map(b => b.x)), Math.min(...bs.map(b => b.y)) - 40,
+         Math.max(...bs.map(b => b.x + b.w)), Math.max(...bs.map(b => b.y + b.h)) + 320);
+}
+
+let drag = null;
+viewport.addEventListener("pointerdown", e => {
+  if (e.target.closest(".story, .hint")) return;
+  drag = { x: e.clientX, y: e.clientY, cx: cam.x, cy: cam.y, moved: false };
+  viewport.setPointerCapture(e.pointerId);
+});
+viewport.addEventListener("pointermove", e => {
+  if (!drag) return;
+  const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+  if (!drag.moved && Math.hypot(dx, dy) < 4) return;
+  drag.moved = true;
+  viewport.classList.add("panning");
+  cam.x = drag.cx + dx; cam.y = drag.cy + dy;
+  applyCam();
+});
+viewport.addEventListener("pointerup", e => {
+  // Clique sem arrastar no fundo limpa a seleção; o clique no frame é tratado no próprio frame.
+  if (drag && !drag.moved && !e.target.closest(".frame, .story")) select(null);
+  if (drag && drag.moved) {
+    // Evita que o fim de um arrasto sobre um frame dispare a seleção.
+    viewport.addEventListener("click", ev => ev.stopPropagation(), { capture: true, once: true });
+  }
+  drag = null;
+  viewport.classList.remove("panning");
+});
+viewport.addEventListener("wheel", e => {
+  e.preventDefault();
+  const r = viewport.getBoundingClientRect();
+  if (e.ctrlKey || Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+    zoomAt(e.clientX - r.left, e.clientY - r.top, cam.z * Math.exp(-e.deltaY * (e.ctrlKey ? 0.01 : 0.0015)));
+  } else {
+    cam.x -= e.deltaX; applyCam();
+  }
+}, { passive: false });
+
+/* ---------- Modo storytelling ---------- */
+
+function setMode(story) {
+  document.getElementById("btnDesign").setAttribute("aria-pressed", String(!story));
+  document.getElementById("btnProto").setAttribute("aria-pressed", String(story));
+  document.body.classList.toggle("story-on", story);
+  document.getElementById("story").hidden = !story;
+  document.querySelectorAll(".badge").forEach(b => b.remove());
+  if (story) goStep(Math.max(step, 0));
+  else {
+    document.querySelectorAll(".spot").forEach(el => el.classList.remove("spot"));
+    fitAll();
+  }
+}
+
+function goStep(i) {
+  step = Math.max(0, Math.min(STORY.length - 1, i));
+  const s = STORY[step];
+  document.getElementById("stChapter").textContent = `${s.sec} · passo ${step + 1} de ${STORY.length}`;
+  document.getElementById("stTitle").textContent = s.title;
+  document.getElementById("stText").textContent = s.text;
+  document.getElementById("stPrev").disabled = step === 0;
+  document.getElementById("stNext").textContent = step === STORY.length - 1 ? "Recomeçar ↺" : "Próximo →";
+  document.getElementById("stDots").innerHTML = STORY.map((_, k) => `<i class="${k === step ? "on" : ""}" data-k="${k}"></i>`).join("");
+  document.querySelectorAll("#stDots i").forEach(d => d.onclick = () => goStep(+d.dataset.k));
+
+  document.querySelectorAll(".spot").forEach(el => el.classList.remove("spot"));
+  document.querySelectorAll(".badge").forEach(b => b.remove());
+  s.focus.forEach(id => document.getElementById("f-" + id).classList.add("spot"));
+  s.links.forEach(id => {
+    document.getElementById("l-" + id).classList.add("spot");
+    document.getElementById("lb-" + id).classList.add("spot");
+  });
+  const main = document.getElementById("f-" + s.focus[s.focus.length - 1]);
+  const badge = document.createElement("div");
+  badge.className = "badge";
+  badge.textContent = step + 1;
+  main.appendChild(badge);
+
+  select(s.focus[s.focus.length - 1]);
+  focusFrames(s.focus);
+}
+
+document.getElementById("btnDesign").onclick = () => setMode(false);
+document.getElementById("btnProto").onclick = () => setMode(true);
+document.getElementById("btnPlay").onclick = () => { step = 0; setMode(true); };
+document.getElementById("stPrev").onclick = () => goStep(step - 1);
+document.getElementById("stNext").onclick = () => goStep(step === STORY.length - 1 ? 0 : step + 1);
+document.getElementById("stClose").onclick = () => setMode(false);
+document.getElementById("btnFit").onclick = fitAll;
+document.getElementById("zoomLabel").onclick = () => {
+  if (selected) focusFrames([selected], 1);
+  else { zoomAt(viewport.clientWidth / 2, viewport.clientHeight / 2, 1); }
+};
+
+document.addEventListener("keydown", e => {
+  const story = document.body.classList.contains("story-on");
+  if (story && (e.key === "ArrowRight" || e.key === " ")) { e.preventDefault(); goStep(step + 1); }
+  else if (story && e.key === "ArrowLeft") goStep(step - 1);
+  else if (story && e.key === "Escape") setMode(false);
+  else if (e.shiftKey && e.code === "Digit1") fitAll();
+  else if (e.shiftKey && e.code === "Digit0") document.getElementById("zoomLabel").click();
+  else if (e.key === "p" || e.key === "P") setMode(true);
+  else if (e.key === "v" || e.key === "V") setMode(false);
+});
+window.addEventListener("resize", () => step >= 0 && document.body.classList.contains("story-on") ? goStep(step) : null);
+
+buildSections();
+buildFrames();
+buildLinks();
+buildStickies();
+buildLayers();
+renderProps();
+applyCam();
+
+// Link direto para um passo da história: jornada.html#passo-3
+const deepLink = /^#passo-(\d+)$/.exec(location.hash);
+requestAnimationFrame(() => {
+  if (deepLink) { step = +deepLink[1] - 1; setMode(true); }
+  else fitAll();
+  animate = true;
+});
+</script>
+</body>
+</html>
