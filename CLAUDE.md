@@ -18,7 +18,7 @@ dotnet test Gadz.Tetris.sln
 dotnet run --project Gadz.Tetris.Desktop
 ```
 
-CI: `.github/workflows/main.yml` (restore, build e test em `windows-latest`). O `appveyor.yml` ainda é da época do .NET Framework (VS2017) e não compila a solução atual.
+CI: `.github/workflows/main.yml` (restore, build e test em `windows-latest`). O `appveyor.yml` faz o mesmo, instalando antes o SDK do `global.json` (a imagem do AppVeyor não o inclui).
 
 ## Arquitetura (camadas e dependências)
 
