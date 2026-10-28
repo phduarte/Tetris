@@ -373,14 +373,53 @@ public class Board : Entity
     /// </summary>
     public void Rotate()
     {
-        if (!State.CanMove || ThereIsCollision(CurrentPiece))
+        if (!State.CanMove)
         {
             return;
         }
 
-        CurrentPiece.Rotate();
+        // a colisão é testada numa cópia já girada; testar a peça atual deixaria a rotação sobrepor blocos
+        var rotated = CurrentPiece.Clone();
+        rotated.Rotate();
+
+        if (!Fits(rotated))
+        {
+            return;
+        }
+
+        CurrentPiece = rotated;
         OnMove?.Invoke();
         ResetMatrix();
+    }
+
+    /// <summary>
+    /// Substitui a peça atual e os blocos assentados. Permite que os testes montem cenários determinísticos.
+    /// </summary>
+    /// <param name="currentPiece">A peça que passa a ser controlada pelo jogador.</param>
+    /// <param name="settledBlocks">Os blocos que passam a estar assentados no tabuleiro.</param>
+    internal void Arrange(Piece currentPiece, IEnumerable<Block> settledBlocks)
+    {
+        CurrentPiece = currentPiece;
+        _playedBlocks = [.. settledBlocks];
+        ResetMatrix();
+    }
+
+    /// <summary>
+    /// Verifica se a peça cabe no tabuleiro: todos os blocos dentro das bordas e sem sobrepor blocos assentados.
+    /// </summary>
+    /// <param name="piece">A peça a verificar.</param>
+    /// <returns><c>true</c> se a peça cabe na posição e rotação informadas.</returns>
+    private bool Fits(Piece piece)
+    {
+        foreach (var block in piece.Blocks)
+        {
+            if (block.X < 0 || block.X > Dimension.Width - 1 || block.Y < 0 || block.Y > Dimension.Height - 1)
+            {
+                return false;
+            }
+        }
+
+        return !ThereIsCollision(piece);
     }
 
     /// <summary>

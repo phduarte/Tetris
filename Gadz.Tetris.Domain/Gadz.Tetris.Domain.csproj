@@ -1,3 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="Gadz.Tetris.Tests" />
+	</ItemGroup>
+
 </Project>
