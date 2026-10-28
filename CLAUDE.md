@@ -6,8 +6,10 @@ Ao aplicar um padrão, avalie custo-benefício — **evite over-engineering**.
 
 ## Stack
 
-- .NET 6 (`net6.0`; o Desktop usa `net6.0-windows` + WinForms), `Nullable` e `ImplicitUsings` habilitados.
-- Testes: NUnit 3 (modelo clássico `Assert.AreEqual`, `Assert.IsTrue`...).
+- .NET 10 (`net10.0`; o Desktop usa `net10.0-windows` + WinForms). SDK fixado em `global.json`.
+- Configuração comum (TargetFramework, `LangVersion latest`, `Nullable`, `ImplicitUsings`, análise de código) fica em `Directory.Build.props` — não repita essas propriedades nos `.csproj`.
+- Estilo de código definido em `.editorconfig` (`dotnet format` aplica).
+- Testes: NUnit (modelo clássico `Assert.AreEqual`, `Assert.IsTrue`...).
 - Som via `winmm.dll` (`mciSendString`) — só funciona no Windows.
 
 ```sh
@@ -16,7 +18,7 @@ dotnet test Gadz.Tetris.sln
 dotnet run --project Gadz.Tetris.Desktop
 ```
 
-Os workflows de CI (`.github/workflows/main.yml` e `appveyor.yml`) ainda são da época do .NET Framework 4.6 (MSBuild/VS2017) e estão desatualizados em relação ao .NET 6.
+CI: `.github/workflows/main.yml` (restore, build e test em `windows-latest`). O `appveyor.yml` faz o mesmo, instalando antes o SDK do `global.json` (a imagem do AppVeyor não o inclui).
 
 ## Arquitetura (camadas e dependências)
 
@@ -48,7 +50,8 @@ Desktop ──► Application ──► Domain
 
 ## Convenções de código
 
-- **Namespaces** espelham as pastas: `Gadz.Tetris.<Projeto>.<Pasta>` (ex.: `Gadz.Tetris.Domain.Models.Pieces`). Use namespace com chaves (block-scoped), como o restante do código.
+- **Namespaces** espelham as pastas: `Gadz.Tetris.<Projeto>.<Pasta>` (ex.: `Gadz.Tetris.Domain.Models.Pieces`). Use namespace file-scoped (`namespace X;`).
+- **C# moderno**: prefira primary constructors, switch expressions, collection expressions (`[]`), `new()` com tipo inferido e `using` declarations. Nada de avisos de nullable: anote com `?` o que pode ser nulo em vez de suprimir.
 - **Nomes**: `PascalCase` para tipos/membros públicos, `_camelCase` para campos privados, `UPPER_SNAKE_CASE` para constantes (`MAXIMO_LINHAS_POSSIVEIS`, `BLOCK_SIZE`).
 - **Idioma**: identificadores novos em inglês (padrão adotado na refatoração recente). Existem nomes legados em português (`TrocarPecaAtual`, `ColideCom`) — não renomeie fora de uma refatoração dedicada. Documentação XML voltada ao cliente (`GameController`) e mensagens de commit costumam estar em português.
 - **Testes**: classes em português terminando em `Tests` (`PecaTests`, `EstatisticasTests`), métodos no formato `DeveXxx` / `NaoDeveXxx`.
@@ -85,7 +88,7 @@ Desktop ──► Application ──► Domain
 
 ## Armadilhas conhecidas
 
-- Os testes usam o `StatsRepository` real e gravam em `%USERPROFILE%\Tetris\stats.mc`. Na primeira execução (arquivo inexistente) vários testes falham porque `StatsFileExists()` chama `FileInfo.Create()` sem descartar o stream, deixando o arquivo bloqueado; numa segunda execução passam.
-- `DeveGuardarORecordeMaximo` depende de haver um recorde salvo nesse arquivo.
+- Os testes usam o `StatsRepository` real e gravam em `%USERPROFILE%\Tetris\stats.mc`.
+- `DeveGuardarORecordeMaximo` depende de haver um recorde > 0 salvo nesse arquivo; por isso o CI o exclui com `--filter`.
 - `PauseCommand` e `ContinueCommand` usam a mesma tecla (Enter), mas `Play.Jogo_KeyDown` executa só o primeiro comando que casar (ordem do `CommandFactory`), então hoje o `ContinueCommand` nunca é acionado e `Board.Pause()` não consulta `State.CanPause`.
 - `SoundPlayerAdapter` e `StatsRepository` são estáticos/têm construtor estático e estão marcados com `[ExcludeFromCodeCoverage]`.

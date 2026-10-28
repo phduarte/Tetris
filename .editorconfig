@@ -1,0 +1,35 @@
+root = true
+
+[*]
+indent_style = space
+insert_final_newline = true
+
+[*.{csproj,props,targets,resx,settings}]
+indent_size = 2
+
+[*.cs]
+indent_size = 4
+charset = utf-8-bom
+
+# Organização
+dotnet_sort_system_directives_first = true
+csharp_style_namespace_declarations = file_scoped:warning
+dotnet_diagnostic.IDE0005.severity = suggestion
+
+# Nomes: campos privados _camelCase, constantes UPPER_SNAKE_CASE (padrão do projeto)
+dotnet_naming_rule.private_fields_underscore.symbols = private_fields
+dotnet_naming_rule.private_fields_underscore.style = underscore_camel
+dotnet_naming_rule.private_fields_underscore.severity = suggestion
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+dotnet_naming_style.underscore_camel.required_prefix = _
+dotnet_naming_style.underscore_camel.capitalization = camel_case
+
+# Preferências de linguagem moderna
+csharp_style_prefer_switch_expression = true:suggestion
+csharp_style_prefer_pattern_matching = true:suggestion
+csharp_prefer_simple_using_statement = true:suggestion
+csharp_style_expression_bodied_properties = true:suggestion
+
+[*.Designer.cs]
+generated_code = true

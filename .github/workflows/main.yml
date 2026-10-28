@@ -1,26 +1,27 @@
-name: .NET 4.6
+name: .NET
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
 
+    # O Desktop usa WinForms (net10.0-windows) e o som usa winmm.dll.
     runs-on: windows-latest
-    
-    env:
-      Actions_Allow_Unsecure_Commands: true # Allows AddPAth and SetEnv commands
 
     steps:
-    - uses: actions/checkout@master
-    - uses: nuget/setup-nuget@v1
-    - name: Run a one-line script
-      run:  echo "clonning!"
+    - uses: actions/checkout@v4
 
-    - name: Setup MSBuild.exe
-      uses: warrenbuckley/Setup-MSBuild@v1
+    - uses: actions/setup-dotnet@v4
+      with:
+        global-json-file: global.json
 
-    - name: update-packages
-      run: nuget restore Gadz.Tetris.sln
+    - name: Restore
+      run: dotnet restore Gadz.Tetris.sln
 
-    - name: MSBuild
-      run: msbuild Gadz.Tetris.sln
+    - name: Build
+      run: dotnet build Gadz.Tetris.sln --configuration Release --no-restore
+
+    # DeveGuardarORecordeMaximo depende de um recorde > 0 já salvo em
+    # %USERPROFILE%\Tetris\stats.mc, que não existe numa máquina limpa.
+    - name: Test
+      run: dotnet test Gadz.Tetris.sln --configuration Release --no-build --filter "Name!=DeveGuardarORecordeMaximo"

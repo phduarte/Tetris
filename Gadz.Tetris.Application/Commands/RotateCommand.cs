@@ -1,18 +1,10 @@
-﻿using Gadz.Tetris.Application;
+﻿namespace Gadz.Tetris.Application.Commands;
 
-namespace Gadz.Tetris.Application.Commands
+internal class RotateCommand(GameController game) : Command(game)
 {
-    internal class RotateCommand : Command
-    {
-        public RotateCommand(GameController game)
-            : base(game)
-        {
-        }
+    public override Key Key => Key.Up;
 
-        public override Key Key => Key.Up;
+    public override bool Control => false;
 
-        public override bool Control => false;
-
-        public override void Execute() => _gameController.Rotate();
-    }
+    public override void Execute() => _gameController.Rotate();
 }

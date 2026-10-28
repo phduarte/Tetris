@@ -1,43 +1,42 @@
-﻿namespace Gadz.Tetris.Domain.Models.Boards
+﻿namespace Gadz.Tetris.Domain.Models.Boards;
+
+/// <summary>
+/// Defines the <see cref="IBoardState" />
+/// </summary>
+public interface IBoardState
 {
     /// <summary>
-    /// Defines the <see cref="IBoardState" />
+    /// Gets a value indicating whether IsPlaying
     /// </summary>
-    public interface IBoardState
-    {
-        /// <summary>
-        /// Gets a value indicating whether IsPlaying
-        /// </summary>
-        bool IsPlaying { get; }
+    bool IsPlaying { get; }
 
-        /// <summary>
-        /// Gets a value indicating whether CanStart
-        /// </summary>
-        bool CanStart { get; }
+    /// <summary>
+    /// Gets a value indicating whether CanStart
+    /// </summary>
+    bool CanStart { get; }
 
-        /// <summary>
-        /// Gets a value indicating whether CanPause
-        /// </summary>
-        bool CanPause { get; }
+    /// <summary>
+    /// Gets a value indicating whether CanPause
+    /// </summary>
+    bool CanPause { get; }
 
-        /// <summary>
-        /// Gets a value indicating whether CanFinish
-        /// </summary>
-        bool CanFinish { get; }
+    /// <summary>
+    /// Gets a value indicating whether CanFinish
+    /// </summary>
+    bool CanFinish { get; }
 
-        /// <summary>
-        /// Gets a value indicating whether CanRestart
-        /// </summary>
-        bool CanRestart { get; }
+    /// <summary>
+    /// Gets a value indicating whether CanRestart
+    /// </summary>
+    bool CanRestart { get; }
 
-        /// <summary>
-        /// Gets a value indicating whether CanMove
-        /// </summary>
-        bool CanMove { get; }
+    /// <summary>
+    /// Gets a value indicating whether CanMove
+    /// </summary>
+    bool CanMove { get; }
 
-        /// <summary>
-        /// Gets a value indicating whether CanChangeStats
-        /// </summary>
-        bool CanChangeStats { get; }
-    }
+    /// <summary>
+    /// Gets a value indicating whether CanChangeStats
+    /// </summary>
+    bool CanChangeStats { get; }
 }

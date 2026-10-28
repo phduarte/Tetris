@@ -1,43 +1,42 @@
-﻿namespace Gadz.Tetris.Domain.Models.Pieces
+﻿namespace Gadz.Tetris.Domain.Models.Pieces;
+
+/// <summary>
+/// Defines the PieceType
+/// </summary>
+public enum PieceType
 {
     /// <summary>
-    /// Defines the PieceType
+    /// Defines the T
     /// </summary>
-    public enum PieceType
-    {
-        /// <summary>
-        /// Defines the T
-        /// </summary>
-        T = 0,
+    T = 0,
 
-        /// <summary>
-        /// Defines the O
-        /// </summary>
-        O,
+    /// <summary>
+    /// Defines the O
+    /// </summary>
+    O,
 
-        /// <summary>
-        /// Defines the L
-        /// </summary>
-        L,
+    /// <summary>
+    /// Defines the L
+    /// </summary>
+    L,
 
-        /// <summary>
-        /// Defines the J
-        /// </summary>
-        J,
+    /// <summary>
+    /// Defines the J
+    /// </summary>
+    J,
 
-        /// <summary>
-        /// Defines the S
-        /// </summary>
-        S,
+    /// <summary>
+    /// Defines the S
+    /// </summary>
+    S,
 
-        /// <summary>
-        /// Defines the Z
-        /// </summary>
-        Z,
+    /// <summary>
+    /// Defines the Z
+    /// </summary>
+    Z,
 
-        /// <summary>
-        /// Defines the I
-        /// </summary>
-        I
-    }
+    /// <summary>
+    /// Defines the I
+    /// </summary>
+    I
 }

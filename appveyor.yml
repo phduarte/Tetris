@@ -1,11 +1,17 @@
 version: 1.0.{build}
-image: Visual Studio 2017
+image: Visual Studio 2022
 configuration: Release
-platform: Any CPU
-before_build:
-  - nuget restore
-build:
-  project: Gadz.Tetris.sln
-  publish_nuget: true
-  include_nuget_references: true
-  verbosity: minimal
+
+# As imagens do AppVeyor não trazem o SDK do .NET 10; instala a versão do global.json.
+install:
+  - ps: Invoke-WebRequest -Uri 'https://dot.net/v1/dotnet-install.ps1' -OutFile "$env:TEMP\dotnet-install.ps1"
+  - ps: '& "$env:TEMP\dotnet-install.ps1" -JsonFile global.json -InstallDir "$env:ProgramFiles\dotnet"'
+  - dotnet --version
+
+# dotnet build ignora o Setup.vdproj, que o MSBuild não consegue carregar.
+build_script:
+  - dotnet build Gadz.Tetris.sln --configuration Release
+
+# DeveGuardarORecordeMaximo depende de um recorde salvo localmente (ver .github/workflows/main.yml).
+test_script:
+  - dotnet test Gadz.Tetris.sln --configuration Release --no-build --filter "Name!=DeveGuardarORecordeMaximo"

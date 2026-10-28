@@ -1,36 +1,32 @@
-﻿using Gadz.Tetris.Domain.Models;
-using System.Collections.Generic;
+﻿namespace Gadz.Tetris.Domain.Models.Statistics;
 
-namespace Gadz.Tetris.Domain.Models.Statistics
+/// <summary>
+/// Defines the <see cref="IStatsRepository" />
+/// </summary>
+public interface IStatsRepository : IRepository
 {
     /// <summary>
-    /// Defines the <see cref="IStatsRepository" />
+    /// The Save
     /// </summary>
-    public interface IStatsRepository : IRepository
-    {
-        /// <summary>
-        /// The Save
-        /// </summary>
-        /// <param name="stats">The stats<see cref="Stats"/></param>
-        void Save(Stats stats);
+    /// <param name="stats">The stats<see cref="Stats"/></param>
+    void Save(Stats stats);
 
-        /// <summary>
-        /// The Load
-        /// </summary>
-        /// <param name="id">The id<see cref="Identity"/></param>
-        /// <returns>The <see cref="Stats"/></returns>
-        Stats Load(Identity id);
+    /// <summary>
+    /// The Load
+    /// </summary>
+    /// <param name="id">The id<see cref="Identity"/></param>
+    /// <returns>The <see cref="Stats"/></returns>
+    Stats Load(Identity id);
 
-        /// <summary>
-        /// The MaxScore
-        /// </summary>
-        /// <returns>The <see cref="int"/></returns>
-        int MaxScore();
+    /// <summary>
+    /// The MaxScore
+    /// </summary>
+    /// <returns>The <see cref="int"/></returns>
+    int MaxScore();
 
-        /// <summary>
-        /// The All
-        /// </summary>
-        /// <returns>The <see cref="IEnumerable{Stats}"/></returns>
-        IEnumerable<Stats> All();
-    }
+    /// <summary>
+    /// The All
+    /// </summary>
+    /// <returns>The <see cref="IEnumerable{Stats}"/></returns>
+    IEnumerable<Stats> All();
 }
