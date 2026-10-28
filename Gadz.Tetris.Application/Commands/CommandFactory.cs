@@ -1,14 +1,11 @@
 ﻿namespace Gadz.Tetris.Application.Commands;
 
-public class CommandFactory
+public class CommandFactory(GameController gameController)
 {
-    readonly GameController _gameController;
+    readonly GameController _gameController = gameController;
 
-    public CommandFactory(GameController gameController)
-        => _gameController = gameController;
-
-    public List<Command> Commands => new List<Command>
-    {
+    public List<Command> Commands =>
+    [
         new SmashDownCommand(_gameController),
         new MoveDownCommand(_gameController),
         new RunLeftCommand(_gameController),
@@ -20,7 +17,7 @@ public class CommandFactory
         new PauseCommand(_gameController),
         new ContinueCommand(_gameController),
         new ToggleMuteCommand(_gameController)
-    };
+    ];
 
     public IEnumerable<Command> GetAll(Key key, bool control)
         => Commands.Where(x => x.Match(key, control));

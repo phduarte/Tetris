@@ -5,19 +5,13 @@ namespace Gadz.Tetris.Domain.Models.Pieces;
 /// <summary>
 /// Defines the <see cref="TetraminoL" />
 /// </summary>
-internal class TetraminoL : Piece
+/// <remarks>
+/// Initializes a new instance of the <see cref="TetraminoL"/> class.
+/// </remarks>
+/// <param name="board">The parent board<see cref="Board"/></param>
+/// <param name="config">The configuration<see cref="PieceConfiguration"/></param>
+internal class TetraminoL(Board board, PieceConfiguration config) : Piece(board, config)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="TetraminoL"/> class.
-    /// </summary>
-    /// <param name="board">The parent board<see cref="Board"/></param>
-    /// <param name="config">The configuration<see cref="PieceConfiguration"/></param>
-    public TetraminoL(Board board, PieceConfiguration config)
-        : base(board, config)
-    {
-
-    }
-
     public override Block[] Blocks
     {
         get

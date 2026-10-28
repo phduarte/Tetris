@@ -30,10 +30,8 @@ public class SoundPlayerAdapter
 
             if (!File.Exists(filePath))
             {
-                using (var file = new StreamWriter(filePath, false))
-                {
-                    sound.Value.CopyTo(file.BaseStream);
-                }
+                using var file = new StreamWriter(filePath, false);
+                sound.Value.CopyTo(file.BaseStream);
             }
 
             mciSendString($@"open {filePath} type waveaudio alias {sound.Key}", null, 0, IntPtr.Zero);

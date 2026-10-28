@@ -30,7 +30,7 @@ public class PieceBuilder
     /// <summary>
     /// 
     /// </summary>
-    public PieceConfiguration Configuration => new PieceConfiguration { Type = _pieceType, Position = _position, Rotation = _rotation };
+    public PieceConfiguration Configuration => new() { Type = _pieceType, Position = _position, Rotation = _rotation };
 
     /// <summary>
     /// The OfType

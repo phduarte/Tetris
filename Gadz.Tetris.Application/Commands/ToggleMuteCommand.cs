@@ -2,16 +2,11 @@
 
 namespace Gadz.Tetris.Application.Commands;
 
-internal class ToggleMuteCommand : Command
+internal class ToggleMuteCommand(GameController game) : Command(game)
 {
     public override Key Key => Key.ShiftKey;
 
     public override bool Control => false;
-
-    public ToggleMuteCommand(GameController game)
-        : base(game)
-    {
-    }
 
     public override void Execute() => SoundPlayerAdapter.ToggleMute();
 }

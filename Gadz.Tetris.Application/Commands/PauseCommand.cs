@@ -1,12 +1,7 @@
 ﻿namespace Gadz.Tetris.Application.Commands;
 
-internal class PauseCommand : Command
+internal class PauseCommand(GameController game) : Command(game)
 {
-    public PauseCommand(GameController game)
-        : base(game)
-    {
-    }
-
     public override Key Key => Key.Enter;
 
     public override bool Control => false;

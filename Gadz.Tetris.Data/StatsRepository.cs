@@ -91,11 +91,9 @@ public class StatsRepository : IStatsRepository
 
         await Task.Factory.StartNew(() =>
         {
-            using (var file = new StreamWriter(StatsFilePath, true))
-            {
-                var line = Map(stats);
-                file.WriteLine(line);
-            }
+            using var file = new StreamWriter(StatsFilePath, true);
+            var line = Map(stats);
+            file.WriteLine(line);
         }).ConfigureAwait(false);
 
         _cache.Add(stats);

@@ -1,12 +1,7 @@
 ﻿namespace Gadz.Tetris.Application.Commands;
 
-internal class RunLeftCommand : Command
+internal class RunLeftCommand(GameController game) : Command(game)
 {
-    public RunLeftCommand(GameController game)
-        : base(game)
-    {
-    }
-
     public override Key Key => Key.Left;
 
     public override bool Control => true;

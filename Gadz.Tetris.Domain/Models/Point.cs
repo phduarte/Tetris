@@ -3,23 +3,17 @@
 /// <summary>
 /// Defines the <see cref="Point" />
 /// </summary>
-public struct Point
+/// <remarks>
+/// Initializes a new instance of the <see cref=""/> class.
+/// </remarks>
+/// <param name="x">The x<see cref="int"/></param>
+/// <param name="y">The y<see cref="int"/></param>
+public struct Point(int x, int y)
 {
     /// <summary>
     /// Defines the X, Y
     /// </summary>
-    public int X, Y;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref=""/> class.
-    /// </summary>
-    /// <param name="x">The x<see cref="int"/></param>
-    /// <param name="y">The y<see cref="int"/></param>
-    public Point(int x, int y)
-    {
-        X = x;
-        Y = y;
-    }
+    public int X = x, Y = y;
 
     /// <summary>
     /// The ToString
@@ -37,11 +31,7 @@ public struct Point
     /// <returns>The <see cref="bool"/></returns>
     public override bool Equals(object? obj)
     {
-        if (obj is Point u)
-        {
-            return ToString().Equals(u.ToString());
-        }
-        return false;
+        return obj is Point u && X == u.X && Y == u.Y;
     }
 
     public static bool operator ==(Point a, Point b)
@@ -69,6 +59,6 @@ public struct Point
     /// <returns>The <see cref="int"/></returns>
     public override int GetHashCode()
     {
-        return base.GetHashCode();
+        return HashCode.Combine(X, Y);
     }
 }

@@ -5,7 +5,12 @@ namespace Gadz.Tetris.Domain.Models.Pieces;
 /// <summary>
 /// Defines the <see cref="Piece" />
 /// </summary>
-public abstract class Piece : Entity
+/// <remarks>
+/// Initializes a new instance of the <see cref="Piece"/> class.
+/// </remarks>
+/// <param name="board">The board<see cref="Board"/></param>
+/// <param name="configuration">The configuration<see cref="PieceConfiguration"/></param>
+public abstract class Piece(Board board, PieceConfiguration configuration) : Entity
 {
     /// <summary>
     /// Defines the _colors
@@ -23,7 +28,7 @@ public abstract class Piece : Entity
     /// <summary>
     /// Gets the Rotation
     /// </summary>
-    public int Rotation { get; private set; }
+    public int Rotation { get; private set; } = configuration.Rotation;
 
     /// <summary>
     /// Gets the Color
@@ -33,35 +38,22 @@ public abstract class Piece : Entity
     /// <summary>
     /// Gets the Position
     /// </summary>
-    public Point Position { get; private set; }
+    public Point Position { get; private set; } = configuration.Position;
 
     /// <summary>
     /// Gets the Type
     /// </summary>
-    public PieceType Type { get; protected set; }
+    public PieceType Type { get; protected set; } = configuration.Type;
 
     /// <summary>
     /// Gets the Board
     /// </summary>
-    public Board Board { get; private set; }
+    public Board Board { get; private set; } = board;
 
     /// <summary>
     /// Gets the Blocks
     /// </summary>
     public abstract Block[] Blocks { get; }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Piece"/> class.
-    /// </summary>
-    /// <param name="board">The board<see cref="Board"/></param>
-    /// <param name="configuration">The configuration<see cref="PieceConfiguration"/></param>
-    protected Piece(Board board, PieceConfiguration configuration)
-    {
-        Board = board;
-        Type = configuration.Type;
-        Position = configuration.Position;
-        Rotation = configuration.Rotation;
-    }
 
     /// <summary>
     /// The Rotate

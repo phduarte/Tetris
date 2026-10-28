@@ -3,17 +3,23 @@
 /// <summary>
 /// Bloco
 /// </summary>
-public struct Block
+/// <remarks>
+/// Initializes a new instance of the <see cref=""/> class.
+/// </remarks>
+/// <param name="x">The x<see cref="int"/></param>
+/// <param name="y">The y<see cref="int"/></param>
+/// <param name="color">The color<see cref="PieceColor"/></param>
+public struct Block(int x, int y, PieceColor color)
 {
     /// <summary>
     /// Gets the Point
     /// </summary>
-    public Point Point { get; private set; }
+    public Point Point { get; private set; } = new Point(x, y);
 
     /// <summary>
     /// Gets the Color
     /// </summary>
-    public PieceColor Color { get; private set; }
+    public PieceColor Color { get; private set; } = color;
 
     /// <summary>
     /// Gets the X
@@ -29,18 +35,6 @@ public struct Block
     public int Y
     {
         get { return Point.Y; }
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref=""/> class.
-    /// </summary>
-    /// <param name="x">The x<see cref="int"/></param>
-    /// <param name="y">The y<see cref="int"/></param>
-    /// <param name="color">The color<see cref="PieceColor"/></param>
-    public Block(int x, int y, PieceColor color)
-    {
-        Point = new Point(x, y);
-        Color = color;
     }
 
     /// <summary>

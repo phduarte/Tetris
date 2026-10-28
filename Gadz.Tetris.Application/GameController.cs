@@ -14,6 +14,8 @@ public class GameController
     /// <summary>
     /// Defines the _board
     /// </summary>
+    private const int MINIMUM_BOARD_SIZE = 10;
+
     private readonly Board _board;
 
     /// <summary>
@@ -150,14 +152,14 @@ public class GameController
     /// <param name="height">The height<see cref="int"/></param>
     private GameController(int width, int height)
     {
-        if (width < 10)
+        if (width < MINIMUM_BOARD_SIZE)
         {
-            throw new ArgumentException(nameof(width));
+            throw new ArgumentException($"A largura mínima do tabuleiro é {MINIMUM_BOARD_SIZE}.", nameof(width));
         }
 
-        if (height < 10)
+        if (height < MINIMUM_BOARD_SIZE)
         {
-            throw new ArgumentException(nameof(height));
+            throw new ArgumentException($"A altura mínima do tabuleiro é {MINIMUM_BOARD_SIZE}.", nameof(height));
         }
 
         _board = new Board(new StatsRepository(), width, height);

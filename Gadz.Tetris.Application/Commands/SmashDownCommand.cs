@@ -1,12 +1,7 @@
 ﻿namespace Gadz.Tetris.Application.Commands;
 
-internal class SmashDownCommand : Command
+internal class SmashDownCommand(GameController game) : Command(game)
 {
-    public SmashDownCommand(GameController game)
-        : base(game)
-    {
-    }
-
     public override Key Key => Key.Space;
 
     public override bool Control => false;

@@ -3,7 +3,11 @@
 /// <summary>
 /// Defines the <see cref="Stats" />
 /// </summary>
-public class Stats : Entity
+/// <remarks>
+/// Initializes a new instance of the <see cref="Stats"/> class.
+/// </remarks>
+/// <param name="id">The id<see cref="Identity"/></param>
+public class Stats(Identity id) : Entity(id)
 {
     /// <summary>
     /// Defines the REFRESH_INTERVAL
@@ -13,7 +17,7 @@ public class Stats : Entity
     /// <summary>
     /// Defines the _durationHistory
     /// </summary>
-    private IDictionary<DateTime, long> _durationHistory;
+    private IDictionary<DateTime, long> _durationHistory = new Dictionary<DateTime, long>();
 
     /// <summary>
     /// Defines the _startTime
@@ -80,16 +84,6 @@ public class Stats : Entity
     {
         Level = 1;
         Speed = 1;
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Stats"/> class.
-    /// </summary>
-    /// <param name="id">The id<see cref="Identity"/></param>
-    public Stats(Identity id)
-        : base(id)
-    {
-        _durationHistory = new Dictionary<DateTime, long>();
     }
 
     /// <summary>
@@ -235,25 +229,19 @@ public class Stats : Entity
     /// <returns>The <see cref="int"/></returns>
     private int CalculateScore(int linhas)
     {
-        switch (linhas)
+        var score = linhas switch
         {
-            case 1:
-                return 40;
+            1 => 40,
+            2 => 100,
+            3 => 300,
+            4 => 1200,
+            _ => 0
+        };
 
-            case 2:
-                return 100;
+        if (linhas == 4)
+            Tetris += score;
 
-            case 3:
-                return 300;
-
-            case 4:
-                Tetris += 1200;
-                return 1200;
-            default:
-                return 0;
-        }
-
-        throw new IndexOutOfRangeException();
+        return score;
     }
 
     /// <summary>

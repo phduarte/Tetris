@@ -1,12 +1,7 @@
 ﻿namespace Gadz.Tetris.Application.Commands;
 
-internal class ContinueCommand : Command
+internal class ContinueCommand(GameController game) : Command(game)
 {
-    public ContinueCommand(GameController game)
-        : base(game)
-    {
-    }
-
     public override Key Key => Key.Enter;
 
     public override bool Control => false;

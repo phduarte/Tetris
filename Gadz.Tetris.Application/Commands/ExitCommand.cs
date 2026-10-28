@@ -1,12 +1,7 @@
 ﻿namespace Gadz.Tetris.Application.Commands;
 
-internal class ExitCommand : Command
+internal class ExitCommand(GameController game) : Command(game)
 {
-    public ExitCommand(GameController game)
-        : base(game)
-    {
-    }
-
     public override Key Key => Key.Escape;
 
     public override bool Control => false;

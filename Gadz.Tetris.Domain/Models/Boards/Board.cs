@@ -28,7 +28,7 @@ public class Board : Entity
     /// <summary>
     /// Defines the _playedBlocks
     /// </summary>
-    private List<Block> _playedBlocks = new List<Block>();
+    private List<Block> _playedBlocks = [];
 
     //o propósito dessa variável é evitar que ocorra 2 avaliações ao mesmo tempo sem precisar de nenhum lock.
     /// <summary>
@@ -585,9 +585,8 @@ public class Board : Entity
     /// <returns>The <see cref="Piece"/></returns>
     private Piece CreateRandomBlock()
     {
-        var x = new Random(DateTime.Now.Millisecond).Next(0, 7);
-        var tipo = (PieceType)x;
-        var rotacao = new Random(DateTime.Now.Millisecond).Next(0, 4);
+        var tipo = (PieceType)Random.Shared.Next(0, 7);
+        var rotacao = Random.Shared.Next(0, 4);
         var posicao = new Point(0, 0);
         var peca = _pieceBuilder.OfType(tipo)
             .OnPosition(posicao)
