@@ -11,9 +11,14 @@ namespace Gadz.Tetris.Tests.Model;
 public class TabuleiroTests
 {
     /// <summary>
+    /// Por quanto tempo o teste de concorrência dispara comandos.
+    /// </summary>
+    private const int STRESS_DURATION_MS = 500;
+
+    /// <summary>
     /// Tabuleiro 10×20 em jogo, recriado a cada teste.
     /// </summary>
-    private Board board;
+    private Board _board;
 
     /// <summary>
     /// Cria e inicia um tabuleiro novo.
@@ -21,8 +26,8 @@ public class TabuleiroTests
     [SetUp]
     public void Setup()
     {
-        board = new Board(new FakeStatsRepository(), 10, 20);
-        board.Start();
+        _board = new Board(new FakeStatsRepository(), 10, 20);
+        _board.Start();
     }
 
     /// <summary>
@@ -31,7 +36,7 @@ public class TabuleiroTests
     [TearDown]
     public void TearDown()
     {
-        board.Finish();
+        _board.Finish();
     }
 
     /// <summary>
@@ -41,11 +46,11 @@ public class TabuleiroTests
     public void NaoDeveGirarSobreBlocosAssentados()
     {
         var column = Enumerable.Range(8, 12).Select(y => new Block(1, y, PieceColor.Blue));
-        board.Arrange(CreatePiece(PieceType.I, new Point(0, 8), 0), column);
+        _board.Arrange(CreatePiece(PieceType.I, new Point(0, 8), 0), column);
 
-        board.Rotate();
+        _board.Rotate();
 
-        Assert.AreEqual(0, board.CurrentPiece.Rotation);
+        Assert.AreEqual(0, _board.CurrentPiece.Rotation);
         Assert.IsFalse(HasOverlap(), "A peça atual sobrepôs blocos assentados.");
     }
 
@@ -55,11 +60,11 @@ public class TabuleiroTests
     [Test]
     public void NaoDeveGirarParaForaDoTabuleiro()
     {
-        board.Arrange(CreatePiece(PieceType.I, new Point(3, 19), 1), []);
+        _board.Arrange(CreatePiece(PieceType.I, new Point(3, 19), 1), []);
 
-        board.Rotate();
+        _board.Rotate();
 
-        Assert.AreEqual(1, board.CurrentPiece.Rotation);
+        Assert.AreEqual(1, _board.CurrentPiece.Rotation);
     }
 
     /// <summary>
@@ -68,12 +73,12 @@ public class TabuleiroTests
     [Test]
     public void DeveGirarEmEspacoLivre()
     {
-        board.Arrange(CreatePiece(PieceType.I, new Point(3, 5), 0), []);
+        _board.Arrange(CreatePiece(PieceType.I, new Point(3, 5), 0), []);
 
         foreach (var expected in new[] { 1, 2, 3, 0 })
         {
-            board.Rotate();
-            Assert.AreEqual(expected, board.CurrentPiece.Rotation);
+            _board.Rotate();
+            Assert.AreEqual(expected, _board.CurrentPiece.Rotation);
         }
     }
 
@@ -85,13 +90,73 @@ public class TabuleiroTests
     {
         LoseGame();
 
-        board.Restart();
-        var y = board.CurrentPiece.Position.Y;
-        board.MoveDown();
+        _board.Restart();
+        var y = _board.CurrentPiece.Position.Y;
+        _board.MoveDown();
 
-        Assert.AreEqual("Playing", board.State.ToString());
-        Assert.AreEqual(0, board.Blocks.Count, "Os blocos da partida anterior continuaram no tabuleiro.");
-        Assert.IsTrue(board.CurrentPiece.Position.Y > y, "A peça não desceu após o reinício.");
+        Assert.AreEqual("Playing", _board.State.ToString());
+        Assert.AreEqual(0, _board.Blocks.Count, "Os blocos da partida anterior continuaram no tabuleiro.");
+        Assert.IsTrue(_board.CurrentPiece.Position.Y > y, "A peça não desceu após o reinício.");
+    }
+
+    /// <summary>
+    /// Quando a peça seguinte entra sobre blocos assentados, o jogo termina.
+    /// </summary>
+    [Test]
+    public void DevePerderQuandoANovaPecaNasceSobreBlocos()
+    {
+        // toda peça nasce dentro do quadrado 4×4 do canto superior esquerdo
+        var spawnArea = from x in Enumerable.Range(0, 4)
+                        from y in Enumerable.Range(0, 4)
+                        select new Block(x, y, PieceColor.Red);
+        _board.Arrange(CreatePiece(PieceType.I, new Point(9, 16), 0), spawnArea);
+
+        _board.MoveDown();
+
+        Assert.IsFalse(_board.IsPlaying);
+        Assert.AreEqual("Finished", _board.State.ToString());
+    }
+
+    /// <summary>
+    /// Comandos disparados de várias threads ao mesmo tempo que o loop não lançam exceção nem sobrepõem blocos.
+    /// </summary>
+    [Test]
+    public void DeveSuportarComandosConcorrentesComOLoop()
+    {
+        var until = DateTime.Now.AddMilliseconds(STRESS_DURATION_MS);
+        Action[] commands =
+        [
+            _board.MoveLeft,
+            _board.MoveRight,
+            _board.Rotate,
+            _board.MoveDown,
+            _board.SmashDown,
+            () =>
+            {
+                if (!_board.IsPlaying)
+                {
+                    _board.Restart();
+                }
+            }
+        ];
+
+        var tasks = commands.Select(command => Task.Run(() =>
+        {
+            while (DateTime.Now < until)
+            {
+                command();
+            }
+        })).ToArray();
+
+        Assert.DoesNotThrow(() => Task.WaitAll(tasks));
+
+        // ao perder, a peça que nasceu sobre a pilha fica sobreposta por definição
+        if (_board.IsPlaying)
+        {
+            Assert.IsFalse(HasOverlap(), "A peça atual sobrepôs blocos assentados.");
+        }
+
+        Assert.AreEqual(_board.Blocks.Count, _board.Blocks.Select(b => b.Point).Distinct().Count(), "Há blocos assentados na mesma célula.");
     }
 
     /// <summary>
@@ -100,12 +165,12 @@ public class TabuleiroTests
     private void LoseGame()
     {
         // cada peça ocupa no máximo 4 colunas, então nenhuma linha é completada e a pilha chega ao topo
-        for (var i = 0; i < board.Height && board.IsPlaying; i++)
+        for (var i = 0; i < _board.Height && _board.IsPlaying; i++)
         {
-            board.SmashDown();
+            _board.SmashDown();
         }
 
-        Assert.IsFalse(board.IsPlaying, "O jogo deveria ter terminado.");
+        Assert.IsFalse(_board.IsPlaying, "O jogo deveria ter terminado.");
     }
 
     /// <summary>
@@ -117,7 +182,7 @@ public class TabuleiroTests
     /// <returns>A peça criada.</returns>
     private Piece CreatePiece(PieceType type, Point position, int rotation)
     {
-        return new PieceBuilder().OfType(type).OnPosition(position).WithRotation(rotation).OnBoard(board).Build();
+        return new PieceBuilder().OfType(type).OnPosition(position).WithRotation(rotation).OnBoard(_board).Build();
     }
 
     /// <summary>
@@ -126,6 +191,6 @@ public class TabuleiroTests
     /// <returns><c>true</c> se houver sobreposição.</returns>
     private bool HasOverlap()
     {
-        return board.CurrentPiece.Blocks.Any(piece => board.Blocks.Any(settled => settled.CollideWith(piece)));
+        return _board.CurrentPiece.Blocks.Any(piece => _board.Blocks.Any(settled => settled.CollideWith(piece)));
     }
 }
