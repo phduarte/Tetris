@@ -2,124 +2,123 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Gadz.Tetris.SoundPlayer
+namespace Gadz.Tetris.SoundPlayer;
+
+[ExcludeFromCodeCoverage]
+public class SoundPlayerAdapter
 {
-    [ExcludeFromCodeCoverage]
-    public class SoundPlayerAdapter
+    public static bool Mute { get; private set; }
+
+    private static IDictionary<string, UnmanagedMemoryStream> _sounds =
+        new Dictionary<string, UnmanagedMemoryStream> {
+        { "clean", Sounds.Clean},
+        { "intro", Sounds.Start },
+        { "move", Sounds.Move},
+        { "run", Sounds.Run },
+        { "ending", Sounds.Ending },
+        { "dock", Sounds.Dock }
+    };
+
+    [DllImport("winmm.dll")]
+    private static extern Int32 mciSendString(string command, StringBuilder buffer, int bufferSize, IntPtr hwndCallback);
+
+    static SoundPlayerAdapter()
     {
-        public static bool Mute { get; private set; }
-
-        private static IDictionary<string, UnmanagedMemoryStream> _sounds =
-            new Dictionary<string, UnmanagedMemoryStream> {
-            { "clean", Sounds.Clean},
-            { "intro", Sounds.Start },
-            { "move", Sounds.Move},
-            { "run", Sounds.Run },
-            { "ending", Sounds.Ending },
-            { "dock", Sounds.Dock }
-        };
-
-        [DllImport("winmm.dll")]
-        private static extern Int32 mciSendString(string command, StringBuilder buffer, int bufferSize, IntPtr hwndCallback);
-
-        static SoundPlayerAdapter()
+        foreach (var sound in _sounds)
         {
-            foreach (var sound in _sounds)
-            {
-                var filePath = Path.Combine(Path.GetTempPath(), sound.Key + ".wav");
+            var filePath = Path.Combine(Path.GetTempPath(), sound.Key + ".wav");
 
-                if (!File.Exists(filePath))
+            if (!File.Exists(filePath))
+            {
+                using (var file = new StreamWriter(filePath, false))
                 {
-                    using (var file = new StreamWriter(filePath, false))
-                    {
-                        sound.Value.CopyTo(file.BaseStream);
-                    }
+                    sound.Value.CopyTo(file.BaseStream);
                 }
-
-                mciSendString($@"open {filePath} type waveaudio alias {sound.Key}", null, 0, IntPtr.Zero);
             }
+
+            mciSendString($@"open {filePath} type waveaudio alias {sound.Key}", null, 0, IntPtr.Zero);
         }
+    }
 
-        public static void Start()
+    public static void Start()
+    {
+        if (!Mute)
         {
-            if (!Mute)
-            {
-                mciSendString(@"stop ending", null, 0, IntPtr.Zero);
-                mciSendString(@"play intro from 0", null, 0, IntPtr.Zero);
-            }
+            mciSendString(@"stop ending", null, 0, IntPtr.Zero);
+            mciSendString(@"play intro from 0", null, 0, IntPtr.Zero);
         }
+    }
 
-        public static void Clear()
+    public static void Clear()
+    {
+        if (!Mute)
         {
-            if (!Mute)
-            {
-                mciSendString(@"play clean from 0", null, 0, IntPtr.Zero);
-            }
+            mciSendString(@"play clean from 0", null, 0, IntPtr.Zero);
         }
+    }
 
-        public static void Move()
+    public static void Move()
+    {
+        if (!Mute)
         {
-            if (!Mute)
-            {
-                mciSendString(@"play move from 0", null, 0, IntPtr.Zero);
-            }
+            mciSendString(@"play move from 0", null, 0, IntPtr.Zero);
         }
+    }
 
-        public static void Slide()
+    public static void Slide()
+    {
+        if (!Mute)
         {
-            if (!Mute)
-            {
-                mciSendString(@"play run from 0", null, 0, IntPtr.Zero);
-            }
+            mciSendString(@"play run from 0", null, 0, IntPtr.Zero);
         }
+    }
 
-        public static void End()
+    public static void End()
+    {
+        if (!Mute)
         {
-            if (!Mute)
-            {
-                mciSendString(@"stop intro", null, 0, IntPtr.Zero);
-                mciSendString(@"play ending from 0", null, 0, IntPtr.Zero);
-            }
+            mciSendString(@"stop intro", null, 0, IntPtr.Zero);
+            mciSendString(@"play ending from 0", null, 0, IntPtr.Zero);
         }
+    }
 
-        public static void ToggleMute()
+    public static void ToggleMute()
+    {
+        Mute = !Mute;
+
+        if (Mute)
         {
-            Mute = !Mute;
-
-            if (Mute)
-            {
-                StopAll();
-            }
-            else
-            {
-                Dock();
-            }
+            StopAll();
         }
-
-        public static void TurnSoundOn()
+        else
         {
-            Mute = false;
+            Dock();
         }
+    }
 
-        public static void TurnSoundOff()
+    public static void TurnSoundOn()
+    {
+        Mute = false;
+    }
+
+    public static void TurnSoundOff()
+    {
+        Mute = true;
+    }
+
+    public static void Dock()
+    {
+        if (!Mute)
         {
-            Mute = true;
+            mciSendString(@"play dock from 0", null, 0, IntPtr.Zero);
         }
+    }
 
-        public static void Dock()
+    private static void StopAll()
+    {
+        foreach (var sound in _sounds)
         {
-            if (!Mute)
-            {
-                mciSendString(@"play dock from 0", null, 0, IntPtr.Zero);
-            }
-        }
-
-        private static void StopAll()
-        {
-            foreach (var sound in _sounds)
-            {
-                mciSendString($@"stop {sound.Key}", null, 0, IntPtr.Zero);
-            }
+            mciSendString($@"stop {sound.Key}", null, 0, IntPtr.Zero);
         }
     }
 }

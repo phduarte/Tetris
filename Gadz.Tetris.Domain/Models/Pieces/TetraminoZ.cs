@@ -1,56 +1,55 @@
 ﻿using Gadz.Tetris.Domain.Models.Boards;
 
-namespace Gadz.Tetris.Domain.Models.Pieces
+namespace Gadz.Tetris.Domain.Models.Pieces;
+
+/// <summary>
+/// Defines the <see cref="TetraminoZ" />
+/// </summary>
+internal class TetraminoZ : Piece
 {
     /// <summary>
-    /// Defines the <see cref="TetraminoZ" />
+    /// Initializes a new instance of the <see cref="TetraminoZ"/> class.
     /// </summary>
-    internal class TetraminoZ : Piece
+    /// <param name="config">The position<see cref="PieceConfiguration"/></param>
+    public TetraminoZ(Board board, PieceConfiguration config)
+        : base(board, config)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TetraminoZ"/> class.
-        /// </summary>
-        /// <param name="config">The position<see cref="PieceConfiguration"/></param>
-        public TetraminoZ(Board board, PieceConfiguration config)
-            : base(board, config)
-        {
-        }
+    }
 
-        public override Block[] Blocks
+    public override Block[] Blocks
+    {
+        get
         {
-            get
+            var blocks = new Block[4];
+            int x = Position.X, y = Position.Y;
+
+            switch (Rotation)
             {
-                var blocks = new Block[4];
-                int x = Position.X, y = Position.Y;
+                case 0:
+                case 2:
 
-                switch (Rotation)
-                {
-                    case 0:
-                    case 2:
+                    blocks[0] = new Block(x + 1, y, Color);
+                    blocks[1] = new Block(x + 1, y + 1, Color);
+                    blocks[2] = new Block(x, y + 1, Color);
+                    blocks[3] = new Block(x, y + 2, Color);
 
-                        blocks[0] = new Block(x + 1, y, Color);
-                        blocks[1] = new Block(x + 1, y + 1, Color);
-                        blocks[2] = new Block(x, y + 1, Color);
-                        blocks[3] = new Block(x, y + 2, Color);
+                    break;
 
-                        break;
+                case 1:
+                case 3:
 
-                    case 1:
-                    case 3:
+                    blocks[0] = new Block(x, y, Color);
+                    blocks[1] = new Block(x + 1, y, Color);
+                    blocks[2] = new Block(x + 1, y + 1, Color);
+                    blocks[3] = new Block(x + 2, y + 1, Color);
 
-                        blocks[0] = new Block(x, y, Color);
-                        blocks[1] = new Block(x + 1, y, Color);
-                        blocks[2] = new Block(x + 1, y + 1, Color);
-                        blocks[3] = new Block(x + 2, y + 1, Color);
+                    break;
 
-                        break;
-
-                    default:
-                        throw new NotImplementedException($"Rotation {Rotation}");
-                }
-
-                return blocks;
+                default:
+                    throw new NotImplementedException($"Rotation {Rotation}");
             }
+
+            return blocks;
         }
     }
 }

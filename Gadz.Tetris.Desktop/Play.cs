@@ -5,325 +5,324 @@ using Gadz.Tetris.Domain.Models.Pieces;
 using Gadz.Tetris.SoundPlayer;
 using Texto = Gadz.Tetris.Desktop.Textos.Jogo;
 
-namespace Gadz.Tetris.Desktop
+namespace Gadz.Tetris.Desktop;
+
+public partial class Play : Form
 {
-    public partial class Play : Form
+    #region fields
+
+    private Form _baseForm;
+    private static int _index = 0;
+    private readonly TaskScheduler _threadPrincipal;
+    private readonly GameController _controller;
+    private readonly CommandFactory _commandFactory;
+    private const int BLOCK_SIZE = 22;
+    private const string BLOCK_PREFIX = "block";
+
+    private static IDictionary<string, Image> _imageCache = new Dictionary<string, Image> {
+        {string.Empty, Properties.Resources.BLOCK_CLASSIC},
+        {"Transparente", Properties.Resources.BLOCK_CLASSIC},
+        {"Yellow", Properties.Resources.BLOCK_YELLOW},
+        {"Red", Properties.Resources.BLOCK_RED},
+        {"Purple", Properties.Resources.BLOCK_PURPLE},
+        {"Green", Properties.Resources.BLOCK_GREEN},
+        {"Orange", Properties.Resources.BLOCK_ORANGE},
+        {"Blue", Properties.Resources.BLOCK_BLUE },
+        {"Cyan", Properties.Resources.BLOCK_CYAN }
+    };
+
+    #endregion
+
+    public Play(Form formBase)
     {
-        #region fields
+        _baseForm = formBase;
+        _threadPrincipal = TaskScheduler.FromCurrentSynchronizationContext();
+        _controller = GameController.Create(10, 20);
+        _commandFactory = new CommandFactory(_controller);
 
-        private Form _baseForm;
-        private static int _index = 0;
-        private readonly TaskScheduler _threadPrincipal;
-        private readonly GameController _controller;
-        private readonly CommandFactory _commandFactory;
-        private const int BLOCK_SIZE = 22;
-        private const string BLOCK_PREFIX = "block";
+        InitializeComponent();
+        HidePausedScreen();
+        SetScreenText();
+        ListenEvents();
 
-        private static IDictionary<string, Image> _imageCache = new Dictionary<string, Image> {
-            {string.Empty, Properties.Resources.BLOCK_CLASSIC},
-            {"Transparente", Properties.Resources.BLOCK_CLASSIC},
-            {"Yellow", Properties.Resources.BLOCK_YELLOW},
-            {"Red", Properties.Resources.BLOCK_RED},
-            {"Purple", Properties.Resources.BLOCK_PURPLE},
-            {"Green", Properties.Resources.BLOCK_GREEN},
-            {"Orange", Properties.Resources.BLOCK_ORANGE},
-            {"Blue", Properties.Resources.BLOCK_BLUE },
-            {"Cyan", Properties.Resources.BLOCK_CYAN }
+        if (!Program.ClassicMode)
+        {
+            mainBoardPanel.BackgroundImage = Properties.Resources.BACKGROUND_TETRIS;
+            BackColor = Color.White;
+        }
+
+        Start();
+    }
+
+    private void Start()
+    {
+        _controller.Start();
+        DrawScreen();
+        PaintScreen();
+        PlayStartSound();
+    }
+
+    private void SetScreenText()
+    {
+        label2.Text = Texto.Pontuacao.ToUpper();
+        label3.Text = Texto.Tempo.ToUpper();
+        label4.Text = Texto.Linhas.ToUpper();
+        label5.Text = Texto.Nivel.ToUpper();
+        label6.Text = Texto.TaxaTetris.ToUpper();
+        label8.Text = Texto.Proximo.ToUpper();
+        lbPause.Text = Texto.Pausado;
+        lbPauseDescription.Text = Texto.PressioneEnterParaContinuar;
+        Text = Texto.Nome.ToUpper();
+    }
+
+    private void PlayStartSound()
+    {
+        SoundPlayerAdapter.Start();
+    }
+
+    private void ListenEvents()
+    {
+        _controller.OnRefresh += PaintScreen;
+        _controller.OnRefresh += UpdateScreenTextAsync;
+        _controller.OnFinish += ExitAsync;
+        _controller.OnLose += ShowGameOver;
+        _controller.OnLose += SoundPlayerAdapter.End;
+
+        _controller.OnClear += PaintScreen;
+        _controller.OnClear += SoundPlayerAdapter.Clear;
+
+        _controller.OnMove += SoundPlayerAdapter.Move;
+        _controller.OnSlide += SoundPlayerAdapter.Slide;
+        _controller.OnDrop += SoundPlayerAdapter.Dock;
+        _controller.OnDrop += () =>
+        {
+            this.ShakeDown(2);
         };
 
-        #endregion
+        _controller.OnPause += ShowPausedScreen;
+        _controller.OnContinue += HidePausedScreen;
+    }
 
-        public Play(Form formBase)
+    private async void UpdateScreenTextAsync()
+    {
+        await Task.Factory.StartNew(() =>
         {
-            _baseForm = formBase;
-            _threadPrincipal = TaskScheduler.FromCurrentSynchronizationContext();
-            _controller = GameController.Create(10, 20);
-            _commandFactory = new CommandFactory(_controller);
+            lbLevel.Text = _controller.Level.ToString();
+            lbPoints.Text = _controller.Score.ToString();
+            lbTime.Text = _controller.Duration.ToString(@"hh\:mm\:ss");
+            lbLines.Text = _controller.Lines.ToString();
+            lbTetris.Text = _controller.TetrisRate.ToString("P0");
+        }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
+    }
 
-            InitializeComponent();
-            HidePausedScreen();
-            SetScreenText();
-            ListenEvents();
+    private async void ShowGameOver()
+    {
+        await Task.Factory.StartNew(() =>
+        {
+            MouseMove -= Play_MouseMove;
+            Hide();
+            new GameOver().ShowDialog();
+            new Deserve(_controller.Board.Stats).ShowDialog();
+            Close();
+        }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
+    }
 
-            if (!Program.ClassicMode)
+    private async void ExitAsync()
+    {
+        await Task.Factory.StartNew(() =>
+        {
+            MouseMove -= Play_MouseMove;
+            new Deserve(_controller.Board.Stats).ShowDialog();
+            Close();
+        }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
+    }
+
+    private void DrawScreen()
+    {
+        mainBoardPanel.Controls.Clear();
+        mainBoardPanel.Width = _controller.BoardWidth * BLOCK_SIZE;
+        mainBoardPanel.Height = _controller.BoardHeight * BLOCK_SIZE;
+
+        for (int y = 0; y < _controller.BoardHeight; y++)
+        {
+            for (int x = 0; x < _controller.BoardWidth; x++)
             {
-                mainBoardPanel.BackgroundImage = Properties.Resources.BACKGROUND_TETRIS;
-                BackColor = Color.White;
+                mainBoardPanel.Controls.Add(CreateBlock(x, y, string.Empty));
             }
-
-            Start();
         }
 
-        private void Start()
+        nextBlockPanel.Controls.Clear();
+
+        for (int y = 0; y < 4; y++)
         {
-            _controller.Start();
-            DrawScreen();
-            PaintScreen();
-            PlayStartSound();
-        }
-
-        private void SetScreenText()
-        {
-            label2.Text = Texto.Pontuacao.ToUpper();
-            label3.Text = Texto.Tempo.ToUpper();
-            label4.Text = Texto.Linhas.ToUpper();
-            label5.Text = Texto.Nivel.ToUpper();
-            label6.Text = Texto.TaxaTetris.ToUpper();
-            label8.Text = Texto.Proximo.ToUpper();
-            lbPause.Text = Texto.Pausado;
-            lbPauseDescription.Text = Texto.PressioneEnterParaContinuar;
-            Text = Texto.Nome.ToUpper();
-        }
-
-        private void PlayStartSound()
-        {
-            SoundPlayerAdapter.Start();
-        }
-
-        private void ListenEvents()
-        {
-            _controller.OnRefresh += PaintScreen;
-            _controller.OnRefresh += UpdateScreenTextAsync;
-            _controller.OnFinish += ExitAsync;
-            _controller.OnLose += ShowGameOver;
-            _controller.OnLose += SoundPlayerAdapter.End;
-
-            _controller.OnClear += PaintScreen;
-            _controller.OnClear += SoundPlayerAdapter.Clear;
-
-            _controller.OnMove += SoundPlayerAdapter.Move;
-            _controller.OnSlide += SoundPlayerAdapter.Slide;
-            _controller.OnDrop += SoundPlayerAdapter.Dock;
-            _controller.OnDrop += () =>
+            for (int x = 0; x < 4; x++)
             {
-                this.ShakeDown(2);
-            };
-
-            _controller.OnPause += ShowPausedScreen;
-            _controller.OnContinue += HidePausedScreen;
+                nextBlockPanel.Controls.Add(CreateBlock(x, y, string.Empty));
+            }
         }
+    }
 
-        private async void UpdateScreenTextAsync()
+    private void PaintScreen()
+    {
+        PaintBoardAsync();
+        PaintNextPieceAsync();
+    }
+
+    private async void PaintNextPieceAsync()
+    {
+        await Task.Factory.StartNew(() =>
         {
-            await Task.Factory.StartNew(() =>
+            ClearNextPiece();
+            PaintBlock(_controller.GetNextBlocks(), nextBlockPanel);
+        });
+    }
+
+    private void ClearNextPiece()
+    {
+        for (int y = 0; y < 4; y++)
+        {
+            for (int x = 0; x < 4; x++)
             {
-                lbLevel.Text = _controller.Level.ToString();
-                lbPoints.Text = _controller.Score.ToString();
-                lbTime.Text = _controller.Duration.ToString(@"hh\:mm\:ss");
-                lbLines.Text = _controller.Lines.ToString();
-                lbTetris.Text = _controller.TetrisRate.ToString("P0");
-            }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
+                PaintBlock(x, y, string.Empty, nextBlockPanel);
+            }
         }
+    }
 
-        private async void ShowGameOver()
+    private async void PaintBoardAsync()
+    {
+        await Task.Factory.StartNew(() =>
         {
-            await Task.Factory.StartNew(() =>
-            {
-                MouseMove -= Play_MouseMove;
-                Hide();
-                new GameOver().ShowDialog();
-                new Deserve(_controller.Board.Stats).ShowDialog();
-                Close();
-            }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
-        }
-
-        private async void ExitAsync()
-        {
-            await Task.Factory.StartNew(() =>
-            {
-                MouseMove -= Play_MouseMove;
-                new Deserve(_controller.Board.Stats).ShowDialog();
-                Close();
-            }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
-        }
-
-        private void DrawScreen()
-        {
-            mainBoardPanel.Controls.Clear();
-            mainBoardPanel.Width = _controller.BoardWidth * BLOCK_SIZE;
-            mainBoardPanel.Height = _controller.BoardHeight * BLOCK_SIZE;
-
             for (int y = 0; y < _controller.BoardHeight; y++)
             {
                 for (int x = 0; x < _controller.BoardWidth; x++)
                 {
-                    mainBoardPanel.Controls.Add(CreateBlock(x, y, string.Empty));
+                    PaintBlock(x, y, _controller.Matrix[x, y].Color.ToString(), mainBoardPanel);
                 }
             }
+        }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
+    }
 
-            nextBlockPanel.Controls.Clear();
-
-            for (int y = 0; y < 4; y++)
-            {
-                for (int x = 0; x < 4; x++)
-                {
-                    nextBlockPanel.Controls.Add(CreateBlock(x, y, string.Empty));
-                }
-            }
-        }
-
-        private void PaintScreen()
+    private static PictureBox CreateBlock(int x, int y, string cor)
+    {
+        return new PictureBox
         {
-            PaintBoardAsync();
-            PaintNextPieceAsync();
-        }
+            Location = new System.Drawing.Point(x * BLOCK_SIZE, y * BLOCK_SIZE),
+            BackgroundImage = GetBackgroundImage(cor),
+            BackgroundImageLayout = ImageLayout.Stretch,
+            Name = BLOCK_PREFIX + (_index++).ToString(),
+            Size = new System.Drawing.Size(BLOCK_SIZE, BLOCK_SIZE),
+            BorderStyle = BorderStyle.None,
+            TabIndex = 0,
+            TabStop = false
+        };
+    }
 
-        private async void PaintNextPieceAsync()
+    private static Image GetBackgroundImage(string cor)
+    {
+        if ("None".Equals(cor) || string.Empty.Equals(cor))
         {
-            await Task.Factory.StartNew(() =>
-            {
-                ClearNextPiece();
-                PaintBlock(_controller.GetNextBlocks(), nextBlockPanel);
-            });
+            return Program.ClassicMode ? Properties.Resources.BLOCK_CLASSIC_FADED : null;
         }
-
-        private void ClearNextPiece()
+        else
         {
-            for (int y = 0; y < 4; y++)
-            {
-                for (int x = 0; x < 4; x++)
-                {
-                    PaintBlock(x, y, string.Empty, nextBlockPanel);
-                }
-            }
+            return Program.ClassicMode ? Properties.Resources.BLOCK_CLASSIC : _imageCache[cor];
         }
+    }
 
-        private async void PaintBoardAsync()
+    private void PaintBlock(IEnumerable<Block> blocos, Panel panel)
+    {
+        foreach (var bloco in blocos)
         {
-            await Task.Factory.StartNew(() =>
-            {
-                for (int y = 0; y < _controller.BoardHeight; y++)
-                {
-                    for (int x = 0; x < _controller.BoardWidth; x++)
-                    {
-                        PaintBlock(x, y, _controller.Matrix[x, y].Color.ToString(), mainBoardPanel);
-                    }
-                }
-            }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
+            PaintBlock(bloco.X, bloco.Y, bloco.Color.ToString(), panel);
         }
+    }
 
-        private static PictureBox CreateBlock(int x, int y, string cor)
+    private void PaintBlock(int x, int y, string color, Panel panel)
+    {
+        foreach (Control i in panel.Controls)
         {
-            return new PictureBox
-            {
-                Location = new System.Drawing.Point(x * BLOCK_SIZE, y * BLOCK_SIZE),
-                BackgroundImage = GetBackgroundImage(cor),
-                BackgroundImageLayout = ImageLayout.Stretch,
-                Name = BLOCK_PREFIX + (_index++).ToString(),
-                Size = new System.Drawing.Size(BLOCK_SIZE, BLOCK_SIZE),
-                BorderStyle = BorderStyle.None,
-                TabIndex = 0,
-                TabStop = false
-            };
-        }
+            var isSameLocation = i.Location.X == x * BLOCK_SIZE && i.Location.Y == y * BLOCK_SIZE;
+            var isSameBlock = i.Name.StartsWith(BLOCK_PREFIX) && isSameLocation;
 
-        private static Image GetBackgroundImage(string cor)
-        {
-            if ("None".Equals(cor) || string.Empty.Equals(cor))
+            if (isSameBlock)
             {
-                return Program.ClassicMode ? Properties.Resources.BLOCK_CLASSIC_FADED : null;
-            }
-            else
-            {
-                return Program.ClassicMode ? Properties.Resources.BLOCK_CLASSIC : _imageCache[cor];
-            }
-        }
-
-        private void PaintBlock(IEnumerable<Block> blocos, Panel panel)
-        {
-            foreach (var bloco in blocos)
-            {
-                PaintBlock(bloco.X, bloco.Y, bloco.Color.ToString(), panel);
-            }
-        }
-
-        private void PaintBlock(int x, int y, string color, Panel panel)
-        {
-            foreach (Control i in panel.Controls)
-            {
-                var isSameLocation = i.Location.X == x * BLOCK_SIZE && i.Location.Y == y * BLOCK_SIZE;
-                var isSameBlock = i.Name.StartsWith(BLOCK_PREFIX) && isSameLocation;
-
-                if (isSameBlock)
-                {
-                    i.BackColor = Color.Transparent;
-                    i.BackgroundImage = GetBackgroundImage(color);
-                    break;
-                }
-            }
-        }
-
-        private void Jogo_KeyDown(object sender, KeyEventArgs e)
-        {
-            foreach (var cmd in _commandFactory.GetAll((Key)e.KeyCode, e.Control))
-            {
-                cmd.Execute();
+                i.BackColor = Color.Transparent;
+                i.BackgroundImage = GetBackgroundImage(color);
                 break;
             }
         }
+    }
 
-        private void Jogo_FormClosed(object sender, FormClosedEventArgs e)
+    private void Jogo_KeyDown(object sender, KeyEventArgs e)
+    {
+        foreach (var cmd in _commandFactory.GetAll((Key)e.KeyCode, e.Control))
         {
-            _baseForm.Show();
+            cmd.Execute();
+            break;
         }
+    }
 
-        private void Jogo_Load(object sender, EventArgs e)
+    private void Jogo_FormClosed(object sender, FormClosedEventArgs e)
+    {
+        _baseForm.Show();
+    }
+
+    private void Jogo_Load(object sender, EventArgs e)
+    {
+        Cursor.Hide();
+    }
+
+    private void HideMouseWhenIsOverScreen()
+    {
+        var rect = new Rectangle
+        {
+            X = Left,
+            Width = Width,
+            Y = Top,
+            Height = Height
+        };
+
+        Cursor.Show();
+
+        if (CursorIsOverScreen(rect))
         {
             Cursor.Hide();
         }
+    }
 
-        private void HideMouseWhenIsOverScreen()
+    private static bool CursorIsOverScreen(Rectangle rectangle)
+    {
+        var y = Cursor.Position.Y;
+        var x = Cursor.Position.X;
+
+        return (y >= rectangle.Top && y <= rectangle.Bottom) && (x >= rectangle.Left && x <= rectangle.Right);
+    }
+
+    private void Play_MouseMove(object sender, MouseEventArgs e)
+    {
+        HideMouseWhenIsOverScreen();
+    }
+
+    private void Play_Deactivate(object sender, EventArgs e)
+    {
+        if (_controller.Playing)
         {
-            var rect = new Rectangle
-            {
-                X = Left,
-                Width = Width,
-                Y = Top,
-                Height = Height
-            };
-
-            Cursor.Show();
-
-            if (CursorIsOverScreen(rect))
-            {
-                Cursor.Hide();
-            }
+            _controller.Pause();
+            ShowPausedScreen();
         }
+    }
 
-        private static bool CursorIsOverScreen(Rectangle rectangle)
-        {
-            var y = Cursor.Position.Y;
-            var x = Cursor.Position.X;
+    private void ShowPausedScreen()
+    {
+        picPause.Left = 0;
+        picPause.Top = 0;
+        lbPause.Visible = picPause.Visible = true;
+    }
 
-            return (y >= rectangle.Top && y <= rectangle.Bottom) && (x >= rectangle.Left && x <= rectangle.Right);
-        }
-
-        private void Play_MouseMove(object sender, MouseEventArgs e)
-        {
-            HideMouseWhenIsOverScreen();
-        }
-
-        private void Play_Deactivate(object sender, EventArgs e)
-        {
-            if (_controller.Playing)
-            {
-                _controller.Pause();
-                ShowPausedScreen();
-            }
-        }
-
-        private void ShowPausedScreen()
-        {
-            picPause.Left = 0;
-            picPause.Top = 0;
-            lbPause.Visible = picPause.Visible = true;
-        }
-
-        private void HidePausedScreen()
-        {
-            picPause.Left = 0;
-            picPause.Top = 0;
-            lbPause.Visible = picPause.Visible = false;
-        }
+    private void HidePausedScreen()
+    {
+        picPause.Left = 0;
+        picPause.Top = 0;
+        lbPause.Visible = picPause.Visible = false;
     }
 }

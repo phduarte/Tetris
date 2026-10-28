@@ -1,9 +1,8 @@
-﻿namespace Gadz.Tetris.Domain.Models
+﻿namespace Gadz.Tetris.Domain.Models;
+
+/// <summary>
+/// Um repositório do Modelo do Domínio.
+/// </summary>
+public interface IRepository
 {
-    /// <summary>
-    /// Um repositório do Modelo do Domínio.
-    /// </summary>
-    public interface IRepository
-    {
-    }
 }
