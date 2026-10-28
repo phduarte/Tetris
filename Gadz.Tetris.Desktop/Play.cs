@@ -174,7 +174,7 @@ public partial class Play : Form
         {
             ClearNextPiece();
             PaintBlock(_controller.GetNextBlocks(), nextBlockPanel);
-        });
+        }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
     }
 
     private void ClearNextPiece()
