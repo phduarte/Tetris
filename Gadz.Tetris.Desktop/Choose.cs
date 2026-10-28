@@ -14,7 +14,7 @@ public partial class Choose : Form
 
     private void button1_Click(object sender, EventArgs e)
     {
-        Program.ClassicMode = "BRICK GAME".Equals(cmbEstilo.SelectedItem.ToString(), StringComparison.InvariantCultureIgnoreCase);
+        Program.ClassicMode = "BRICK GAME".Equals(cmbEstilo.SelectedItem?.ToString(), StringComparison.InvariantCultureIgnoreCase);
 
         new Play(this).Show();
         Hide();

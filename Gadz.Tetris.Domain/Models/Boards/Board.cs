@@ -137,47 +137,47 @@ public class Board : Entity
     /// <summary>
     /// Defines the OnRefresh
     /// </summary>
-    public event GameActionEventHandler OnRefresh;
+    public event GameActionEventHandler? OnRefresh;
 
     /// <summary>
     /// Defines the OnFinish
     /// </summary>
-    public event GameActionEventHandler OnFinish;
+    public event GameActionEventHandler? OnFinish;
 
     /// <summary>
     /// Defines the OnClear
     /// </summary>
-    public event GameActionEventHandler OnClear;
+    public event GameActionEventHandler? OnClear;
 
     /// <summary>
     /// Defines the OnMove
     /// </summary>
-    public event GameActionEventHandler OnMove;
+    public event GameActionEventHandler? OnMove;
 
     /// <summary>
     /// Defines the OnSlide
     /// </summary>
-    public event GameActionEventHandler OnSlide;
+    public event GameActionEventHandler? OnSlide;
 
     /// <summary>
     /// Defines the OnDrop
     /// </summary>
-    public event GameActionEventHandler OnDrop;
+    public event GameActionEventHandler? OnDrop;
 
     /// <summary>
     /// Defines the OnPause
     /// </summary>
-    public event GameActionEventHandler OnPause;
+    public event GameActionEventHandler? OnPause;
 
     /// <summary>
     /// Defines the OnContinue
     /// </summary>
-    public event GameActionEventHandler OnContinue;
+    public event GameActionEventHandler? OnContinue;
 
     /// <summary>
     /// Defines the OnContinue
     /// </summary>
-    public event GameActionEventHandler OnLose;
+    public event GameActionEventHandler? OnLose;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Board"/> class.
@@ -194,6 +194,8 @@ public class Board : Entity
         State = new PausedState();
         Matrix = new Block[width, height];
         Record = _repository.MaxScore();
+        CurrentPiece = CreateRandomBlock();
+        NextPiece = CreateRandomBlock();
     }
 
     /// <summary>

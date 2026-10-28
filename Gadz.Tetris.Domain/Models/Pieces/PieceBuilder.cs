@@ -25,7 +25,7 @@ public class PieceBuilder
     /// <summary>
     /// Defines the _board
     /// </summary>
-    private Board _board;
+    private Board? _board;
 
     /// <summary>
     /// 
@@ -82,31 +82,18 @@ public class PieceBuilder
     /// <returns>The <see cref="Piece"/></returns>
     public Piece Build()
     {
-        switch (_pieceType)
+        var board = _board ?? throw new InvalidOperationException($"Informe o tabuleiro com {nameof(OnBoard)} antes de construir a peça.");
+
+        return _pieceType switch
         {
-            case PieceType.T:
-                return new TetraminoT(_board, Configuration);
-
-            case PieceType.O:
-                return new TetraminoO(_board, Configuration);
-
-            case PieceType.I:
-                return new TetraminoI(_board, Configuration);
-
-            case PieceType.L:
-                return new TetraminoL(_board, Configuration);
-
-            case PieceType.J:
-                return new TetraminoJ(_board, Configuration);
-
-            case PieceType.S:
-                return new TetraminoS(_board, Configuration);
-
-            case PieceType.Z:
-                return new TetraminoZ(_board, Configuration);
-
-            default:
-                throw new NotImplementedException();
-        }
+            PieceType.T => new TetraminoT(board, Configuration),
+            PieceType.O => new TetraminoO(board, Configuration),
+            PieceType.I => new TetraminoI(board, Configuration),
+            PieceType.L => new TetraminoL(board, Configuration),
+            PieceType.J => new TetraminoJ(board, Configuration),
+            PieceType.S => new TetraminoS(board, Configuration),
+            PieceType.Z => new TetraminoZ(board, Configuration),
+            _ => throw new NotImplementedException()
+        };
     }
 }

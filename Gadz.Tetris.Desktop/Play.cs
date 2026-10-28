@@ -217,7 +217,7 @@ public partial class Play : Form
         };
     }
 
-    private static Image GetBackgroundImage(string cor)
+    private static Image? GetBackgroundImage(string cor)
     {
         if ("None".Equals(cor) || string.Empty.Equals(cor))
         {
@@ -298,7 +298,7 @@ public partial class Play : Form
         return (y >= rectangle.Top && y <= rectangle.Bottom) && (x >= rectangle.Left && x <= rectangle.Right);
     }
 
-    private void Play_MouseMove(object sender, MouseEventArgs e)
+    private void Play_MouseMove(object? sender, MouseEventArgs e)
     {
         HideMouseWhenIsOverScreen();
     }

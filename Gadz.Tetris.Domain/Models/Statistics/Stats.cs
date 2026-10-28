@@ -148,6 +148,9 @@ public class Stats : Entity
     /// </summary>
     public void Pause()
     {
+        if (!_startTime.HasValue)
+            return;
+
         long milisecondsDuration = DateTime.Now.Ticks - _startTime.Value.Ticks;
         _durationHistory.Add(new KeyValuePair<DateTime, long>(_startTime.Value, milisecondsDuration));
         _startTime = null;

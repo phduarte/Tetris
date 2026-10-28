@@ -20,7 +20,7 @@ public class SoundPlayerAdapter
     };
 
     [DllImport("winmm.dll")]
-    private static extern Int32 mciSendString(string command, StringBuilder buffer, int bufferSize, IntPtr hwndCallback);
+    private static extern Int32 mciSendString(string command, StringBuilder? buffer, int bufferSize, IntPtr hwndCallback);
 
     static SoundPlayerAdapter()
     {

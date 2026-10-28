@@ -149,7 +149,7 @@ public class StatsRepository : IStatsRepository
 
         using (var file = new StreamReader(StatsFilePath))
         {
-            string line = null;
+            string? line;
             while ((line = file.ReadLine()) != null)
             {
                 var stats = Stats.Load(Map(line));
@@ -203,10 +203,8 @@ public class StatsRepository : IStatsRepository
 
         if (!fi.Exists)
         {
-            if (!fi.Directory.Exists)
-                fi.Directory.Create();
-
-            fi.Create();
+            fi.Directory?.Create();
+            fi.Create().Dispose();
         }
 
         return fi.Exists;

@@ -35,7 +35,7 @@ public struct Point
     /// </summary>
     /// <param name="obj">The obj<see cref="object"/></param>
     /// <returns>The <see cref="bool"/></returns>
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj is Point u)
         {

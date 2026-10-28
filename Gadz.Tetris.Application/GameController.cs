@@ -19,47 +19,47 @@ public class GameController
     /// <summary>
     /// Ocorre a cada alteração visual, de estado do jogo ou suas estatísticas
     /// </summary>
-    public event GameActionEventHandler OnRefresh;
+    public event GameActionEventHandler? OnRefresh;
 
     /// <summary>
     /// Ocorre quando o jogo é finalizado.
     /// </summary>
-    public event GameActionEventHandler OnFinish;
+    public event GameActionEventHandler? OnFinish;
 
     /// <summary>
     /// Ocorre quando uma linha é destruída
     /// </summary>
-    public event GameActionEventHandler OnClear;
+    public event GameActionEventHandler? OnClear;
 
     /// <summary>
     /// Ocorre quando uma peça é movimentada
     /// </summary>
-    public event GameActionEventHandler OnMove;
+    public event GameActionEventHandler? OnMove;
 
     /// <summary>
     /// Ocorre quando uma peça desliza na tela
     /// </summary>
-    public event GameActionEventHandler OnSlide;
+    public event GameActionEventHandler? OnSlide;
 
     /// <summary>
     /// Ocorre quando uma peça desliza na tela
     /// </summary>
-    public event GameActionEventHandler OnDrop;
+    public event GameActionEventHandler? OnDrop;
 
     /// <summary>
     /// Ocorre quando o jogador pausa o jogo.
     /// </summary>
-    public event GameActionEventHandler OnPause;
+    public event GameActionEventHandler? OnPause;
 
     /// <summary>
     /// Ocorre quando o jogo é reiniciado após estar pausado.
     /// </summary>
-    public event GameActionEventHandler OnContinue;
+    public event GameActionEventHandler? OnContinue;
 
     /// <summary>
     /// Ocorre quando o jogador perde.
     /// </summary>
-    public event GameActionEventHandler OnLose;
+    public event GameActionEventHandler? OnLose;
 
     /// <summary>
     /// Gets a value indicating whether Playing

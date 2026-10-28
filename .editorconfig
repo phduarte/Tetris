@@ -14,7 +14,7 @@ charset = utf-8-bom
 # Organização
 dotnet_sort_system_directives_first = true
 csharp_style_namespace_declarations = file_scoped:warning
-dotnet_diagnostic.IDE0005.severity = warning
+dotnet_diagnostic.IDE0005.severity = suggestion
 
 # Nomes: campos privados _camelCase, constantes UPPER_SNAKE_CASE (padrão do projeto)
 dotnet_naming_rule.private_fields_underscore.symbols = private_fields
