@@ -297,6 +297,7 @@ public class Board : Entity
         CurrentPiece = CreateRandomBlock();
         NextPiece = CreateRandomBlock();
         Stats.Start();
+        _playedBlocks.Clear();
         ResetMatrix();
         State = new PlayingState();
         RefreshAsync();
@@ -529,35 +530,41 @@ public class Board : Entity
 
         _refreshing = true;
 
-        //o movimento não será válido se as casas horizontais do tabuleiro já estiverem sido percorridas
-        //neste caso, o hogo é finalizado
-        if (!CanMoveDown(CurrentPiece))
+        // o finally garante que a flag seja liberada também quando o jogo termina com Lose()
+        try
         {
-            if (_atingiuTopo)
+            //o movimento não será válido se as casas horizontais do tabuleiro já estiverem sido percorridas
+            //neste caso, o hogo é finalizado
+            if (!CanMoveDown(CurrentPiece))
             {
-                Lose();
-                return;
-            }
-            else
-            {
-                TrocarPecaAtual();
-
                 if (_atingiuTopo)
                 {
                     Lose();
                     return;
                 }
+                else
+                {
+                    TrocarPecaAtual();
+
+                    if (_atingiuTopo)
+                    {
+                        Lose();
+                        return;
+                    }
+                }
             }
+            else
+            {
+                CurrentPiece.MoveDown();
+            }
+
+            ResetMatrix();
+            VerificarSePreencheuLinha();
         }
-        else
+        finally
         {
-            CurrentPiece.MoveDown();
+            _refreshing = false;
         }
-
-        ResetMatrix();
-        VerificarSePreencheuLinha();
-
-        _refreshing = false;
     }
 
     /// <summary>

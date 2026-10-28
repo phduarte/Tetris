@@ -78,6 +78,37 @@ public class TabuleiroTests
     }
 
     /// <summary>
+    /// Depois de perder, reiniciar o jogo volta ao estado <c>Playing</c> com o tabuleiro vazio e a peça descendo.
+    /// </summary>
+    [Test]
+    public void DeveVoltarAJogarAoReiniciarDepoisDePerder()
+    {
+        LoseGame();
+
+        board.Restart();
+        var y = board.CurrentPiece.Position.Y;
+        board.MoveDown();
+
+        Assert.AreEqual("Playing", board.State.ToString());
+        Assert.AreEqual(0, board.Blocks.Count, "Os blocos da partida anterior continuaram no tabuleiro.");
+        Assert.IsTrue(board.CurrentPiece.Position.Y > y, "A peça não desceu após o reinício.");
+    }
+
+    /// <summary>
+    /// Derruba peças na coluna inicial até o jogo acabar.
+    /// </summary>
+    private void LoseGame()
+    {
+        // cada peça ocupa no máximo 4 colunas, então nenhuma linha é completada e a pilha chega ao topo
+        for (var i = 0; i < board.Height && board.IsPlaying; i++)
+        {
+            board.SmashDown();
+        }
+
+        Assert.IsFalse(board.IsPlaying, "O jogo deveria ter terminado.");
+    }
+
+    /// <summary>
     /// Cria uma peça no tabuleiro do teste.
     /// </summary>
     /// <param name="type">O tipo da peça.</param>
