@@ -91,5 +91,5 @@ Desktop ──► Application ──► Domain
 
 - Os testes usam o `StatsRepository` real e gravam em `%USERPROFILE%\Tetris\stats.mc`.
 - `DeveGuardarORecordeMaximo` depende de haver um recorde > 0 salvo nesse arquivo; por isso o CI o exclui com `--filter`.
-- `PauseCommand` e `ContinueCommand` usam a mesma tecla (Enter), mas `Play.Jogo_KeyDown` executa só o primeiro comando que casar (ordem do `CommandFactory`), então hoje o `ContinueCommand` nunca é acionado e `Board.Pause()` não consulta `State.CanPause`.
+- `Play.Jogo_KeyDown` executa só o primeiro comando que casar com a tecla (ordem do `CommandFactory`); por isso cada tecla deve ter um único comando — o Enter usa `TogglePauseCommand`, que consulta `CanPause`/`CanContinue` no estado.
 - `SoundPlayerAdapter` e `StatsRepository` são estáticos/têm construtor estático e estão marcados com `[ExcludeFromCodeCoverage]`.
