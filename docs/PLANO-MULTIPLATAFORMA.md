@@ -35,7 +35,7 @@ O `Board.RefreshAsync()` cria uma thread de background. O WebAssembly roda numa 
 
 ### 2. A Application está presa à infraestrutura do Windows
 
-- `GameController.Create` faz `new StatsRepository()`, que grava em arquivo. Relacionada: [#53](https://github.com/phduarte/Tetris/issues/53) ✅ — já existe a sobrecarga `Create(width, height, IStatsRepository)`, mas a versão sem repositório ainda cria o `StatsRepository`.
+- ~~`GameController.Create` faz `new StatsRepository()`, que grava em arquivo.~~ ✅ [#84](https://github.com/phduarte/Tetris/issues/84): `Create(width, height, IStatsRepository, ISoundPlayer)`; a `Application` referencia só o `Domain`.
 - ~~`ToggleMuteCommand` chama o `SoundPlayerAdapter` estático, que usa `winmm.dll`.~~ ✅ [#83](https://github.com/phduarte/Tetris/issues/83): `ISoundPlayer` na `Application`; o Desktop cria o `SoundPlayerAdapter` e o passa ao `Create`.
 
 Proposta: criar a interface `ISoundPlayer` na `Application` (som não é regra de jogo, então não vai no `Domain`) e mudar a assinatura para `GameController.Create(width, height, IStatsRepository, ISoundPlayer)`. A `Application` deixa de referenciar `Data` e `SoundPlayer`.
@@ -47,7 +47,7 @@ Proposta: criar a interface `ISoundPlayer` na `Application` (som não é regra d
 | Desktop | `StatsRepository` (arquivo `stats.mc`) | `SoundPlayerAdapter` (winmm) |
 | Web | `LocalStorageStatsRepository` (localStorage/IndexedDB) | `WebAudioSoundPlayer` (JS interop) |
 
-⚠️ **Decisão pendente.** Isso muda duas regras do `CLAUDE.md`: "a Application é o único ponto que monta o domínio com a infraestrutura" e "não acesse `Gadz.Tetris.Data` a partir do Desktop". A proposta é a Desktop referenciar `Data` e `SoundPlayer` **só para montar as dependências**, no `Program.cs`. Se aprovada, o `CLAUDE.md` precisa ser atualizado.
+✅ **Decidido (#84).** O Desktop referencia `Data` e `SoundPlayer` **só para montar as dependências**, no `Program.cs`. O `CLAUDE.md` foi atualizado (diagrama, tabela de projetos e regra 3).
 
 ### Ajustes menores
 

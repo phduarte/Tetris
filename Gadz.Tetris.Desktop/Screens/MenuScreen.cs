@@ -146,7 +146,7 @@ internal sealed class MenuScreen : ConsoleScreen
     /// <param name="frame">O aparelho.</param>
     public MenuScreen(ConsoleFrame frame) : base(frame)
     {
-        _nextGame = PlayScreen.CreateGame(frame.Sound);
+        _nextGame = PlayScreen.CreateGame(frame);
         KeyBindings = new Dictionary<Keys, Action>
         {
             [Keys.Left] = ToggleSkin,

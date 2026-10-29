@@ -2,6 +2,7 @@
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using Gadz.Tetris.Application;
+using Gadz.Tetris.Domain.Models.Statistics;
 using Gadz.Tetris.Desktop.Screens;
 using Texto = Gadz.Tetris.Desktop.Textos.Jogo;
 
@@ -187,9 +188,11 @@ internal sealed class ConsoleFrame : Form
     /// Monta o aparelho e liga no menu.
     /// </summary>
     /// <param name="sound">Os sons do aparelho, usados por todas as telas e partidas.</param>
-    public ConsoleFrame(ISoundPlayer sound)
+    /// <param name="repository">Onde as estatísticas das partidas são guardadas.</param>
+    public ConsoleFrame(ISoundPlayer sound, IStatsRepository repository)
     {
         Sound = sound;
+        Repository = repository;
         SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint, true);
         FormBorderStyle = FormBorderStyle.None;
         AutoScaleMode = AutoScaleMode.None;
@@ -210,6 +213,11 @@ internal sealed class ConsoleFrame : Form
     /// Os sons do aparelho. Uma única instância, para o som desligado valer em todas as telas e partidas.
     /// </summary>
     public ISoundPlayer Sound { get; }
+
+    /// <summary>
+    /// Onde as estatísticas das partidas são guardadas; repassado ao <see cref="GameController"/> de cada partida.
+    /// </summary>
+    public IStatsRepository Repository { get; }
 
     /// <summary>
     /// O estilo do LCD, escolhido no menu e aplicado a todas as telas.

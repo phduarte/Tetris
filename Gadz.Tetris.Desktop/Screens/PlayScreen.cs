@@ -226,9 +226,9 @@ internal sealed class PlayScreen : ConsoleScreen
     /// <summary>
     /// Cria uma partida no tamanho padrão.
     /// </summary>
-    /// <param name="sound">Os sons do aparelho.</param>
+    /// <param name="frame">O aparelho, que fornece o repositório e os sons.</param>
     /// <returns>A partida, ainda não iniciada.</returns>
-    public static GameController CreateGame(ISoundPlayer sound) => GameController.Create(BOARD_WIDTH, BOARD_HEIGHT, null, sound);
+    public static GameController CreateGame(ConsoleFrame frame) => GameController.Create(BOARD_WIDTH, BOARD_HEIGHT, frame.Repository, frame.Sound);
 
     /// <summary>
     /// Começa a partida e passa a ouvir os eventos dela.

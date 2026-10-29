@@ -1,5 +1,4 @@
-﻿using Gadz.Tetris.Data;
-using Gadz.Tetris.Domain;
+﻿using Gadz.Tetris.Domain;
 using Gadz.Tetris.Domain.Models;
 using Gadz.Tetris.Domain.Models.Boards;
 using Gadz.Tetris.Domain.Models.Pieces;
@@ -9,8 +8,8 @@ namespace Gadz.Tetris.Application;
 
 /// <summary>
 /// Controlador do jogo (Facade): o único ponto de contato da aplicação cliente com o jogo.
-/// <para>Monta o domínio com a infraestrutura, repassa comandos, consultas e eventos do tabuleiro
-/// e mantém o relógio que desce a peça durante a partida.</para>
+/// <para>Monta o domínio com a infraestrutura recebida da interface cliente (repositório e som), repassa comandos,
+/// consultas e eventos do tabuleiro e mantém o relógio que desce a peça durante a partida.</para>
 /// </summary>
 public class GameController
 {
@@ -204,13 +203,13 @@ public class GameController
     /// </summary>
     /// <param name="width">Largura do tabuleiro</param>
     /// <param name="height">Altura do tabuleiro</param>
-    /// <param name="repository">Repositório das estatísticas; se nulo, usa o arquivo em disco (<see cref="StatsRepository"/>)</param>
+    /// <param name="repository">Repositório das estatísticas, na implementação da interface cliente (ex.: arquivo em disco no Desktop)</param>
     /// <param name="soundPlayer">Os sons da partida, na implementação da interface cliente</param>
     /// <returns>Uma instância do Controlador do Jogo</returns>
     /// <exception cref="ArgumentException">Se a largura ou a altura for menor que 10.</exception>
-    public static GameController Create(int width, int height, IStatsRepository? repository, ISoundPlayer soundPlayer)
+    public static GameController Create(int width, int height, IStatsRepository repository, ISoundPlayer soundPlayer)
     {
-        return new GameController(width, height, repository ?? new StatsRepository(), soundPlayer, null);
+        return new GameController(width, height, repository, soundPlayer, null);
     }
 
     /// <summary>

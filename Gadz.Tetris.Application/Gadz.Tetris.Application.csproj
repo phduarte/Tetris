@@ -5,7 +5,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Gadz.Tetris.Data\Gadz.Tetris.Data.csproj" />
 	  <ProjectReference Include="..\Gadz.Tetris.Domain\Gadz.Tetris.Domain.csproj" />
 	</ItemGroup>
 
