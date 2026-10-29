@@ -26,12 +26,20 @@ public class CommandFactory(GameController gameController)
     ];
 
     /// <summary>
+    /// Os comandos associados a um toque na tecla (não uma repetição), na ordem de registro.
+    /// </summary>
+    /// <param name="key">A tecla pressionada.</param>
+    /// <param name="control">Se a tecla Ctrl estava pressionada.</param>
+    /// <returns>Os comandos que casam com a tecla.</returns>
+    public IEnumerable<Command> GetAll(Key key, bool control) => GetAll(key, control, false);
+
+    /// <summary>
     /// Os comandos associados à tecla, na ordem de registro.
     /// </summary>
     /// <param name="key">A tecla pressionada.</param>
     /// <param name="control">Se a tecla Ctrl estava pressionada.</param>
     /// <param name="repeat">Se é uma repetição automática da tecla segurada.</param>
     /// <returns>Os comandos que casam com a tecla.</returns>
-    public IEnumerable<Command> GetAll(Key key, bool control, bool repeat = false)
+    public IEnumerable<Command> GetAll(Key key, bool control, bool repeat)
         => Commands.Where(x => x.Match(key, control, repeat));
 }

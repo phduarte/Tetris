@@ -409,8 +409,10 @@ internal static class ControlPanel
     /// A cor com o brilho multiplicado pelo fator (acima de 1 clareia, abaixo escurece).
     /// </summary>
     private static Color Shade(Color color, float factor)
-    {
-        int Channel(int value) => Math.Min(byte.MaxValue, (int)(value * factor));
-        return Color.FromArgb(color.A, Channel(color.R), Channel(color.G), Channel(color.B));
-    }
+        => Color.FromArgb(color.A, ShadeChannel(color.R, factor), ShadeChannel(color.G, factor), ShadeChannel(color.B, factor));
+
+    /// <summary>
+    /// Um canal de cor (0–255) multiplicado pelo fator, sem passar de 255.
+    /// </summary>
+    private static int ShadeChannel(int value, float factor) => Math.Min(byte.MaxValue, (int)(value * factor));
 }

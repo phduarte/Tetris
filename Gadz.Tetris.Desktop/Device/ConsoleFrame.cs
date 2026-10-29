@@ -259,6 +259,7 @@ internal sealed class ConsoleFrame : Form
     /// <param name="e">Dados da pintura.</param>
     protected override void OnPaintBackground(PaintEventArgs e)
     {
+        // vazio de propósito: o OnPaint cobre a janela inteira, e apagar o fundo antes faria a tela piscar
     }
 
     /// <summary>
