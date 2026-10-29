@@ -2,7 +2,8 @@
 
 /// <summary>
 /// As estatísticas de uma partida: pontuação, linhas, nível, tempo jogado e contadores.
-/// Concentra as regras de pontuação, de subida de nível e da velocidade de queda.
+/// Concentra as regras de pontuação, de subida de nível e da velocidade de queda;
+/// a contagem do tempo jogado fica no <see cref="PlayClock"/>.
 /// </summary>
 /// <param name="id">A identidade da partida.</param>
 public class Stats(Identity id) : Entity(id)
@@ -68,14 +69,9 @@ public class Stats(Identity id) : Entity(id)
     private const int TETRIS_LINES = 4;
 
     /// <summary>
-    /// Os trechos já jogados (início → duração em ticks); cada pausa fecha um trecho.
+    /// O cronômetro da partida; cada pausa fecha um trecho.
     /// </summary>
-    private IDictionary<DateTime, long> _durationHistory = new Dictionary<DateTime, long>();
-
-    /// <summary>
-    /// Início do trecho em andamento, ou <c>null</c> se a partida estiver pausada ou encerrada.
-    /// </summary>
-    private DateTime? _startTime;
+    private readonly PlayClock _clock = new();
 
     /// <summary>
     /// Linhas removidas desde a última subida de nível.
@@ -120,7 +116,7 @@ public class Stats(Identity id) : Entity(id)
     /// <summary>
     /// Tempo jogado, somando os trechos fechados e o trecho em andamento (sem contar as pausas).
     /// </summary>
-    public TimeSpan Duration => CalculateTime();
+    public TimeSpan Duration => _clock.Elapsed;
 
     /// <summary>
     /// Intervalo, em milissegundos, entre as descidas automáticas da peça.
@@ -161,7 +157,7 @@ public class Stats(Identity id) : Entity(id)
         Speed = record.Speed;
         Moves = record.Moves;
         Blocks = record.Blocks;
-        _durationHistory.Add(DateTime.Now, record.Seconds);
+        _clock = new(TimeSpan.FromTicks(record.Seconds));
     }
 
     /// <summary>
@@ -189,7 +185,7 @@ public class Stats(Identity id) : Entity(id)
     /// </summary>
     public void Start()
     {
-        _startTime = DateTime.Now;
+        _clock.Start();
     }
 
     /// <summary>
@@ -197,12 +193,7 @@ public class Stats(Identity id) : Entity(id)
     /// </summary>
     public void Pause()
     {
-        if (!_startTime.HasValue)
-            return;
-
-        long milisecondsDuration = DateTime.Now.Ticks - _startTime.Value.Ticks;
-        _durationHistory.Add(new KeyValuePair<DateTime, long>(_startTime.Value, milisecondsDuration));
-        _startTime = null;
+        _clock.Stop();
     }
 
     /// <summary>
@@ -210,7 +201,7 @@ public class Stats(Identity id) : Entity(id)
     /// </summary>
     public void Continue()
     {
-        _startTime = DateTime.Now;
+        _clock.Start();
     }
 
     /// <summary>
@@ -218,12 +209,7 @@ public class Stats(Identity id) : Entity(id)
     /// </summary>
     public void Finish()
     {
-        if (_startTime.HasValue)
-        {
-            long milisecondsDuration = DateTime.Now.Ticks - _startTime.Value.Ticks;
-            _durationHistory.Add(new KeyValuePair<DateTime, long>(_startTime.Value, milisecondsDuration));
-            _startTime = null;
-        }
+        _clock.Stop();
     }
 
     /// <summary>
@@ -232,21 +218,6 @@ public class Stats(Identity id) : Entity(id)
     public void IncludeBlock()
     {
         Blocks++;
-    }
-
-    /// <summary>
-    /// Soma o tempo dos trechos fechados e do trecho em andamento.
-    /// </summary>
-    /// <returns>O tempo jogado.</returns>
-    private TimeSpan CalculateTime()
-    {
-        long duracao = 0;
-
-        duracao += _durationHistory.Sum(_ => _.Value);
-        if (_startTime.HasValue)
-            duracao += (DateTime.Now - _startTime.Value).Ticks;
-
-        return new TimeSpan(duracao);
     }
 
     /// <summary>
