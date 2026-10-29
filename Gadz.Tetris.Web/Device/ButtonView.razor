@@ -1,5 +1,5 @@
 <button type="button" class="button @(Button.Big ? "big" : "small") @(Button.Latched ? "latched" : string.Empty)"
-        @onclick="() => Frame.Press(Button.Key)">
+        data-key="@Button.Key" @onclick="() => Frame.Press(Button.Key)">
     <span class="caption">@Button.Caption</span>
     <span class="keycap">@Button.KeyCap</span>
 </button>

@@ -143,6 +143,7 @@ public partial class PlayScreen
         Controller.OnContinue += RepaintAsync;
         Controller.OnFinish += ShowResultAsync;
         Controller.OnLose += StartCurtainAsync;
+        Controller.OnDrop += ShakeDownAsync;
 
         Controller.Start();
     }
@@ -202,6 +203,7 @@ public partial class PlayScreen
         Controller.OnContinue -= RepaintAsync;
         Controller.OnFinish -= ShowResultAsync;
         Controller.OnLose -= StartCurtainAsync;
+        Controller.OnDrop -= ShakeDownAsync;
 
         _leaving.Cancel();
         _leaving.Dispose();
@@ -250,6 +252,11 @@ public partial class PlayScreen
     /// Ao perder, começa a cortina.
     /// </summary>
     private void StartCurtainAsync() => _ = InvokeAsync(RunCurtainAsync);
+
+    /// <summary>
+    /// Sacode o aparelho quando a peça é derrubada.
+    /// </summary>
+    private void ShakeDownAsync() => _ = InvokeAsync(Frame.ShakeDownAsync);
 
     /// <summary>
     /// A cortina sobe (as animações ficam no CSS; aqui só os tempos), a música de fim toca, o GAME OVER aparece

@@ -222,7 +222,9 @@ body {
 .arrow.left::before { border-right-color: var(--dpad-arrow); margin-left: -6px; }
 .arrow.right::before { border-left-color: var(--dpad-arrow); margin-right: -6px; }
 
-.arrow:active:not(:disabled) {
+/* [data-pressed]: a tecla do botão está apertada no teclado (keyboard.js; não é classe porque o Blazor regrava o class) */
+.arrow:active:not(:disabled),
+.arrow[data-pressed]:not(:disabled) {
     filter: brightness(1.3);
 }
 
@@ -295,6 +297,7 @@ body {
 }
 
 .button:active .caption,
+.button[data-pressed] .caption,
 .button.latched .caption {
     transform: translateY(3px);
     box-shadow: 0 0 0 var(--button-shadow);
@@ -590,8 +593,10 @@ kbd {
     gap: calc(var(--cell) * 0.7);
 }
 
+/* a margem à esquerda centraliza melhor o tabuleiro e deixa a coluna das estatísticas mais estreita */
 .board-area {
     position: relative;
+    margin-left: calc(var(--cell) * 1.1);
     padding-right: calc(var(--cell) * 0.4);
     border-right: 2px solid var(--ink);
 }

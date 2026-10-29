@@ -3,7 +3,7 @@
         <div class="dpad">
             @foreach (var (key, area, enabled) in DpadKeys)
             {
-                <button type="button" class="arrow @area" disabled="@(!enabled)" @onclick="() => Frame.Press(key)"></button>
+                <button type="button" class="arrow @area" data-key="@key" disabled="@(!enabled)" @onclick="() => Frame.Press(key)"></button>
             }
         </div>
         <p class="dpad-caption">@Dpad.Label<span class="dpad-hint">@Dpad.Hint</span></p>

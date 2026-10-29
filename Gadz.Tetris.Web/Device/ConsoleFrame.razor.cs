@@ -62,6 +62,26 @@ public partial class ConsoleFrame : IAsyncDisposable
     private IJSObjectReference? _keyboard;
 
     /// <summary>
+    /// A carcaça, sacudida por <see cref="ShakeDownAsync"/>.
+    /// </summary>
+    private ElementReference _console;
+
+    /// <summary>
+    /// O módulo <c>shake.js</c>, importado no primeiro tremor.
+    /// </summary>
+    private IJSObjectReference? _shake;
+
+    /// <summary>
+    /// Sacode o aparelho para baixo (quando a peça é derrubada), como no Desktop.
+    /// </summary>
+    /// <returns>A tarefa do tremor.</returns>
+    public async Task ShakeDownAsync()
+    {
+        _shake ??= await JS.InvokeAsync<IJSObjectReference>("import", "./js/shake.js");
+        await _shake.InvokeVoidAsync("shakeDown", _console);
+    }
+
+    /// <summary>
     /// A chave do estilo escolhido no <c>localStorage</c>, para ele valer na próxima visita.
     /// </summary>
     private const string SKIN_KEY = "gadz-tetris:skin:v1";
@@ -168,6 +188,11 @@ public partial class ConsoleFrame : IAsyncDisposable
         {
             await _keyboard.InvokeVoidAsync("dispose");
             await _keyboard.DisposeAsync();
+        }
+
+        if (_shake is not null)
+        {
+            await _shake.DisposeAsync();
         }
 
         _self?.Dispose();
