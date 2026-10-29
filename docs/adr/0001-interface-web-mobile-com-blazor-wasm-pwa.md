@@ -1,6 +1,6 @@
 # ADR 0001 — Interface Web e Mobile com Blazor WebAssembly instalável como PWA
 
-- **Status:** Proposto
+- **Status:** Aceito (29/10/2026, com a fase 7: #82, #83, #84 e #85)
 - **Data:** 28/10/2026
 - **Decisores:** Paulo Duarte
 - **Detalhes:** [PLANO-MULTIPLATAFORMA.md](../PLANO-MULTIPLATAFORMA.md)

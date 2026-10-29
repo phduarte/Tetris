@@ -30,12 +30,13 @@ O `Board.RefreshAsync()` cria uma thread de background. O WebAssembly roda numa 
 - O `Domain` expõe um `Tick()` (o atual `Checkout()`), e o "relógio" fica fora dele.
 - A `Application` controla o loop com `PeriodicTimer`/`Task.Delay`, que funcionam no WASM.
 - Bônus: os testes de queda e de nível ficam determinísticos, porque dá para chamar `Tick()` direto sem esperar tempo real.
-- Relacionada: [#63](https://github.com/phduarte/Tetris/issues/63) (serializar as mutações do `Board`). ✅ Fechada com um `lock` no `Board`; o loop continua numa `Thread` de background, então mover o relógio para fora segue pendente.
+- Relacionada: [#63](https://github.com/phduarte/Tetris/issues/63) (serializar as mutações do `Board`). ✅ Fechada com um `lock` no `Board`.
+- ✅ [#82](https://github.com/phduarte/Tetris/issues/82): o `Board` expõe `Tick()` e o `GameController` desce a peça com `Task.Delay`, lendo `Stats.Interval` a cada volta.
 
 ### 2. A Application está presa à infraestrutura do Windows
 
-- `GameController.Create` faz `new StatsRepository()`, que grava em arquivo. Relacionada: [#53](https://github.com/phduarte/Tetris/issues/53) ✅ — já existe a sobrecarga `Create(width, height, IStatsRepository)`, mas a versão sem repositório ainda cria o `StatsRepository`.
-- `ToggleMuteCommand` chama o `SoundPlayerAdapter` estático, que usa `winmm.dll`.
+- ~~`GameController.Create` faz `new StatsRepository()`, que grava em arquivo.~~ ✅ [#84](https://github.com/phduarte/Tetris/issues/84): `Create(width, height, IStatsRepository, ISoundPlayer)`; a `Application` referencia só o `Domain`.
+- ~~`ToggleMuteCommand` chama o `SoundPlayerAdapter` estático, que usa `winmm.dll`.~~ ✅ [#83](https://github.com/phduarte/Tetris/issues/83): `ISoundPlayer` na `Application`; o Desktop cria o `SoundPlayerAdapter` e o passa ao `Create`.
 
 Proposta: criar a interface `ISoundPlayer` na `Application` (som não é regra de jogo, então não vai no `Domain`) e mudar a assinatura para `GameController.Create(width, height, IStatsRepository, ISoundPlayer)`. A `Application` deixa de referenciar `Data` e `SoundPlayer`.
 
@@ -46,7 +47,7 @@ Proposta: criar a interface `ISoundPlayer` na `Application` (som não é regra d
 | Desktop | `StatsRepository` (arquivo `stats.mc`) | `SoundPlayerAdapter` (winmm) |
 | Web | `LocalStorageStatsRepository` (localStorage/IndexedDB) | `WebAudioSoundPlayer` (JS interop) |
 
-⚠️ **Decisão pendente.** Isso muda duas regras do `CLAUDE.md`: "a Application é o único ponto que monta o domínio com a infraestrutura" e "não acesse `Gadz.Tetris.Data` a partir do Desktop". A proposta é a Desktop referenciar `Data` e `SoundPlayer` **só para montar as dependências**, no `Program.cs`. Se aprovada, o `CLAUDE.md` precisa ser atualizado.
+✅ **Decidido (#84).** O Desktop referencia `Data` e `SoundPlayer` **só para montar as dependências**, no `Program.cs`. O `CLAUDE.md` foi atualizado (diagrama, tabela de projetos e regra 3).
 
 ### Ajustes menores
 
@@ -54,7 +55,7 @@ Proposta: criar a interface `ISoundPlayer` na `Application` (som não é regra d
 | --- | --- | --- |
 | Teclas | O enum `Key` usa códigos de tecla do Windows. A Web mapeia o `KeyboardEvent.key` do navegador para `Key`, e os botões de toque disparam os mesmos `Key`, reaproveitando o `CommandFactory` sem `switch` | — |
 | Pausa no Enter | Unificar `PauseCommand`/`ContinueCommand` em `TogglePauseCommand` que consulta o State | [#58](https://github.com/phduarte/Tetris/issues/58) ✅ |
-| Textos | Mover `Jogo.resx` e `Jogo-pt.resx` para um projeto compartilhado (ou para a `Application`), para a Web usar as mesmas chaves via `IStringLocalizer` | — |
+| Textos | ✅ `Jogo.resx` e `Jogo.pt.resx` no projeto compartilhado `Gadz.Tetris.Texts`; a Web usará as mesmas chaves via `IStringLocalizer` | [#85](https://github.com/phduarte/Tetris/issues/85) |
 | `Matrix` | Expor uma cópia somente leitura (snapshot) em vez de `Block[,]` mutável | [#61](https://github.com/phduarte/Tetris/issues/61) ✅ |
 | `Board` exposto | O `GameController` não deve expor a entidade `Board` às interfaces | [#65](https://github.com/phduarte/Tetris/issues/65) ✅ |
 

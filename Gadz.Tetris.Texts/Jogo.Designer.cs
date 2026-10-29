@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Gadz.Tetris.Desktop.Textos {
+namespace Gadz.Tetris.Texts {
     using System;
     
     
@@ -22,7 +22,7 @@ namespace Gadz.Tetris.Desktop.Textos {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Jogo {
+    public class Jogo {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,10 +36,10 @@ namespace Gadz.Tetris.Desktop.Textos {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Gadz.Tetris.Desktop.Textos.Jogo", typeof(Jogo).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Gadz.Tetris.Texts.Jogo", typeof(Jogo).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to A Tetris made to study software engineering in a setting everyone knows..
         /// </summary>
-        internal static string AboutText {
+        public static string AboutText {
             get {
                 return ResourceManager.GetString("AboutText", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Help.
         /// </summary>
-        internal static string Ajuda {
+        public static string Ajuda {
             get {
                 return ResourceManager.GetString("Ajuda", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to by gadz.
         /// </summary>
-        internal static string By {
+        public static string By {
             get {
                 return ResourceManager.GetString("By", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Back.
         /// </summary>
-        internal static string CapBack {
+        public static string CapBack {
             get {
                 return ResourceManager.GetString("CapBack", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Continue.
         /// </summary>
-        internal static string CapContinue {
+        public static string CapContinue {
             get {
                 return ResourceManager.GetString("CapContinue", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Done.
         /// </summary>
-        internal static string CapDone {
+        public static string CapDone {
             get {
                 return ResourceManager.GetString("CapDone", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to ▼ Down.
         /// </summary>
-        internal static string CapDown {
+        public static string CapDown {
             get {
                 return ResourceManager.GetString("CapDown", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Drop.
         /// </summary>
-        internal static string CapDrop {
+        public static string CapDrop {
             get {
                 return ResourceManager.GetString("CapDrop", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to License.
         /// </summary>
-        internal static string CapLicense {
+        public static string CapLicense {
             get {
                 return ResourceManager.GetString("CapLicense", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to ◀ ▶ Move · ▲ Rotate.
         /// </summary>
-        internal static string CapMove {
+        public static string CapMove {
             get {
                 return ResourceManager.GetString("CapMove", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Pause.
         /// </summary>
-        internal static string CapPause {
+        public static string CapPause {
             get {
                 return ResourceManager.GetString("CapPause", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Play.
         /// </summary>
-        internal static string CapPlay {
+        public static string CapPlay {
             get {
                 return ResourceManager.GetString("CapPlay", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Quit.
         /// </summary>
-        internal static string CapQuit {
+        public static string CapQuit {
             get {
                 return ResourceManager.GetString("CapQuit", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to ▲ ▼ Scroll.
         /// </summary>
-        internal static string CapScroll {
+        public static string CapScroll {
             get {
                 return ResourceManager.GetString("CapScroll", resourceCulture);
             }
@@ -189,7 +189,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Ctrl + ◀ ▶ slides.
         /// </summary>
-        internal static string CapSlide {
+        public static string CapSlide {
             get {
                 return ResourceManager.GetString("CapSlide", resourceCulture);
             }
@@ -198,7 +198,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Test.
         /// </summary>
-        internal static string CapTest {
+        public static string CapTest {
             get {
                 return ResourceManager.GetString("CapTest", resourceCulture);
             }
@@ -207,7 +207,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to ◀ ▶ Theme.
         /// </summary>
-        internal static string CapTheme {
+        public static string CapTheme {
             get {
                 return ResourceManager.GetString("CapTheme", resourceCulture);
             }
@@ -216,7 +216,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Enter · done.
         /// </summary>
-        internal static string EnterDone {
+        public static string EnterDone {
             get {
                 return ResourceManager.GetString("EnterDone", resourceCulture);
             }
@@ -225,7 +225,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Enter to play.
         /// </summary>
-        internal static string EnterToPlay {
+        public static string EnterToPlay {
             get {
                 return ResourceManager.GetString("EnterToPlay", resourceCulture);
             }
@@ -234,7 +234,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Game over.
         /// </summary>
-        internal static string GameOver {
+        public static string GameOver {
             get {
                 return ResourceManager.GetString("GameOver", resourceCulture);
             }
@@ -243,7 +243,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Drop.
         /// </summary>
-        internal static string HelpHardDrop {
+        public static string HelpHardDrop {
             get {
                 return ResourceManager.GetString("HelpHardDrop", resourceCulture);
             }
@@ -252,7 +252,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Move.
         /// </summary>
-        internal static string HelpMove {
+        public static string HelpMove {
             get {
                 return ResourceManager.GetString("HelpMove", resourceCulture);
             }
@@ -261,7 +261,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Pause / resume.
         /// </summary>
-        internal static string HelpPause {
+        public static string HelpPause {
             get {
                 return ResourceManager.GetString("HelpPause", resourceCulture);
             }
@@ -270,7 +270,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Quit and save.
         /// </summary>
-        internal static string HelpQuit {
+        public static string HelpQuit {
             get {
                 return ResourceManager.GetString("HelpQuit", resourceCulture);
             }
@@ -279,7 +279,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Rotate.
         /// </summary>
-        internal static string HelpRotate {
+        public static string HelpRotate {
             get {
                 return ResourceManager.GetString("HelpRotate", resourceCulture);
             }
@@ -288,7 +288,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Slide to the edge.
         /// </summary>
-        internal static string HelpSlide {
+        public static string HelpSlide {
             get {
                 return ResourceManager.GetString("HelpSlide", resourceCulture);
             }
@@ -297,7 +297,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Move down.
         /// </summary>
-        internal static string HelpSoftDrop {
+        public static string HelpSoftDrop {
             get {
                 return ResourceManager.GetString("HelpSoftDrop", resourceCulture);
             }
@@ -306,7 +306,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Sound on / off.
         /// </summary>
-        internal static string HelpSound {
+        public static string HelpSound {
             get {
                 return ResourceManager.GetString("HelpSound", resourceCulture);
             }
@@ -315,7 +315,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to How to play.
         /// </summary>
-        internal static string HowToPlay {
+        public static string HowToPlay {
             get {
                 return ResourceManager.GetString("HowToPlay", resourceCulture);
             }
@@ -324,7 +324,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Any key.
         /// </summary>
-        internal static string KeyAny {
+        public static string KeyAny {
             get {
                 return ResourceManager.GetString("KeyAny", resourceCulture);
             }
@@ -333,7 +333,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Ctrl.
         /// </summary>
-        internal static string KeyCtrl {
+        public static string KeyCtrl {
             get {
                 return ResourceManager.GetString("KeyCtrl", resourceCulture);
             }
@@ -342,7 +342,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Enter.
         /// </summary>
-        internal static string KeyEnter {
+        public static string KeyEnter {
             get {
                 return ResourceManager.GetString("KeyEnter", resourceCulture);
             }
@@ -351,7 +351,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Esc.
         /// </summary>
-        internal static string KeyEsc {
+        public static string KeyEsc {
             get {
                 return ResourceManager.GetString("KeyEsc", resourceCulture);
             }
@@ -360,7 +360,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to F1.
         /// </summary>
-        internal static string KeyF1 {
+        public static string KeyF1 {
             get {
                 return ResourceManager.GetString("KeyF1", resourceCulture);
             }
@@ -369,7 +369,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to F12.
         /// </summary>
-        internal static string KeyF12 {
+        public static string KeyF12 {
             get {
                 return ResourceManager.GetString("KeyF12", resourceCulture);
             }
@@ -378,7 +378,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Shift.
         /// </summary>
-        internal static string KeyShift {
+        public static string KeyShift {
             get {
                 return ResourceManager.GetString("KeyShift", resourceCulture);
             }
@@ -387,7 +387,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Space.
         /// </summary>
-        internal static string KeySpace {
+        public static string KeySpace {
             get {
                 return ResourceManager.GetString("KeySpace", resourceCulture);
             }
@@ -396,7 +396,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to The level goes up when you reach the line goal (20 at first, +25% each level) and the pieces fall faster..
         /// </summary>
-        internal static string LevelRule {
+        public static string LevelRule {
             get {
                 return ResourceManager.GetString("LevelRule", resourceCulture);
             }
@@ -411,7 +411,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         ///
         ///The above copyright notice [o restante da cadeia de caracteres foi truncado]&quot;;.
         /// </summary>
-        internal static string LicenseText {
+        public static string LicenseText {
             get {
                 return ResourceManager.GetString("LicenseText", resourceCulture);
             }
@@ -420,7 +420,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Lines.
         /// </summary>
-        internal static string Linhas {
+        public static string Linhas {
             get {
                 return ResourceManager.GetString("Linhas", resourceCulture);
             }
@@ -429,7 +429,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to {0} lines.
         /// </summary>
-        internal static string ManyLines {
+        public static string ManyLines {
             get {
                 return ResourceManager.GetString("ManyLines", resourceCulture);
             }
@@ -438,7 +438,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to MIT license.
         /// </summary>
-        internal static string MitLicense {
+        public static string MitLicense {
             get {
                 return ResourceManager.GetString("MitLicense", resourceCulture);
             }
@@ -447,7 +447,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to New record!.
         /// </summary>
-        internal static string NewRecord {
+        public static string NewRecord {
             get {
                 return ResourceManager.GetString("NewRecord", resourceCulture);
             }
@@ -456,7 +456,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Level.
         /// </summary>
-        internal static string Nivel {
+        public static string Nivel {
             get {
                 return ResourceManager.GetString("Nivel", resourceCulture);
             }
@@ -465,7 +465,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Tetris.
         /// </summary>
-        internal static string Nome {
+        public static string Nome {
             get {
                 return ResourceManager.GetString("Nome", resourceCulture);
             }
@@ -474,7 +474,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to {0} line.
         /// </summary>
-        internal static string OneLine {
+        public static string OneLine {
             get {
                 return ResourceManager.GetString("OneLine", resourceCulture);
             }
@@ -483,7 +483,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Pause.
         /// </summary>
-        internal static string Pausado {
+        public static string Pausado {
             get {
                 return ResourceManager.GetString("Pausado", resourceCulture);
             }
@@ -492,7 +492,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Pieces.
         /// </summary>
-        internal static string Pieces {
+        public static string Pieces {
             get {
                 return ResourceManager.GetString("Pieces", resourceCulture);
             }
@@ -501,7 +501,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Points per drop.
         /// </summary>
-        internal static string PointsPerDrop {
+        public static string PointsPerDrop {
             get {
                 return ResourceManager.GetString("PointsPerDrop", resourceCulture);
             }
@@ -510,7 +510,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Score.
         /// </summary>
-        internal static string Pontuacao {
+        public static string Pontuacao {
             get {
                 return ResourceManager.GetString("Pontuacao", resourceCulture);
             }
@@ -519,7 +519,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Enter continues.
         /// </summary>
-        internal static string PressioneEnterParaContinuar {
+        public static string PressioneEnterParaContinuar {
             get {
                 return ResourceManager.GetString("PressioneEnterParaContinuar", resourceCulture);
             }
@@ -528,7 +528,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Any key.
         /// </summary>
-        internal static string PressioneParaContinuar {
+        public static string PressioneParaContinuar {
             get {
                 return ResourceManager.GetString("PressioneParaContinuar", resourceCulture);
             }
@@ -537,7 +537,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Press a key to test.
         /// </summary>
-        internal static string PressKeyToTest {
+        public static string PressKeyToTest {
             get {
                 return ResourceManager.GetString("PressKeyToTest", resourceCulture);
             }
@@ -546,7 +546,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Next.
         /// </summary>
-        internal static string Proximo {
+        public static string Proximo {
             get {
                 return ResourceManager.GetString("Proximo", resourceCulture);
             }
@@ -555,7 +555,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Hi-score.
         /// </summary>
-        internal static string Recorde {
+        public static string Recorde {
             get {
                 return ResourceManager.GetString("Recorde", resourceCulture);
             }
@@ -564,7 +564,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Result.
         /// </summary>
-        internal static string Result {
+        public static string Result {
             get {
                 return ResourceManager.GetString("Result", resourceCulture);
             }
@@ -573,7 +573,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Brick game.
         /// </summary>
-        internal static string SkinBrickGame {
+        public static string SkinBrickGame {
             get {
                 return ResourceManager.GetString("SkinBrickGame", resourceCulture);
             }
@@ -582,7 +582,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Tetris.
         /// </summary>
-        internal static string SkinTetris {
+        public static string SkinTetris {
             get {
                 return ResourceManager.GetString("SkinTetris", resourceCulture);
             }
@@ -591,7 +591,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to About.
         /// </summary>
-        internal static string Sobre {
+        public static string Sobre {
             get {
                 return ResourceManager.GetString("Sobre", resourceCulture);
             }
@@ -600,7 +600,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Off.
         /// </summary>
-        internal static string SomDesligado {
+        public static string SomDesligado {
             get {
                 return ResourceManager.GetString("SomDesligado", resourceCulture);
             }
@@ -609,7 +609,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to On.
         /// </summary>
-        internal static string SomLigado {
+        public static string SomLigado {
             get {
                 return ResourceManager.GetString("SomLigado", resourceCulture);
             }
@@ -618,7 +618,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Sound.
         /// </summary>
-        internal static string Sound {
+        public static string Sound {
             get {
                 return ResourceManager.GetString("Sound", resourceCulture);
             }
@@ -627,7 +627,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Study edition.
         /// </summary>
-        internal static string Subtitle {
+        public static string Subtitle {
             get {
                 return ResourceManager.GetString("Subtitle", resourceCulture);
             }
@@ -636,7 +636,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to DDD|Clean code|SOLID|Design patterns.
         /// </summary>
-        internal static string Tags {
+        public static string Tags {
             get {
                 return ResourceManager.GetString("Tags", resourceCulture);
             }
@@ -645,7 +645,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Tetris.
         /// </summary>
-        internal static string TaxaTetris {
+        public static string TaxaTetris {
             get {
                 return ResourceManager.GetString("TaxaTetris", resourceCulture);
             }
@@ -654,7 +654,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Time.
         /// </summary>
-        internal static string Tempo {
+        public static string Tempo {
             get {
                 return ResourceManager.GetString("Tempo", resourceCulture);
             }
@@ -663,7 +663,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to {0} lines · tetris!.
         /// </summary>
-        internal static string TetrisLines {
+        public static string TetrisLines {
             get {
                 return ResourceManager.GetString("TetrisLines", resourceCulture);
             }
@@ -672,7 +672,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         /// <summary>
         ///   Looks up a localized string similar to Theme.
         /// </summary>
-        internal static string Theme {
+        public static string Theme {
             get {
                 return ResourceManager.GetString("Theme", resourceCulture);
             }

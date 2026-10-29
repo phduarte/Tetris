@@ -34,17 +34,19 @@ The solution started with only two packages, Core and Desktop. Through refactori
 
 ```
 Desktop ──► Application ──► Domain
-                       ├──► Data ──► Domain
-                       └──► SoundPlayer
+   ├──► Data ──► Domain
+   ├──► SoundPlayer ──► Application
+   └──► Texts
 ```
 
 | Project | Responsibility |
 | --- | --- |
 | `Gadz.Tetris.Domain` | Domain model and all game rules (board, pieces, collision, scoring, levels, high score and states). Depends on no other project. |
 | `Gadz.Tetris.Data` | Statistics repository, saved to `%USERPROFILE%\Tetris\stats.mc`. |
-| `Gadz.Tetris.SoundPlayer` | Audio adapter over `winmm.dll`. |
-| `Gadz.Tetris.Application` | `GameController` (facade for the user interfaces) and the keyboard commands. Wires the domain to the infrastructure. |
-| `Gadz.Tetris.Desktop` | WinForms interface: handles device input and gives visual feedback to the player. Holds no game rules. |
+| `Gadz.Tetris.SoundPlayer` | Audio adapter over `winmm.dll`, implementing the `Application`'s `ISoundPlayer`. |
+| `Gadz.Tetris.Texts` | User interface texts in English and Portuguese, shared by the user interfaces. |
+| `Gadz.Tetris.Application` | `GameController` (facade for the user interfaces) and the keyboard commands. Depends only on the domain: it receives the repository and the sound player from its caller. |
+| `Gadz.Tetris.Desktop` | WinForms interface: handles device input and gives visual feedback to the player. Holds no game rules. It is the composition root: `Program.cs` creates the file repository and the Windows sound player. |
 | `Gadz.Tetris.Tests` | NUnit tests for the domain and the `GameController`. |
 
 While modeling the domain, technology neutrality and decoupled responsibilities were essential, so the domain has no links to the infrastructure or interface layers. After all, players must not be able to tamper with the game rules, and the game should not be tied to a single interface. There will probably be versions for other devices, such as mobile. Inside each project, whatever does not need to be seen from outside is hidden with the *internal* and *private* modifiers.

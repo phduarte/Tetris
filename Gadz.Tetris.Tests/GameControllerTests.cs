@@ -1,6 +1,7 @@
 ﻿using Gadz.Tetris.Application;
 using Gadz.Tetris.Application.Commands;
 using Gadz.Tetris.Domain.Models;
+using Gadz.Tetris.Domain.Models.Pieces;
 using Gadz.Tetris.Domain.Models.Statistics;
 using Gadz.Tetris.Tests.Model;
 using NUnit.Framework;
@@ -13,6 +14,11 @@ namespace Gadz.Tetris.Tests;
 public class GameControllerTests
 {
     /// <summary>
+    /// Quanto os testes do relógio esperam: um pouco mais que o intervalo de descida do nível 1 (1000 ms).
+    /// </summary>
+    private const int CLOCK_TIMEOUT_MS = 1500;
+
+    /// <summary>
     /// Controlador 10×20 recriado a cada teste.
     /// </summary>
     private GameController app;
@@ -23,13 +29,19 @@ public class GameControllerTests
     private InMemoryStatsRepository repository;
 
     /// <summary>
-    /// Cria o controlador com o repositório em memória.
+    /// Som de mentira usado pelo controlador, que registra os sons pedidos.
+    /// </summary>
+    private FakeSoundPlayer sound;
+
+    /// <summary>
+    /// Cria o controlador com o repositório em memória e o som de mentira.
     /// </summary>
     [SetUp]
     public void Setup()
     {
         repository = new InMemoryStatsRepository();
-        app = GameController.Create(10, 20, repository);
+        sound = new FakeSoundPlayer();
+        app = GameController.Create(10, 20, repository, sound);
     }
 
     /// <summary>
@@ -49,7 +61,7 @@ public class GameControllerTests
     [Test]
     public void NaoDeveInstanciar()
     {
-        Assert.Throws<ArgumentException>(() => GameController.Create(4, 4));
+        Assert.Throws<ArgumentException>(() => GameController.Create(4, 4, repository, sound));
     }
 
     /// <summary>
@@ -258,7 +270,6 @@ public class GameControllerTests
     {
         app.Start();
         app.RunRight();
-        Thread.Sleep(100);
         Assert.IsTrue(app.CurrentPiecePosition.X > 5);
     }
 
@@ -270,10 +281,48 @@ public class GameControllerTests
     {
         DeveCorrerParaDireita();
         app.RunLeft();
-        Thread.Sleep(100);
 
         // a posição é a origem da forma, que pode ficar em -1 quando a rotação sorteada começa os blocos na coluna 1
         Assert.AreEqual(0, app.GetActualBlocks().Min(b => b.X));
+    }
+
+    /// <summary>
+    /// Depois de iniciar, o relógio do controlador desce a peça sozinho, sem nenhum comando do jogador.
+    /// </summary>
+    [Test]
+    public void DeveDescerAPecaSozinhaDepoisDeIniciar()
+    {
+        // TaskCompletionSource em vez de um evento descartável: o relógio ainda pode disparar OnRefresh depois do teste
+        var descended = new TaskCompletionSource();
+        app.OnRefresh += () =>
+        {
+            if (app.CurrentPiecePosition.Y > 0)
+            {
+                descended.TrySetResult();
+            }
+        };
+
+        app.Start();
+
+        Assert.IsTrue(descended.Task.Wait(CLOCK_TIMEOUT_MS), "A peça não desceu sozinha.");
+        app.Exit();
+    }
+
+    /// <summary>
+    /// Com o jogo pausado, o relógio do controlador não desce a peça.
+    /// </summary>
+    [Test]
+    public void NaoDeveDescerAPecaComOJogoPausado()
+    {
+        app.Start();
+        app.Pause();
+        var y = app.CurrentPiecePosition.Y;
+
+        // espera mais que o intervalo do nível 1, tempo suficiente para um passo do relógio
+        Thread.Sleep(CLOCK_TIMEOUT_MS);
+
+        Assert.AreEqual(y, app.CurrentPiecePosition.Y);
+        app.Exit();
     }
 
     /// <summary>
@@ -334,7 +383,7 @@ public class GameControllerTests
         const int RECORDE = 1200;
         repository.Save(Stats.Load(new StatsRecord { Id = Identity.New(), Score = RECORDE }));
 
-        var game = GameController.Create(10, 20, repository);
+        var game = GameController.Create(10, 20, repository, sound);
 
         Assert.AreEqual(RECORDE, game.GetMaxScore());
     }
@@ -431,5 +480,86 @@ public class GameControllerTests
         var commands = new CommandFactory(app).GetAll((Key)SHIFT_KEY_CODE, false).ToList();
 
         Assert.AreEqual(1, commands.Count);
+    }
+
+    /// <summary>
+    /// O Shift (<c>ToggleMuteCommand</c>) desliga e religa o som recebido pelo controlador.
+    /// </summary>
+    [Test]
+    public void DeveAlternarOSomComOShift()
+    {
+        var toggleMute = new CommandFactory(app).GetAll(Key.ShiftKey, false).Single();
+
+        toggleMute.Execute();
+        Assert.IsTrue(sound.Mute, "O som deveria ter sido desligado.");
+        Assert.IsTrue(app.IsMuted, "O controlador deveria informar o som desligado.");
+
+        toggleMute.Execute();
+        Assert.IsFalse(sound.Mute, "O som deveria ter sido religado.");
+    }
+
+    /// <summary>
+    /// Iniciar a partida toca a música de início.
+    /// </summary>
+    [Test]
+    public void DeveTocarAMusicaAoIniciar()
+    {
+        app.Start();
+
+        Assert.AreEqual(1, sound.Played(nameof(FakeSoundPlayer.Start)));
+    }
+
+    /// <summary>
+    /// Derrubar a peça toca o som de cada passo deslizando e o da peça encaixando.
+    /// </summary>
+    [Test]
+    public void DeveTocarOSomDeEncaixarAoDerrubar()
+    {
+        app.Start();
+
+        app.SmashDown();
+
+        Assert.AreEqual(1, sound.Played(nameof(FakeSoundPlayer.Dock)));
+        Assert.IsTrue(sound.Played(nameof(FakeSoundPlayer.Slide)) > 0, "A peça deveria ter deslizado até o fundo.");
+    }
+
+    /// <summary>
+    /// Completar uma linha toca o som de linha removida.
+    /// </summary>
+    [Test]
+    public void DeveTocarOSomDeLimparLinha()
+    {
+        // cinco quadrados (O, 2 colunas cada) lado a lado completam as duas últimas linhas do tabuleiro de 10 colunas
+        const int SQUARES_PER_ROW = 5;
+        const int SQUARE_WIDTH = 2;
+        var game = GameController.Create(10, 20, repository, sound, new SequencePieceGenerator((PieceType.O, 0)));
+        game.Start();
+
+        for (var square = 0; square < SQUARES_PER_ROW; square++)
+        {
+            for (var step = 0; step < square * SQUARE_WIDTH; step++)
+            {
+                game.MoveRight();
+            }
+
+            game.SmashDown();
+        }
+
+        Assert.AreEqual(2, game.Lines, "As duas linhas deveriam ter sido completadas.");
+        Assert.AreEqual(1, sound.Played(nameof(FakeSoundPlayer.Clear)));
+        game.Exit();
+    }
+
+    /// <summary>
+    /// Mover a peça toca o som de movimento.
+    /// </summary>
+    [Test]
+    public void DeveTocarOSomDeMoverAoMover()
+    {
+        app.Start();
+
+        app.MoveRight();
+
+        Assert.AreEqual(1, sound.Played(nameof(FakeSoundPlayer.Move)));
     }
 }

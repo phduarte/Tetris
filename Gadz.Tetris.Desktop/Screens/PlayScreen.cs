@@ -4,8 +4,7 @@ using Gadz.Tetris.Application.Commands;
 using Gadz.Tetris.Desktop.Device;
 using Gadz.Tetris.Desktop.Extensions;
 using Gadz.Tetris.Domain.Models.Pieces;
-using Gadz.Tetris.SoundPlayer;
-using Texto = Gadz.Tetris.Desktop.Textos.Jogo;
+using Texto = Gadz.Tetris.Texts.Jogo;
 
 namespace Gadz.Tetris.Desktop.Screens;
 
@@ -227,8 +226,9 @@ internal sealed class PlayScreen : ConsoleScreen
     /// <summary>
     /// Cria uma partida no tamanho padrão.
     /// </summary>
+    /// <param name="frame">O aparelho, que fornece o repositório e os sons.</param>
     /// <returns>A partida, ainda não iniciada.</returns>
-    public static GameController CreateGame() => GameController.Create(BOARD_WIDTH, BOARD_HEIGHT);
+    public static GameController CreateGame(ConsoleFrame frame) => GameController.Create(BOARD_WIDTH, BOARD_HEIGHT, frame.Repository, frame.Sound);
 
     /// <summary>
     /// Começa a partida e passa a ouvir os eventos dela.
@@ -241,15 +241,9 @@ internal sealed class PlayScreen : ConsoleScreen
         _controller.OnContinue += RepaintAsync;
         _controller.OnFinish += ShowResultAsync;
         _controller.OnLose += StartCurtainAsync;
-
-        _controller.OnClear += SoundPlayerAdapter.Clear;
-        _controller.OnMove += SoundPlayerAdapter.Move;
-        _controller.OnSlide += SoundPlayerAdapter.Slide;
-        _controller.OnDrop += SoundPlayerAdapter.Dock;
         _controller.OnDrop += ShakeDown;
 
         _controller.Start();
-        SoundPlayerAdapter.Start();
     }
 
     /// <summary>
@@ -263,11 +257,6 @@ internal sealed class PlayScreen : ConsoleScreen
         _controller.OnContinue -= RepaintAsync;
         _controller.OnFinish -= ShowResultAsync;
         _controller.OnLose -= StartCurtainAsync;
-
-        _controller.OnClear -= SoundPlayerAdapter.Clear;
-        _controller.OnMove -= SoundPlayerAdapter.Move;
-        _controller.OnSlide -= SoundPlayerAdapter.Slide;
-        _controller.OnDrop -= SoundPlayerAdapter.Dock;
         _controller.OnDrop -= ShakeDown;
 
         _curtain?.Dispose();
@@ -400,7 +389,7 @@ internal sealed class PlayScreen : ConsoleScreen
 
         var note = "♪";
         var font = Fonts.Bold(ICON_SIZE);
-        lcd.Text(note, font, left, top, brush: SoundPlayerAdapter.Mute ? off : on);
+        lcd.Text(note, font, left, top, brush: _controller.IsMuted ? off : on);
 
         // as barras da pausa são desenhadas, e não escritas: o "❚" de cada fonte tem um tamanho
         var barsLeft = left + lcd.MeasureText(note, font) + ICON_GAP;
@@ -465,7 +454,7 @@ internal sealed class PlayScreen : ConsoleScreen
     /// </summary>
     private void StartCurtainAsync() => _ = RunOnUiAsync(() =>
     {
-        _curtain = new GameOverCurtain(BOARD_HEIGHT, CURTAIN_HOLD_MS, CURTAIN_STEP_MS, SoundPlayerAdapter.End, OnCurtainStep);
+        _curtain = new GameOverCurtain(BOARD_HEIGHT, CURTAIN_HOLD_MS, CURTAIN_STEP_MS, Frame.Sound.End, OnCurtainStep);
         Frame.Invalidate();
     });
 

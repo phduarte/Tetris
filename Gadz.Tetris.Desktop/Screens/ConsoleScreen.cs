@@ -1,6 +1,5 @@
 ﻿using Gadz.Tetris.Desktop.Device;
-using Gadz.Tetris.SoundPlayer;
-using Texto = Gadz.Tetris.Desktop.Textos.Jogo;
+using Texto = Gadz.Tetris.Texts.Jogo;
 
 namespace Gadz.Tetris.Desktop.Screens;
 
@@ -34,7 +33,7 @@ internal abstract class ConsoleScreen(ConsoleFrame frame)
     /// <summary>
     /// O botão SOM, presente em todas as telas; com o som desligado, ele fica afundado.
     /// </summary>
-    protected static ConsoleButton SoundButton { get; } = new(Keys.ShiftKey, Texto.Sound, Texto.KeyShift, Latched: () => SoundPlayerAdapter.Mute);
+    protected ConsoleButton SoundButton { get; } = new(Keys.ShiftKey, Texto.Sound, Texto.KeyShift, Latched: () => frame.Sound.Mute);
 
     /// <summary>
     /// Desenha o conteúdo do LCD.
@@ -91,7 +90,7 @@ internal abstract class ConsoleScreen(ConsoleFrame frame)
     /// </summary>
     protected void ToggleSound()
     {
-        SoundPlayerAdapter.ToggleMute();
+        Frame.Sound.ToggleMute();
         Frame.Invalidate();
     }
 }

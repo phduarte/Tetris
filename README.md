@@ -36,17 +36,19 @@ Um fato curioso é que Steve Wozniak, cofundador da Apple foi um dos maiores rec
 
 ```
 Desktop ──► Application ──► Domain
-                       ├──► Data ──► Domain
-                       └──► SoundPlayer
+   ├──► Data ──► Domain
+   ├──► SoundPlayer ──► Application
+   └──► Texts
 ```
 
 | Projeto | Responsabilidade |
 | --- | --- |
 | `Gadz.Tetris.Domain` | Modelo de domínio e todas as regras do jogo (tabuleiro, peças, colisão, pontuação, níveis, recorde e estados). Não depende de nenhum outro projeto. |
 | `Gadz.Tetris.Data` | Repositório das estatísticas, gravadas em `%USERPROFILE%\Tetris\stats.mc`. |
-| `Gadz.Tetris.SoundPlayer` | Adapter de áudio sobre a `winmm.dll`. |
-| `Gadz.Tetris.Application` | `GameController` (fachada para as interfaces) e os comandos de teclado. Monta o domínio com a infraestrutura. |
-| `Gadz.Tetris.Desktop` | Interface WinForms: lida com as entradas dos dispositivos e dá respostas visuais ao jogador. Não tem regras de jogo. |
+| `Gadz.Tetris.SoundPlayer` | Adapter de áudio sobre a `winmm.dll`, que implementa o `ISoundPlayer` da `Application`. |
+| `Gadz.Tetris.Texts` | Textos da interface em inglês e português, compartilhados entre as interfaces. |
+| `Gadz.Tetris.Application` | `GameController` (fachada para as interfaces) e os comandos de teclado. Depende só do domínio: recebe o repositório e o som de quem a usa. |
+| `Gadz.Tetris.Desktop` | Interface WinForms: lida com as entradas dos dispositivos e dá respostas visuais ao jogador. Não tem regras de jogo. É a raiz de composição: cria o repositório em arquivo e o som do Windows no `Program.cs`. |
 | `Gadz.Tetris.Tests` | Testes NUnit do domínio e do `GameController`. |
 
   Enquanto eu modelava o Modelo de Domínio, a neutralidade tecnológica e o desacoplamento das responsabilidades foi algo fundamental, por isso o Domínio não tem ligações externas com camadas de Infraestrutura ou Interface por exemplo. Afinal, não podemos permitir que regras do jogo sejam manipuladas pelo usuário, e nem ficar preso num modelo de Interface só. Provavelmente teremos versões para outros dispositivos de IHC, como Mobile por exemplo. Dentro de cada projeto, o que não precisa ser visto de fora fica isolado com os modificadores *internal* e *private*.

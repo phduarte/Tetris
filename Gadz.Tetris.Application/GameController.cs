@@ -1,5 +1,4 @@
-﻿using Gadz.Tetris.Data;
-using Gadz.Tetris.Domain;
+﻿using Gadz.Tetris.Domain;
 using Gadz.Tetris.Domain.Models;
 using Gadz.Tetris.Domain.Models.Boards;
 using Gadz.Tetris.Domain.Models.Pieces;
@@ -9,7 +8,8 @@ namespace Gadz.Tetris.Application;
 
 /// <summary>
 /// Controlador do jogo (Facade): o único ponto de contato da aplicação cliente com o jogo.
-/// <para>Monta o domínio com a infraestrutura e repassa comandos, consultas e eventos do tabuleiro.</para>
+/// <para>Monta o domínio com a infraestrutura recebida da interface cliente (repositório e som), repassa comandos,
+/// consultas e eventos do tabuleiro e mantém o relógio que desce a peça durante a partida.</para>
 /// </summary>
 public class GameController
 {
@@ -22,6 +22,16 @@ public class GameController
     /// O tabuleiro controlado; nunca é exposto ao cliente.
     /// </summary>
     private readonly Board _board;
+
+    /// <summary>
+    /// Cancela o relógio que desce a peça; trocado a cada <see cref="UpdateClock"/> para nunca haver dois relógios ao mesmo tempo.
+    /// </summary>
+    private CancellationTokenSource? _clock;
+
+    /// <summary>
+    /// Os sons da partida, ligados aos eventos do tabuleiro.
+    /// </summary>
+    private readonly ISoundPlayer _soundPlayer;
 
     /// <summary>
     /// Ocorre a cada alteração visual, de estado do jogo ou suas estatísticas
@@ -135,6 +145,11 @@ public class GameController
     public bool IsNewRecord => _board.IsNewRecord;
 
     /// <summary>
+    /// Se o som está desligado
+    /// </summary>
+    public bool IsMuted => _soundPlayer.Mute;
+
+    /// <summary>
     /// Tabela de pontuação: os pontos de uma jogada, indexados pela quantidade de linhas removidas menos 1.
     /// </summary>
     public static IReadOnlyList<int> ScoreTable => Stats.ScoreTable;
@@ -145,8 +160,10 @@ public class GameController
     /// <param name="width">Largura do tabuleiro</param>
     /// <param name="height">Altura do tabuleiro</param>
     /// <param name="repository">Repositório onde as estatísticas são guardadas</param>
+    /// <param name="soundPlayer">Os sons tocados a cada ação da partida</param>
+    /// <param name="pieceGenerator">Gerador das novas peças; se nulo, as peças são sorteadas</param>
     /// <exception cref="ArgumentException">Se a largura ou a altura for menor que <see cref="MINIMUM_BOARD_SIZE"/>.</exception>
-    private GameController(int width, int height, IStatsRepository repository)
+    private GameController(int width, int height, IStatsRepository repository, ISoundPlayer soundPlayer, IPieceGenerator? pieceGenerator)
     {
         if (width < MINIMUM_BOARD_SIZE)
         {
@@ -158,7 +175,7 @@ public class GameController
             throw new ArgumentException($"A altura mínima do tabuleiro é {MINIMUM_BOARD_SIZE}.", nameof(height));
         }
 
-        _board = new Board(repository, width, height);
+        _board = new Board(repository, width, height, pieceGenerator);
         _board.OnRefresh += () => OnRefresh?.Invoke();
         _board.OnFinish += () => OnFinish?.Invoke();
         _board.OnLose += () =>
@@ -173,6 +190,12 @@ public class GameController
         _board.OnPause += () => OnPause?.Invoke();
         _board.OnContinue += () => OnContinue?.Invoke();
         _board.OnDrop += () => OnDrop?.Invoke();
+
+        _soundPlayer = soundPlayer;
+        _board.OnClear += _soundPlayer.Clear;
+        _board.OnMove += _soundPlayer.Move;
+        _board.OnSlide += _soundPlayer.Slide;
+        _board.OnDrop += _soundPlayer.Dock;
     }
 
     /// <summary>
@@ -180,12 +203,27 @@ public class GameController
     /// </summary>
     /// <param name="width">Largura do tabuleiro</param>
     /// <param name="height">Altura do tabuleiro</param>
-    /// <param name="repository">Repositório das estatísticas; se omitido, usa o arquivo em disco (<see cref="StatsRepository"/>)</param>
+    /// <param name="repository">Repositório das estatísticas, na implementação da interface cliente (ex.: arquivo em disco no Desktop)</param>
+    /// <param name="soundPlayer">Os sons da partida, na implementação da interface cliente</param>
     /// <returns>Uma instância do Controlador do Jogo</returns>
     /// <exception cref="ArgumentException">Se a largura ou a altura for menor que 10.</exception>
-    public static GameController Create(int width, int height, IStatsRepository? repository = null)
+    public static GameController Create(int width, int height, IStatsRepository repository, ISoundPlayer soundPlayer)
     {
-        return new GameController(width, height, repository ?? new StatsRepository());
+        return new GameController(width, height, repository, soundPlayer, null);
+    }
+
+    /// <summary>
+    /// Cria um Controlador do Jogo com peças previsíveis, para os testes montarem cenários exatos.
+    /// </summary>
+    /// <param name="width">Largura do tabuleiro</param>
+    /// <param name="height">Altura do tabuleiro</param>
+    /// <param name="repository">Repositório das estatísticas</param>
+    /// <param name="soundPlayer">Os sons da partida</param>
+    /// <param name="pieceGenerator">Gerador das novas peças</param>
+    /// <returns>Uma instância do Controlador do Jogo</returns>
+    internal static GameController Create(int width, int height, IStatsRepository repository, ISoundPlayer soundPlayer, IPieceGenerator pieceGenerator)
+    {
+        return new GameController(width, height, repository, soundPlayer, pieceGenerator);
     }
 
     /// <summary>
@@ -206,7 +244,17 @@ public class GameController
     /// <summary>
     /// Inicia o jogo
     /// </summary>
-    public void Start() => _board.Start();
+    public void Start()
+    {
+        _board.Start();
+        UpdateClock();
+        _soundPlayer.Start();
+    }
+
+    /// <summary>
+    /// Liga ou desliga o som
+    /// </summary>
+    public void ToggleMute() => _soundPlayer.ToggleMute();
 
     /// <summary>
     /// Movimenta o bloco atual para baixo
@@ -226,7 +274,11 @@ public class GameController
     /// <summary>
     /// Pausa o jogo
     /// </summary>
-    public void Pause() => _board.Pause();
+    public void Pause()
+    {
+        _board.Pause();
+        UpdateClock();
+    }
 
     /// <summary>
     /// Salva o progresso do jogo
@@ -239,6 +291,7 @@ public class GameController
     public void Exit()
     {
         _board.Finish();
+        UpdateClock();
         Save();
     }
 
@@ -250,17 +303,29 @@ public class GameController
     /// <summary>
     /// Continua um jogo pausado
     /// </summary>
-    public void Continue() => _board.Continue();
+    public void Continue()
+    {
+        _board.Continue();
+        UpdateClock();
+    }
 
     /// <summary>
     /// Pausa o jogo em andamento ou continua o jogo pausado
     /// </summary>
-    public void TogglePause() => _board.TogglePause();
+    public void TogglePause()
+    {
+        _board.TogglePause();
+        UpdateClock();
+    }
 
     /// <summary>
     /// Reinicia um jogo
     /// </summary>
-    public void Restart() => _board.Restart();
+    public void Restart()
+    {
+        _board.Restart();
+        UpdateClock();
+    }
 
     /// <summary>
     /// Blocos da peça atual
@@ -299,5 +364,53 @@ public class GameController
     public int GetMaxScore()
     {
         return _board.Record;
+    }
+
+    /// <summary>
+    /// Para o relógio atual e, se a partida estiver em andamento, liga outro.
+    /// Chamado depois de toda ação que pode mudar o estado entre jogando, pausado e encerrado.
+    /// </summary>
+    private void UpdateClock()
+    {
+        _clock?.Cancel();
+        _clock?.Dispose();
+        _clock = null;
+
+        if (!_board.IsPlaying)
+        {
+            return;
+        }
+
+        _clock = new CancellationTokenSource();
+        _ = RunClockAsync(_clock.Token);
+    }
+
+    /// <summary>
+    /// Desce a peça a cada <see cref="Board.Frequency"/> ms até o relógio ser cancelado ou a partida sair do estado jogando.
+    /// O intervalo é lido a cada volta porque diminui quando o nível sobe.
+    /// </summary>
+    /// <param name="token">Cancelado por <see cref="UpdateClock"/> ao pausar, encerrar ou ligar outro relógio.</param>
+    /// <returns>A tarefa do relógio, que termina sem exceção.</returns>
+    private async Task RunClockAsync(CancellationToken token)
+    {
+        try
+        {
+            while (true)
+            {
+                // ConfigureAwait(false): o passo não precisa voltar à thread de UI, que só desenha ao receber os eventos
+                await Task.Delay(_board.Frequency, token).ConfigureAwait(false);
+
+                if (token.IsCancellationRequested || !_board.IsPlaying)
+                {
+                    return;
+                }
+
+                _board.Tick();
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // o relógio foi parado por UpdateClock
+        }
     }
 }
