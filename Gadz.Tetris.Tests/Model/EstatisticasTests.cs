@@ -5,17 +5,17 @@ using NUnit.Framework;
 namespace Gadz.Tetris.Tests.Model;
 
 /// <summary>
-/// Defines the <see cref="EstatisticasTests" />
+/// Testes das regras de <see cref="Stats"/>: pontuação, níveis, velocidade e tempo.
 /// </summary>
 public class EstatisticasTests
 {
     /// <summary>
-    /// Defines the stats
+    /// Estatísticas novas, recriadas a cada teste.
     /// </summary>
     private Stats stats;
 
     /// <summary>
-    /// The Setup
+    /// Cria estatísticas de uma partida nova.
     /// </summary>
     [SetUp]
     public void Setup()
@@ -24,7 +24,7 @@ public class EstatisticasTests
     }
 
     /// <summary>
-    /// The DeveInstanciar
+    /// As estatísticas de uma partida nova podem ser criadas.
     /// </summary>
     [Test]
     public void DeveInstanciar()
@@ -34,7 +34,7 @@ public class EstatisticasTests
     }
 
     /// <summary>
-    /// The DeveRecuperarValoresDeOutraPartida
+    /// Carregar um registro guardado recupera os valores da partida.
     /// </summary>
     [Test]
     public void DeveRecuperarValoresDeOutraPartida()
@@ -61,7 +61,7 @@ public class EstatisticasTests
     }
 
     /// <summary>
-    /// The DevePontuar40PontosPorUmaLinha
+    /// Remover 1 linha numa jogada vale 40 pontos.
     /// </summary>
     [Test]
     public void DevePontuar40PontosPorUmaLinha()
@@ -71,7 +71,7 @@ public class EstatisticasTests
     }
 
     /// <summary>
-    /// The DevePontuar100PontosPorDuasLinhas
+    /// Remover 2 linhas numa jogada vale 100 pontos.
     /// </summary>
     [Test]
     public void DevePontuar100PontosPorDuasLinhas()
@@ -81,7 +81,7 @@ public class EstatisticasTests
     }
 
     /// <summary>
-    /// The DevePontuar300PontosPorTresLinhas
+    /// Remover 3 linhas numa jogada vale 300 pontos.
     /// </summary>
     [Test]
     public void DevePontuar300PontosPorTresLinhas()
@@ -91,7 +91,7 @@ public class EstatisticasTests
     }
 
     /// <summary>
-    /// The DevePontuar1200PontosPorQuatroLinhas
+    /// Remover 4 linhas numa jogada (TETRIS) vale 1200 pontos.
     /// </summary>
     [Test]
     public void DevePontuar1200PontosPorQuatroLinhas()
@@ -136,7 +136,7 @@ public class EstatisticasTests
     }
 
     /// <summary>
-    /// The DeveContabilizarTempoDaPartida
+    /// O tempo começa a contar ao iniciar a partida.
     /// </summary>
     [Test]
     public void DeveContabilizarTempoDaPartida()
@@ -148,7 +148,7 @@ public class EstatisticasTests
     }
 
     /// <summary>
-    /// The DevePararDeContabilizarTempoAoTerminarPartida
+    /// O tempo para de contar ao terminar a partida.
     /// </summary>
     [Test]
     public void DevePararDeContabilizarTempoAoTerminarPartida()
@@ -161,7 +161,7 @@ public class EstatisticasTests
     }
 
     /// <summary>
-    /// The DeveContabilizarMovimentos
+    /// Cada movimento do jogador é contado.
     /// </summary>
     [Test]
     public void DeveContabilizarMovimentos()
@@ -171,7 +171,7 @@ public class EstatisticasTests
     }
 
     /// <summary>
-    /// The DeveConseguirPausarPartida
+    /// O tempo para de contar enquanto a partida está pausada.
     /// </summary>
     [Test]
     public void DeveConseguirPausarPartida()
@@ -187,7 +187,7 @@ public class EstatisticasTests
     }
 
     /// <summary>
-    /// The DeveConseguirContinuarPartida
+    /// O tempo volta a contar ao continuar a partida.
     /// </summary>
     [Test]
     public void DeveConseguirContinuarPartida()

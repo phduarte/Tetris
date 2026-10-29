@@ -1,32 +1,32 @@
 ﻿namespace Gadz.Tetris.Domain.Models.Statistics;
 
 /// <summary>
-/// Defines the <see cref="IStatsRepository" />
+/// Onde as estatísticas das partidas são guardadas. A interface fica no domínio e a implementação, na infraestrutura.
 /// </summary>
 public interface IStatsRepository : IRepository
 {
     /// <summary>
-    /// The Save
+    /// Guarda as estatísticas de uma partida.
     /// </summary>
-    /// <param name="stats">The stats<see cref="Stats"/></param>
+    /// <param name="stats">As estatísticas a guardar.</param>
     void Save(Stats stats);
 
     /// <summary>
-    /// The Load
+    /// Carrega as estatísticas de uma partida guardada.
     /// </summary>
-    /// <param name="id">The id<see cref="Identity"/></param>
-    /// <returns>The <see cref="Stats"/></returns>
+    /// <param name="id">A identidade da partida.</param>
+    /// <returns>As estatísticas da partida.</returns>
     Stats Load(Identity id);
 
     /// <summary>
-    /// The MaxScore
+    /// A maior pontuação entre as partidas guardadas (o recorde).
     /// </summary>
-    /// <returns>The <see cref="int"/></returns>
+    /// <returns>O recorde, ou 0 se não houver partidas.</returns>
     int MaxScore();
 
     /// <summary>
-    /// The All
+    /// Todas as partidas guardadas.
     /// </summary>
-    /// <returns>The <see cref="IEnumerable{Stats}"/></returns>
+    /// <returns>As estatísticas de cada partida.</returns>
     IEnumerable<Stats> All();
 }

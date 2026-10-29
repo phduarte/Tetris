@@ -1,12 +1,10 @@
 ﻿namespace Gadz.Tetris.Domain.Models.Statistics;
 
 /// <summary>
-/// Defines the <see cref="Stats" />
+/// As estatísticas de uma partida: pontuação, linhas, nível, tempo jogado e contadores.
+/// Concentra as regras de pontuação, de subida de nível e da velocidade de queda.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="Stats"/> class.
-/// </remarks>
-/// <param name="id">The id<see cref="Identity"/></param>
+/// <param name="id">A identidade da partida.</param>
 public class Stats(Identity id) : Entity(id)
 {
     /// <summary>
@@ -70,12 +68,12 @@ public class Stats(Identity id) : Entity(id)
     private const int TETRIS_LINES = 4;
 
     /// <summary>
-    /// Defines the _durationHistory
+    /// Os trechos já jogados (início → duração em ticks); cada pausa fecha um trecho.
     /// </summary>
     private IDictionary<DateTime, long> _durationHistory = new Dictionary<DateTime, long>();
 
     /// <summary>
-    /// Defines the _startTime
+    /// Início do trecho em andamento, ou <c>null</c> se a partida estiver pausada ou encerrada.
     /// </summary>
     private DateTime? _startTime;
 
@@ -90,37 +88,37 @@ public class Stats(Identity id) : Entity(id)
     private int _goal = INITIAL_LINE_GOAL;
 
     /// <summary>
-    /// Gets the Lines
+    /// Linhas removidas na partida.
     /// </summary>
     public int Lines { get; private set; }
 
     /// <summary>
-    /// Gets the Score
+    /// Pontuação acumulada.
     /// </summary>
     public int Score { get; private set; }
 
     /// <summary>
-    /// Gets the Level
+    /// O nível atual; sobe a cada meta de linhas cumprida.
     /// </summary>
     public int Level { get; private set; }
 
     /// <summary>
-    /// Gets the Speed
+    /// A velocidade atual; sobe junto com o nível.
     /// </summary>
     public int Speed { get; private set; }
 
     /// <summary>
-    /// Gets the Moves
+    /// Movimentos feitos pelo jogador.
     /// </summary>
     public int Moves { get; private set; }
 
     /// <summary>
-    /// Gets the Blocks
+    /// Peças assentadas no tabuleiro.
     /// </summary>
     public int Blocks { get; private set; }
 
     /// <summary>
-    /// Gets the Duration
+    /// Tempo jogado, somando os trechos fechados e o trecho em andamento (sem contar as pausas).
     /// </summary>
     public TimeSpan Duration => CalculateTime();
 
@@ -131,14 +129,17 @@ public class Stats(Identity id) : Entity(id)
     public int Interval => Math.Max(MIN_INTERVAL_MS, BASE_INTERVAL_MS - ((Level - INITIAL_LEVEL) * INTERVAL_STEP_MS));
 
     /// <summary>
-    /// 
+    /// Pontos obtidos com TETRIS (4 linhas de uma vez).
     /// </summary>
     public int Tetris { get; private set; }
 
+    /// <summary>
+    /// Fração da pontuação obtida com TETRIS.
+    /// </summary>
     public float TetrisRate => Score > 0 ? Tetris / (float)Score : 0F;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Stats"/> class.
+    /// Cria as estatísticas de uma partida nova, no nível e velocidade iniciais.
     /// </summary>
     public Stats()
         : this(Identity.New())
@@ -148,16 +149,9 @@ public class Stats(Identity id) : Entity(id)
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Stats"/> class.
+    /// Reconstrói as estatísticas de uma partida guardada.
     /// </summary>
-    /// <param name="id">The id<see cref="Identity"/></param>
-    /// <param name="points">The points<see cref="int"/></param>
-    /// <param name="lines">The lines<see cref="int"/></param>
-    /// <param name="level">The level<see cref="int"/></param>
-    /// <param name="speed">The speed<see cref="int"/></param>
-    /// <param name="moves">The moves<see cref="int"/></param>
-    /// <param name="blocks">The blocks<see cref="int"/></param>
-    /// <param name="duration">The duration<see cref="long"/></param>
+    /// <param name="record">Os dados guardados da partida.</param>
     private Stats(StatsRecord record)
         : this(record.Id)
     {
@@ -171,9 +165,9 @@ public class Stats(Identity id) : Entity(id)
     }
 
     /// <summary>
-    /// The Gain
+    /// Pontua as linhas removidas numa jogada e sobe de nível se a meta for cumprida.
     /// </summary>
-    /// <param name="lines">The lines<see cref="int"/></param>
+    /// <param name="lines">Quantidade de linhas removidas de uma vez.</param>
     public void Gain(int lines)
     {
         Lines += lines;
@@ -183,7 +177,7 @@ public class Stats(Identity id) : Entity(id)
     }
 
     /// <summary>
-    /// The CountMovement
+    /// Conta um movimento do jogador.
     /// </summary>
     public void CountMovement()
     {
@@ -191,7 +185,7 @@ public class Stats(Identity id) : Entity(id)
     }
 
     /// <summary>
-    /// The Start
+    /// Começa a contar o tempo.
     /// </summary>
     public void Start()
     {
@@ -199,7 +193,7 @@ public class Stats(Identity id) : Entity(id)
     }
 
     /// <summary>
-    /// The Pause
+    /// Fecha o trecho em andamento e para de contar o tempo.
     /// </summary>
     public void Pause()
     {
@@ -212,7 +206,7 @@ public class Stats(Identity id) : Entity(id)
     }
 
     /// <summary>
-    /// The Continue
+    /// Abre um novo trecho e volta a contar o tempo.
     /// </summary>
     public void Continue()
     {
@@ -220,7 +214,7 @@ public class Stats(Identity id) : Entity(id)
     }
 
     /// <summary>
-    /// The Finish
+    /// Fecha o trecho em andamento, se houver, ao fim da partida.
     /// </summary>
     public void Finish()
     {
@@ -233,7 +227,7 @@ public class Stats(Identity id) : Entity(id)
     }
 
     /// <summary>
-    /// The IncludeBlock
+    /// Conta uma peça assentada.
     /// </summary>
     public void IncludeBlock()
     {
@@ -241,9 +235,9 @@ public class Stats(Identity id) : Entity(id)
     }
 
     /// <summary>
-    /// The CalculateTime
+    /// Soma o tempo dos trechos fechados e do trecho em andamento.
     /// </summary>
-    /// <returns>The <see cref="TimeSpan"/></returns>
+    /// <returns>O tempo jogado.</returns>
     private TimeSpan CalculateTime()
     {
         long duracao = 0;
@@ -256,7 +250,7 @@ public class Stats(Identity id) : Entity(id)
     }
 
     /// <summary>
-    /// The CheckLevel
+    /// Sobe de nível quando as linhas do nível atual atingem a meta, e aumenta a meta do próximo nível.
     /// </summary>
     private void CheckLevel()
     {
@@ -269,7 +263,7 @@ public class Stats(Identity id) : Entity(id)
     }
 
     /// <summary>
-    /// The LevelUp
+    /// Avança o nível e a velocidade.
     /// </summary>
     private void LevelUp()
     {
@@ -278,10 +272,10 @@ public class Stats(Identity id) : Entity(id)
     }
 
     /// <summary>
-    /// The CalculateScore
+    /// Os pontos de uma jogada, pela tabela de pontuação. Os pontos de um TETRIS também são somados em <see cref="Tetris"/>.
     /// </summary>
-    /// <param name="linhas">The linhas<see cref="int"/></param>
-    /// <returns>The <see cref="int"/></returns>
+    /// <param name="linhas">Quantidade de linhas removidas de uma vez.</param>
+    /// <returns>Os pontos da jogada, ou 0 se a quantidade de linhas não estiver na tabela.</returns>
     private int CalculateScore(int linhas)
     {
         var score = linhas switch
@@ -300,10 +294,10 @@ public class Stats(Identity id) : Entity(id)
     }
 
     /// <summary>
-    /// Carrega uma estatística baseada num registro de estatística salvo anteriormente.
+    /// Carrega as estatísticas de uma partida a partir do registro guardado.
     /// </summary>
-    /// <param name="record"></param>
-    /// <returns></returns>
+    /// <param name="record">Os dados guardados da partida.</param>
+    /// <returns>As estatísticas da partida.</returns>
     public static Stats Load(StatsRecord record)
     {
         return new Stats(record);

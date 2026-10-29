@@ -1,12 +1,12 @@
 ﻿namespace Gadz.Tetris.Desktop;
 
 /// <summary>
-/// Defines the <see cref="About" />
+/// Tela "Sobre" do jogo.
 /// </summary>
 public partial class About : Form
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="About"/> class.
+    /// Cria a tela.
     /// </summary>
     public About()
     {
@@ -14,10 +14,10 @@ public partial class About : Form
     }
 
     /// <summary>
-    /// The button2_Click
+    /// Fecha a tela.
     /// </summary>
-    /// <param name="sender">The sender<see cref="object"/></param>
-    /// <param name="e">The e<see cref="EventArgs"/></param>
+    /// <param name="sender">O botão clicado.</param>
+    /// <param name="e">Dados do clique.</param>
     private void button2_Click(object sender, EventArgs e)
     {
         Close();

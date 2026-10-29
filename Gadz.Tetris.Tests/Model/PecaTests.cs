@@ -4,17 +4,17 @@ using NUnit.Framework;
 namespace Gadz.Tetris.Tests.Model;
 
 /// <summary>
-/// Defines the <see cref="PecaTests" />
+/// Testes dos movimentos de uma <see cref="Piece"/> isolada, sem tabuleiro.
 /// </summary>
 public class PecaTests
 {
     /// <summary>
-    /// Defines the peca
+    /// Peça I na origem, recriada a cada teste.
     /// </summary>
     private Piece peca;
 
     /// <summary>
-    /// The Setup
+    /// Cria uma peça I na rotação inicial.
     /// </summary>
     [SetUp]
     public void Setup()
@@ -26,7 +26,7 @@ public class PecaTests
     }
 
     /// <summary>
-    /// The DeveInstanciar
+    /// A peça criada tem o tipo, a cor, os 4 blocos, a posição e a rotação pedidos.
     /// </summary>
     [Test]
     public void DeveInstanciar()
@@ -41,7 +41,7 @@ public class PecaTests
     }
 
     /// <summary>
-    /// The DeveGirar
+    /// Girar avança para a próxima rotação.
     /// </summary>
     [Test]
     public void DeveGirar()
@@ -51,7 +51,7 @@ public class PecaTests
     }
 
     /// <summary>
-    /// The DeveMoverParaDireita
+    /// Mover para a direita avança uma coluna.
     /// </summary>
     [Test]
     public void DeveMoverParaDireita()
@@ -61,7 +61,7 @@ public class PecaTests
     }
 
     /// <summary>
-    /// The DeveMoverParaEsquerda
+    /// Mover para a esquerda volta uma coluna.
     /// </summary>
     [Test]
     public void DeveMoverParaEsquerda()
@@ -73,7 +73,7 @@ public class PecaTests
     }
 
     /// <summary>
-    /// The DeveMoverParaBaixo
+    /// Mover para baixo avança uma linha.
     /// </summary>
     [Test]
     public void DeveMoverParaBaixo()
@@ -83,7 +83,7 @@ public class PecaTests
     }
 
     /// <summary>
-    /// The DeveSerClonada
+    /// O clone é igual à peça original, mas é outro objeto.
     /// </summary>
     [Test]
     public void DeveSerClonada()
@@ -94,7 +94,7 @@ public class PecaTests
     }
 
     /// <summary>
-    /// The NaoDeveSerClonada
+    /// Atribuir a peça a outra variável não cria uma cópia.
     /// </summary>
     [Test]
     public void NaoDeveSerClonada()

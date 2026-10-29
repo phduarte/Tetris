@@ -8,12 +8,12 @@ using NUnit.Framework;
 namespace Gadz.Tetris.Tests;
 
 /// <summary>
-/// Defines the <see cref="GameControllerTests" />
+/// Testes do <see cref="GameController"/>, a fachada usada pela interface.
 /// </summary>
 public class GameControllerTests
 {
     /// <summary>
-    /// Defines the app
+    /// Controlador 10×20 recriado a cada teste.
     /// </summary>
     private GameController app;
 
@@ -23,7 +23,7 @@ public class GameControllerTests
     private InMemoryStatsRepository repository;
 
     /// <summary>
-    /// The Setup
+    /// Cria o controlador com o repositório em memória.
     /// </summary>
     [SetUp]
     public void Setup()
@@ -33,7 +33,7 @@ public class GameControllerTests
     }
 
     /// <summary>
-    /// The DeveInstanciar
+    /// O controlador é criado com as dimensões pedidas.
     /// </summary>
     [Test]
     public void DeveInstanciar()
@@ -44,7 +44,7 @@ public class GameControllerTests
     }
 
     /// <summary>
-    /// The NaoDeveInstanciar
+    /// Tabuleiros menores que 10×10 são rejeitados.
     /// </summary>
     [Test]
     public void NaoDeveInstanciar()
@@ -53,7 +53,7 @@ public class GameControllerTests
     }
 
     /// <summary>
-    /// The DeveIniciar
+    /// Iniciar põe o jogo no estado "Playing".
     /// </summary>
     [Test]
     public void DeveIniciar()
@@ -65,7 +65,7 @@ public class GameControllerTests
     }
 
     /// <summary>
-    /// The DeveReiniciar
+    /// Reiniciar uma partida pausada volta ao estado "Playing".
     /// </summary>
     [Test]
     public void DeveReiniciar()
@@ -79,7 +79,7 @@ public class GameControllerTests
     }
 
     /// <summary>
-    /// The DevePausar
+    /// Pausar põe o jogo no estado "Parado" e ele deixa de estar jogando.
     /// </summary>
     [Test]
     public void DevePausar()
@@ -92,7 +92,7 @@ public class GameControllerTests
     }
 
     /// <summary>
-    /// The DeveContinuar
+    /// Continuar uma partida pausada volta ao estado "Playing".
     /// </summary>
     [Test]
     public void DeveContinuar()
@@ -147,7 +147,7 @@ public class GameControllerTests
     }
 
     /// <summary>
-    /// The DeveIniciarComNivelUm
+    /// A partida começa no nível 1.
     /// </summary>
     [Test]
     public void DeveIniciarComNivelUm()
@@ -158,7 +158,7 @@ public class GameControllerTests
     }
 
     /// <summary>
-    /// The DeveIniciarNaVelocidadeMaisAlta
+    /// A partida começa na velocidade 1.
     /// </summary>
     [Test]
     public void DeveIniciarNaVelocidadeMaisAlta()
@@ -169,7 +169,7 @@ public class GameControllerTests
     }
 
     /// <summary>
-    /// The DeveConseguirMedirOTempoDaPartida
+    /// O tempo da partida só começa a contar depois de iniciar.
     /// </summary>
     [Test]
     public void DeveConseguirMedirOTempoDaPartida()
@@ -184,7 +184,7 @@ public class GameControllerTests
     }
 
     /// <summary>
-    /// The DeveIniciarComPlacarEmBranco
+    /// A partida começa com pontuação zero.
     /// </summary>
     [Test]
     public void DeveIniciarComPlacarEmBranco()
@@ -194,7 +194,7 @@ public class GameControllerTests
     }
 
     /// <summary>
-    /// The DeveIniciarSemNenhumaLinhaPreenchida
+    /// A partida começa sem linhas removidas.
     /// </summary>
     [Test]
     public void DeveIniciarSemNenhumaLinhaPreenchida()
@@ -204,7 +204,7 @@ public class GameControllerTests
     }
 
     /// <summary>
-    /// The DeveIniciarComBlocoNaPosicaoZero
+    /// A primeira peça entra no canto superior esquerdo.
     /// </summary>
     [Test]
     public void DeveIniciarComBlocoNaPosicaoZero()
@@ -215,7 +215,7 @@ public class GameControllerTests
     }
 
     /// <summary>
-    /// The DeveMoverParaDireita
+    /// Mover para a direita avança uma coluna.
     /// </summary>
     [Test]
     public void DeveMoverParaDireita()
@@ -227,7 +227,7 @@ public class GameControllerTests
     }
 
     /// <summary>
-    /// The DeveMoverParaEsquerda
+    /// Mover para a esquerda volta uma coluna.
     /// </summary>
     [Test]
     public void DeveMoverParaEsquerda()
@@ -239,7 +239,7 @@ public class GameControllerTests
     }
 
     /// <summary>
-    /// The DeveMoverParaBaixo
+    /// Descer avança duas linhas: o movimento do jogador e o passo do jogo que vem logo depois.
     /// </summary>
     [Test]
     public void DeveMoverParaBaixo()
@@ -251,7 +251,7 @@ public class GameControllerTests
     }
 
     /// <summary>
-    /// The DeveCorrerParaDireita
+    /// Deslizar para a direita leva a peça até perto da borda.
     /// </summary>
     [Test]
     public void DeveCorrerParaDireita()
@@ -263,7 +263,7 @@ public class GameControllerTests
     }
 
     /// <summary>
-    /// The DeveCorrerParaEsquerda
+    /// Deslizar para a esquerda leva a peça até a coluna 0.
     /// </summary>
     [Test]
     public void DeveCorrerParaEsquerda()
@@ -275,7 +275,7 @@ public class GameControllerTests
     }
 
     /// <summary>
-    /// The DeveCorrerParaBaixo
+    /// Derrubar a peça a assenta no fundo e traz a próxima para o topo.
     /// </summary>
     [Test]
     public void DeveCorrerParaBaixo()
@@ -304,7 +304,7 @@ public class GameControllerTests
     }
 
     /// <summary>
-    /// The DeveListarProximosBlocos
+    /// A próxima peça tem 4 blocos.
     /// </summary>
     [Test]
     public void DeveListarProximosBlocos()
@@ -314,7 +314,7 @@ public class GameControllerTests
     }
 
     /// <summary>
-    /// The DeveListarOsBlocosAtuais
+    /// A peça atual tem 4 blocos.
     /// </summary>
     [Test]
     public void DeveListarOsBlocosAtuais()

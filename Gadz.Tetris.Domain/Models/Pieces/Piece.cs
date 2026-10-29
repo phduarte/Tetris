@@ -3,12 +3,10 @@
 namespace Gadz.Tetris.Domain.Models.Pieces;
 
 /// <summary>
-/// Defines the <see cref="Piece" />
+/// Um tetraminó: tipo, posição e rotação. A peça só sabe se mover e girar; quem decide se o movimento
+/// é válido (limites e colisão) é o <see cref="Board"/>. Crie peças com o <see cref="PieceBuilder"/>.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="Piece"/> class.
-/// </remarks>
-/// <param name="configuration">The configuration<see cref="PieceConfiguration"/></param>
+/// <param name="configuration">Tipo, posição e rotação iniciais.</param>
 public abstract class Piece(PieceConfiguration configuration) : Entity
 {
     /// <summary>
@@ -17,7 +15,7 @@ public abstract class Piece(PieceConfiguration configuration) : Entity
     private const int ROTATION_COUNT = 4;
 
     /// <summary>
-    /// Defines the _colors
+    /// A cor fixa de cada tipo de peça.
     /// </summary>
     private static IDictionary<PieceType, PieceColor> _colors = new Dictionary<PieceType, PieceColor> {
             { PieceType.I, PieceColor.Cyan },
@@ -30,22 +28,22 @@ public abstract class Piece(PieceConfiguration configuration) : Entity
     };
 
     /// <summary>
-    /// Gets the Rotation
+    /// A rotação atual, de 0 a 3.
     /// </summary>
     public int Rotation { get; private set; } = configuration.Rotation;
 
     /// <summary>
-    /// Gets the Color
+    /// A cor da peça, definida pelo seu tipo.
     /// </summary>
     public PieceColor Color => GetPieceColor(Type);
 
     /// <summary>
-    /// Gets the Position
+    /// O canto superior esquerdo da forma da peça no tabuleiro.
     /// </summary>
     public Point Position { get; private set; } = configuration.Position;
 
     /// <summary>
-    /// Gets the Type
+    /// O tetraminó que a peça representa.
     /// </summary>
     public PieceType Type { get; protected set; } = configuration.Type;
 
@@ -70,17 +68,17 @@ public abstract class Piece(PieceConfiguration configuration) : Entity
     }
 
     /// <summary>
-    /// The MoveDown
+    /// Desce a peça uma linha, sem verificar limites nem colisão.
     /// </summary>
     public void MoveDown() => MoveBy(0, 1);
 
     /// <summary>
-    /// The MoveRight
+    /// Move a peça uma coluna para a direita, sem verificar limites nem colisão.
     /// </summary>
     public void MoveRight() => MoveBy(1, 0);
 
     /// <summary>
-    /// The MoveLeft
+    /// Move a peça uma coluna para a esquerda, sem verificar limites nem colisão.
     /// </summary>
     public void MoveLeft() => MoveBy(-1, 0);
 
@@ -95,9 +93,9 @@ public abstract class Piece(PieceConfiguration configuration) : Entity
     }
 
     /// <summary>
-    /// The Clone
+    /// Cria uma cópia independente da peça, com a mesma identidade. Usada para testar um movimento antes de aplicá-lo.
     /// </summary>
-    /// <returns>The <see cref="Piece"/></returns>
+    /// <returns>A cópia.</returns>
     public virtual Piece Clone()
     {
         var clone = new PieceBuilder().OfType(Type).OnPosition(Position).WithRotation(Rotation).Build();
@@ -106,10 +104,10 @@ public abstract class Piece(PieceConfiguration configuration) : Entity
     }
 
     /// <summary>
-    /// The GetPieceColor
+    /// A cor fixa de um tipo de peça.
     /// </summary>
-    /// <param name="index">The index<see cref="PieceType"/></param>
-    /// <returns>The <see cref="PieceColor"/></returns>
+    /// <param name="index">O tipo da peça.</param>
+    /// <returns>A cor do tipo, ou <see cref="PieceColor.None"/> se o tipo for desconhecido.</returns>
     public static PieceColor GetPieceColor(PieceType index)
     {
         try
@@ -123,10 +121,10 @@ public abstract class Piece(PieceConfiguration configuration) : Entity
     }
 
     /// <summary>
-    /// The Equals
+    /// Duas peças são iguais quando ocupam as mesmas células, na mesma ordem de blocos.
     /// </summary>
-    /// <param name="obj">The obj<see cref="object"/></param>
-    /// <returns>The <see cref="bool"/></returns>
+    /// <param name="obj">O objeto a comparar.</param>
+    /// <returns><c>true</c> se <paramref name="obj"/> for uma peça com os mesmos blocos.</returns>
     public override bool Equals(object? obj)
     {
         if (obj is Piece p)
@@ -136,15 +134,16 @@ public abstract class Piece(PieceConfiguration configuration) : Entity
         return false;
     }
 
-    /// <summary>
-    /// The GetHashCode
-    /// </summary>
-    /// <returns>The <see cref="int"/></returns>
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         return ToString().GetHashCode();
     }
 
+    /// <summary>
+    /// As células ocupadas pela peça, separadas por vírgula (ex.: <c>0x0,0x1,0x2,0x3</c>).
+    /// </summary>
+    /// <returns>Os blocos em texto.</returns>
     public override string ToString()
     {
         return string.Join(",", Blocks);

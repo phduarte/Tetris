@@ -1,7 +1,7 @@
 ﻿namespace Gadz.Tetris.Domain.Models.Boards;
 
 /// <summary>
-/// Defines the <see cref="PausedState" />
+/// Partida pausada (também é o estado do tabuleiro antes do primeiro <see cref="Board.Start"/>): nada se move até continuar.
 /// </summary>
 internal class PausedState : IBoardState
 {
@@ -17,49 +17,33 @@ internal class PausedState : IBoardState
     {
     }
 
-    /// <summary>
-    /// Gets a value indicating whether IsPlaying
-    /// </summary>
+    /// <inheritdoc/>
     public bool IsPlaying => false;
 
-    /// <summary>
-    /// Gets a value indicating whether CanChangeStats
-    /// </summary>
+    /// <inheritdoc/>
     public bool CanChangeStats => false;
 
-    /// <summary>
-    /// Gets a value indicating whether CanStart
-    /// </summary>
+    /// <inheritdoc/>
     public bool CanStart => false;
 
-    /// <summary>
-    /// Gets a value indicating whether CanMove
-    /// </summary>
+    /// <inheritdoc/>
     public bool CanMove => false;
 
-    /// <summary>
-    /// Gets a value indicating whether CanPause
-    /// </summary>
+    /// <inheritdoc/>
     public bool CanPause => false;
 
-    /// <summary>
-    /// Gets a value indicating whether CanContinue
-    /// </summary>
+    /// <inheritdoc/>
     public bool CanContinue => true;
 
-    /// <summary>
-    /// Gets a value indicating whether CanRestart
-    /// </summary>
+    /// <inheritdoc/>
     public bool CanRestart => true;
 
-    /// <summary>
-    /// Gets a value indicating whether CanFinish
-    /// </summary>
+    /// <inheritdoc/>
     public bool CanFinish => true;
 
     /// <summary>
-    /// The ToString
+    /// O nome do estado, verificado nos testes.
     /// </summary>
-    /// <returns>The <see cref="string"/></returns>
+    /// <returns>O nome do estado.</returns>
     public override string ToString() => "Parado";
 }

@@ -1,34 +1,31 @@
 ﻿namespace Gadz.Tetris.Domain.Models;
 
 /// <summary>
-/// Defines the <see cref="Point" />
+/// Uma célula do tabuleiro, ou um deslocamento entre células. X cresce para a direita e Y para baixo.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref=""/> class.
-/// </remarks>
-/// <param name="x">The x<see cref="int"/></param>
-/// <param name="y">The y<see cref="int"/></param>
+/// <param name="x">A coluna.</param>
+/// <param name="y">A linha.</param>
 public struct Point(int x, int y)
 {
     /// <summary>
-    /// Defines the X, Y
+    /// A coluna (<see cref="X"/>) e a linha (<see cref="Y"/>).
     /// </summary>
     public int X = x, Y = y;
 
     /// <summary>
-    /// The ToString
+    /// O ponto no formato <c>XxY</c>, usado também para comparar peças.
     /// </summary>
-    /// <returns>The <see cref="string"/></returns>
+    /// <returns>Por exemplo, <c>3x5</c>.</returns>
     public override string ToString()
     {
         return $"{X}x{Y}";
     }
 
     /// <summary>
-    /// The Equals
+    /// Dois pontos são iguais quando têm a mesma coluna e a mesma linha.
     /// </summary>
-    /// <param name="obj">The obj<see cref="object"/></param>
-    /// <returns>The <see cref="bool"/></returns>
+    /// <param name="obj">O objeto a comparar.</param>
+    /// <returns><c>true</c> se <paramref name="obj"/> for um <see cref="Point"/> nas mesmas coordenadas.</returns>
     public override bool Equals(object? obj)
     {
         return obj is Point u && X == u.X && Y == u.Y;
@@ -44,19 +41,16 @@ public struct Point(int x, int y)
         return !a.Equals(b);
     }
     /// <summary>
-    /// The ColideCom
+    /// Informa se os dois pontos ocupam a mesma célula.
     /// </summary>
-    /// <param name="ponto">The ponto<see cref="Point"/></param>
-    /// <returns>The <see cref="bool"/></returns>
+    /// <param name="ponto">O outro ponto.</param>
+    /// <returns><c>true</c> se as coordenadas forem iguais.</returns>
     public bool ColideCom(Point ponto)
     {
         return Equals(ponto);
     }
 
-    /// <summary>
-    /// The GetHashCode
-    /// </summary>
-    /// <returns>The <see cref="int"/></returns>
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         return HashCode.Combine(X, Y);

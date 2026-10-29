@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Gadz.Tetris.Tests.Model;
 
 /// <summary>
-/// Defines the <see cref="FormasTests" />
+/// Testes da forma de cada tetraminó, criada pelo <see cref="PieceBuilder"/>.
 /// </summary>
 public class FormasTests
 {
@@ -18,7 +18,7 @@ public class FormasTests
     }
 
     /// <summary>
-    /// The DeveDesenharFormaI
+    /// A peça I começa na vertical.
     /// </summary>
     [Test]
     public void DeveDesenharFormaI()
@@ -29,7 +29,7 @@ public class FormasTests
     }
 
     /// <summary>
-    /// The DeveDesenharFormaJ
+    /// A peça J começa em pé, com o pé para a esquerda.
     /// </summary>
     [Test]
     public void DeveDesenharFormaJ()
@@ -40,7 +40,7 @@ public class FormasTests
     }
 
     /// <summary>
-    /// The DeveDesenharFormaL
+    /// A peça L começa em pé, com o pé para a direita.
     /// </summary>
     [Test]
     public void DeveDesenharFormaL()
@@ -50,7 +50,7 @@ public class FormasTests
     }
 
     /// <summary>
-    /// The DeveDesenharFormaO
+    /// A peça O é um quadrado 2×2.
     /// </summary>
     [Test]
     public void DeveDesenharFormaO()
@@ -61,7 +61,7 @@ public class FormasTests
     }
 
     /// <summary>
-    /// The DeveDesenharFormaS
+    /// A peça S começa em pé.
     /// </summary>
     [Test]
     public void DeveDesenharFormaS()
@@ -71,7 +71,7 @@ public class FormasTests
     }
 
     /// <summary>
-    /// The DeveDesenharFormaT
+    /// A peça T começa em pé, com a ponta para a direita.
     /// </summary>
     [Test]
     public void DeveDesenharFormaT()
@@ -82,7 +82,7 @@ public class FormasTests
     }
 
     /// <summary>
-    /// The DeveDesenharFormaZ
+    /// A peça Z começa em pé.
     /// </summary>
     [Test]
     public void DeveDesenharFormaZ()
@@ -153,7 +153,7 @@ public class FormasTests
     }
 
     /// <summary>
-    /// The NaoDeveDesenharNenhumaForma
+    /// Um tipo de peça desconhecido não pode ser construído.
     /// </summary>
     [Test]
     public void NaoDeveDesenharNenhumaForma()

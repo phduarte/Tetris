@@ -4,12 +4,12 @@ using NUnit.Framework;
 namespace Gadz.Tetris.Tests.Model;
 
 /// <summary>
-/// Defines the <see cref="IdentidadeTests" />
+/// Testes de <see cref="Identity"/> e das suas conversões.
 /// </summary>
 public class IdentidadeTests
 {
     /// <summary>
-    /// The DeveInstanciar
+    /// Uma identidade pode ser criada vazia.
     /// </summary>
     [Test]
     public void DeveInstanciar()
@@ -19,7 +19,7 @@ public class IdentidadeTests
     }
 
     /// <summary>
-    /// The DeveGerarNova
+    /// Uma identidade nova pode ser gerada.
     /// </summary>
     [Test]
     public void DeveGerarNova()
@@ -29,7 +29,7 @@ public class IdentidadeTests
     }
 
     /// <summary>
-    /// The DeveConverterIdentidadeParaInteiro
+    /// Uma identidade numérica converte para <c>int</c>.
     /// </summary>
     [Test]
     public void DeveConverterIdentidadeParaInteiro()
@@ -41,7 +41,7 @@ public class IdentidadeTests
     }
 
     /// <summary>
-    /// The DeveConverterIdentidadeParaTexto
+    /// Uma identidade converte para <c>string</c>.
     /// </summary>
     [Test]
     public void DeveConverterIdentidadeParaTexto()
@@ -53,7 +53,7 @@ public class IdentidadeTests
     }
 
     /// <summary>
-    /// The DeveConverterTextoParIdentidade
+    /// Um texto converte para identidade.
     /// </summary>
     [Test]
     public void DeveConverterTextoParIdentidade()
@@ -65,7 +65,7 @@ public class IdentidadeTests
     }
 
     /// <summary>
-    /// The DeveConverterInteiroParaIdentidade
+    /// Um número converte para identidade.
     /// </summary>
     [Test]
     public void DeveConverterInteiroParaIdentidade()
