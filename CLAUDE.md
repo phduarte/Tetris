@@ -24,15 +24,15 @@ CI: `.github/workflows/main.yml` (restore, build e test em `windows-latest`). O 
 
 ```
 Desktop ──► Application ──► Domain
-                       ├──► Data ──► Domain
-                       └──► SoundPlayer
+   │                   └──► Data ──► Domain
+   └──► SoundPlayer ──► Application (implementa ISoundPlayer)
 ```
 
 | Projeto | Responsabilidade |
 |---|---|
 | `Gadz.Tetris.Domain` | Modelo de domínio e **todas** as regras do jogo (tabuleiro, peças, colisão, pontuação, níveis, estados). Não referencia nenhum outro projeto nem pacote. |
 | `Gadz.Tetris.Data` | Implementação dos repositórios do domínio (`StatsRepository` → arquivo texto `%USERPROFILE%\Tetris\stats.mc`). |
-| `Gadz.Tetris.SoundPlayer` | Adapter de áudio (`SoundPlayerAdapter`) com os `.wav` embutidos em `Sounds.resx`. |
+| `Gadz.Tetris.SoundPlayer` | Adapter de áudio (`SoundPlayerAdapter : ISoundPlayer`) com os `.wav` embutidos em `Sounds.resx`. Criado uma única vez no `Program.cs` do Desktop. |
 | `Gadz.Tetris.Application` | `GameController` (fachada para o cliente) e os `Commands` de teclado. É o único ponto que monta o domínio com a infraestrutura. |
 | `Gadz.Tetris.Desktop` | Interface WinForms: captura entradas e desenha a tela. Sem regras de jogo. Um único form sem borda (`Device/ConsoleFrame`, o "aparelho") desenha carcaça, LCD e botões; as telas (`Screens/*Screen`) só trocam o conteúdo do LCD. |
 | `Gadz.Tetris.Tests` | Testes NUnit do domínio e do `GameController`. |
@@ -46,7 +46,7 @@ Desktop ──► Application ──► Domain
 - **Repository** — interface no domínio (`IStatsRepository : IRepository`), implementação em `Data`.
 - **Command** — cada ação de teclado é uma subclasse de `Command` (`Key`, `Control`, `Execute()`) registrada em `CommandFactory` (respeita OCP).
 - **Facade / Factory Method** — `GameController.Create(width, height)` com construtor privado.
-- **Adapter** — `SoundPlayerAdapter` encapsula a API nativa de áudio.
+- **Adapter** — `SoundPlayerAdapter` encapsula a API nativa de áudio atrás do `ISoundPlayer` (interface na `Application`, porque som não é regra de jogo). O `GameController` recebe o `ISoundPlayer` no `Create` e liga os sons aos eventos do `Board`; as telas usam a mesma instância por `ConsoleFrame.Sound` (som fora da partida, mudo, música de fim).
 - **Eventos** — notificações usam o delegate `GameActionEventHandler` e eventos `On*` (`OnRefresh`, `OnClear`, `OnMove`, `OnDrop`, `OnLose`...), disparados com `Evento?.Invoke()`. O `GameController` repassa os eventos do `Board`.
 - **Telas do aparelho (Desktop)** — o `ConsoleFrame` exibe uma `ConsoleScreen` por vez (`MenuScreen`, `PlayScreen`, `ResultScreen`, `HelpScreen`, `AboutScreen`) e troca com `Navigate`. Cada tela declara o `ConsoleLayout` (direcional, botões pequenos e botão grande, cada um com tecla e legenda), desenha o LCD via `LcdCanvas` (células, 7 segmentos, textos) e trata as teclas. Clicar num botão equivale a apertar a tecla dele. Pausa e GAME OVER são modos de desenho da `PlayScreen`, não forms.
 
@@ -95,11 +95,11 @@ Desktop ──► Application ──► Domain
 
 ## Armadilhas conhecidas
 
-- O `GameController` sorteia as peças (o `Create` não aceita outro gerador). Teste que posicione a peça deve valer para qualquer tipo e rotação: a I deitada ocupa 4 colunas, e `CurrentPiecePosition` é a origem da forma, que pode ficar fora do tabuleiro (ex.: -1) quando os blocos começam numa coluna interna. Para conferir a borda, use os blocos (`GetActualBlocks().Min(b => b.X)`); para cenários exatos, teste o `Board` com o `SequencePieceGenerator`.
-- `GameController.Create(width, height)` sem repositório usa o `StatsRepository` real (`%USERPROFILE%\Tetris\stats.mc`). Nos testes, sempre passe o `InMemoryStatsRepository` (`Gadz.Tetris.Tests.Model`) para não gravar em disco.
+- O `GameController` sorteia as peças (o `Create` público não aceita outro gerador; há uma sobrecarga `internal` com `IPieceGenerator`, visível só para `Gadz.Tetris.Tests`). Teste que posicione a peça deve valer para qualquer tipo e rotação: a I deitada ocupa 4 colunas, e `CurrentPiecePosition` é a origem da forma, que pode ficar fora do tabuleiro (ex.: -1) quando os blocos começam numa coluna interna. Para conferir a borda, use os blocos (`GetActualBlocks().Min(b => b.X)`); para cenários exatos, teste o `Board` com o `SequencePieceGenerator`.
+- `GameController.Create(width, height, null, sound)` usa o `StatsRepository` real (`%USERPROFILE%\Tetris\stats.mc`). Nos testes, sempre passe o `InMemoryStatsRepository` e o `FakeSoundPlayer` (`Gadz.Tetris.Tests.Model`) para não gravar em disco nem tocar som.
 - `PlayScreen.HandleKey` executa só o primeiro comando que casar com a tecla (ordem do `CommandFactory`); por isso cada tecla deve ter um único comando — o Enter usa `TogglePauseCommand`, que consulta `CanPause`/`CanContinue` no estado. `Command.Match` recebe também `repeat` (tecla segurada, detectada pelo `ConsoleFrame`): por padrão o comando ignora esse dado; `MoveLeft/Right` só casam no primeiro toque e `HoldLeft/Right` só nas repetições.
 - `Key` usa os códigos do WinForms (`Keys`): o Shift chega como `Keys.ShiftKey` (0x10), não `LShiftKey`.
-- `SoundPlayerAdapter` e `StatsRepository` são estáticos/têm construtor estático e estão marcados com `[ExcludeFromCodeCoverage]`.
+- `SoundPlayerAdapter` e `StatsRepository` falam com o sistema (winmm, disco) e estão marcados com `[ExcludeFromCodeCoverage]`. Crie um só `SoundPlayerAdapter` por aplicação: o construtor abre os sons com aliases fixos.
 - A UI lê os textos pela classe gerada de `Textos/Jogo.resx` (`using Texto = ...Textos.Jogo`). O `Jogo.pt.resx` é um recurso satélite (não gera classe): o Windows em português recebe os textos dele automaticamente.
 - Sem o Visual Studio, a classe de um `.resx` pode ser regenerada com o `ResGen.exe /str:cs,...` do Windows SDK. Ele escreve os comentários no idioma do sistema; traduza-os de volta para o texto padrão em inglês (ou copie só o membro novo para o `Jogo.Designer.cs`).
 - As telas não têm designer: tudo é desenhado em código, em pixels a 96 DPI, e o `ConsoleFrame` escala para o DPI do monitor. Medidas e cores ficam em constantes e na `Palette`; a fonte do LCD (Silkscreen, OFL) e o ícone estão em `Properties/Resources.resx`.

@@ -1,7 +1,6 @@
 ﻿using Gadz.Tetris.Application;
 using Gadz.Tetris.Desktop.Device;
 using Gadz.Tetris.Domain.Models.Pieces;
-using Gadz.Tetris.SoundPlayer;
 using Texto = Gadz.Tetris.Desktop.Textos.Jogo;
 
 namespace Gadz.Tetris.Desktop.Screens;
@@ -139,7 +138,7 @@ internal sealed class MenuScreen : ConsoleScreen
     /// <summary>
     /// A próxima partida, já montada: é dela que vem o recorde mostrado no menu.
     /// </summary>
-    private readonly GameController _nextGame = PlayScreen.CreateGame();
+    private readonly GameController _nextGame;
 
     /// <summary>
     /// Cria o menu.
@@ -147,6 +146,7 @@ internal sealed class MenuScreen : ConsoleScreen
     /// <param name="frame">O aparelho.</param>
     public MenuScreen(ConsoleFrame frame) : base(frame)
     {
+        _nextGame = PlayScreen.CreateGame(frame.Sound);
         KeyBindings = new Dictionary<Keys, Action>
         {
             [Keys.Left] = ToggleSkin,
@@ -227,9 +227,9 @@ internal sealed class MenuScreen : ConsoleScreen
     /// <summary>
     /// Desenha a linha do som: SOM ♪ LIGADO.
     /// </summary>
-    private static void PaintSound(LcdCanvas lcd, float center)
+    private void PaintSound(LcdCanvas lcd, float center)
     {
-        var state = (SoundPlayerAdapter.Mute ? Texto.SomDesligado : $"♪ {Texto.SomLigado}").ToUpperInvariant();
+        var state = (Frame.Sound.Mute ? Texto.SomDesligado : $"♪ {Texto.SomLigado}").ToUpperInvariant();
         var font = Fonts.Pixel(SOUND_SIZE);
         var labelWidth = lcd.MeasureLabel(Texto.Sound);
         var left = center - ((labelWidth + SOUND_GAP + lcd.MeasureText(state, font)) / 2);
@@ -244,6 +244,6 @@ internal sealed class MenuScreen : ConsoleScreen
     private void ToggleSkin()
     {
         Frame.Skin = Frame.Skin == Skin.Tetris ? Skin.BrickGame : Skin.Tetris;
-        SoundPlayerAdapter.Dock();
+        Frame.Sound.Dock();
     }
 }

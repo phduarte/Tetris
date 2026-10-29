@@ -1,6 +1,4 @@
-﻿using Gadz.Tetris.SoundPlayer;
-
-namespace Gadz.Tetris.Application.Commands;
+﻿namespace Gadz.Tetris.Application.Commands;
 
 internal class ToggleMuteCommand(GameController game) : Command(game)
 {
@@ -8,5 +6,5 @@ internal class ToggleMuteCommand(GameController game) : Command(game)
 
     public override bool Control => false;
 
-    public override void Execute() => SoundPlayerAdapter.ToggleMute();
+    public override void Execute() => _gameController.ToggleMute();
 }

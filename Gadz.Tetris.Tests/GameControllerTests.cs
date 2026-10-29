@@ -1,6 +1,7 @@
 ﻿using Gadz.Tetris.Application;
 using Gadz.Tetris.Application.Commands;
 using Gadz.Tetris.Domain.Models;
+using Gadz.Tetris.Domain.Models.Pieces;
 using Gadz.Tetris.Domain.Models.Statistics;
 using Gadz.Tetris.Tests.Model;
 using NUnit.Framework;
@@ -28,13 +29,19 @@ public class GameControllerTests
     private InMemoryStatsRepository repository;
 
     /// <summary>
-    /// Cria o controlador com o repositório em memória.
+    /// Som de mentira usado pelo controlador, que registra os sons pedidos.
+    /// </summary>
+    private FakeSoundPlayer sound;
+
+    /// <summary>
+    /// Cria o controlador com o repositório em memória e o som de mentira.
     /// </summary>
     [SetUp]
     public void Setup()
     {
         repository = new InMemoryStatsRepository();
-        app = GameController.Create(10, 20, repository);
+        sound = new FakeSoundPlayer();
+        app = GameController.Create(10, 20, repository, sound);
     }
 
     /// <summary>
@@ -54,7 +61,7 @@ public class GameControllerTests
     [Test]
     public void NaoDeveInstanciar()
     {
-        Assert.Throws<ArgumentException>(() => GameController.Create(4, 4));
+        Assert.Throws<ArgumentException>(() => GameController.Create(4, 4, repository, sound));
     }
 
     /// <summary>
@@ -376,7 +383,7 @@ public class GameControllerTests
         const int RECORDE = 1200;
         repository.Save(Stats.Load(new StatsRecord { Id = Identity.New(), Score = RECORDE }));
 
-        var game = GameController.Create(10, 20, repository);
+        var game = GameController.Create(10, 20, repository, sound);
 
         Assert.AreEqual(RECORDE, game.GetMaxScore());
     }
@@ -473,5 +480,86 @@ public class GameControllerTests
         var commands = new CommandFactory(app).GetAll((Key)SHIFT_KEY_CODE, false).ToList();
 
         Assert.AreEqual(1, commands.Count);
+    }
+
+    /// <summary>
+    /// O Shift (<c>ToggleMuteCommand</c>) desliga e religa o som recebido pelo controlador.
+    /// </summary>
+    [Test]
+    public void DeveAlternarOSomComOShift()
+    {
+        var toggleMute = new CommandFactory(app).GetAll(Key.ShiftKey, false).Single();
+
+        toggleMute.Execute();
+        Assert.IsTrue(sound.Mute, "O som deveria ter sido desligado.");
+        Assert.IsTrue(app.IsMuted, "O controlador deveria informar o som desligado.");
+
+        toggleMute.Execute();
+        Assert.IsFalse(sound.Mute, "O som deveria ter sido religado.");
+    }
+
+    /// <summary>
+    /// Iniciar a partida toca a música de início.
+    /// </summary>
+    [Test]
+    public void DeveTocarAMusicaAoIniciar()
+    {
+        app.Start();
+
+        Assert.AreEqual(1, sound.Played(nameof(FakeSoundPlayer.Start)));
+    }
+
+    /// <summary>
+    /// Derrubar a peça toca o som de cada passo deslizando e o da peça encaixando.
+    /// </summary>
+    [Test]
+    public void DeveTocarOSomDeEncaixarAoDerrubar()
+    {
+        app.Start();
+
+        app.SmashDown();
+
+        Assert.AreEqual(1, sound.Played(nameof(FakeSoundPlayer.Dock)));
+        Assert.IsTrue(sound.Played(nameof(FakeSoundPlayer.Slide)) > 0, "A peça deveria ter deslizado até o fundo.");
+    }
+
+    /// <summary>
+    /// Completar uma linha toca o som de linha removida.
+    /// </summary>
+    [Test]
+    public void DeveTocarOSomDeLimparLinha()
+    {
+        // cinco quadrados (O, 2 colunas cada) lado a lado completam as duas últimas linhas do tabuleiro de 10 colunas
+        const int SQUARES_PER_ROW = 5;
+        const int SQUARE_WIDTH = 2;
+        var game = GameController.Create(10, 20, repository, sound, new SequencePieceGenerator((PieceType.O, 0)));
+        game.Start();
+
+        for (var square = 0; square < SQUARES_PER_ROW; square++)
+        {
+            for (var step = 0; step < square * SQUARE_WIDTH; step++)
+            {
+                game.MoveRight();
+            }
+
+            game.SmashDown();
+        }
+
+        Assert.AreEqual(2, game.Lines, "As duas linhas deveriam ter sido completadas.");
+        Assert.AreEqual(1, sound.Played(nameof(FakeSoundPlayer.Clear)));
+        game.Exit();
+    }
+
+    /// <summary>
+    /// Mover a peça toca o som de movimento.
+    /// </summary>
+    [Test]
+    public void DeveTocarOSomDeMoverAoMover()
+    {
+        app.Start();
+
+        app.MoveRight();
+
+        Assert.AreEqual(1, sound.Played(nameof(FakeSoundPlayer.Move)));
     }
 }

@@ -36,7 +36,7 @@ O `Board.RefreshAsync()` cria uma thread de background. O WebAssembly roda numa 
 ### 2. A Application está presa à infraestrutura do Windows
 
 - `GameController.Create` faz `new StatsRepository()`, que grava em arquivo. Relacionada: [#53](https://github.com/phduarte/Tetris/issues/53) ✅ — já existe a sobrecarga `Create(width, height, IStatsRepository)`, mas a versão sem repositório ainda cria o `StatsRepository`.
-- `ToggleMuteCommand` chama o `SoundPlayerAdapter` estático, que usa `winmm.dll`.
+- ~~`ToggleMuteCommand` chama o `SoundPlayerAdapter` estático, que usa `winmm.dll`.~~ ✅ [#83](https://github.com/phduarte/Tetris/issues/83): `ISoundPlayer` na `Application`; o Desktop cria o `SoundPlayerAdapter` e o passa ao `Create`.
 
 Proposta: criar a interface `ISoundPlayer` na `Application` (som não é regra de jogo, então não vai no `Domain`) e mudar a assinatura para `GameController.Create(width, height, IStatsRepository, ISoundPlayer)`. A `Application` deixa de referenciar `Data` e `SoundPlayer`.
 

@@ -1,15 +1,22 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Text;
+using Gadz.Tetris.Application;
 
 namespace Gadz.Tetris.SoundPlayer;
 
+/// <summary>
+/// Adapter da API nativa de áudio do Windows (<c>winmm.dll</c>) para o <see cref="ISoundPlayer"/>.
+/// Os <c>.wav</c> vêm embutidos em <see cref="Sounds"/> e são extraídos para a pasta temporária ao criar o adapter.
+/// Crie uma única instância por aplicação: cada uma abre os sons com os mesmos aliases.
+/// </summary>
 [ExcludeFromCodeCoverage]
-public class SoundPlayerAdapter
+public class SoundPlayerAdapter : ISoundPlayer
 {
-    public static bool Mute { get; private set; }
-
-    private static IDictionary<string, UnmanagedMemoryStream> _sounds =
+    /// <summary>
+    /// Os sons embutidos, pelo alias usado nos comandos do <c>mciSendString</c>.
+    /// </summary>
+    private static readonly IReadOnlyDictionary<string, UnmanagedMemoryStream> _sounds =
         new Dictionary<string, UnmanagedMemoryStream> {
         { "clean", Sounds.Clean},
         { "intro", Sounds.Start },
@@ -19,10 +26,19 @@ public class SoundPlayerAdapter
         { "dock", Sounds.Dock }
     };
 
+    /// <inheritdoc/>
+    public bool Mute { get; private set; }
+
+    /// <summary>
+    /// Envia um comando à API MCI do Windows.
+    /// </summary>
     [DllImport("winmm.dll")]
     private static extern Int32 mciSendString(string command, StringBuilder? buffer, int bufferSize, IntPtr hwndCallback);
 
-    static SoundPlayerAdapter()
+    /// <summary>
+    /// Extrai os sons para a pasta temporária (se ainda não estiverem lá) e os abre na API MCI.
+    /// </summary>
+    public SoundPlayerAdapter()
     {
         foreach (var sound in _sounds)
         {
@@ -38,7 +54,8 @@ public class SoundPlayerAdapter
         }
     }
 
-    public static void Start()
+    /// <inheritdoc/>
+    public void Start()
     {
         if (!Mute)
         {
@@ -47,7 +64,8 @@ public class SoundPlayerAdapter
         }
     }
 
-    public static void Clear()
+    /// <inheritdoc/>
+    public void Clear()
     {
         if (!Mute)
         {
@@ -55,7 +73,8 @@ public class SoundPlayerAdapter
         }
     }
 
-    public static void Move()
+    /// <inheritdoc/>
+    public void Move()
     {
         if (!Mute)
         {
@@ -63,7 +82,8 @@ public class SoundPlayerAdapter
         }
     }
 
-    public static void Slide()
+    /// <inheritdoc/>
+    public void Slide()
     {
         if (!Mute)
         {
@@ -71,7 +91,8 @@ public class SoundPlayerAdapter
         }
     }
 
-    public static void End()
+    /// <inheritdoc/>
+    public void End()
     {
         if (!Mute)
         {
@@ -80,7 +101,8 @@ public class SoundPlayerAdapter
         }
     }
 
-    public static void ToggleMute()
+    /// <inheritdoc/>
+    public void ToggleMute()
     {
         Mute = !Mute;
 
@@ -94,17 +116,8 @@ public class SoundPlayerAdapter
         }
     }
 
-    public static void TurnSoundOn()
-    {
-        Mute = false;
-    }
-
-    public static void TurnSoundOff()
-    {
-        Mute = true;
-    }
-
-    public static void Dock()
+    /// <inheritdoc/>
+    public void Dock()
     {
         if (!Mute)
         {
@@ -112,6 +125,9 @@ public class SoundPlayerAdapter
         }
     }
 
+    /// <summary>
+    /// Interrompe todos os sons que estiverem tocando.
+    /// </summary>
     private static void StopAll()
     {
         foreach (var sound in _sounds)

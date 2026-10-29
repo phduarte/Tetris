@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<FCCExcludeFromCodeCoverage/>
+		<FCCExcludeFromCodeCoverage />
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -48,6 +48,10 @@
 		<None Update="AudioFiles\Start.wav">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Gadz.Tetris.Application\Gadz.Tetris.Application.csproj" />
 	</ItemGroup>
 
 </Project>

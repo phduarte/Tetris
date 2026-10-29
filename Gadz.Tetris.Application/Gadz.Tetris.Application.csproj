@@ -1,9 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
+		<InternalsVisibleTo Include="Gadz.Tetris.Tests" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <ProjectReference Include="..\Gadz.Tetris.Data\Gadz.Tetris.Data.csproj" />
 	  <ProjectReference Include="..\Gadz.Tetris.Domain\Gadz.Tetris.Domain.csproj" />
-	  <ProjectReference Include="..\Gadz.Tetris.SoundPlayer\Gadz.Tetris.SoundPlayer.csproj" />
 	</ItemGroup>
 
 </Project>

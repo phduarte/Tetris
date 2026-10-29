@@ -9,6 +9,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Gadz.Tetris.Application\Gadz.Tetris.Application.csproj" />
+	  <ProjectReference Include="..\Gadz.Tetris.SoundPlayer\Gadz.Tetris.SoundPlayer.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

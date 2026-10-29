@@ -30,6 +30,11 @@ public class GameController
     private CancellationTokenSource? _clock;
 
     /// <summary>
+    /// Os sons da partida, ligados aos eventos do tabuleiro.
+    /// </summary>
+    private readonly ISoundPlayer _soundPlayer;
+
+    /// <summary>
     /// Ocorre a cada alteração visual, de estado do jogo ou suas estatísticas
     /// </summary>
     public event GameActionEventHandler? OnRefresh;
@@ -141,6 +146,11 @@ public class GameController
     public bool IsNewRecord => _board.IsNewRecord;
 
     /// <summary>
+    /// Se o som está desligado
+    /// </summary>
+    public bool IsMuted => _soundPlayer.Mute;
+
+    /// <summary>
     /// Tabela de pontuação: os pontos de uma jogada, indexados pela quantidade de linhas removidas menos 1.
     /// </summary>
     public static IReadOnlyList<int> ScoreTable => Stats.ScoreTable;
@@ -151,8 +161,10 @@ public class GameController
     /// <param name="width">Largura do tabuleiro</param>
     /// <param name="height">Altura do tabuleiro</param>
     /// <param name="repository">Repositório onde as estatísticas são guardadas</param>
+    /// <param name="soundPlayer">Os sons tocados a cada ação da partida</param>
+    /// <param name="pieceGenerator">Gerador das novas peças; se nulo, as peças são sorteadas</param>
     /// <exception cref="ArgumentException">Se a largura ou a altura for menor que <see cref="MINIMUM_BOARD_SIZE"/>.</exception>
-    private GameController(int width, int height, IStatsRepository repository)
+    private GameController(int width, int height, IStatsRepository repository, ISoundPlayer soundPlayer, IPieceGenerator? pieceGenerator)
     {
         if (width < MINIMUM_BOARD_SIZE)
         {
@@ -164,7 +176,7 @@ public class GameController
             throw new ArgumentException($"A altura mínima do tabuleiro é {MINIMUM_BOARD_SIZE}.", nameof(height));
         }
 
-        _board = new Board(repository, width, height);
+        _board = new Board(repository, width, height, pieceGenerator);
         _board.OnRefresh += () => OnRefresh?.Invoke();
         _board.OnFinish += () => OnFinish?.Invoke();
         _board.OnLose += () =>
@@ -179,6 +191,12 @@ public class GameController
         _board.OnPause += () => OnPause?.Invoke();
         _board.OnContinue += () => OnContinue?.Invoke();
         _board.OnDrop += () => OnDrop?.Invoke();
+
+        _soundPlayer = soundPlayer;
+        _board.OnClear += _soundPlayer.Clear;
+        _board.OnMove += _soundPlayer.Move;
+        _board.OnSlide += _soundPlayer.Slide;
+        _board.OnDrop += _soundPlayer.Dock;
     }
 
     /// <summary>
@@ -186,12 +204,27 @@ public class GameController
     /// </summary>
     /// <param name="width">Largura do tabuleiro</param>
     /// <param name="height">Altura do tabuleiro</param>
-    /// <param name="repository">Repositório das estatísticas; se omitido, usa o arquivo em disco (<see cref="StatsRepository"/>)</param>
+    /// <param name="repository">Repositório das estatísticas; se nulo, usa o arquivo em disco (<see cref="StatsRepository"/>)</param>
+    /// <param name="soundPlayer">Os sons da partida, na implementação da interface cliente</param>
     /// <returns>Uma instância do Controlador do Jogo</returns>
     /// <exception cref="ArgumentException">Se a largura ou a altura for menor que 10.</exception>
-    public static GameController Create(int width, int height, IStatsRepository? repository = null)
+    public static GameController Create(int width, int height, IStatsRepository? repository, ISoundPlayer soundPlayer)
     {
-        return new GameController(width, height, repository ?? new StatsRepository());
+        return new GameController(width, height, repository ?? new StatsRepository(), soundPlayer, null);
+    }
+
+    /// <summary>
+    /// Cria um Controlador do Jogo com peças previsíveis, para os testes montarem cenários exatos.
+    /// </summary>
+    /// <param name="width">Largura do tabuleiro</param>
+    /// <param name="height">Altura do tabuleiro</param>
+    /// <param name="repository">Repositório das estatísticas</param>
+    /// <param name="soundPlayer">Os sons da partida</param>
+    /// <param name="pieceGenerator">Gerador das novas peças</param>
+    /// <returns>Uma instância do Controlador do Jogo</returns>
+    internal static GameController Create(int width, int height, IStatsRepository repository, ISoundPlayer soundPlayer, IPieceGenerator pieceGenerator)
+    {
+        return new GameController(width, height, repository, soundPlayer, pieceGenerator);
     }
 
     /// <summary>
@@ -216,7 +249,13 @@ public class GameController
     {
         _board.Start();
         UpdateClock();
+        _soundPlayer.Start();
     }
+
+    /// <summary>
+    /// Liga ou desliga o som
+    /// </summary>
+    public void ToggleMute() => _soundPlayer.ToggleMute();
 
     /// <summary>
     /// Movimenta o bloco atual para baixo
