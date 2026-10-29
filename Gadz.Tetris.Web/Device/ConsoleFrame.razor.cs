@@ -1,4 +1,6 @@
-﻿using Gadz.Tetris.Web.Screens;
+﻿using Gadz.Tetris.Domain.Models.Statistics;
+using Gadz.Tetris.Web.Screens;
+using Microsoft.AspNetCore.Components;
 
 namespace Gadz.Tetris.Web.Device;
 
@@ -27,6 +29,12 @@ public partial class ConsoleFrame
     /// A tela exibida, que recebe as teclas; registrada por ela mesma ao ser criada.
     /// </summary>
     private ConsoleScreen? _current;
+
+    /// <summary>
+    /// Onde as estatísticas das partidas são guardadas (no navegador, o <c>LocalStorageStatsRepository</c>).
+    /// </summary>
+    [Inject]
+    public IStatsRepository Repository { get; set; } = default!;
 
     /// <summary>
     /// Troca a tela do LCD.
