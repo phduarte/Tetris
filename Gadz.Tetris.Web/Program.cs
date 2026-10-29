@@ -1,4 +1,5 @@
-﻿using Gadz.Tetris.Domain.Models.Statistics;
+﻿using Gadz.Tetris.Application;
+using Gadz.Tetris.Domain.Models.Statistics;
 using Gadz.Tetris.Web;
 using Gadz.Tetris.Web.Infrastructure;
 using Microsoft.AspNetCore.Components.Web;
@@ -17,4 +18,10 @@ builder.Services.AddLocalization();
 builder.Services.AddSingleton<IStatsRepository>(services
     => new LocalStorageStatsRepository((IJSInProcessRuntime)services.GetRequiredService<IJSRuntime>()));
 
-await builder.Build().RunAsync();
+// uma única instância de som, como o SoundPlayerAdapter do Desktop
+builder.Services.AddSingleton(services => new WebAudioSoundPlayer((IJSInProcessRuntime)services.GetRequiredService<IJSRuntime>()));
+builder.Services.AddSingleton<ISoundPlayer>(services => services.GetRequiredService<WebAudioSoundPlayer>());
+
+var host = builder.Build();
+await host.Services.GetRequiredService<WebAudioSoundPlayer>().LoadAsync();
+await host.RunAsync();

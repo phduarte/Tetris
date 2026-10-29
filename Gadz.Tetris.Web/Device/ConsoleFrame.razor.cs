@@ -1,4 +1,5 @@
-﻿using Gadz.Tetris.Domain.Models.Statistics;
+﻿using Gadz.Tetris.Application;
+using Gadz.Tetris.Domain.Models.Statistics;
 using Gadz.Tetris.Web.Screens;
 using Microsoft.AspNetCore.Components;
 
@@ -35,6 +36,12 @@ public partial class ConsoleFrame
     /// </summary>
     [Inject]
     public IStatsRepository Repository { get; set; } = default!;
+
+    /// <summary>
+    /// Os sons do jogo (no navegador, o <c>WebAudioSoundPlayer</c>), usados também fora da partida.
+    /// </summary>
+    [Inject]
+    public ISoundPlayer Sound { get; set; } = default!;
 
     /// <summary>
     /// Troca a tela do LCD.
