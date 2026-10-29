@@ -61,9 +61,20 @@ public partial class PlayScreen
     private const int CURTAIN_STEP_MS = 45;
 
     /// <summary>
-    /// Por quanto tempo, no máximo, o GAME OVER fica na tela antes de seguir sozinho para o resultado.
+    /// Duração, em milissegundos, da música de fim (<c>Ending.wav</c>), que começa junto com a cortina.
     /// </summary>
-    private const int GAME_OVER_TIMEOUT_MS = 10_000;
+    private const int ENDING_MUSIC_MS = 6_160;
+
+    /// <summary>
+    /// Quanto tempo o GAME OVER fica na tela depois que a música de fim termina.
+    /// </summary>
+    private const int AFTER_MUSIC_MS = 5_000;
+
+    /// <summary>
+    /// Por quanto tempo, no máximo, o GAME OVER fica na tela antes de seguir sozinho para o resultado:
+    /// até a música terminar e mais <see cref="AFTER_MUSIC_MS"/>, descontada a cortina, que toca junto com a música.
+    /// </summary>
+    private const int GAME_OVER_TIMEOUT_MS = ENDING_MUSIC_MS + AFTER_MUSIC_MS - (2 * BOARD_HEIGHT * CURTAIN_STEP_MS);
 
     /// <summary>
     /// As cores da cortina, de baixo para cima (a mesma ordem da <c>Palette</c> do Desktop).

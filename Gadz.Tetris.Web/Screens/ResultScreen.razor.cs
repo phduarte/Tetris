@@ -35,7 +35,7 @@ public partial class ResultScreen
     /// <summary>
     /// Tempo, em milissegundos, até voltar sozinho ao menu.
     /// </summary>
-    private const int TIMEOUT_MS = 30_000;
+    private const int TIMEOUT_MS = 15_000;
 
     /// <summary>
     /// Cancela a volta automática ao menu quando a tela sai antes.

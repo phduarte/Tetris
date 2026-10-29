@@ -105,8 +105,8 @@ No VS Code, o `.vscode/launch.json` traz as opções **Web (Blazor WebAssembly)*
 - **Um aparelho, várias telas**: o jogo é um minigame de bolso (carcaça grafite e coral) em que só o LCD muda de uma tela para outra. Os botões da carcaça mostram a ação e a tecla, e também podem ser clicados.
 - **Estilo BRICK GAME**: LCD esverdeado e monocromático, como o video-game de bolso famoso na década de 90.
 - **Estilo TETRIS**: LCD escuro com as peças nas cores do jogo original da década de 80. O tema é escolhido no menu com ← / →.
-- **Pausa e fim de jogo no LCD**: na pausa (inclusive a automática, quando a janela perde o foco) o tabuleiro apaga para não espiar a jogada. Ao perder, uma cortina de blocos sobe e desce antes do GAME OVER, que segue para o resultado com qualquer tecla ou sozinho depois de 10 segundos.
-- **Resultado**: pontos, nível, linhas, peças, % de TETRIS e tempo, com o selo NOVO RECORDE quando a partida supera o recorde guardado. Volta ao menu com ENTER ou sozinho depois de 30 segundos.
+- **Pausa e fim de jogo no LCD**: na pausa (inclusive a automática, quando a janela perde o foco) o tabuleiro apaga para não espiar a jogada. Ao perder, uma cortina de blocos sobe e desce antes do GAME OVER, que segue para o resultado com qualquer tecla ou sozinho 5 segundos depois de a música de fim terminar.
+- **Resultado**: pontos, nível, linhas, peças, % de TETRIS e tempo, com o selo NOVO RECORDE quando a partida supera o recorde guardado. Volta ao menu com ENTER ou sozinho depois de 15 segundos.
 - **Ajuda interativa**: apertar uma tecla destaca a linha dela no manual, que também traz a tabela de pontos.
 - **Idiomas**: textos em inglês e em português, conforme o idioma do Windows (ou do navegador, na Web).
 - **Desktop e Web**: o mesmo jogo roda no Windows (WinForms) e no navegador (Blazor WebAssembly), sobre o mesmo domínio.

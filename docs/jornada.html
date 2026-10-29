@@ -301,9 +301,9 @@ const FRAMES = [
   { id: "curtain",  sec: "desfecho", file: "tela4.1.png", name: "Cortina",          form: "GameOverCurtain", w: 426, h: 646, x: 2660, y: 680,
     desc: "A peça nova não cabe: depois de uma pausa curta, uma cortina de blocos sobe linha a linha e desce apagando o tabuleiro, ao som de Ending.wav." },
   { id: "gameover", sec: "desfecho", file: "tela4.png",   name: "Game Over",        form: "PlayScreen",   w: 426, h: 646, x: 3380, y: 680,
-    desc: "O GAME OVER em pixel art (com degradê amarelo → vermelho no tema TETRIS), com o placar final ainda visível ao lado. Qualquer tecla continua; sem tecla, segue sozinho para o resultado em 10 segundos." },
+    desc: "O GAME OVER em pixel art (com degradê amarelo → vermelho no tema TETRIS), com o placar final ainda visível ao lado. Qualquer tecla continua; sem tecla, segue sozinho para o resultado 5 segundos depois de a música de fim terminar." },
   { id: "result",   sec: "desfecho", file: "tela5.png",   name: "Resultado",        form: "ResultScreen", w: 426, h: 646, x: 4060, y: 680,
-    desc: "Pontos em destaque, o selo NOVO RECORDE quando a partida supera o recorde guardado (decidido pelo domínio) e a grade com nível, linhas, peças, % de TETRIS e tempo. Enter (FEITO) volta ao menu; sem tecla, volta sozinho em 30 segundos." },
+    desc: "Pontos em destaque, o selo NOVO RECORDE quando a partida supera o recorde guardado (decidido pelo domínio) e a grade com nível, linhas, peças, % de TETRIS e tempo. Enter (FEITO) volta ao menu; sem tecla, volta sozinho em 15 segundos." },
 ];
 
 /**
@@ -323,8 +323,8 @@ const LINKS = [
   { id: "loseT",    from: ["classic", "r", .6], to: ["curtain", "l", .65], kind: "end",   label: "peça nova não cabe" },
   { id: "curtainEnd", from: ["curtain", "r", .5], to: ["gameover", "l", .5], kind: "end", label: "cortina sobe e desce · ♪ Ending" },
   { id: "quit",     from: ["classic", "b", .5], to: ["result", "b", .3],  kind: "end",    label: "<kbd>Esc</kbd> ou ✕ encerra e salva", bend: 420 },
-  { id: "anyKey",   from: ["gameover", "r", .5], to: ["result", "l", .5], kind: "end",    label: "qualquer tecla ou 10 s" },
-  { id: "again",    from: ["result", "b", .75], to: ["menu", "b", .5],    kind: "back",   label: "<kbd>Enter</kbd> · <b>FEITO</b> ou 30 s · nova partida", bend: 1000 },
+  { id: "anyKey",   from: ["gameover", "r", .5], to: ["result", "l", .5], kind: "end",    label: "qualquer tecla ou 5 s após a música" },
+  { id: "again",    from: ["result", "b", .75], to: ["menu", "b", .5],    kind: "back",   label: "<kbd>Enter</kbd> · <b>FEITO</b> ou 15 s · nova partida", bend: 1000 },
 ];
 
 /** Notas de design espalhadas pelo canvas. */
