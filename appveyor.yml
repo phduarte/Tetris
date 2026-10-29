@@ -12,6 +12,5 @@ install:
 build_script:
   - dotnet build Gadz.Tetris.sln --configuration Release
 
-# DeveGuardarORecordeMaximo depende de um recorde salvo localmente (ver .github/workflows/main.yml).
 test_script:
-  - dotnet test Gadz.Tetris.sln --configuration Release --no-build --filter "Name!=DeveGuardarORecordeMaximo"
+  - dotnet test Gadz.Tetris.sln --configuration Release --no-build

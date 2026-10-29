@@ -3,6 +3,7 @@ using Gadz.Tetris.Domain;
 using Gadz.Tetris.Domain.Models;
 using Gadz.Tetris.Domain.Models.Boards;
 using Gadz.Tetris.Domain.Models.Pieces;
+using Gadz.Tetris.Domain.Models.Statistics;
 
 namespace Gadz.Tetris.Application;
 
@@ -150,7 +151,8 @@ public class GameController
     /// </summary>
     /// <param name="width">The width<see cref="int"/></param>
     /// <param name="height">The height<see cref="int"/></param>
-    private GameController(int width, int height)
+    /// <param name="repository">Repositório onde as estatísticas são guardadas</param>
+    private GameController(int width, int height, IStatsRepository repository)
     {
         if (width < MINIMUM_BOARD_SIZE)
         {
@@ -162,7 +164,7 @@ public class GameController
             throw new ArgumentException($"A altura mínima do tabuleiro é {MINIMUM_BOARD_SIZE}.", nameof(height));
         }
 
-        _board = new Board(new StatsRepository(), width, height);
+        _board = new Board(repository, width, height);
         _board.OnRefresh += () => OnRefresh?.Invoke();
         _board.OnFinish += () => OnFinish?.Invoke();
         _board.OnLose += () => OnLose?.Invoke();
@@ -179,10 +181,11 @@ public class GameController
     /// </summary>
     /// <param name="width">Largura do tabuleiro</param>
     /// <param name="height">Algura do tabuleiro</param>
+    /// <param name="repository">Repositório das estatísticas; se omitido, usa o arquivo em disco (<see cref="StatsRepository"/>)</param>
     /// <returns>Uma instância do Controlador do Jogo</returns>
-    public static GameController Create(int width, int height)
+    public static GameController Create(int width, int height, IStatsRepository? repository = null)
     {
-        return new GameController(width, height);
+        return new GameController(width, height, repository ?? new StatsRepository());
     }
 
     /// <summary>

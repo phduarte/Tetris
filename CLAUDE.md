@@ -89,7 +89,6 @@ Desktop ──► Application ──► Domain
 
 ## Armadilhas conhecidas
 
-- Os testes usam o `StatsRepository` real e gravam em `%USERPROFILE%\Tetris\stats.mc`.
-- `DeveGuardarORecordeMaximo` depende de haver um recorde > 0 salvo nesse arquivo; por isso o CI o exclui com `--filter`.
+- `GameController.Create(width, height)` sem repositório usa o `StatsRepository` real (`%USERPROFILE%\Tetris\stats.mc`). Nos testes, sempre passe o `InMemoryStatsRepository` (`Gadz.Tetris.Tests.Model`) para não gravar em disco.
 - `Play.Jogo_KeyDown` executa só o primeiro comando que casar com a tecla (ordem do `CommandFactory`); por isso cada tecla deve ter um único comando — o Enter usa `TogglePauseCommand`, que consulta `CanPause`/`CanContinue` no estado.
 - `SoundPlayerAdapter` e `StatsRepository` são estáticos/têm construtor estático e estão marcados com `[ExcludeFromCodeCoverage]`.

@@ -26,7 +26,7 @@ public class TabuleiroTests
     [SetUp]
     public void Setup()
     {
-        _board = new Board(new FakeStatsRepository(), 10, 20);
+        _board = new Board(new InMemoryStatsRepository(), 10, 20);
         _board.Start();
     }
 

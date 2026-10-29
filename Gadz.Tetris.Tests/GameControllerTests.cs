@@ -1,5 +1,8 @@
 ﻿using Gadz.Tetris.Application;
 using Gadz.Tetris.Application.Commands;
+using Gadz.Tetris.Domain.Models;
+using Gadz.Tetris.Domain.Models.Statistics;
+using Gadz.Tetris.Tests.Model;
 using NUnit.Framework;
 
 namespace Gadz.Tetris.Tests;
@@ -15,12 +18,18 @@ public class GameControllerTests
     private GameController app;
 
     /// <summary>
+    /// Repositório em memória usado pelo controlador, para não gravar em disco.
+    /// </summary>
+    private InMemoryStatsRepository repository;
+
+    /// <summary>
     /// The Setup
     /// </summary>
     [SetUp]
     public void Setup()
     {
-        app = GameController.Create(10, 20);
+        repository = new InMemoryStatsRepository();
+        app = GameController.Create(10, 20, repository);
     }
 
     /// <summary>
@@ -287,13 +296,28 @@ public class GameControllerTests
     }
 
     /// <summary>
-    /// The DeveGuardarORecordeMaximo
+    /// O recorde informado é a maior pontuação já guardada no repositório.
     /// </summary>
     [Test]
     public void DeveGuardarORecordeMaximo()
     {
+        const int RECORDE = 1200;
+        repository.Save(Stats.Load(new StatsRecord { Id = Identity.New(), Score = RECORDE }));
+
+        var game = GameController.Create(10, 20, repository);
+
+        Assert.AreEqual(RECORDE, game.GetMaxScore());
+    }
+
+    /// <summary>
+    /// Ao sair, as estatísticas da partida são guardadas no repositório.
+    /// </summary>
+    [Test]
+    public void DeveSalvarAsEstatisticasAoSair()
+    {
         app.Start();
         app.Exit();
-        Assert.AreNotEqual(0, app.GetMaxScore());
+
+        Assert.AreEqual(1, repository.All().Count());
     }
 }
