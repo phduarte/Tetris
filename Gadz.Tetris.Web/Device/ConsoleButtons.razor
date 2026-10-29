@@ -3,7 +3,8 @@
         <div class="dpad">
             @foreach (var (key, area, enabled) in DpadKeys)
             {
-                <button type="button" class="arrow @area" data-key="@key" disabled="@(!enabled)" @onclick="() => Frame.Press(key)"></button>
+                @* sem @onclick: o keyboard.js trata o toque e a seta segurada, que se repete como a tecla *@
+                <button type="button" class="arrow @area" data-key="@key" disabled="@(!enabled)"></button>
             }
         </div>
         <p class="dpad-caption">@Dpad.Label<span class="dpad-hint">@Dpad.Hint</span></p>
@@ -23,12 +24,6 @@
 </SectionContent>
 
 @code {
-    /// <summary>
-    /// O aparelho, que recebe o clique como se fosse a tecla.
-    /// </summary>
-    [CascadingParameter]
-    public ConsoleFrame Frame { get; set; } = default!;
-
     /// <summary>
     /// O direcional da tela.
     /// </summary>

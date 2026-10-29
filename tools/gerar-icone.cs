@@ -3,7 +3,9 @@
 #:property PublishAot=false
 
 // Gera o ícone do jogo (Gadz.Tetris.Desktop/tetris.ico) desenhando-o em cada tamanho, para ficar nítido também em 16 px.
+// Com saída .png, gera uma imagem só, no tamanho pedido: são os ícones da Web (favicon e PWA), iguais ao do Desktop.
 // Uso: dotnet run tools/gerar-icone.cs -- Gadz.Tetris.Desktop/tetris.ico
+//      dotnet run tools/gerar-icone.cs -- Gadz.Tetris.Web/wwwroot/icon-512.png 512
 
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -32,6 +34,14 @@ string[] grid =
     "L.OO",
     "LLOO",
 ];
+
+if (Path.GetExtension(output).Equals(".png", StringComparison.OrdinalIgnoreCase))
+{
+    var size = int.Parse(args[1]);
+    File.WriteAllBytes(output, Render(size));
+    Console.WriteLine($"{output}: {size} px");
+    return;
+}
 
 var images = sizes.Select(size => (size, png: Render(size))).ToList();
 using (var file = File.Create(output))
