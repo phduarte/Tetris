@@ -93,7 +93,7 @@ dotnet publish Gadz.Tetris.Web -c Release -o publish
 
 The site ends up in `publish/wwwroot`.
 
-The online version is published to [GitHub Pages](https://phduarte.github.io/Tetris/) by the `.github/workflows/pages.yml` workflow, on every push to `master`. Since the site lives in the `/Tetris/` subfolder, the workflow adjusts the `<base href>` in `index.html` before `publish`.
+The online version is published to [GitHub Pages](https://phduarte.github.io/Tetris/) by the `.github/workflows/pages.yml` workflow, on every push to `main`. Since the site lives in the `/Tetris/` subfolder, the workflow adjusts the `<base href>` in `index.html` before `publish`.
 
 ### Desktop (Windows)
 

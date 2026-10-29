@@ -1,6 +1,6 @@
 # Plano multiplataforma: Web e Mobile — Gadz.Tetris
 
-Análise de 28/10/2026, branch `master`.
+Análise de 28/10/2026, branch `main`.
 
 Um dos objetivos do projeto é ter N interfaces usando o mesmo `Domain`. Hoje só existe a interface WinForms. Este documento propõe uma interface única para Web e Mobile, instalável como PWA, e lista o que precisa mudar antes disso. Algumas mudanças já têm issue no [plano de refatoração](PLANO-REFATORACAO.md) e estão indicadas abaixo.
 

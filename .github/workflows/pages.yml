@@ -3,7 +3,7 @@ name: GitHub Pages
 # publica a versão Web (Blazor WebAssembly) em https://phduarte.github.io/Tetris/
 on:
   push:
-    branches: [master]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
