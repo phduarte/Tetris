@@ -69,7 +69,7 @@ Desktop ──► Application ──► Domain
 - 7 peças com cores fixas: I=Cyan, T=Purple, L=Orange, J=Blue, O=Yellow, S=Green, Z=Red. Rotação cicla 0→3→0.
 - Pontuação por jogada: 1 linha = 40, 2 = 100, 3 = 300, 4 (TETRIS) = 1200. No máximo 4 linhas por jogada.
 - Nível sobe ao completar a meta de linhas (inicia em 20 e cresce 25% a cada nível).
-- Velocidade: a peça desce a cada `Stats.Interval` ms — 1000 no nível 1, menos 50 por nível, mínimo de 100.
+- Velocidade: a peça desce a cada `Stats.Interval` ms — 1000 no nível 1, menos 50 por nível, mínimo de 100. O domínio não tem relógio: cada passo é um `Board.Tick()`, chamado pelo `GameController` (`Task.Delay`, sem threads próprias, para rodar também no WebAssembly). Nos testes de domínio, chame `Tick()` em vez de esperar.
 - Recorde (HI-SCORE): `Board.Record` é a maior pontuação guardada no repositório ou a pontuação atual, se ela já a superou; `Board.IsNewRecord` diz se a partida superou o recorde guardado. As estatísticas são salvas ao sair (`Exit`) e ao perder (o `GameController` salva antes de repassar o `OnLose`).
 - A tabela de pontuação é exposta como `Stats.ScoreTable` (via `GameController.ScoreTable`) para a ajuda não repetir os números.
 - Tempo jogado: contado pelo `PlayClock` (`internal`) dentro de `Stats`, sem contar as pausas.
@@ -87,7 +87,7 @@ Desktop ──► Application ──► Domain
 7. **Não exponha estado mutável do domínio.** Mantenha `private set`, coleções somente leitura e tipos internos como `internal`.
 8. **Sem números mágicos.** Valores com significado viram constantes nomeadas (`private const`).
 9. **Textos de interface ficam em recursos.** Todo texto visível vai em `Textos/Jogo.resx` (inglês) **e** `Textos/Jogo.pt.resx` (português), com a mesma chave nos dois.
-10. **Atualizações de controles WinForms acontecem na thread de UI.** O `Board` roda o loop em thread de background; use o `TaskScheduler` capturado (`_threadPrincipal`) como em `PlayScreen.RunOnUiAsync`.
+10. **Atualizações de controles WinForms acontecem na thread de UI.** O relógio do `GameController` (`RunClockAsync`) chama `Board.Tick` fora da thread de UI; use o `TaskScheduler` capturado (`_threadPrincipal`) como em `PlayScreen.RunOnUiAsync`.
 11. **Compatibilidade do arquivo de estatísticas.** `stats.mc` é texto separado por tab com ordem de colunas fixa (`COL_ID`…`COL_TIME`). Só acrescente colunas ao final e mantenha a leitura de arquivos antigos funcionando.
 12. **Testes acompanham as regras.** Toda regra de domínio nova ou alterada precisa de teste em `Gadz.Tetris.Tests`. Mudanças na tabela de pontuação, cores, estados ou teclas exigem atualizar testes **e** o `README.md`.
 13. **Não edite arquivos gerados** (`*.Designer.cs`) à mão.

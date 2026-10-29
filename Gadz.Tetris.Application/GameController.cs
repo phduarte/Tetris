@@ -9,7 +9,8 @@ namespace Gadz.Tetris.Application;
 
 /// <summary>
 /// Controlador do jogo (Facade): o único ponto de contato da aplicação cliente com o jogo.
-/// <para>Monta o domínio com a infraestrutura e repassa comandos, consultas e eventos do tabuleiro.</para>
+/// <para>Monta o domínio com a infraestrutura, repassa comandos, consultas e eventos do tabuleiro
+/// e mantém o relógio que desce a peça durante a partida.</para>
 /// </summary>
 public class GameController
 {
@@ -22,6 +23,11 @@ public class GameController
     /// O tabuleiro controlado; nunca é exposto ao cliente.
     /// </summary>
     private readonly Board _board;
+
+    /// <summary>
+    /// Cancela o relógio que desce a peça; trocado a cada <see cref="UpdateClock"/> para nunca haver dois relógios ao mesmo tempo.
+    /// </summary>
+    private CancellationTokenSource? _clock;
 
     /// <summary>
     /// Ocorre a cada alteração visual, de estado do jogo ou suas estatísticas
@@ -206,7 +212,11 @@ public class GameController
     /// <summary>
     /// Inicia o jogo
     /// </summary>
-    public void Start() => _board.Start();
+    public void Start()
+    {
+        _board.Start();
+        UpdateClock();
+    }
 
     /// <summary>
     /// Movimenta o bloco atual para baixo
@@ -226,7 +236,11 @@ public class GameController
     /// <summary>
     /// Pausa o jogo
     /// </summary>
-    public void Pause() => _board.Pause();
+    public void Pause()
+    {
+        _board.Pause();
+        UpdateClock();
+    }
 
     /// <summary>
     /// Salva o progresso do jogo
@@ -239,6 +253,7 @@ public class GameController
     public void Exit()
     {
         _board.Finish();
+        UpdateClock();
         Save();
     }
 
@@ -250,17 +265,29 @@ public class GameController
     /// <summary>
     /// Continua um jogo pausado
     /// </summary>
-    public void Continue() => _board.Continue();
+    public void Continue()
+    {
+        _board.Continue();
+        UpdateClock();
+    }
 
     /// <summary>
     /// Pausa o jogo em andamento ou continua o jogo pausado
     /// </summary>
-    public void TogglePause() => _board.TogglePause();
+    public void TogglePause()
+    {
+        _board.TogglePause();
+        UpdateClock();
+    }
 
     /// <summary>
     /// Reinicia um jogo
     /// </summary>
-    public void Restart() => _board.Restart();
+    public void Restart()
+    {
+        _board.Restart();
+        UpdateClock();
+    }
 
     /// <summary>
     /// Blocos da peça atual
@@ -299,5 +326,53 @@ public class GameController
     public int GetMaxScore()
     {
         return _board.Record;
+    }
+
+    /// <summary>
+    /// Para o relógio atual e, se a partida estiver em andamento, liga outro.
+    /// Chamado depois de toda ação que pode mudar o estado entre jogando, pausado e encerrado.
+    /// </summary>
+    private void UpdateClock()
+    {
+        _clock?.Cancel();
+        _clock?.Dispose();
+        _clock = null;
+
+        if (!_board.IsPlaying)
+        {
+            return;
+        }
+
+        _clock = new CancellationTokenSource();
+        _ = RunClockAsync(_clock.Token);
+    }
+
+    /// <summary>
+    /// Desce a peça a cada <see cref="Board.Frequency"/> ms até o relógio ser cancelado ou a partida sair do estado jogando.
+    /// O intervalo é lido a cada volta porque diminui quando o nível sobe.
+    /// </summary>
+    /// <param name="token">Cancelado por <see cref="UpdateClock"/> ao pausar, encerrar ou ligar outro relógio.</param>
+    /// <returns>A tarefa do relógio, que termina sem exceção.</returns>
+    private async Task RunClockAsync(CancellationToken token)
+    {
+        try
+        {
+            while (true)
+            {
+                // ConfigureAwait(false): o passo não precisa voltar à thread de UI, que só desenha ao receber os eventos
+                await Task.Delay(_board.Frequency, token).ConfigureAwait(false);
+
+                if (token.IsCancellationRequested || !_board.IsPlaying)
+                {
+                    return;
+                }
+
+                _board.Tick();
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // o relógio foi parado por UpdateClock
+        }
     }
 }

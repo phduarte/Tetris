@@ -32,7 +32,7 @@ public class TabuleiroTests
     }
 
     /// <summary>
-    /// Encerra o jogo para que o loop em background pare.
+    /// Encerra o jogo ao fim de cada teste.
     /// </summary>
     [TearDown]
     public void TearDown()
@@ -259,14 +259,15 @@ public class TabuleiroTests
     }
 
     /// <summary>
-    /// Comandos disparados de várias threads ao mesmo tempo que o loop não lançam exceção nem sobrepõem blocos.
+    /// Comandos disparados de várias threads ao mesmo tempo que o relógio (<see cref="Board.Tick"/>) não lançam exceção nem sobrepõem blocos.
     /// </summary>
     [Test]
-    public void DeveSuportarComandosConcorrentesComOLoop()
+    public void DeveSuportarComandosConcorrentesComORelogio()
     {
         var until = DateTime.Now.AddMilliseconds(STRESS_DURATION_MS);
         Action[] commands =
         [
+            _board.Tick,
             _board.MoveLeft,
             _board.MoveRight,
             _board.Rotate,
@@ -298,6 +299,46 @@ public class TabuleiroTests
         }
 
         Assert.AreEqual(_board.Blocks.Count, _board.Blocks.Select(b => b.Point).Distinct().Count(), "Há blocos assentados na mesma célula.");
+    }
+
+    /// <summary>
+    /// Cada <see cref="Board.Tick"/> desce a peça uma linha; quando ela não pode mais descer, é assentada e a próxima entra.
+    /// </summary>
+    [Test]
+    public void DeveDescerAPecaACadaTick()
+    {
+        // I deitada (rotação 1) ocupa uma única linha: desce do topo (Y 0) até o fundo (Y 19) em 19 passos
+        var board = new Board(new InMemoryStatsRepository(), 10, 20, new SequencePieceGenerator((PieceType.I, 1)));
+        board.Start();
+        var bottom = board.Height - 1 - board.CurrentPiece.Blocks.Max(b => b.Y);
+
+        for (var i = 1; i <= bottom; i++)
+        {
+            board.Tick();
+            Assert.AreEqual(i, board.CurrentPiece.Position.Y, $"Posição errada após {i} passo(s).");
+        }
+
+        Assert.AreEqual(0, board.Blocks.Count, "A peça foi assentada antes de chegar ao fundo.");
+
+        board.Tick();
+
+        Assert.AreEqual(4, board.Blocks.Count, "A peça não foi assentada ao chegar ao fundo.");
+        Assert.AreEqual(1, board.Stats.Blocks, "A troca de peça não foi contada.");
+        Assert.AreEqual(0, board.CurrentPiece.Position.Y, "A próxima peça não entrou no topo.");
+    }
+
+    /// <summary>
+    /// Com a partida pausada, o <see cref="Board.Tick"/> não move a peça.
+    /// </summary>
+    [Test]
+    public void NaoDeveDescerNoTickComOJogoPausado()
+    {
+        var y = _board.CurrentPiece.Position.Y;
+        _board.Pause();
+
+        _board.Tick();
+
+        Assert.AreEqual(y, _board.CurrentPiece.Position.Y);
     }
 
     /// <summary>

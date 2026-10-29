@@ -13,6 +13,11 @@ namespace Gadz.Tetris.Tests;
 public class GameControllerTests
 {
     /// <summary>
+    /// Quanto os testes do relógio esperam: um pouco mais que o intervalo de descida do nível 1 (1000 ms).
+    /// </summary>
+    private const int CLOCK_TIMEOUT_MS = 1500;
+
+    /// <summary>
     /// Controlador 10×20 recriado a cada teste.
     /// </summary>
     private GameController app;
@@ -258,7 +263,6 @@ public class GameControllerTests
     {
         app.Start();
         app.RunRight();
-        Thread.Sleep(100);
         Assert.IsTrue(app.CurrentPiecePosition.X > 5);
     }
 
@@ -270,10 +274,48 @@ public class GameControllerTests
     {
         DeveCorrerParaDireita();
         app.RunLeft();
-        Thread.Sleep(100);
 
         // a posição é a origem da forma, que pode ficar em -1 quando a rotação sorteada começa os blocos na coluna 1
         Assert.AreEqual(0, app.GetActualBlocks().Min(b => b.X));
+    }
+
+    /// <summary>
+    /// Depois de iniciar, o relógio do controlador desce a peça sozinho, sem nenhum comando do jogador.
+    /// </summary>
+    [Test]
+    public void DeveDescerAPecaSozinhaDepoisDeIniciar()
+    {
+        // TaskCompletionSource em vez de um evento descartável: o relógio ainda pode disparar OnRefresh depois do teste
+        var descended = new TaskCompletionSource();
+        app.OnRefresh += () =>
+        {
+            if (app.CurrentPiecePosition.Y > 0)
+            {
+                descended.TrySetResult();
+            }
+        };
+
+        app.Start();
+
+        Assert.IsTrue(descended.Task.Wait(CLOCK_TIMEOUT_MS), "A peça não desceu sozinha.");
+        app.Exit();
+    }
+
+    /// <summary>
+    /// Com o jogo pausado, o relógio do controlador não desce a peça.
+    /// </summary>
+    [Test]
+    public void NaoDeveDescerAPecaComOJogoPausado()
+    {
+        app.Start();
+        app.Pause();
+        var y = app.CurrentPiecePosition.Y;
+
+        // espera mais que o intervalo do nível 1, tempo suficiente para um passo do relógio
+        Thread.Sleep(CLOCK_TIMEOUT_MS);
+
+        Assert.AreEqual(y, app.CurrentPiecePosition.Y);
+        app.Exit();
     }
 
     /// <summary>

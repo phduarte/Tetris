@@ -30,7 +30,8 @@ O `Board.RefreshAsync()` cria uma thread de background. O WebAssembly roda numa 
 - O `Domain` expõe um `Tick()` (o atual `Checkout()`), e o "relógio" fica fora dele.
 - A `Application` controla o loop com `PeriodicTimer`/`Task.Delay`, que funcionam no WASM.
 - Bônus: os testes de queda e de nível ficam determinísticos, porque dá para chamar `Tick()` direto sem esperar tempo real.
-- Relacionada: [#63](https://github.com/phduarte/Tetris/issues/63) (serializar as mutações do `Board`). ✅ Fechada com um `lock` no `Board`; o loop continua numa `Thread` de background, então mover o relógio para fora segue pendente.
+- Relacionada: [#63](https://github.com/phduarte/Tetris/issues/63) (serializar as mutações do `Board`). ✅ Fechada com um `lock` no `Board`.
+- ✅ [#82](https://github.com/phduarte/Tetris/issues/82): o `Board` expõe `Tick()` e o `GameController` desce a peça com `Task.Delay`, lendo `Stats.Interval` a cada volta.
 
 ### 2. A Application está presa à infraestrutura do Windows
 

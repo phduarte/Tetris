@@ -35,15 +35,9 @@ public class Board : Entity
     private Playfield _playfield;
 
     /// <summary>
-    /// Serializa as mutações do tabuleiro: o loop roda em background e os comandos chegam pela thread da UI.
+    /// Serializa as mutações do tabuleiro: o relógio que chama <see cref="Tick"/> pode rodar numa thread diferente da dos comandos do jogador.
     /// </summary>
     private readonly Lock _sync = new();
-
-    /// <summary>
-    /// Identifica o loop vigente. Cada <see cref="RefreshAsync"/> incrementa o valor e o loop anterior se encerra,
-    /// evitando dois loops simultâneos após <see cref="Restart"/> ou <see cref="Continue"/>.
-    /// </summary>
-    private int _loopGeneration;
 
     /// <summary>
     /// Largura e altura do tabuleiro, em células.
@@ -286,7 +280,7 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// Continua a partida pausada, se o estado permitir, e retoma a descida automática.
+    /// Continua a partida pausada, se o estado permitir.
     /// </summary>
     public void Continue()
     {
@@ -300,7 +294,6 @@ public class Board : Entity
             OnContinue?.Invoke();
             State = PlayingState.Instance;
             Stats.Continue();
-            RefreshAsync();
         }
     }
 
@@ -352,7 +345,7 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// Começa uma partida nova: limpa o tabuleiro, sorteia as peças e inicia a descida automática.
+    /// Começa uma partida nova: limpa o tabuleiro e sorteia as peças. A descida automática depende de <see cref="Tick"/>.
     /// </summary>
     public void Start()
     {
@@ -364,7 +357,6 @@ public class Board : Entity
             _playfield.Clear();
             OnRefresh?.Invoke();
             State = PlayingState.Instance;
-            RefreshAsync();
         }
     }
 
@@ -419,6 +411,18 @@ public class Board : Entity
         lock (_sync)
         {
             Stats = _repository.Load(id);
+        }
+    }
+
+    /// <summary>
+    /// Avança o jogo um passo da descida automática: desce a peça atual ou, se ela não puder descer, assenta-a.
+    /// O tabuleiro não tem relógio: quem o usa chama este método a cada <see cref="Frequency"/> ms enquanto a partida estiver em andamento.
+    /// </summary>
+    public void Tick()
+    {
+        lock (_sync)
+        {
+            Checkout();
         }
     }
 
@@ -602,33 +606,6 @@ public class Board : Entity
         {
             AddScore(lines);
         }
-    }
-
-    /// <summary>
-    /// Inicia, numa thread de background, o loop que desce a peça a cada <see cref="Frequency"/> ms enquanto a partida estiver em andamento.
-    /// </summary>
-    private void RefreshAsync()
-    {
-        var generation = ++_loopGeneration;
-
-        new Thread(() =>
-        {
-            while (true)
-            {
-                Thread.Sleep(Frequency);
-
-                lock (_sync)
-                {
-                    if (!IsPlaying || generation != _loopGeneration)
-                    {
-                        return;
-                    }
-
-                    Checkout();
-                }
-            }
-        })
-        { IsBackground = true }.Start();
     }
 
     /// <summary>
