@@ -1,0 +1,1178 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Redesign das Telas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --page: #18191c;
+    --text: #ececec;
+    --muted: #9b9ea4;
+    --line: #2e3035;
+    --accent: #ff7a59;
+    --accent-dk: #c9492c;
+    --case-hi: #37383e;
+    --case-lo: #25262a;
+    --bezel: #131417;
+    --lcd-mono: #b4bf9f;
+    --ink-mono: #1d2618;
+    --lcd-color: #11161a;
+    --ink-color: #dfe8e1;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--page); color: var(--text);
+    font: 14px/1.5 "Segoe UI", system-ui, sans-serif;
+  }
+  header, section { max-width: 1340px; margin: 0 auto; padding: 0 24px; }
+  header { padding-top: 40px; padding-bottom: 8px; }
+  h1 { font-size: 26px; margin: 0 0 6px; }
+  header p { color: var(--muted); max-width: 780px; margin: 0 0 8px; }
+  nav { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+  nav a {
+    color: var(--text); text-decoration: none; font-size: 12px;
+    border: 1px solid var(--line); border-radius: 14px; padding: 3px 11px;
+  }
+  nav a:hover { border-color: var(--accent); color: var(--accent); }
+  kbd {
+    background: #2a2b30; border: 1px solid #44464c; border-bottom-width: 2px; border-radius: 4px;
+    padding: 0 5px; font: 600 12px/1.6 Consolas, monospace; color: var(--text);
+  }
+  section { padding-top: 36px; padding-bottom: 36px; border-bottom: 1px solid var(--line); }
+  h2 { font-size: 20px; margin: 0 0 20px; }
+  h2 small { color: var(--muted); font-weight: 400; font-size: 13px; margin-left: 8px; }
+  .compare { display: flex; flex-wrap: wrap; gap: 36px; align-items: flex-start; }
+  figure { margin: 0; }
+  figcaption {
+    color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .08em;
+    margin-bottom: 10px; font-weight: 600;
+  }
+  .before img { display: block; max-width: 100%; border-radius: 4px; box-shadow: 0 6px 20px rgba(0,0,0,.45); opacity: .9; }
+  .hint { color: var(--muted); font-size: 12px; margin-top: 10px; text-align: center; }
+  .notes { flex: 1 1 280px; min-width: 260px; }
+  .notes h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); margin: 0 0 8px; }
+  .notes ul { margin: 0 0 22px; padding-left: 18px; color: #d2d4d8; }
+  .notes li { margin-bottom: 6px; }
+  .notes code { color: #f4c6b8; font-size: 12.5px; }
+  .notes .open { color: #f5cc3c; }
+
+  /* ---------- Aparelho (carcaça comum a todas as telas) ---------- */
+  .device {
+    --lcd: var(--lcd-mono); --ink: var(--ink-mono);
+    width: 426px; padding: 0 24px 20px; border-radius: 26px;
+    background: linear-gradient(180deg, var(--case-hi), var(--case-lo));
+    box-shadow: 0 22px 44px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.08);
+    outline: none; user-select: none;
+  }
+  .device[data-skin="color"] { --lcd: var(--lcd-color); --ink: var(--ink-color); }
+  .device:focus-visible { box-shadow: 0 0 0 3px var(--accent), 0 22px 44px rgba(0,0,0,.55); }
+
+  .topbar { height: 48px; display: flex; align-items: center; gap: 10px; }
+  .logo { display: flex; gap: 3px; }
+  .logo i { width: 7px; height: 7px; border-radius: 1px; }
+  .brand { font: 700 12px/1 "Segoe UI", sans-serif; letter-spacing: .32em; color: #e9e6df; }
+  .brand b { color: var(--accent); }
+  .close {
+    margin-left: auto; width: 20px; height: 20px; border-radius: 50%; border: 0;
+    background: #1b1c20; color: #8d9096; font-size: 12px; line-height: 20px; cursor: pointer;
+  }
+  .close:hover { color: var(--accent); }
+
+  .bezel {
+    background: var(--bezel); border-radius: 14px; padding: 14px;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,.7), 0 1px 0 rgba(255,255,255,.06);
+  }
+  .lcd {
+    position: relative; height: 382px; padding: 12px; border-radius: 4px; overflow: hidden;
+    background: var(--lcd); color: var(--ink);
+    box-shadow: inset 0 3px 10px rgba(0,0,0,.35);
+    transition: background .3s, color .3s;
+  }
+  .pix { font-family: "Silkscreen", monospace; text-transform: uppercase; }
+  .label { font: 700 9px/1 "Segoe UI", sans-serif; letter-spacing: .14em; text-transform: uppercase; }
+
+  /* Célula do LCD: borda + miolo, sempre visível (apagada) como num display real. */
+  .grid { display: grid; gap: 2px; }
+  .cell { width: var(--cs); height: var(--cs); border: 2px solid var(--ink); padding: 2px; opacity: .09; }
+  .cell::after { content: ""; display: block; width: 100%; height: 100%; background: var(--ink); }
+  .cell.on { opacity: 1; }
+  .device[data-skin="color"] .cell { opacity: .06; }
+  .device[data-skin="color"] .cell.on {
+    opacity: 1; background: var(--c);
+    border-color: rgba(255,255,255,.55) rgba(0,0,0,.4) rgba(0,0,0,.4) rgba(255,255,255,.55);
+  }
+  .device[data-skin="color"] .cell.on::after { background: rgba(255,255,255,.16); }
+
+  /* Display de 7 segmentos com segmentos-fantasma. */
+  .seg { display: inline-flex; gap: 2px; height: var(--h, 24px); transform: skewX(-6deg); }
+  .seg svg { height: 100%; width: auto; }
+  .seg polygon, .seg rect { fill: var(--ink); opacity: .1; }
+  .seg .on { opacity: 1; }
+  .unit { font: 700 13px/1 "Segoe UI", sans-serif; margin-left: 3px; }
+
+  @keyframes blink { 50% { opacity: 0; } }
+  .blink { animation: blink 1.1s steps(1) infinite; }
+
+  /* ---------- Botões da carcaça ---------- */
+  .controls {
+    display: grid; grid-template-columns: 112px 1fr 84px; align-items: start;
+    gap: 8px; padding-top: 18px; min-height: 168px;
+  }
+  .ctl { display: grid; justify-items: center; gap: 6px; }
+  .cap { text-align: center; font: 700 9px/1.35 "Segoe UI", sans-serif; letter-spacing: .08em; color: #e9e6df; }
+  .cap em { display: block; font-style: normal; color: var(--accent); }
+
+  .dpad { position: relative; width: 96px; height: 96px; }
+  .dpad button {
+    position: absolute; width: 32px; height: 32px; border: 0; padding: 0; cursor: pointer;
+    background: linear-gradient(180deg, #3f4046, #2b2c31); color: #c9cbd0; font-size: 13px;
+    box-shadow: 0 3px 0 #141518, inset 0 1px 0 rgba(255,255,255,.1);
+  }
+  .dpad .up    { left: 32px; top: 0;    border-radius: 6px 6px 0 0; }
+  .dpad .down  { left: 32px; top: 64px; border-radius: 0 0 6px 6px; }
+  .dpad .left  { left: 0;    top: 32px; border-radius: 6px 0 0 6px; }
+  .dpad .right { left: 64px; top: 32px; border-radius: 0 6px 6px 0; }
+  .dpad::after {
+    content: ""; position: absolute; left: 32px; top: 32px; width: 32px; height: 32px;
+    background: #2f3035; box-shadow: 0 3px 0 #141518;
+  }
+  .dpad button:disabled { color: #55575d; cursor: default; }
+
+  .smalls { display: flex; justify-content: center; gap: 12px; padding-top: 22px; }
+  .pill {
+    width: 38px; height: 14px; border: 0; border-radius: 7px; cursor: pointer;
+    background: linear-gradient(180deg, #4a4b52, #303137); box-shadow: 0 2px 0 #141518;
+  }
+  .big {
+    width: 66px; height: 66px; border-radius: 50%; border: 0; cursor: pointer;
+    background: radial-gradient(circle at 35% 30%, #ffb199, var(--accent) 45%, var(--accent-dk));
+    box-shadow: 0 4px 0 #7a2c1a, 0 0 0 4px #1d1e22;
+    margin-top: 6px;
+  }
+  .dpad button.pressed, .pill.pressed, .big.pressed {
+    transform: translateY(2px); filter: brightness(1.25); box-shadow: 0 1px 0 #141518;
+  }
+  .big.pressed { box-shadow: 0 2px 0 #7a2c1a, 0 0 0 4px #1d1e22; }
+  /* Botão que "chama" o jogador: indica a saída da tela atual. */
+  @keyframes pulse { 50% { box-shadow: 0 2px 0 #141518, 0 0 0 4px rgba(255,122,89,.6); } }
+  .pill.pulse { animation: pulse 1.2s infinite; }
+
+  /* ---------- LCD do menu ---------- */
+  .menu-lcd { display: flex; flex-direction: column; align-items: center; }
+  .rec { align-self: stretch; display: flex; justify-content: space-between; align-items: center; }
+  .title { margin-top: 26px; --cs: 12px; }
+  .subtitle { margin-top: 10px; font-size: 10px; letter-spacing: .3em; opacity: .7; }
+  .choice { margin-top: 30px; display: grid; justify-items: center; gap: 8px; }
+  .choice .val { font-size: 17px; display: flex; gap: 14px; align-items: center; }
+  .choice .arrow { font-size: 12px; }
+  .sound { margin-top: 18px; font-size: 11px; display: flex; gap: 8px; align-items: center; }
+  .press { margin-top: auto; margin-bottom: 14px; font-size: 12px; }
+  .ground { --cs: 12px; }
+
+  /* ---------- LCD da partida (também usado na pausa e no game over) ---------- */
+  .play-lcd { display: flex; gap: 12px; }
+  .board-wrap { position: relative; padding: 0 6px 0 0; border-right: 2px solid var(--ink); --cs: 16px; }
+  .board { grid-template-columns: repeat(10, var(--cs)); }
+  .side { flex: 1; display: grid; align-content: start; gap: 11px; }
+  .stat { display: grid; gap: 5px; }
+  .next { --cs: 13px; grid-template-columns: repeat(4, var(--cs)); }
+  .row2 { display: flex; justify-content: space-between; }
+  .icons { display: flex; gap: 10px; font-size: 15px; margin-top: 2px; }
+  .icons .off { opacity: .1; }
+  .overlay {
+    position: absolute; inset: 0 6px 0 0; display: none;
+    flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    background: var(--lcd); text-align: center;
+  }
+  .overlay.show { display: flex; }
+  .overlay .big-txt { font-size: 20px; }
+  .overlay .small-txt { font-size: 9px; line-height: 1.6; }
+  .overlay .over-txt { font-size: 30px; line-height: 1.05; }
+  .device[data-skin="color"] .over-txt {
+    background: linear-gradient(180deg, #f5cc3c 30%, #ef5a6f 75%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+
+  /* ---------- LCD do resultado ---------- */
+  .result-lcd { display: flex; flex-direction: column; align-items: center; gap: 12px; padding-top: 16px; }
+  .result-lcd .head { font-size: 15px; }
+  .badge-rec { font-size: 9px; padding: 2px 7px; border: 2px solid var(--ink); visibility: hidden; }
+  .badge-rec.show { visibility: visible; }
+  .stats4 { align-self: stretch; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 20px; padding: 0 22px; }
+  .rule { align-self: stretch; margin: 2px 10px; border-top: 2px dotted var(--ink); opacity: .35; }
+  .stars { --cs: 8px; margin-top: -2px; }
+  /* Fora do desenho do glifo não há célula, nem apagada: a estrela vazia mantém a forma. */
+  .cell.void { visibility: hidden; }
+
+  /* ---------- LCD da ajuda ---------- */
+  .help-lcd { display: flex; flex-direction: column; gap: 3px; padding: 14px 14px 10px; }
+  .help-lcd .head { font-size: 13px; margin-bottom: 5px; }
+  .help-lcd .sub { margin: 8px 0 3px; }
+  .krow { display: grid; grid-template-columns: 116px 1fr; align-items: center; padding: 2px 5px; font-size: 11.5px; transition: background .15s; }
+  .krow.hit { background: var(--ink); color: var(--lcd); }
+  .key {
+    display: inline-block; border: 1.5px solid currentColor; border-bottom-width: 2.5px; border-radius: 3px;
+    padding: 0 4px; margin-right: 3px; font: 8px/1.6 "Silkscreen", monospace; text-transform: uppercase;
+  }
+  .prow { display: flex; justify-content: space-between; padding: 0 5px; font-size: 10px; }
+  .foot { margin-top: auto; font-size: 10px; line-height: 1.4; opacity: .8; padding: 0 5px; }
+  .help-lcd .try { text-align: center; font-size: 9px; margin-top: 6px; }
+
+  /* ---------- LCD do sobre ---------- */
+  .about-lcd { display: flex; flex-direction: column; align-items: center; gap: 9px; padding-top: 18px; }
+  .mini-title { --cs: 7px; }
+  .about-lcd .by { font-size: 9px; letter-spacing: .3em; opacity: .75; }
+  .about-lcd p { margin: 2px 14px 0; font-size: 11.5px; line-height: 1.45; text-align: center; }
+  .tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; padding: 0 10px; }
+  .tags span { border: 1.5px solid var(--ink); padding: 1px 6px; font-size: 8px; }
+  .lic { align-self: stretch; position: relative; margin: 0 4px; }
+  .lic .label { display: flex; justify-content: space-between; margin-bottom: 5px; }
+  .lic-box {
+    height: 168px; overflow: hidden; padding-right: 12px;
+    font-size: 9.5px; line-height: 1.4; white-space: pre-wrap;
+  }
+  .lic-track { position: absolute; right: 0; top: 16px; bottom: 0; width: 4px; background: var(--ink); opacity: .15; }
+  .lic-thumb { position: absolute; right: 0; width: 4px; height: 30px; background: var(--ink); }
+
+  @media (max-width: 520px) {
+    header, section { padding-left: 16px; padding-right: 16px; }
+    .device { transform: scale(.8); transform-origin: top left; margin-bottom: -130px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Redesign das telas · mockup</h1>
+  <p>
+    Conceito: <b>um aparelho, várias telas</b>. A carcaça (moldura, LCD e botões) é a mesma em todo o jogo;
+    só o conteúdo do LCD muda. Cada botão mostra a ação e a tecla correspondente, então a ajuda fica sempre à vista.
+    Inspirado em minigames de bolso, com identidade própria: grafite + coral.
+  </p>
+  <p>
+    Os mockups são interativos e ligados entre si como na <a href="jornada.html" style="color:var(--accent)">jornada</a>:
+    clique em um aparelho e use o teclado. No menu, <kbd>←</kbd> <kbd>→</kbd> trocam o estilo (vale para todas as telas),
+    <kbd>Shift</kbd> liga o som e <kbd>Enter</kbd> leva à partida.
+  </p>
+  <nav>
+    <a href="#s-menu">1 · Menu</a><a href="#s-play">2 · Partida</a><a href="#s-pause">3 · Pausa</a>
+    <a href="#s-over">4 · Game Over</a><a href="#s-result">5 · Resultado</a><a href="#s-help">6 · Ajuda</a><a href="#s-about">7 · Sobre</a>
+  </nav>
+</header>
+
+<!-- ============================ 1 · MENU ============================ -->
+<section id="s-menu">
+  <h2>1 · Menu inicial <small>Choose.cs</small></h2>
+  <div class="compare">
+    <figure class="before">
+      <figcaption>Antes</figcaption>
+      <img src="screenshots/tela1.png" width="417" height="552" alt="Menu atual">
+    </figure>
+    <figure>
+      <figcaption>Depois</figcaption>
+      <div class="device" id="menu" tabindex="0">
+        <div class="lcd menu-lcd">
+          <div class="rec">
+            <span class="label">Recorde</span>
+            <span class="seg" style="--h:18px" id="mRecord"></span>
+          </div>
+          <div class="grid title" id="mTitle"></div>
+          <div class="subtitle pix">edição de estudo</div>
+          <div class="choice">
+            <span class="label">Estilo</span>
+            <div class="val pix"><span class="arrow">◄</span><span id="mSkin">Brick game</span><span class="arrow">►</span></div>
+          </div>
+          <div class="sound pix"><span class="label">Som</span><span id="mSound">♪ ligado</span></div>
+          <div class="press pix blink">Enter para jogar</div>
+          <div class="grid ground" id="mGround"></div>
+        </div>
+      </div>
+      <div class="hint">clique no aparelho para usar o teclado</div>
+    </figure>
+    <aside class="notes">
+      <h3>Decisões</h3>
+      <ul>
+        <li>O combobox vira um seletor <b>◄ ►</b> dentro do LCD, operado com <kbd>←</kbd> <kbd>→</kbd>.</li>
+        <li>O botão verde "Iniciar" vira o botão grande da carcaça (<kbd>Enter</kbd>).</li>
+        <li>Título desenhado com as próprias células do LCD. No estilo TETRIS, cada letra ganha a cor de uma peça.</li>
+        <li>O recorde aparece já no menu, como convite para jogar (vem do <code>stats.mc</code>).</li>
+        <li>Ajuda e Sobre deixam de ser links e viram botões pequenos da carcaça.</li>
+        <li>O checkbox de som vira um indicador no LCD; <kbd>Shift</kbd> continua alternando.</li>
+      </ul>
+      <h3>Em WinForms</h3>
+      <ul>
+        <li>Form sem borda (<code>FormBorderStyle.None</code>) com a carcaça pintada em <code>OnPaint</code>; arrasta-se pela faixa superior.</li>
+        <li>Controles reutilizáveis entre as telas: <code>ConsoleFrame</code>, <code>LcdPanel</code>, <code>SevenSegmentDisplay</code>, <code>ConsoleButton</code>.</li>
+        <li><kbd>←</kbd> <kbd>→</kbd> no menu precisam de <code>Command</code>s próprios (regra 4), sem <code>if</code> de tecla no form.</li>
+        <li>Fonte pixel (Silkscreen, licença OFL) embutida como recurso e carregada com <code>PrivateFontCollection</code>.</li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<!-- ============================ 2 · PARTIDA ============================ -->
+<section id="s-play">
+  <h2>2 · Partida · BRICK GAME <small>Play.cs</small></h2>
+  <div class="compare">
+    <figure class="before">
+      <figcaption>Antes</figcaption>
+      <img src="screenshots/tela2.1.png" width="398" height="542" alt="Partida atual">
+    </figure>
+    <figure>
+      <figcaption>Depois</figcaption>
+      <div class="device" id="play" tabindex="0">
+        <div class="lcd play-lcd" data-prefix="p"></div>
+      </div>
+      <div class="hint">clique para jogar · pausa sozinho quando perde o foco, como no jogo</div>
+    </figure>
+    <aside class="notes">
+      <h3>Decisões</h3>
+      <ul>
+        <li>Mesma carcaça do menu: trocar de tela não troca de "aparelho".</li>
+        <li>Números em 7 segmentos com dígitos-fantasma (os <b>8</b> apagados), como num LCD de verdade.</li>
+        <li>Hierarquia clara: rótulos pequenos em caixa alta, valores grandes.</li>
+        <li>Os botões mostram ação + tecla; o manual vira um reforço, não uma necessidade.</li>
+        <li>Estilo TETRIS (escolhido no menu): mesma moldura, LCD escuro e peças coloridas.</li>
+      </ul>
+      <h3>Em WinForms</h3>
+      <ul>
+        <li>Tabuleiro e painel lateral pintados em controles com <code>DoubleBuffered</code>, no lugar de vários <code>Label</code>s.</li>
+        <li>Clique num botão executa o mesmo <code>Command</code> da tecla; a UI não ganha regra de jogo.</li>
+        <li>O destaque do botão ao apertar a tecla é só visual, a partir do <code>KeyDown</code> que já existe.</li>
+        <li>Atualizações continuam passando pelo <code>_threadPrincipal</code> (regra 10).</li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<!-- ============================ 3 · PAUSA ============================ -->
+<section id="s-pause">
+  <h2>3 · Pausado <small>Play.cs</small></h2>
+  <div class="compare">
+    <figure class="before">
+      <figcaption>Antes</figcaption>
+      <img src="screenshots/tela3.png" width="402" height="538" alt="Pausa atual">
+    </figure>
+    <figure>
+      <figcaption>Depois</figcaption>
+      <div class="device" id="pause" tabindex="0">
+        <div class="lcd play-lcd" data-prefix="z"></div>
+      </div>
+      <div class="hint">tela estática · a pausa real está no mockup da partida</div>
+    </figure>
+    <aside class="notes">
+      <h3>Decisões</h3>
+      <ul>
+        <li>A pausa acontece dentro do LCD: só o tabuleiro apaga, sem espiar a jogada.</li>
+        <li>O painel lateral continua visível. Pontos e tempo não são spoiler e situam o jogador.</li>
+        <li>O ícone <b>❚❚</b> acende no LCD, como um indicador de aparelho.</li>
+        <li>O botão PAUSA pulsa: mostra como voltar sem precisar de texto extra.</li>
+        <li>Vale igual para a pausa automática quando a janela perde o foco.</li>
+      </ul>
+      <h3>Em WinForms</h3>
+      <ul>
+        <li>Hoje é um painel que cobre o form inteiro; passa a ser um modo de desenho do controle do tabuleiro.</li>
+        <li>O desenho consulta o estado exposto pelo <code>GameController</code>; nada de flag paralela de "pausado" (regra 6).</li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<!-- ============================ 4 · GAME OVER ============================ -->
+<section id="s-over">
+  <h2>4 · Game Over <small>GameOver.cs</small></h2>
+  <div class="compare">
+    <figure class="before">
+      <figcaption>Antes</figcaption>
+      <img src="screenshots/tela4.png" width="412" height="545" alt="Game Over atual">
+    </figure>
+    <figure>
+      <figcaption>Depois</figcaption>
+      <div class="device" id="over" tabindex="0">
+        <div class="lcd play-lcd" data-prefix="o"></div>
+      </div>
+      <div class="hint">clique para rever a animação · qualquer tecla continua</div>
+    </figure>
+    <aside class="notes">
+      <h3>Decisões</h3>
+      <ul>
+        <li>Cortina de blocos que sobe e desce: a animação clássica de fim de jogo dos minigames, feita com as mesmas células.</li>
+        <li>O "GAME OVER" em pixel art continua sendo o clímax. No estilo TETRIS, ganha o mesmo degradê amarelo → vermelho da tela atual.</li>
+        <li>O placar final já fica visível ao lado, preparando o resultado.</li>
+        <li>Qualquer tecla continua, como hoje.</li>
+      </ul>
+      <h3>Em WinForms</h3>
+      <ul>
+        <li>Pode deixar de ser um <code>Form</code> separado e virar uma animação do próprio tabuleiro, disparada pelo evento <code>OnLose</code>.</li>
+        <li>A animação usa um <code>System.Windows.Forms.Timer</code> (thread de UI), não o loop do <code>Board</code>.</li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<!-- ============================ 5 · RESULTADO ============================ -->
+<section id="s-result">
+  <h2>5 · Resultado <small>Deserve.cs</small></h2>
+  <div class="compare">
+    <figure class="before">
+      <figcaption>Antes</figcaption>
+      <img src="screenshots/tela5.png" width="416" height="551" alt="Resultado atual">
+    </figure>
+    <figure>
+      <figcaption>Depois</figcaption>
+      <div class="device" id="result" tabindex="0">
+        <div class="lcd result-lcd">
+          <div class="head pix">Resultado</div>
+          <div class="badge-rec pix blink" id="rBadge">Novo recorde!</div>
+          <div class="stat" style="justify-items:center"><span class="label">Pontos</span><span class="seg" style="--h:36px" id="rScore"></span></div>
+          <div class="stats4">
+            <div class="stat"><span class="label">Nível</span><span class="seg" style="--h:20px" id="rLevel"></span></div>
+            <div class="stat"><span class="label">Tetris</span><span><span class="seg" style="--h:20px" id="rRate"></span><span class="unit">%</span></span></div>
+            <div class="stat"><span class="label">Peças</span><span class="seg" style="--h:20px" id="rPieces"></span></div>
+            <div class="stat"><span class="label">Tempo</span><span class="seg" style="--h:17px" id="rTime"></span></div>
+          </div>
+          <div class="rule"></div>
+          <span class="label">Avalie a partida</span>
+          <div class="grid stars" id="rStars"></div>
+          <div class="pix blink" style="font-size:11px;margin-top:auto">Enter · feito</div>
+        </div>
+      </div>
+      <div class="hint">← → escolhem as estrelas · Enter volta ao menu</div>
+    </figure>
+    <aside class="notes">
+      <h3>Decisões</h3>
+      <ul>
+        <li>Pontos em destaque; o resto vira uma grade secundária de 7 segmentos.</li>
+        <li>Selo "NOVO RECORDE!" quando a partida supera o recorde salvo: fecha o ciclo com o recorde do menu.</li>
+        <li>As estrelas viram pixel art selecionável com <kbd>←</kbd> <kbd>→</kbd>; FEITO vira o botão grande (<kbd>Enter</kbd>).</li>
+        <li>Tempo sem as frações de segundo (hoje aparece <code>00:00:07.5473350</code>).</li>
+      </ul>
+      <h3>Em aberto</h3>
+      <ul>
+        <li class="open">Hoje as estrelas só fecham a tela: a avaliação não é salva. Ou removemos, ou gravamos (coluna nova no fim do <code>stats.mc</code>, regra 11).</li>
+      </ul>
+      <h3>Em WinForms</h3>
+      <ul>
+        <li>"É novo recorde?" é regra: deve vir pronto do domínio via <code>GameController</code>, não ser comparado no form.</li>
+        <li>Peças = <code>Stats.Blocks</code>; % Tetris = <code>Stats.TetrisRate</code>.</li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<!-- ============================ 6 · AJUDA ============================ -->
+<section id="s-help">
+  <h2>6 · Ajuda <small>Help.cs</small></h2>
+  <div class="compare">
+    <figure class="before">
+      <figcaption>Antes</figcaption>
+      <img src="screenshots/tela6.png" width="414" height="553" alt="Ajuda atual">
+    </figure>
+    <figure>
+      <figcaption>Depois</figcaption>
+      <div class="device" id="help" tabindex="0">
+        <div class="lcd help-lcd">
+          <div class="head pix">Como jogar</div>
+          <div id="hRows"></div>
+          <span class="label sub">Pontos por jogada</span>
+          <div class="prow pix"><span>1 linha</span><span>40</span></div>
+          <div class="prow pix"><span>2 linhas</span><span>100</span></div>
+          <div class="prow pix"><span>3 linhas</span><span>300</span></div>
+          <div class="prow pix"><span>4 linhas · tetris!</span><span>1200</span></div>
+          <div class="foot">O nível sobe ao completar a meta de linhas (20 no início, +25% a cada nível) e as peças caem mais rápido.</div>
+          <div class="try pix blink">aperte uma tecla para testar</div>
+        </div>
+      </div>
+      <div class="hint">Esc volta ao menu</div>
+    </figure>
+    <aside class="notes">
+      <h3>Decisões</h3>
+      <ul>
+        <li>As teclas são desenhadas como teclas, e não descritas em texto corrido.</li>
+        <li>Apertar uma tecla destaca a linha correspondente: o jogador testa enquanto lê.</li>
+        <li>Tabela de pontos e regra de nível entram no manual (hoje só estão no README).</li>
+        <li>VOLTAR no botão grande (<kbd>Esc</kbd>) no lugar do X vermelho.</li>
+      </ul>
+      <h3>Em WinForms</h3>
+      <ul>
+        <li>Textos em <code>Jogo.resx</code> e <code>Jogo-pt.resx</code> (regra 9).</li>
+        <li>Valores da tabela idealmente lidos do domínio, para não duplicar números na UI.</li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<!-- ============================ 7 · SOBRE ============================ -->
+<section id="s-about">
+  <h2>7 · Sobre <small>About.cs</small></h2>
+  <div class="compare">
+    <figure class="before">
+      <figcaption>Antes</figcaption>
+      <img src="screenshots/tela7.png" width="414" height="556" alt="Sobre atual">
+    </figure>
+    <figure>
+      <figcaption>Depois</figcaption>
+      <div class="device" id="about" tabindex="0">
+        <div class="lcd about-lcd">
+          <div class="grid mini-title" id="aTitle"></div>
+          <div class="by pix">por gadz</div>
+          <p>Um Tetris feito para estudar engenharia de software num cenário que todo mundo conhece.</p>
+          <div class="tags pix"><span>DDD</span><span>Clean code</span><span>SOLID</span><span>Design patterns</span></div>
+          <div class="lic">
+            <div class="label"><span>Licença MIT</span><span>▲▼</span></div>
+            <div class="lic-box" id="aLic"></div>
+            <div class="lic-track"></div>
+            <div class="lic-thumb" id="aThumb"></div>
+          </div>
+        </div>
+      </div>
+      <div class="hint">▲ ▼ rolam a licença · Esc volta ao menu</div>
+    </figure>
+    <aside class="notes">
+      <h3>Decisões</h3>
+      <ul>
+        <li>O propósito cabe em uma frase; os temas do estudo viram etiquetas.</li>
+        <li>A licença completa fica num quadro rolável com <kbd>↑</kbd> <kbd>↓</kbd>, no lugar do bloco de texto selecionado.</li>
+        <li>Mesma identidade das outras telas: título em blocos e a carcaça.</li>
+      </ul>
+      <h3>Em WinForms</h3>
+      <ul>
+        <li>Texto da licença como recurso; a rolagem é só de UI.</li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<script>
+/* ======================================================================
+   Mockup ilustrativo: a lógica abaixo só existe para dar vida ao desenho.
+   No jogo real as regras continuam no domínio.
+   ====================================================================== */
+
+const COLORS = { I: "#35c6e8", T: "#a66cf0", L: "#f7953b", J: "#4a7cf7", O: "#f5cc3c", S: "#4cc27a", Z: "#ef5a6f" };
+const SHAPES = {
+  I: [[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]],
+  T: [[0,1,0],[1,1,1],[0,0,0]],
+  L: [[0,0,1],[1,1,1],[0,0,0]],
+  J: [[1,0,0],[1,1,1],[0,0,0]],
+  O: [[1,1],[1,1]],
+  S: [[0,1,1],[1,1,0],[0,0,0]],
+  Z: [[1,1,0],[0,1,1],[0,0,0]],
+};
+const TYPES = Object.keys(SHAPES);
+const W = 10, H = 20;
+const POINTS = [0, 40, 100, 300, 1200];
+const SKINS = { mono: "Brick game", color: "Tetris" };
+const LICENSE = `MIT License
+
+Copyright (c) 2018 Paulo Duarte
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.`;
+
+const shared = { skin: "mono", sound: true, record: 12840 };
+/** Estatísticas da última partida; começa com uma partida de exemplo. */
+let last = { score: 13250, lines: 92, level: 4, rate: 35, pieces: 231, secs: 1122, next: "L" };
+
+const $ = id => document.getElementById(id);
+
+/* ---------- Display de 7 segmentos ---------- */
+
+const SEG_ON = { "0": "abcdef", "1": "bc", "2": "abged", "3": "abgcd", "4": "fgbc", "5": "afgcd",
+  "6": "afgedc", "7": "abc", "8": "abcdefg", "9": "abcdfg", "-": "g", " ": "" };
+const hseg = (x, y, l, t = 2) => `${x},${y} ${x+t/2},${y-t/2} ${x+l-t/2},${y-t/2} ${x+l},${y} ${x+l-t/2},${y+t/2} ${x+t/2},${y+t/2}`;
+const vseg = (x, y, l, t = 2) => `${x},${y} ${x+t/2},${y+t/2} ${x+t/2},${y+l-t/2} ${x},${y+l} ${x-t/2},${y+l-t/2} ${x-t/2},${y+t/2}`;
+const X0 = 1.5, X1 = 10.5, Y0 = 1.5, YM = 11, Y1 = 20.5, G = .5;
+const SEG_PTS = {
+  a: hseg(X0 + G, Y0, X1 - X0 - 2 * G), g: hseg(X0 + G, YM, X1 - X0 - 2 * G), d: hseg(X0 + G, Y1, X1 - X0 - 2 * G),
+  f: vseg(X0, Y0 + G, YM - Y0 - 2 * G), b: vseg(X1, Y0 + G, YM - Y0 - 2 * G),
+  e: vseg(X0, YM + G, Y1 - YM - 2 * G), c: vseg(X1, YM + G, Y1 - YM - 2 * G),
+};
+
+function digitSvg(ch) {
+  if (ch === ":") {
+    return `<svg viewBox="0 0 4 22"><rect class="on" x="1" y="6" width="2" height="2"/><rect class="on" x="1" y="14" width="2" height="2"/></svg>`;
+  }
+  const on = SEG_ON[ch] ?? "";
+  const polys = "abcdefg".split("").map(s => `<polygon class="${on.includes(s) ? "on" : ""}" points="${SEG_PTS[s]}"/>`);
+  return `<svg viewBox="0 0 12 22">${polys.join("")}</svg>`;
+}
+
+/** Escreve `value` alinhado à direita em `digits` posições; as vazias ficam como "8" apagado. */
+function setSeg(el, value, digits) {
+  const txt = String(value).padStart(digits, " ").slice(-digits);
+  el.innerHTML = txt.split("").map(digitSvg).join("");
+}
+function setTime(el, secs) {
+  const p = n => String(n).padStart(2, "0");
+  const t = `${p(Math.floor(secs / 3600))}:${p(Math.floor(secs / 60) % 60)}:${p(secs % 60)}`;
+  el.innerHTML = t.split("").map(digitSvg).join("");
+}
+
+/* ---------- Células do LCD ---------- */
+
+function makeCells(container, count) {
+  container.innerHTML = "";
+  return Array.from({ length: count }, () => {
+    const c = document.createElement("div");
+    c.className = "cell";
+    container.appendChild(c);
+    return c;
+  });
+}
+function paint(cell, type) {
+  cell.classList.toggle("on", !!type);
+  cell.style.setProperty("--c", type ? COLORS[type] : "transparent");
+}
+
+/**
+ * Desenha um bitmap (linhas de "0"/"1") numa grade, com espaçamento entre os glifos.
+ * Com `sparse`, só existem as células do desenho; glifos sem cor ficam apagados, mas com a forma visível.
+ */
+function drawGlyphs(el, glyphs, colors, { gapCols = 1, sparse = false } = {}) {
+  const w = glyphs[0][0].length, h = glyphs[0].length;
+  const cols = glyphs.length * (w + gapCols) - gapCols;
+  el.style.gridTemplateColumns = `repeat(${cols}, var(--cs))`;
+  const cells = makeCells(el, cols * h);
+  if (sparse) cells.forEach(c => c.classList.add("void"));
+  glyphs.forEach((gl, i) => gl.forEach((row, y) => [...row].forEach((b, x) => {
+    if (b !== "1") return;
+    const cell = cells[y * cols + i * (w + gapCols) + x];
+    cell.classList.remove("void");
+    paint(cell, colors[i]);
+  })));
+  return cells;
+}
+
+const LETTERS = {
+  T: ["111","010","010","010","010"],
+  E: ["111","100","110","100","111"],
+  R: ["110","101","110","101","101"],
+  I: ["111","010","010","010","111"],
+  S: ["011","100","010","001","110"],
+};
+const WORD = [..."TETRIS"].map(c => LETTERS[c]);
+const WORD_COLORS = ["T", "Z", "T", "L", "I", "S"];
+const STAR = ["00100", "11111", "01110", "01010", "10001"];
+
+/* ---------- Carcaça: montada igual para todas as telas ---------- */
+
+/** Envolve o LCD de cada aparelho com a faixa superior, a moldura e a área de botões. */
+function mountShell(device) {
+  const lcd = device.querySelector(".lcd");
+  device.innerHTML = `
+    <div class="topbar">
+      <div class="logo">${TYPES.map(t => `<i style="background:${COLORS[t]}"></i>`).join("")}</div>
+      <div class="brand">GADZ <b>TETRIS</b></div>
+      <button class="close" title="Fechar" tabindex="-1">✕</button>
+    </div>
+    <div class="bezel"></div>
+    <div class="controls"></div>`;
+  device.querySelector(".bezel").appendChild(lcd);
+}
+
+/** LCD de partida (tabuleiro + painel lateral); `p` prefixa os ids. */
+function mountPlayLcd(lcd) {
+  const p = lcd.dataset.prefix;
+  lcd.innerHTML = `
+    <div class="board-wrap">
+      <div class="grid board" id="${p}Board"></div>
+      <div class="overlay" id="${p}Overlay">
+        <div class="big-txt pix" id="${p}OvTitle"></div>
+        <div class="small-txt pix" id="${p}OvText"></div>
+      </div>
+    </div>
+    <div class="side">
+      <div class="stat"><span class="label">Pontos</span><span class="seg" style="--h:24px" id="${p}Score"></span></div>
+      <div class="stat"><span class="label">Linhas</span><span class="seg" style="--h:20px" id="${p}Lines"></span></div>
+      <div class="stat"><span class="label">Próxima</span><div class="grid next" id="${p}Next"></div></div>
+      <div class="row2">
+        <div class="stat"><span class="label">Nível</span><span class="seg" style="--h:20px" id="${p}Level"></span></div>
+        <div class="stat"><span class="label">Tetris</span><span><span class="seg" style="--h:20px" id="${p}Rate"></span><span class="unit">%</span></span></div>
+      </div>
+      <div class="stat"><span class="label">Tempo</span><span class="seg" style="--h:17px" id="${p}Time"></span></div>
+      <div class="icons"><span class="snd-ico">♪</span><span id="${p}PauseIco" class="off">❚❚</span></div>
+    </div>`;
+  return {
+    board: makeCells($(p + "Board"), W * H),
+    next: makeCells($(p + "Next"), 16),
+    overlay(title, text, cls = "big-txt") {
+      $(p + "Overlay").classList.toggle("show", !!title);
+      $(p + "OvTitle").className = `${cls} pix`;
+      $(p + "OvTitle").innerHTML = title ?? "";
+      $(p + "OvText").innerHTML = text ?? "";
+    },
+    paused(on) { $(p + "PauseIco").classList.toggle("off", !on); },
+    side(s) {
+      setSeg($(p + "Score"), s.score, 6);
+      setSeg($(p + "Lines"), s.lines, 4);
+      setSeg($(p + "Level"), s.level, 2);
+      setSeg($(p + "Rate"), s.rate, 3);
+      setTime($(p + "Time"), s.secs);
+      this.nextPiece(s.next);
+    },
+    nextPiece(t) {
+      this.next.forEach((c, i) => paint(c, SHAPES[t][Math.floor(i / 4)]?.[i % 4] ? t : null));
+    },
+    fill(board) {
+      board.forEach((row, y) => row.forEach((t, x) => paint(this.board[y * W + x], t)));
+    },
+  };
+}
+
+/** Monta os botões da carcaça a partir da configuração da tela. */
+function buildControls(device, cfg) {
+  const root = device.querySelector(".controls");
+  root.innerHTML = `
+    <div class="ctl">
+      <div class="dpad">
+        <button class="up" data-key="ArrowUp" ${cfg.ud ? "" : "disabled"}>▲</button>
+        <button class="left" data-key="ArrowLeft" ${cfg.lr ? "" : "disabled"}>◀</button>
+        <button class="right" data-key="ArrowRight" ${cfg.lr ? "" : "disabled"}>▶</button>
+        <button class="down" data-key="ArrowDown" ${cfg.ud ? "" : "disabled"}>▼</button>
+      </div>
+      <div class="cap">${cfg.dpad}</div>
+    </div>
+    <div class="smalls">
+      ${cfg.smalls.map(s => `<div class="ctl"><button class="pill ${s.pulse ? "pulse" : ""}" data-key="${s.key}"></button>
+        <div class="cap">${s.label}<em>${s.hint}</em></div></div>`).join("")}
+    </div>
+    <div class="ctl">
+      <button class="big" data-key="${cfg.big.key}"></button>
+      <div class="cap">${cfg.big.label}<em>${cfg.big.hint}</em></div>
+    </div>`;
+  root.querySelectorAll("button[data-key]").forEach(b =>
+    b.addEventListener("mousedown", e => {
+      e.preventDefault();
+      device.focus();
+      press(device, b.dataset.key);
+      dispatch(device.id, b.dataset.key, {});
+    }));
+}
+function press(device, key) {
+  device.querySelector(".controls").querySelectorAll(`[data-key="${key}"]`).forEach(b => {
+    b.classList.add("pressed");
+    setTimeout(() => b.classList.remove("pressed"), 120);
+  });
+}
+
+const SOUND = { key: "Shift", label: "SOM", hint: "SHIFT" };
+const BACK = { key: "Escape", label: "VOLTAR", hint: "ESC" };
+
+function applyShared() {
+  document.querySelectorAll(".device").forEach(d => d.dataset.skin = shared.skin);
+  $("mSkin").textContent = SKINS[shared.skin];
+  $("mSound").textContent = shared.sound ? "♪ ligado" : "desligado";
+  document.querySelectorAll(".snd-ico").forEach(i => i.classList.toggle("off", !shared.sound));
+}
+
+/** Navega até outra tela, como na jornada do jogador. */
+function goTo(id) {
+  const d = $(id);
+  d.scrollIntoView({ behavior: "smooth", block: "center" });
+  d.focus({ preventScroll: true });
+}
+
+/* ======================= 1 · MENU ======================= */
+
+function menuKey(key) {
+  switch (key) {
+    case "ArrowLeft": case "ArrowRight": shared.skin = shared.skin === "mono" ? "color" : "mono"; applyShared(); break;
+    case "help": goTo("help"); break;
+    case "about": goTo("about"); break;
+    case "Enter": game = null; goTo("play"); break;
+    default: return false;
+  }
+}
+
+/* ======================= 2 · PARTIDA ======================= */
+
+const PREFILL = [
+  "......S...",
+  "J....SS.L.",
+  "JJJ.ZZ.OO.",
+  "IIII.ZZOOT",
+  "LLL.SS.TTT",
+];
+const rotate = m => m[0].map((_, i) => m.map(r => r[i]).reverse());
+const randType = () => TYPES[Math.floor(Math.random() * TYPES.length)];
+function prefilled(rows) {
+  const board = Array.from({ length: H }, () => Array(W).fill(null));
+  rows.forEach((row, i) => [...row].forEach((t, x) => board[H - rows.length + i][x] = t === "." ? null : t));
+  return board;
+}
+
+let playLcd;
+let game = null;
+
+function newGame() {
+  game = { board: prefilled(PREFILL), piece: null, next: randType(), score: 0, lines: 0, tetrisLines: 0,
+           level: 1, pieces: 0, secs: 0, state: "playing", fallTimer: null };
+  playLcd.overlay(null);
+  playLcd.paused(false);
+  spawn();
+  render();
+  schedule();
+}
+function cellsOf(m, x, y) {
+  const out = [];
+  m.forEach((row, dy) => row.forEach((v, dx) => v && out.push([x + dx, y + dy])));
+  return out;
+}
+function fits(m, x, y) {
+  return cellsOf(m, x, y).every(([cx, cy]) => cx >= 0 && cx < W && cy < H && (cy < 0 || !game.board[cy][cx]));
+}
+function spawn() {
+  const t = game.next;
+  game.next = randType();
+  game.pieces++;
+  const m = SHAPES[t];
+  game.piece = { t, m, x: Math.floor((W - m.length) / 2), y: t === "I" ? -1 : 0 };
+  if (!fits(m, game.piece.x, game.piece.y)) lose();
+}
+function lock() {
+  const p = game.piece;
+  cellsOf(p.m, p.x, p.y).forEach(([x, y]) => { if (y >= 0) game.board[y][x] = p.t; });
+  const kept = game.board.filter(r => r.some(c => !c));
+  const n = H - kept.length;
+  while (kept.length < H) kept.unshift(Array(W).fill(null));
+  game.board = kept;
+  if (n) {
+    game.score += POINTS[n];
+    game.lines += n;
+    if (n === 4) game.tetrisLines += 4;
+    game.level = 1 + Math.floor(game.lines / 20);
+  }
+  spawn();
+}
+function move(dx, dy) {
+  const p = game.piece;
+  if (fits(p.m, p.x + dx, p.y + dy)) { p.x += dx; p.y += dy; return true; }
+  return false;
+}
+function turn() {
+  const m = rotate(game.piece.m);
+  for (const k of [0, -1, 1, -2, 2]) if (fits(m, game.piece.x + k, game.piece.y)) { game.piece.m = m; game.piece.x += k; return; }
+}
+function step() {
+  if (!move(0, 1)) lock();
+}
+function schedule() {
+  clearTimeout(game.fallTimer);
+  if (game.state !== "playing") return;
+  game.fallTimer = setTimeout(() => { step(); if (game.state === "playing") render(); schedule(); },
+    Math.max(100, 1000 - (game.level - 1) * 50));
+}
+function snapshot() {
+  return { score: game.score, lines: game.lines, level: game.level, pieces: game.pieces, secs: game.secs, next: game.next,
+           rate: game.lines ? Math.round(100 * game.tetrisLines / game.lines) : 0 };
+}
+function setPaused(on) {
+  game.state = on ? "paused" : "playing";
+  playLcd.paused(on);
+  playLcd.overlay(on ? "Pausa" : null, `<span class="blink">enter continua</span>`);
+  schedule();
+}
+/** A peça nova não cabe: vai para o Game Over. */
+function lose() {
+  game.state = "over";
+  clearTimeout(game.fallTimer);
+  last = snapshot();
+  goTo("over");
+}
+/** Esc: encerra e vai direto ao resultado. */
+function quit() {
+  game.state = "over";
+  clearTimeout(game.fallTimer);
+  last = snapshot();
+  showResult();
+}
+
+function render() {
+  const p = game.piece;
+  const board = game.board.map(r => [...r]);
+  cellsOf(p.m, p.x, p.y).forEach(([x, y]) => { if (y >= 0) board[y][x] = p.t; });
+  playLcd.fill(board);
+  playLcd.side(snapshot());
+}
+
+function playKey(key, mods) {
+  if (!game || game.state === "over") { if (key === "Enter") newGame(); return; }
+  if (key === "Enter") { setPaused(game.state === "playing"); return; }
+  if (key === "Escape") { quit(); return; }
+  if (game.state !== "playing") return;
+  switch (key) {
+    case "ArrowLeft":  if (mods.ctrl) while (move(-1, 0)); else move(-1, 0); break;
+    case "ArrowRight": if (mods.ctrl) while (move(1, 0)); else move(1, 0); break;
+    case "ArrowDown":  step(); break;
+    case "ArrowUp":    turn(); break;
+    case " ":          while (move(0, 1)); lock(); break;
+    default: return false;
+  }
+  if (game.state === "playing") render();
+}
+
+/* ======================= 3 · PAUSA (estática) ======================= */
+
+function mountPause(lcd) {
+  lcd.fill(prefilled([]));
+  lcd.side(last);
+  lcd.paused(true);
+  lcd.overlay("Pausa", `<span class="blink">enter continua</span>`);
+}
+
+/* ======================= 4 · GAME OVER ======================= */
+
+const CURTAIN_MS = 45;
+const HOLD_MS = 700;
+let overLcd, overDone = false, overTimer = null;
+
+/** Pilha que chegou ao topo, gerada de forma determinística. */
+function deadBoard() {
+  return Array.from({ length: H }, (_, y) => Array.from({ length: W }, (_, x) =>
+    y >= 2 && (x * 7 + y * 3) % 5 !== 0 ? TYPES[(x + y) % TYPES.length] : null));
+}
+
+/** Cortina: as linhas acendem de baixo para cima e apagam de cima para baixo; depois, o letreiro. */
+function runCurtain() {
+  clearTimeout(overTimer);
+  overDone = false;
+  overLcd.overlay(null);
+  overLcd.side(last);
+  const board = deadBoard();
+  overLcd.fill(board);
+  let frame = 0;
+  const tick = () => {
+    if (frame < H) board[H - 1 - frame] = Array(W).fill(TYPES[frame % TYPES.length]);
+    else if (frame < 2 * H) board[frame - H] = Array(W).fill(null);
+    else {
+      overLcd.overlay("Game<br>Over", `<span class="blink">qualquer tecla</span>`, "over-txt");
+      overDone = true;
+      return;
+    }
+    overLcd.fill(board);
+    frame++;
+    overTimer = setTimeout(tick, CURTAIN_MS);
+  };
+  overTimer = setTimeout(tick, HOLD_MS);
+}
+
+function overKey() {
+  if (overDone) showResult();
+}
+
+/* ======================= 5 · RESULTADO ======================= */
+
+let rating = 0;
+
+function renderResult(isRecord) {
+  $("rBadge").classList.toggle("show", isRecord);
+  setSeg($("rScore"), last.score, 6);
+  setSeg($("rLevel"), last.level, 2);
+  setSeg($("rRate"), last.rate, 3);
+  setSeg($("rPieces"), last.pieces, 4);
+  setTime($("rTime"), last.secs);
+  renderStars();
+}
+function renderStars() {
+  drawGlyphs($("rStars"), Array(5).fill(STAR), [..."OOOOO"].map((c, i) => i < rating ? c : null), { sparse: true });
+}
+function showResult() {
+  const isRecord = last.score > shared.record;
+  if (isRecord) { shared.record = last.score; setSeg($("mRecord"), shared.record, 6); }
+  rating = 0;
+  renderResult(isRecord);
+  goTo("result");
+}
+function resultKey(key) {
+  switch (key) {
+    case "ArrowLeft":  rating = Math.max(1, rating - 1); renderStars(); break;
+    case "ArrowRight": rating = Math.min(5, rating + 1); renderStars(); break;
+    case "Enter":      goTo("menu"); break;
+    default: return false;
+  }
+}
+
+/* ======================= 6 · AJUDA ======================= */
+
+const HELP_ROWS = [
+  { keys: ["←", "→"],         text: "Mover",                match: ["ArrowLeft", "ArrowRight"] },
+  { keys: ["Ctrl", "←", "→"], text: "Deslizar até a borda", match: ["Control"] },
+  { keys: ["↓"],              text: "Descer",               match: ["ArrowDown"] },
+  { keys: ["↑"],              text: "Girar",                match: ["ArrowUp"] },
+  { keys: ["Espaço"],         text: "Derrubar",             match: [" "] },
+  { keys: ["Enter"],          text: "Pausar / continuar",   match: ["Enter"] },
+  { keys: ["Shift"],          text: "Som liga / desliga",   match: ["Shift"] },
+  { keys: ["Esc"],            text: "Encerrar e salvar",    match: ["Escape"] },
+];
+
+function mountHelp() {
+  $("hRows").innerHTML = HELP_ROWS.map((r, i) =>
+    `<div class="krow" data-row="${i}"><span>${r.keys.map(k => `<span class="key">${k}</span>`).join("")}</span><span>${r.text}</span></div>`).join("");
+}
+/** Destaca a linha da tecla apertada, para o jogador testar enquanto lê. */
+function helpHighlight(key) {
+  HELP_ROWS.forEach((r, i) => {
+    if (!r.match.includes(key)) return;
+    const el = document.querySelector(`.krow[data-row="${i}"]`);
+    el.classList.add("hit");
+    clearTimeout(el.t);
+    el.t = setTimeout(() => el.classList.remove("hit"), 450);
+  });
+}
+function helpKey(key) {
+  helpHighlight(key);
+  if (key === "Escape") setTimeout(() => goTo("menu"), 300);
+  else if (!HELP_ROWS.some(r => r.match.includes(key))) return false;
+}
+
+/* ======================= 7 · SOBRE ======================= */
+
+const LIC_STEP = 40;
+
+function updateThumb() {
+  const box = $("aLic"), thumb = $("aThumb");
+  const track = box.clientHeight - thumb.offsetHeight;
+  const max = box.scrollHeight - box.clientHeight;
+  thumb.style.top = `${16 + (max ? box.scrollTop / max : 0) * track}px`;
+}
+function aboutKey(key) {
+  const box = $("aLic");
+  switch (key) {
+    case "ArrowDown": box.scrollTop += LIC_STEP; updateThumb(); break;
+    case "ArrowUp":   box.scrollTop -= LIC_STEP; updateThumb(); break;
+    case "Escape":    goTo("menu"); break;
+    default: return false;
+  }
+}
+
+/* ======================= Registro das telas ======================= */
+
+/** Cada tela declara seus botões e quem trata as teclas (retorna false quando ignora a tecla). */
+const SCREENS = {
+  menu: {
+    controls: { lr: true, dpad: "◀ ▶ ESTILO",
+      smalls: [{ key: "help", label: "AJUDA", hint: "CLIQUE" }, { key: "about", label: "SOBRE", hint: "CLIQUE" }, SOUND],
+      big: { key: "Enter", label: "JOGAR", hint: "ENTER" } },
+    onKey: menuKey,
+  },
+  play: {
+    controls: { lr: true, ud: true, dpad: "◀ ▶ MOVER · ▲ GIRAR<br>▼ DESCER<em>CTRL + ◀ ▶ DESLIZA</em>",
+      smalls: [{ key: "Enter", label: "PAUSA", hint: "ENTER" }, { key: "Escape", label: "SAIR", hint: "ESC" }, SOUND],
+      big: { key: " ", label: "DERRUBAR", hint: "ESPAÇO" } },
+    onKey: playKey,
+  },
+  pause: {
+    controls: { lr: true, ud: true, dpad: "◀ ▶ MOVER · ▲ GIRAR<br>▼ DESCER<em>CTRL + ◀ ▶ DESLIZA</em>",
+      smalls: [{ key: "Enter", label: "PAUSA", hint: "ENTER", pulse: true }, { key: "Escape", label: "SAIR", hint: "ESC" }, SOUND],
+      big: { key: " ", label: "DERRUBAR", hint: "ESPAÇO" } },
+    onKey: () => false,
+  },
+  over: {
+    controls: { lr: true, ud: true, dpad: "QUALQUER TECLA<em>CONTINUA</em>",
+      smalls: [SOUND],
+      big: { key: "Enter", label: "CONTINUAR", hint: "QUALQUER TECLA" } },
+    onKey: overKey,
+  },
+  result: {
+    controls: { lr: true, dpad: "◀ ▶ AVALIAR",
+      smalls: [SOUND],
+      big: { key: "Enter", label: "FEITO", hint: "ENTER" } },
+    onKey: resultKey,
+  },
+  help: {
+    controls: { lr: true, ud: true, dpad: "TESTE<em>QUALQUER TECLA</em>",
+      smalls: [SOUND],
+      big: BACK },
+    onKey: helpKey,
+  },
+  about: {
+    controls: { ud: true, dpad: "▲ ▼ ROLAR<em>LICENÇA</em>",
+      smalls: [SOUND],
+      big: BACK },
+    onKey: aboutKey,
+  },
+};
+
+/** Shift vale em todas as telas; o resto é da tela. */
+function dispatch(id, key, mods) {
+  if (key === "Shift") {
+    shared.sound = !shared.sound;
+    applyShared();
+    if (id === "help") helpHighlight(key);
+    return;
+  }
+  return SCREENS[id].onKey(key, mods);
+}
+
+const KEYS = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", " ", "Enter", "Escape", "Shift", "Control"];
+
+for (const [id, screen] of Object.entries(SCREENS)) {
+  const device = $(id);
+  mountShell(device);
+  buildControls(device, screen.controls);
+  device.addEventListener("keydown", e => {
+    // No Game Over qualquer tecla vale; nas outras telas só as teclas do jogo.
+    if (e.key === "Tab" || (!KEYS.includes(e.key) && id !== "over")) return;
+    if (dispatch(id, e.key, { ctrl: e.ctrlKey }) === false) return;
+    e.preventDefault();
+    press(device, e.key);
+  });
+}
+
+/* ======================= Montagem inicial ======================= */
+
+drawGlyphs($("mTitle"), WORD, WORD_COLORS);
+drawGlyphs($("aTitle"), WORD, WORD_COLORS);
+(function buildGround() {
+  const el = $("mGround");
+  const rows = [
+    "..........T.........IIII",
+    "OO.....J.TTT....S...LLL.",
+    "OOZZ...JJJ.....SS..ZL...",
+  ];
+  el.style.gridTemplateColumns = `repeat(${rows[0].length}, var(--cs))`;
+  const cells = makeCells(el, rows.length * rows[0].length);
+  rows.join("").split("").forEach((t, i) => paint(cells[i], t === "." ? null : t));
+})();
+setSeg($("mRecord"), shared.record, 6);
+
+playLcd = mountPlayLcd($("play").querySelector(".lcd"));
+playLcd.fill(prefilled(PREFILL));
+playLcd.side({ score: 0, lines: 0, level: 1, rate: 0, secs: 0, next: "T" });
+
+mountPause(mountPlayLcd($("pause").querySelector(".lcd")));
+
+overLcd = mountPlayLcd($("over").querySelector(".lcd"));
+overLcd.fill(deadBoard());
+overLcd.side(last);
+overLcd.overlay("Game<br>Over", `<span class="blink">qualquer tecla</span>`, "over-txt");
+overDone = true;
+
+renderResult(last.score > shared.record);
+mountHelp();
+$("aLic").textContent = LICENSE;
+updateThumb();
+
+/* Comportamentos de foco: começar a partida, pausar ao sair, rever a animação. */
+$("play").addEventListener("focus", () => { if (!game || game.state === "over") newGame(); });
+$("play").addEventListener("blur", () => game && game.state === "playing" && setPaused(true));
+$("play").querySelector(".close").addEventListener("click", () => game && game.state !== "over" && quit());
+$("over").addEventListener("focus", runCurtain);
+$("over").addEventListener("mousedown", e => { if (document.activeElement === $("over") && !e.target.closest("button")) runCurtain(); });
+
+setInterval(() => {
+  if (game && game.state === "playing") { game.secs++; setTime($("pTime"), game.secs); }
+}, 1000);
+
+applyShared();
+</script>
+</body>
+</html>
