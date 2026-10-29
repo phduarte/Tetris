@@ -130,6 +130,16 @@ public class GameController
     public float TetrisRate => _board.TetrisRate;
 
     /// <summary>
+    /// Se a partida atual superou o recorde que estava guardado quando ela começou.
+    /// </summary>
+    public bool IsNewRecord => _board.IsNewRecord;
+
+    /// <summary>
+    /// Tabela de pontuação: os pontos de uma jogada, indexados pela quantidade de linhas removidas menos 1.
+    /// </summary>
+    public static IReadOnlyList<int> ScoreTable => Stats.ScoreTable;
+
+    /// <summary>
     /// Valida as dimensões, cria o tabuleiro e passa a repassar os eventos dele. Use <see cref="Create"/>.
     /// </summary>
     /// <param name="width">Largura do tabuleiro</param>
@@ -151,7 +161,12 @@ public class GameController
         _board = new Board(repository, width, height);
         _board.OnRefresh += () => OnRefresh?.Invoke();
         _board.OnFinish += () => OnFinish?.Invoke();
-        _board.OnLose += () => OnLose?.Invoke();
+        _board.OnLose += () =>
+        {
+            // a partida perdida também conta para o recorde, como a encerrada pelo jogador em Exit
+            Save();
+            OnLose?.Invoke();
+        };
         _board.OnClear += () => OnClear?.Invoke();
         _board.OnMove += () => OnMove?.Invoke();
         _board.OnSlide += () => OnSlide?.Invoke();

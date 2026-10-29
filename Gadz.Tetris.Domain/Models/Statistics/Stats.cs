@@ -69,6 +69,11 @@ public class Stats(Identity id) : Entity(id)
     private const int TETRIS_LINES = 4;
 
     /// <summary>
+    /// Tabela de pontuação: os pontos de uma jogada, indexados pela quantidade de linhas removidas menos 1.
+    /// </summary>
+    public static IReadOnlyList<int> ScoreTable { get; } = [SCORE_SINGLE, SCORE_DOUBLE, SCORE_TRIPLE, SCORE_TETRIS];
+
+    /// <summary>
     /// O cronômetro da partida; cada pausa fecha um trecho.
     /// </summary>
     private readonly PlayClock _clock = new();
@@ -249,14 +254,7 @@ public class Stats(Identity id) : Entity(id)
     /// <returns>Os pontos da jogada, ou 0 se a quantidade de linhas não estiver na tabela.</returns>
     private int CalculateScore(int linhas)
     {
-        var score = linhas switch
-        {
-            1 => SCORE_SINGLE,
-            2 => SCORE_DOUBLE,
-            3 => SCORE_TRIPLE,
-            TETRIS_LINES => SCORE_TETRIS,
-            _ => 0
-        };
+        var score = linhas >= 1 && linhas <= ScoreTable.Count ? ScoreTable[linhas - 1] : 0;
 
         if (linhas == TETRIS_LINES)
             Tetris += score;

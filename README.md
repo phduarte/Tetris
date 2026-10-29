@@ -55,8 +55,13 @@ Os planos de evolução estão em [docs/PLANO-REFATORACAO.md](docs/PLANO-REFATOR
 
 ## Características
 
-- **Tema Clássico**: Opção para selecionar o tema similar ao do jogo original da década de 80.
-- **Tema Brickgame**: Opção para selecionar o tema similar ao do video-game de bolso, famoso na década de 90.
+- **Um aparelho, várias telas**: o jogo é um minigame de bolso (carcaça grafite e coral) em que só o LCD muda de uma tela para outra. Os botões da carcaça mostram a ação e a tecla, e também podem ser clicados.
+- **Estilo BRICK GAME**: LCD esverdeado e monocromático, como o video-game de bolso famoso na década de 90.
+- **Estilo TETRIS**: LCD escuro com as peças nas cores do jogo original da década de 80. O tema é escolhido no menu com ← / →.
+- **Pausa e fim de jogo no LCD**: na pausa (inclusive a automática, quando a janela perde o foco) o tabuleiro apaga para não espiar a jogada. Ao perder, uma cortina de blocos sobe e desce antes do GAME OVER, que segue para o resultado com qualquer tecla ou sozinho depois de 10 segundos.
+- **Resultado**: pontos, nível, linhas, peças, % de TETRIS e tempo, com o selo NOVO RECORDE quando a partida supera o recorde guardado. Volta ao menu com ENTER ou sozinho depois de 30 segundos.
+- **Ajuda interativa**: apertar uma tecla destaca a linha dela no manual, que também traz a tabela de pontos.
+- **Idiomas**: textos em inglês e em português, conforme o idioma do Windows.
 - **Slide**: Segurar a tecla CTRL enquanto move a peça para esquerda ou direita faz a peça deslizar até o limite.
 - **Smash Down**: Ao apertar a tecla SPACEBAR a peça imediatamente cai em velocidade acelerada.
 - **Sons**: Os eventos e movimentos reproduzem sons similares aos dos brickgames.
@@ -67,24 +72,30 @@ Os planos de evolução estão em [docs/PLANO-REFATORACAO.md](docs/PLANO-REFATOR
   + 3 linhas completas na mesma jogada valem 300 pontos
   + TETRIS (4 linhas completas na mesma jogada) vale 1.200 pontos
 - **Níveis e velocidade**: o nível sobe ao completar a meta de linhas (20 no primeiro nível, crescendo 25% a cada nível). No nível 1 a peça desce a cada 1.000 ms, e esse intervalo diminui 50 ms por nível até o mínimo de 100 ms.
-- **HI-SCORE**: a tela de jogo mostra o recorde abaixo da pontuação. Ele é a maior pontuação já guardada e passa a acompanhar a pontuação atual quando ela o supera.
+- **HI-SCORE**: o menu e a tela de jogo mostram o recorde. Ele é a maior pontuação já guardada (partidas encerradas com ESC ou perdidas) e passa a acompanhar a pontuação atual quando ela o supera.
 
 ## Controles
 
 | Tecla | Ação |
 | --- | --- |
-| ← / → | Move a peça |
+| ← / → | Move a peça (segurando a tecla, ela anda 2 blocos a cada repetição) |
 | CTRL + ← / → | Desliza a peça até o limite |
 | ↓ | Desce a peça |
 | ↑ | Gira a peça |
 | ESPAÇO | Derruba a peça (smash down) |
 | ENTER | Pausa / continua |
 | ESC | Encerra o jogo e salva as estatísticas |
-| SHIFT | Liga / desliga o som |
+| SHIFT | Liga / desliga o som (com o som desligado, o botão SOM fica afundado) |
+| F1 | Abre a ajuda (no menu) |
+| F12 | Abre a tela Sobre (no menu) |
 
 ## Gráfico
 
-![img1](docs/screenshots/tela2.1.png)
+| Menu | Partida | Ajuda | Resultado |
+| --- | --- | --- | --- |
+| ![Menu](docs/screenshots/tela1.png) | ![Partida](docs/screenshots/tela2.2.png) | ![Ajuda](docs/screenshots/tela6.png) | ![Resultado](docs/screenshots/tela5.png) |
+
+Os mockups e as decisões do redesign estão em [docs/redesign.html](docs/redesign.html), e o fluxo entre as telas em [docs/jornada.html](docs/jornada.html).
 
 ## Conclusão
 

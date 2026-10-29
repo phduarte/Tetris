@@ -284,24 +284,26 @@ const SECTIONS = [
 
 /** Telas no tamanho original da captura (w × h em pixels) e posição no canvas. */
 const FRAMES = [
-  { id: "help",     sec: "chegada",  file: "tela6.png",   name: "Ajuda",            form: "Help",     w: 414, h: 553, x: 0,    y: 0,
-    desc: "Manual curto com os controles: setas, barra de espaço, Ctrl + setas, Enter e Esc. Aberto como diálogo a partir do menu." },
-  { id: "about",    sec: "chegada",  file: "tela7.png",   name: "Sobre",            form: "About",    w: 414, h: 556, x: 520,  y: 0,
-    desc: "Propósito do projeto (estudo de engenharia de software) e a licença MIT." },
-  { id: "menu",     sec: "chegada",  file: "tela1.png",   name: "Menu inicial",     form: "Choose",   w: 417, h: 552, x: 260,  y: 820,
-    desc: "Porta de entrada. O jogador escolhe o estilo visual (BRICK GAME ou TETRIS), liga ou desliga o som e inicia a partida." },
-  { id: "legacy",   sec: "partida",  file: "tela2.png",   name: "Brick Game · versão original", form: "Play", w: 345, h: 461, x: 1100, y: -280,
-    desc: "Primeira versão do tabuleiro (2018), com fonte de display LCD e o indicador de velocidade. Serve de referência para a evolução do visual." },
-  { id: "brick",    sec: "partida",  file: "tela2.1.png", name: "Partida · BRICK GAME", form: "Play",   w: 398, h: 542, x: 1100, y: 300,
-    desc: "Estilo monocromático que lembra os minigames de bolso. Painel lateral com pontos, linhas, próxima peça, nível, taxa de TETRIS e tempo." },
-  { id: "classic",  sec: "partida",  file: "tela2.2.png", name: "Partida · TETRIS",  form: "Play",     w: 399, h: 537, x: 1100, y: 1000,
-    desc: "Estilo colorido: cada tetraminó tem sua cor fixa (I ciano, T roxo, L laranja, J azul, O amarelo, S verde, Z vermelho)." },
-  { id: "pause",    sec: "partida",  file: "tela3.png",   name: "Pausado",          form: "Play",     w: 402, h: 538, x: 1760, y: -420,
-    desc: "Camada sobre o tabuleiro que esconde as peças. Entra com Enter ou automaticamente quando a janela perde o foco." },
-  { id: "gameover", sec: "desfecho", file: "tela4.png",   name: "Game Over",        form: "GameOver", w: 412, h: 545, x: 2400, y: 650,
-    desc: "A peça nova não cabe mais no tabuleiro. Momento de impacto visual antes de mostrar o resultado." },
-  { id: "result",   sec: "desfecho", file: "tela5.png",   name: "Resultado",        form: "Deserve",  w: 416, h: 551, x: 3060, y: 650,
-    desc: "Resumo da partida (placar, % TETRIS, nível, peças e tempo) e uma avaliação em estrelas. FEITO! fecha e volta ao menu." },
+  { id: "help",     sec: "chegada",  file: "tela6.png",   name: "Ajuda",            form: "HelpScreen",   w: 426, h: 646, x: -60,  y: 0,
+    desc: "Como jogar: as teclas desenhadas como teclas — apertar uma destaca a linha dela, para testar enquanto lê. Traz a tabela de pontos (lida do domínio) e a regra de nível. Esc (VOLTAR) retorna ao menu." },
+  { id: "about",    sec: "chegada",  file: "tela7.png",   name: "Sobre",            form: "AboutScreen",  w: 426, h: 646, x: 620,  y: 0,
+    desc: "O propósito do projeto numa frase, os temas do estudo como etiquetas e a licença MIT num quadro que rola com ▲ ▼." },
+  { id: "menu",     sec: "chegada",  file: "tela1.png",   name: "Menu inicial",     form: "MenuScreen",   w: 426, h: 646, x: 280,  y: 900,
+    desc: "Porta de entrada: o recorde como convite, o título em blocos, o tema escolhido com ◄ ► (BRICK GAME ou TETRIS) e o som. Enter (botão JOGAR) começa a partida; AJUDA (F1) e SOBRE (F12) são botões da carcaça." },
+  { id: "legacy",   sec: "partida",  file: "antes/tela2.png", name: "Brick Game · versão original", form: "Play", w: 345, h: 461, x: 1180, y: -560,
+    desc: "Primeira versão do tabuleiro (2018), com fonte de display LCD e o indicador de velocidade. As telas anteriores ao redesign estão em screenshots/antes e no docs/redesign.html." },
+  { id: "brick",    sec: "partida",  file: "tela2.1.png", name: "Partida · BRICK GAME", form: "PlayScreen", w: 426, h: 646, x: 1180, y: 260,
+    desc: "LCD monocromático de minigame de bolso. Painel lateral em 7 segmentos com pontos, linhas, próxima peça, nível, % de TETRIS, tempo e recorde, além dos indicadores ♪ e ❚❚." },
+  { id: "classic",  sec: "partida",  file: "tela2.2.png", name: "Partida · TETRIS",  form: "PlayScreen",   w: 426, h: 646, x: 1180, y: 1120,
+    desc: "O mesmo aparelho com LCD escuro e cada tetraminó na sua cor (I ciano, T roxo, L laranja, J azul, O amarelo, S verde, Z vermelho)." },
+  { id: "pause",    sec: "partida",  file: "tela3.png",   name: "Pausado",          form: "PlayScreen",   w: 426, h: 646, x: 1980, y: -360,
+    desc: "A pausa acontece no LCD: só o tabuleiro apaga (sem espiar a jogada), o painel continua visível, o ❚❚ acende e o botão PAUSA pulsa. Entra com Enter ou quando a janela perde o foco." },
+  { id: "curtain",  sec: "desfecho", file: "tela4.1.png", name: "Cortina",          form: "GameOverCurtain", w: 426, h: 646, x: 2660, y: 680,
+    desc: "A peça nova não cabe: depois de uma pausa curta, uma cortina de blocos sobe linha a linha e desce apagando o tabuleiro, ao som de Ending.wav." },
+  { id: "gameover", sec: "desfecho", file: "tela4.png",   name: "Game Over",        form: "PlayScreen",   w: 426, h: 646, x: 3380, y: 680,
+    desc: "O GAME OVER em pixel art (com degradê amarelo → vermelho no tema TETRIS), com o placar final ainda visível ao lado. Qualquer tecla continua; sem tecla, segue sozinho para o resultado em 10 segundos." },
+  { id: "result",   sec: "desfecho", file: "tela5.png",   name: "Resultado",        form: "ResultScreen", w: 426, h: 646, x: 4060, y: 680,
+    desc: "Pontos em destaque, o selo NOVO RECORDE quando a partida supera o recorde guardado (decidido pelo domínio) e a grade com nível, linhas, peças, % de TETRIS e tempo. Enter (FEITO) volta ao menu; sem tecla, volta sozinho em 30 segundos." },
 ];
 
 /**
@@ -309,46 +311,50 @@ const FRAMES = [
  * `bend` força a curvatura; `at` posiciona o rótulo ao longo da curva (padrão 0,5).
  */
 const LINKS = [
-  { id: "toHelp",   from: ["menu", "t", .3],  to: ["help", "b", .5],      kind: "flow",   label: "Link <b>Ajuda</b> · <kbd>X</kbd> volta" },
-  { id: "toAbout",  from: ["menu", "t", .7],  to: ["about", "b", .5],     kind: "flow",   label: "Link <b>Sobre</b> · <kbd>X</kbd> volta" },
-  { id: "playBrick",from: ["menu", "r", .35], to: ["brick", "l", .5],     kind: "flow",   label: "Iniciar · BRICK GAME" },
-  { id: "playTet",  from: ["menu", "r", .65], to: ["classic", "l", .5],   kind: "flow",   label: "Iniciar · TETRIS" },
+  { id: "toHelp",   from: ["menu", "t", .3],  to: ["help", "b", .5],      kind: "flow",   label: "<kbd>F1</kbd> · <b>AJUDA</b> · <kbd>Esc</kbd> volta", at: .7 },
+  { id: "toAbout",  from: ["menu", "t", .7],  to: ["about", "b", .5],     kind: "flow",   label: "<kbd>F12</kbd> · <b>SOBRE</b> · <kbd>Esc</kbd> volta", at: .7 },
+  { id: "playBrick",from: ["menu", "r", .35], to: ["brick", "l", .5],     kind: "flow",   label: "<kbd>Enter</kbd> · tema BRICK GAME", at: .85 },
+  { id: "playTet",  from: ["menu", "r", .65], to: ["classic", "l", .5],   kind: "flow",   label: "<kbd>Enter</kbd> · tema TETRIS" },
   { id: "evolve",   from: ["legacy", "b", .5],to: ["brick", "t", .5],     kind: "legacy", label: "evolução do visual" },
   { id: "pauseB",   from: ["brick", "r", .2], to: ["pause", "b", .3],     kind: "flow",   label: "<kbd>Enter</kbd> ou perde o foco" },
-  { id: "pauseT",   from: ["classic", "r", .15], to: ["pause", "b", .75], kind: "flow",   label: "<kbd>Enter</kbd>", at: .3 },
+  { id: "pauseT",   from: ["classic", "r", .15], to: ["pause", "b", .75], kind: "flow",   label: "<kbd>Enter</kbd>", at: .6 },
   { id: "resume",   from: ["pause", "l", .5], to: ["brick", "t", .85],    kind: "back",   label: "<kbd>Enter</kbd> retoma" },
-  { id: "loseB",    from: ["brick", "r", .75],to: ["gameover", "l", .35], kind: "end",    label: "peça encosta no topo" },
-  { id: "loseT",    from: ["classic", "r", .6], to: ["gameover", "l", .65], kind: "end",  label: "peça encosta no topo" },
-  { id: "quit",     from: ["classic", "b", .5], to: ["result", "b", .3],  kind: "end",    label: "<kbd>Esc</kbd> encerra e salva", bend: 380 },
-  { id: "anyKey",   from: ["gameover", "r", .5], to: ["result", "l", .5], kind: "end",    label: "qualquer tecla" },
-  { id: "again",    from: ["result", "b", .75], to: ["menu", "b", .5],    kind: "back",   label: "<b>FEITO!</b> · nova partida", bend: 900 },
+  { id: "loseB",    from: ["brick", "r", .75],to: ["curtain", "l", .35],  kind: "end",    label: "peça nova não cabe" },
+  { id: "loseT",    from: ["classic", "r", .6], to: ["curtain", "l", .65], kind: "end",   label: "peça nova não cabe" },
+  { id: "curtainEnd", from: ["curtain", "r", .5], to: ["gameover", "l", .5], kind: "end", label: "cortina sobe e desce · ♪ Ending" },
+  { id: "quit",     from: ["classic", "b", .5], to: ["result", "b", .3],  kind: "end",    label: "<kbd>Esc</kbd> ou ✕ encerra e salva", bend: 420 },
+  { id: "anyKey",   from: ["gameover", "r", .5], to: ["result", "l", .5], kind: "end",    label: "qualquer tecla ou 10 s" },
+  { id: "again",    from: ["result", "b", .75], to: ["menu", "b", .5],    kind: "back",   label: "<kbd>Enter</kbd> · <b>FEITO</b> ou 30 s · nova partida", bend: 1000 },
 ];
 
 /** Notas de design espalhadas pelo canvas. */
 const STICKIES = [
-  { x: -330, y: 940, title: "Som em qualquer tela", text: "Shift liga/desliga o som. O checkbox do menu só reflete o estado atual." },
-  { x: 2240, y: 120, title: "Pausa sem flags", text: "Enter usa um único comando (TogglePause) que pergunta ao estado se pode pausar ou continuar — padrão State." },
-  { x: 3560, y: 700, title: "Estatísticas salvas", text: "Ao sair, a partida é gravada em stats.mc e o recorde passa a valer nas próximas sessões." },
+  { x: -330, y: 920, title: "Um aparelho, várias telas", text: "A carcaça é a mesma em todo o jogo; só o LCD muda. Cada botão mostra a ação e a tecla, e clicar nele equivale a apertá-la." },
+  { x: -330, y: 1200, title: "Som em qualquer tela", text: "Shift (ou o botão SOM) liga/desliga o som em todas as telas. Desligado, o botão SOM fica afundado, e o menu e o ♪ do LCD mostram o estado." },
+  { x: 2500, y: -300, title: "Pausa sem flags", text: "Enter usa um único comando (TogglePause) que pergunta ao estado se pode pausar ou continuar — padrão State. A tela consulta o mesmo estado para apagar o tabuleiro." },
+  { x: 4580, y: 740, title: "Estatísticas salvas", text: "Ao sair com Esc ou ao perder, a partida é gravada em stats.mc. O domínio diz se ela é um novo recorde, e o menu já mostra o recorde atualizado." },
 ];
 
 /** Roteiro do modo storytelling: cada passo foca telas e conexões. */
 const STORY = [
   { sec: "Capítulo 1 · Chegada", title: "Tudo começa no menu", focus: ["menu"], links: [],
-    text: "O jogador abre o Tetris e encontra uma tela limpa: escolher o estilo, conferir o som e apertar Iniciar. Nada além do necessário para começar a jogar." },
+    text: "O jogador liga o aparelho e o recorde já aparece no LCD, como convite. Escolher o tema com ◄ ►, conferir o som e apertar Enter: nada além do necessário para começar a jogar." },
   { sec: "Capítulo 1 · Chegada", title: "Antes de jogar, entender", focus: ["menu", "help", "about"], links: ["toHelp", "toAbout"],
-    text: "Quem tem dúvida abre a Ajuda e aprende os controles em segundos. O Sobre conta o porquê do projeto: um estudo de DDD, Clean Code e padrões de projeto." },
-  { sec: "Capítulo 2 · Partida", title: "Dois estilos, o mesmo jogo", focus: ["menu", "brick", "classic"], links: ["playBrick", "playTet"],
-    text: "A escolha do menu muda só a pele: BRICK GAME evoca o minigame de bolso, TETRIS traz as cores clássicas. As regras são exatamente as mesmas — vivem no domínio." },
+    text: "Quem tem dúvida aperta F1 (AJUDA) e testa as teclas enquanto lê — cada uma acende a sua linha. O SOBRE conta o porquê do projeto: um estudo de DDD, Clean Code e padrões de projeto." },
+  { sec: "Capítulo 2 · Partida", title: "Dois temas, o mesmo jogo", focus: ["menu", "brick", "classic"], links: ["playBrick", "playTet"],
+    text: "A escolha do menu muda só o LCD: BRICK GAME evoca o minigame de bolso, TETRIS traz as cores clássicas. A carcaça e as regras são exatamente as mesmas — as regras vivem no domínio." },
   { sec: "Capítulo 2 · Partida", title: "De onde viemos", focus: ["legacy", "brick"], links: ["evolve"],
-    text: "A primeira versão tinha a cara de um LCD antigo. O layout evoluiu, ganhou a taxa de TETRIS no lugar da velocidade, e a identidade monocromática foi preservada." },
+    text: "A primeira versão tinha a cara de um LCD antigo, mas era um formulário comum. O redesign assumiu de vez o aparelho de bolso: displays de 7 segmentos, células apagadas sempre visíveis e botões com a tecla de cada ação." },
   { sec: "Capítulo 2 · Partida", title: "Uma pausa para respirar", focus: ["brick", "classic", "pause"], links: ["pauseB", "pauseT", "resume"],
-    text: "Enter pausa e esconde o tabuleiro — sem espiar a próxima jogada. Se o jogador trocar de janela, o jogo pausa sozinho. Outro Enter e a partida continua de onde parou." },
-  { sec: "Capítulo 3 · Desfecho", title: "Game Over", focus: ["brick", "classic", "gameover"], links: ["loseB", "loseT"],
-    text: "Quando uma nova peça não cabe mais, a partida acaba com um GAME OVER em pixel art. É o clímax da história: tensão máxima, e então o silêncio." },
+    text: "Enter pausa e apaga só o tabuleiro — sem espiar a próxima jogada, mas com o placar à vista. Se o jogador trocar de janela, o jogo pausa sozinho. O botão PAUSA pulsa mostrando como voltar." },
+  { sec: "Capítulo 3 · Desfecho", title: "A cortina desce", focus: ["brick", "classic", "curtain"], links: ["loseB", "loseT"],
+    text: "Quando uma nova peça não cabe mais, o jogo respira por um instante e uma cortina de blocos toma a tela, linha a linha, ao som do tema de encerramento." },
+  { sec: "Capítulo 3 · Desfecho", title: "Game Over", focus: ["curtain", "gameover"], links: ["curtainEnd"],
+    text: "A cortina recolhe e revela o GAME OVER em pixel art. É o clímax da história: tensão máxima, e então o convite para continuar com qualquer tecla." },
   { sec: "Capítulo 3 · Desfecho", title: "O placar conta a sua história", focus: ["gameover", "result", "classic"], links: ["anyKey", "quit"],
-    text: "Qualquer tecla leva ao resultado: placar, % de TETRIS, nível, peças e tempo. Quem prefere parar antes aperta Esc — a partida também é salva." },
+    text: "O resultado mostra pontos, nível, linhas, peças, % de TETRIS e tempo — e o selo NOVO RECORDE quando for o caso. Quem prefere parar antes aperta Esc: a partida também é salva." },
   { sec: "Epílogo", title: "Só mais uma partida", focus: ["result", "menu"], links: ["again"],
-    text: "FEITO! fecha o resultado e devolve o jogador ao menu. A jornada fecha o ciclo — e o recorde salvo é o convite para tentar de novo." },
+    text: "FEITO devolve o jogador ao menu, que já exibe o recorde atualizado. A jornada fecha o ciclo — e o recorde é o convite para tentar de novo." },
 ];
 
 const COLORS = { flow: "#a259ff", end: "#f24822", back: "#8a8a8a", legacy: "#f2994a" };
@@ -537,7 +543,7 @@ function renderProps() {
       <div class="field"><span>X</span>${f.x}</div><div class="field"><span>Y</span>${f.y}</div>
     </div>
     <div class="grid2">
-      <div class="field"><span>Form</span>${f.form}</div><div class="field"><span>📷</span>${f.file}</div>
+      <div class="field"><span>Tela</span>${f.form}</div><div class="field"><span>📷</span>${f.file}</div>
     </div>
     <p>${f.desc}</p>
     <div class="panel-title" style="padding:0 0 6px">Interações · saída</div>

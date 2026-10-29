@@ -348,4 +348,83 @@ public class GameControllerTests
 
         Assert.AreEqual(1, repository.All().Count());
     }
+
+    /// <summary>
+    /// Ao perder, as estatísticas da partida também são guardadas, para contar no recorde.
+    /// </summary>
+    [Test]
+    public void DeveSalvarAsEstatisticasAoPerder()
+    {
+        var lost = false;
+        app.OnLose += () => lost = true;
+        app.Start();
+
+        // cada peça ocupa no máximo 4 colunas, então nenhuma linha é completada e a pilha chega ao topo
+        for (var i = 0; i < app.BoardHeight && app.Playing; i++)
+        {
+            app.SmashDown();
+        }
+
+        Assert.IsTrue(lost, "O jogo deveria ter terminado.");
+        Assert.AreEqual(1, repository.All().Count());
+    }
+
+    /// <summary>
+    /// Um toque na seta anda 1 bloco; cada repetição da seta segurada anda 2.
+    /// </summary>
+    /// <param name="key">A seta.</param>
+    /// <param name="direction">O sentido do movimento (+1 direita, -1 esquerda).</param>
+    [TestCase(Key.Right, 1)]
+    [TestCase(Key.Left, -1)]
+    public void DeveAndarMaisRapidoComASetaSegurada(Key key, int direction)
+    {
+        const int START_COLUMN = 4;
+        app.Start();
+        var factory = new CommandFactory(app);
+        factory.GetAll(Key.Right, false).First().Execute();
+        app.MoveRight();
+        app.MoveRight();
+        app.MoveRight();
+        Assert.AreEqual(START_COLUMN, app.CurrentPiecePosition.X, "A peça deveria ter saído do canto.");
+
+        factory.GetAll(key, false, repeat: false).First().Execute();
+        Assert.AreEqual(START_COLUMN + direction, app.CurrentPiecePosition.X, "O primeiro toque deveria andar 1 bloco.");
+
+        factory.GetAll(key, false, repeat: true).First().Execute();
+        Assert.AreEqual(START_COLUMN + (3 * direction), app.CurrentPiecePosition.X, "A repetição deveria andar 2 blocos.");
+    }
+
+    /// <summary>
+    /// Segurar ↓ continua descendo como antes: a repetição não muda os outros comandos.
+    /// </summary>
+    [Test]
+    public void DeveManterOsOutrosComandosNaRepeticao()
+    {
+        var factory = new CommandFactory(app);
+
+        Assert.AreSame(factory.GetAll(Key.Down, false).First(), factory.GetAll(Key.Down, false, repeat: true).First());
+        Assert.AreSame(factory.GetAll(Key.Right, true).First(), factory.GetAll(Key.Right, true, repeat: true).First());
+    }
+
+    /// <summary>
+    /// A tabela de pontuação chega à interface pelo controlador.
+    /// </summary>
+    [Test]
+    public void DeveInformarATabelaDePontuacao()
+    {
+        CollectionAssert.AreEqual(Stats.ScoreTable, GameController.ScoreTable);
+    }
+
+    /// <summary>
+    /// A tecla Shift, com o código que o Windows envia (<c>Keys.ShiftKey</c> = 0x10), tem um comando: ligar/desligar o som.
+    /// </summary>
+    [Test]
+    public void DeveTerUmComandoParaShift()
+    {
+        const int SHIFT_KEY_CODE = 0x10;
+
+        var commands = new CommandFactory(app).GetAll((Key)SHIFT_KEY_CODE, false).ToList();
+
+        Assert.AreEqual(1, commands.Count);
+    }
 }

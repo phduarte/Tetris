@@ -15,8 +15,10 @@ public class CommandFactory(GameController gameController)
         new MoveDownCommand(gameController),
         new RunLeftCommand(gameController),
         new MoveLeftCommand(gameController),
+        new HoldLeftCommand(gameController),
         new RunRightCommand(gameController),
         new MoveRightCommand(gameController),
+        new HoldRightCommand(gameController),
         new RotateCommand(gameController),
         new ExitCommand(gameController),
         new TogglePauseCommand(gameController),
@@ -28,7 +30,8 @@ public class CommandFactory(GameController gameController)
     /// </summary>
     /// <param name="key">A tecla pressionada.</param>
     /// <param name="control">Se a tecla Ctrl estava pressionada.</param>
+    /// <param name="repeat">Se é uma repetição automática da tecla segurada.</param>
     /// <returns>Os comandos que casam com a tecla.</returns>
-    public IEnumerable<Command> GetAll(Key key, bool control)
-        => Commands.Where(x => x.Match(key, control));
+    public IEnumerable<Command> GetAll(Key key, bool control, bool repeat = false)
+        => Commands.Where(x => x.Match(key, control, repeat));
 }
