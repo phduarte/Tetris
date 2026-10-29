@@ -11,9 +11,8 @@ const cacheName = `${cacheNamePrefix}${self.assetsManifest.version}`;
 const offlineAssetsInclude = [ /\.dll$/, /\.pdb$/, /\.wasm/, /\.html/, /\.js$/, /\.json$/, /\.css$/, /\.woff$/, /\.png$/, /\.jpe?g$/, /\.gif$/, /\.ico$/, /\.blat$/, /\.dat$/, /\.webmanifest$/ ];
 const offlineAssetsExclude = [ /^service-worker\.js$/ ];
 
-// Replace with your base path if you are hosting on a subfolder. Ensure there is a trailing '/'.
-const base = "/";
-const baseUrl = new URL(base, self.origin);
+// a base é a pasta do próprio service worker: serve tanto na raiz quanto numa subpasta (GitHub Pages: /Tetris/)
+const baseUrl = new URL('./', self.location);
 const manifestUrlList = self.assetsManifest.assets.map(asset => new URL(asset.url, baseUrl).href);
 
 async function onInstall(event) {
