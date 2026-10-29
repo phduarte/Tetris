@@ -1,0 +1,51 @@
+<span class="digits @Class">@foreach (var character in Text)
+    {
+        <span class="digit" data-ghost="@Ghost(character)">@character</span>
+    }</span>
+
+@code {
+    /// <summary>
+    /// O valor já formatado (números completados com espaços à esquerda, como no LCD do Desktop).
+    /// </summary>
+    [Parameter, EditorRequired]
+    public string Text { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Classe CSS extra (define a altura dos dígitos).
+    /// </summary>
+    [Parameter]
+    public string? Class { get; set; }
+
+    /// <summary>
+    /// O "fantasma" de cada posição: um 8 apagado atrás dos números (e dos espaços), como nos visores de 7 segmentos.
+    /// </summary>
+    private static string Ghost(char character) => char.IsDigit(character) || character == ' ' ? "8" : character.ToString();
+
+    /// <summary>
+    /// Multiplicador de uma fração para porcentagem.
+    /// </summary>
+    private const int PERCENT = 100;
+
+    /// <summary>
+    /// Um número completado com espaços à esquerda nas posições do display (os dígitos a mais, à esquerda, somem).
+    /// </summary>
+    /// <param name="value">O número.</param>
+    /// <param name="digits">As posições do display.</param>
+    /// <returns>O texto do display.</returns>
+    public static string Number(int value, int digits) => value.ToString().PadLeft(digits)[^digits..];
+
+    /// <summary>
+    /// Uma fração como porcentagem inteira, nas posições do display (o sinal de % fica fora).
+    /// </summary>
+    /// <param name="fraction">A fração, de 0 a 1.</param>
+    /// <param name="digits">As posições do display.</param>
+    /// <returns>O texto do display.</returns>
+    public static string Percent(float fraction, int digits) => Number((int)Math.Round(fraction * PERCENT), digits);
+
+    /// <summary>
+    /// Um tempo no formato do display (hh:mm:ss).
+    /// </summary>
+    /// <param name="duration">O tempo.</param>
+    /// <returns>O texto do display.</returns>
+    public static string Time(TimeSpan duration) => duration.ToString(@"hh\:mm\:ss");
+}

@@ -1,0 +1,43 @@
+@using Gadz.Tetris.Domain.Models.Pieces
+
+<div class="grid @Class" style="--columns: @Columns; --rows: @Rows">
+    @for (var y = 0; y < Rows; y++)
+    {
+        for (var x = 0; x < Columns; x++)
+        {
+            <div class="cell @CellClass(ColorAt(x, y))"></div>
+        }
+    }
+</div>
+
+@code {
+    /// <summary>
+    /// Quantidade de colunas.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public int Columns { get; set; }
+
+    /// <summary>
+    /// Quantidade de linhas.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public int Rows { get; set; }
+
+    /// <summary>
+    /// A cor de cada célula, pela coluna e pela linha; <see cref="PieceColor.None"/> para uma célula vazia.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public Func<int, int, PieceColor> ColorAt { get; set; } = (_, _) => PieceColor.None;
+
+    /// <summary>
+    /// Classe CSS extra da grade (define o tamanho das células).
+    /// </summary>
+    [Parameter]
+    public string? Class { get; set; }
+
+    /// <summary>
+    /// A classe CSS da célula: a cor da peça (as cores ficam no CSS) ou vazia.
+    /// </summary>
+    private static string CellClass(PieceColor color)
+        => color == PieceColor.None ? "empty" : color.ToString().ToLowerInvariant();
+}

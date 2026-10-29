@@ -97,7 +97,7 @@ internal sealed class ResultScreen : ConsoleScreen
     /// <summary>
     /// Por quanto tempo, no máximo, o resultado fica na tela antes de voltar sozinho ao menu.
     /// </summary>
-    private const int TIMEOUT_MS = 30_000;
+    private const int TIMEOUT_MS = 15_000;
 
     /// <summary>
     /// Tamanho da instrução no rodapé.

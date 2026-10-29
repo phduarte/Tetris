@@ -1,0 +1,86 @@
+@inherits ConsoleScreen
+@implements IAsyncDisposable
+@inject IJSRuntime JS
+
+<div class="screen about">
+    <TitleArt />
+    <p class="subtitle">@Texts[nameof(Jogo.By)]</p>
+    <p class="about-text">@Texts[nameof(Jogo.AboutText)]</p>
+
+    <ul class="tags">
+        @foreach (var tag in Texts[nameof(Jogo.Tags)].Value.Split(TAG_SEPARATOR))
+        {
+            <li>@tag</li>
+        }
+    </ul>
+
+    <span class="label">@Texts[nameof(Jogo.MitLicense)]</span>
+    <div class="license" @ref="_license">@Texts[nameof(Jogo.LicenseText)]</div>
+</div>
+
+<ConsoleButtons Dpad="Dpad" Buttons="Buttons" />
+
+@code {
+    /// <summary>
+    /// Separador dos temas em <c>Tags</c>.
+    /// </summary>
+    private const char TAG_SEPARATOR = '|';
+
+    /// <summary>
+    /// Quanto a licença rola a cada seta, em pixels (o mesmo passo do Desktop).
+    /// </summary>
+    private const int SCROLL_STEP = 40;
+
+    /// <summary>
+    /// A caixa da licença.
+    /// </summary>
+    private ElementReference _license;
+
+    /// <summary>
+    /// O módulo <c>scroll.js</c>, importado na primeira rolagem.
+    /// </summary>
+    private IJSObjectReference? _scroll;
+
+    /// <inheritdoc/>
+    protected override IReadOnlyDictionary<string, Action> KeyBindings => new Dictionary<string, Action>
+    {
+        [KeyMap.UP] = () => _ = ScrollAsync(-SCROLL_STEP),
+        [KeyMap.DOWN] = () => _ = ScrollAsync(SCROLL_STEP),
+        [KeyMap.ESCAPE] = () => Frame.Navigate<MenuScreen>(),
+        [KeyMap.SHIFT] = ToggleSound,
+    };
+
+    /// <summary>
+    /// O direcional: ▲ ▼ rolam a licença.
+    /// </summary>
+    private DpadSetup Dpad => new(false, true, Texts[nameof(Jogo.CapScroll)], Texts[nameof(Jogo.CapLicense)]);
+
+    /// <summary>
+    /// Os botões da carcaça: som e voltar.
+    /// </summary>
+    private IReadOnlyList<ConsoleButton> Buttons =>
+        [SoundButton, new(KeyMap.ESCAPE, Texts[nameof(Jogo.CapBack)], Texts[nameof(Jogo.KeyEsc)], Big: true)];
+
+    /// <summary>
+    /// Rola a caixa da licença.
+    /// </summary>
+    /// <param name="top">Quantos pixels rolar (negativo sobe).</param>
+    /// <returns>A tarefa da rolagem.</returns>
+    private async Task ScrollAsync(int top)
+    {
+        _scroll ??= await JS.InvokeAsync<IJSObjectReference>("import", "./js/scroll.js");
+        await _scroll.InvokeVoidAsync("scrollBy", _license, top);
+    }
+
+    /// <summary>
+    /// Libera o módulo de rolagem.
+    /// </summary>
+    /// <returns>A tarefa de liberação.</returns>
+    public async ValueTask DisposeAsync()
+    {
+        if (_scroll is not null)
+        {
+            await _scroll.DisposeAsync();
+        }
+    }
+}

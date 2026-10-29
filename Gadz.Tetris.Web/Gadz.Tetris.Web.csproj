@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+	<PropertyGroup>
+		<OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
+		<ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Gadz.Tetris.Application\Gadz.Tetris.Application.csproj" />
+		<ProjectReference Include="..\Gadz.Tetris.Texts\Gadz.Tetris.Texts.csproj" />
+	</ItemGroup>
+
+	<!-- a fonte do LCD (Silkscreen, OFL) e os sons são os mesmos do Desktop: links, sem cópia dos arquivos.
+	     O ContentRoot aponta para o projeto de origem porque o servidor de desenvolvimento procura o arquivo
+	     em ContentRoot + caminho publicado; sem ele, procuraria em wwwroot e serviria um arquivo vazio. -->
+	<ItemGroup>
+		<Content Include="..\Gadz.Tetris.Desktop\Fontes\Silkscreen-Regular.ttf" Link="wwwroot\Fontes\%(Filename)%(Extension)" ContentRoot="$(MSBuildProjectDirectory)\..\Gadz.Tetris.Desktop\" />
+		<Content Include="..\Gadz.Tetris.SoundPlayer\AudioFiles\*.wav" Link="wwwroot\AudioFiles\%(Filename)%(Extension)" ContentRoot="$(MSBuildProjectDirectory)\..\Gadz.Tetris.SoundPlayer\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
+	</ItemGroup>
+
+</Project>

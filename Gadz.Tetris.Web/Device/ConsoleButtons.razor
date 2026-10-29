@@ -1,0 +1,54 @@
+<SectionContent SectionName="@ConsoleFrame.BUTTONS_SECTION">
+    <div class="dpad-block">
+        <div class="dpad">
+            @foreach (var (key, area, enabled) in DpadKeys)
+            {
+                <button type="button" class="arrow @area" data-key="@key" disabled="@(!enabled)" @onclick="() => Frame.Press(key)"></button>
+            }
+        </div>
+        <p class="dpad-caption">@Dpad.Label<span class="dpad-hint">@Dpad.Hint</span></p>
+    </div>
+
+    <div class="smalls">
+        @foreach (var button in Buttons.Where(b => !b.Big))
+        {
+            <ButtonView Button="button" />
+        }
+    </div>
+
+    @foreach (var button in Buttons.Where(b => b.Big))
+    {
+        <ButtonView Button="button" />
+    }
+</SectionContent>
+
+@code {
+    /// <summary>
+    /// O aparelho, que recebe o clique como se fosse a tecla.
+    /// </summary>
+    [CascadingParameter]
+    public ConsoleFrame Frame { get; set; } = default!;
+
+    /// <summary>
+    /// O direcional da tela.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public DpadSetup Dpad { get; set; } = new(false, false, string.Empty);
+
+    /// <summary>
+    /// Os botões que a tela mostra na carcaça.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public IReadOnlyList<ConsoleButton> Buttons { get; set; } = [];
+
+    /// <summary>
+    /// As quatro setas do direcional: a tecla, a posição na cruz (classe CSS) e se a tela usa a seta.
+    /// </summary>
+    private IEnumerable<(string Key, string Area, bool Enabled)> DpadKeys =>
+    [
+        (KeyMap.UP, "up", Dpad.Vertical),
+        (KeyMap.LEFT, "left", Dpad.Horizontal),
+        (KeyMap.RIGHT, "right", Dpad.Horizontal),
+        (KeyMap.DOWN, "down", Dpad.Vertical),
+    ];
+}

@@ -222,6 +222,9 @@
   <data name="KeyF12" xml:space="preserve">
     <value>F12</value>
   </data>
+  <data name="KeyF2" xml:space="preserve">
+    <value>F2</value>
+  </data>
   <data name="KeyShift" xml:space="preserve">
     <value>Shift</value>
   </data>

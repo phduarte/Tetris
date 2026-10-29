@@ -1,0 +1,40 @@
+@inherits ConsoleScreen
+
+<div class="screen result">
+    <p class="head">@Texts[nameof(Jogo.Result)]</p>
+
+    @* o selo ocupa o espaço mesmo quando escondido, para a tela não "pular" entre partidas *@
+    <p class="badge @(IsNewRecord ? "blink" : "hidden")">@Texts[nameof(Jogo.NewRecord)]</p>
+
+    <div class="stat centered">
+        <span class="label">@Texts[nameof(Jogo.Pontuacao)]</span>
+        <Digits Text="@Digits.Number(Stats.Score, SCORE_DIGITS)" Class="big" />
+    </div>
+
+    <div class="result-grid">
+        <div class="stat">
+            <span class="label">@Texts[nameof(Jogo.Nivel)]</span>
+            <Digits Text="@Digits.Number(Stats.Level, LEVEL_DIGITS)" />
+        </div>
+        <div class="stat">
+            <span class="label">@Texts[nameof(Jogo.Linhas)]</span>
+            <Digits Text="@Digits.Number(Stats.Lines, COUNT_DIGITS)" />
+        </div>
+        <div class="stat">
+            <span class="label">@Texts[nameof(Jogo.Pieces)]</span>
+            <Digits Text="@Digits.Number(Stats.Pieces, COUNT_DIGITS)" />
+        </div>
+        <div class="stat">
+            <span class="label">@Texts[nameof(Jogo.TaxaTetris)]</span>
+            <span><Digits Text="@Digits.Percent(Stats.TetrisRate, RATE_DIGITS)" /><span class="unit">%</span></span>
+        </div>
+        <div class="stat">
+            <span class="label">@Texts[nameof(Jogo.Tempo)]</span>
+            <Digits Text="@Digits.Time(Stats.Duration)" Class="small" />
+        </div>
+    </div>
+
+    <p class="foot blink">@Texts[nameof(Jogo.EnterDone)]</p>
+</div>
+
+<ConsoleButtons Dpad="Dpad" Buttons="Buttons" />

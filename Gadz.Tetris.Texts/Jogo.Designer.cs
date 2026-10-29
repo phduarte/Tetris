@@ -374,7 +374,16 @@ namespace Gadz.Tetris.Texts {
                 return ResourceManager.GetString("KeyF12", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to F2.
+        /// </summary>
+        public static string KeyF2 {
+            get {
+                return ResourceManager.GetString("KeyF2", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Shift.
         /// </summary>

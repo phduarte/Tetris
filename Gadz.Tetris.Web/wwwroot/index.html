@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#25262a" />
+    <title>Gadz Tetris</title>
+    <base href="/" />
+    <link rel="preload" id="webassembly" />
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link href="manifest.webmanifest" rel="manifest" />
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
+    <script type="importmap"></script>
+</head>
+
+<!-- o ontouchstart vazio faz o Safari do iOS aplicar o :active (botão afundado) ao tocar -->
+<body ontouchstart="">
+    <!-- no celular, o espaço livre acima do aparelho, reservado para anúncio -->
+    <div id="ad-slot" class="ad-slot"></div>
+
+    <div id="app">
+        <div class="loading">TETRIS</div>
+    </div>
+
+    <div id="blazor-error-ui">
+        ⚠ <a href="." class="reload">↻</a>
+        <span class="dismiss">✕</span>
+    </div>
+    <script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
+    <script>navigator.serviceWorker.register('service-worker.js', { updateViaCache: 'none' });</script>
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+name: GitHub Pages
+
+# publica a versão Web (Blazor WebAssembly) em https://phduarte.github.io/Tetris/
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# só um deploy por vez; um novo push não cancela o que já está publicando
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    # a Web não depende de WinForms nem do winmm.dll: roda no Linux
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-dotnet@v4
+      with:
+        global-json-file: global.json
+
+    # o site fica na subpasta /Tetris/; o ajuste vem antes do publish para os hashes do
+    # service-worker-assets.js baterem com o index.html publicado
+    - name: Base href
+      run: sed -i 's|<base href="/" />|<base href="/${{ github.event.repository.name }}/" />|' Gadz.Tetris.Web/wwwroot/index.html
+
+    - name: Test
+      run: dotnet test Gadz.Tetris.Tests --configuration Release
+
+    - name: Publish
+      run: dotnet publish Gadz.Tetris.Web --configuration Release --output publish
+
+    - uses: actions/upload-pages-artifact@v3
+      with:
+        path: publish/wwwroot
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+    - id: deployment
+      uses: actions/deploy-pages@v4

@@ -1,0 +1,76 @@
+@inherits ConsoleScreen
+
+<div class="screen play">
+    <div class="board-area">
+        <BlockGrid Columns="BOARD_WIDTH" Rows="BOARD_HEIGHT" ColorAt="CellColor" Class="board" />
+
+        @if (_lost)
+        {
+            <div class="grid board curtain" style="--columns: @BOARD_WIDTH; --rows: @BOARD_HEIGHT; --fill: @CurtainFillMs()ms">
+                @for (var y = 0; y < BOARD_HEIGHT; y++)
+                {
+                    var style = CurtainStyle(y);
+                    var color = CurtainColor(y);
+                    for (var x = 0; x < BOARD_WIDTH; x++)
+                    {
+                        <div class="cell @color" style="@style"></div>
+                    }
+                }
+            </div>
+        }
+
+        @if (_gameOver)
+        {
+            <div class="overlay">
+                <p class="game-over">@Texts[nameof(Jogo.GameOver)]</p>
+                <p class="hint blink">@Texts[nameof(Jogo.PressioneParaContinuar)]</p>
+            </div>
+        }
+        else if (!_lost && Paused)
+        {
+            <div class="overlay opaque">
+                <p class="pause">@Texts[nameof(Jogo.Pausado)]</p>
+                <p class="hint blink">@Texts[nameof(Jogo.PressioneEnterParaContinuar)]</p>
+            </div>
+        }
+    </div>
+
+    <aside class="side">
+        <div class="stat">
+            <span class="label">@Texts[nameof(Jogo.Pontuacao)]</span>
+            <Digits Text="@Digits.Number(Controller.Score, SCORE_DIGITS)" Class="big" />
+        </div>
+        <div class="stat">
+            <span class="label">@Texts[nameof(Jogo.Linhas)]</span>
+            <Digits Text="@Digits.Number(Controller.Lines, LINES_DIGITS)" />
+        </div>
+        <div class="stat">
+            <span class="label">@Texts[nameof(Jogo.Proximo)]</span>
+            <BlockGrid Columns="NEXT_SIZE" Rows="NEXT_SIZE" ColorAt="NextColor" Class="next" />
+        </div>
+        <div class="stat-pair">
+            <div class="stat">
+                <span class="label">@Texts[nameof(Jogo.Nivel)]</span>
+                <Digits Text="@Digits.Number(Controller.Level, LEVEL_DIGITS)" />
+            </div>
+            <div class="stat">
+                <span class="label">@Texts[nameof(Jogo.TaxaTetris)]</span>
+                <span><Digits Text="@Digits.Percent(Controller.TetrisRate, RATE_DIGITS)" /><span class="unit">%</span></span>
+            </div>
+        </div>
+        <div class="stat">
+            <span class="label">@Texts[nameof(Jogo.Tempo)]</span>
+            <Digits Text="@Digits.Time(Controller.Duration)" Class="small" />
+        </div>
+        <div class="stat">
+            <span class="label">@Texts[nameof(Jogo.Recorde)]</span>
+            <Digits Text="@Digits.Number(Controller.GetMaxScore(), SCORE_DIGITS)" Class="small" />
+        </div>
+        <div class="icons">
+            <span class="@(Controller.IsMuted ? "off" : "on")">♪</span>
+            <span class="pause-icon @(Paused && !_lost ? "on" : "off")"></span>
+        </div>
+    </aside>
+</div>
+
+<ConsoleButtons Dpad="Dpad" Buttons="Buttons" />

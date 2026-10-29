@@ -1,0 +1,63 @@
+@using Gadz.Tetris.Domain.Models.Pieces
+
+<BlockGrid Columns="Columns" Rows="LETTER_ROWS" ColorAt="ColorAt" Class="title" />
+
+@code {
+    /// <summary>
+    /// Linhas de cada letra.
+    /// </summary>
+    private const int LETTER_ROWS = 5;
+
+    /// <summary>
+    /// Colunas de cada letra.
+    /// </summary>
+    private const int LETTER_COLUMNS = 3;
+
+    /// <summary>
+    /// Colunas vazias entre as letras.
+    /// </summary>
+    private const int LETTER_GAP = 1;
+
+    /// <summary>
+    /// O desenho de cada letra, linha a linha ('1' = bloco aceso).
+    /// </summary>
+    private static readonly Dictionary<char, string[]> _letters = new()
+    {
+        ['T'] = ["111", "010", "010", "010", "010"],
+        ['E'] = ["111", "100", "110", "100", "111"],
+        ['R'] = ["110", "101", "110", "101", "101"],
+        ['I'] = ["111", "010", "010", "010", "111"],
+        ['S'] = ["011", "100", "010", "001", "110"],
+    };
+
+    /// <summary>
+    /// A palavra do título, com a cor de cada letra (as mesmas do Desktop).
+    /// </summary>
+    private static readonly (char Letter, PieceColor Color)[] _word =
+    [
+        ('T', PieceColor.Purple), ('E', PieceColor.Red), ('T', PieceColor.Purple),
+        ('R', PieceColor.Orange), ('I', PieceColor.Cyan), ('S', PieceColor.Green),
+    ];
+
+    /// <summary>
+    /// Colunas do título inteiro.
+    /// </summary>
+    private static int Columns => (_word.Length * (LETTER_COLUMNS + LETTER_GAP)) - LETTER_GAP;
+
+    /// <summary>
+    /// A cor de uma célula do título.
+    /// </summary>
+    private static PieceColor ColorAt(int column, int row)
+    {
+        var index = column / (LETTER_COLUMNS + LETTER_GAP);
+        var offset = column % (LETTER_COLUMNS + LETTER_GAP);
+
+        if (offset >= LETTER_COLUMNS)
+        {
+            return PieceColor.None;
+        }
+
+        var (letter, color) = _word[index];
+        return _letters[letter][row][offset] == '1' ? color : PieceColor.None;
+    }
+}

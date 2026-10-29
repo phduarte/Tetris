@@ -1,10 +1,15 @@
 # Tetris
 
 ![.NET](https://github.com/phduarte/Tetris/actions/workflows/main.yml/badge.svg)
+[![GitHub Pages](https://github.com/phduarte/Tetris/actions/workflows/pages.yml/badge.svg)](https://phduarte.github.io/Tetris/)
 [![CodeFactor](https://www.codefactor.io/repository/github/phduarte/tetris/badge)](https://www.codefactor.io/repository/github/phduarte/tetris)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d567b76d931e4e619802302fdf0124b7)](https://www.codacy.com/manual/phduarte87/Tetris?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=phduarte/Tetris&amp;utm_campaign=Badge_Grade)
 
 *[Leia em português](README.md)*
+
+### [▶ Play in your browser](https://phduarte.github.io/Tetris/)
+
+The game is a **PWA** web application (Blazor WebAssembly): it runs in the browser on a computer or phone, with nothing to install and no server, and the browser can install it as an app. There is also a **Desktop** version for Windows, in WinForms. Both user interfaces share the same domain and the same rules.
 
 Tetris is a game released by Nintendo in 1989 and one of the most famous video games of all time.
 
@@ -33,6 +38,9 @@ The purpose of this project is to show, in a simple way, how to apply the method
 The solution started with only two packages, Core and Desktop. Through refactoring it was split into layers, on .NET 10:
 
 ```
+Web ──► Application ──► Domain
+   └──► Texts
+
 Desktop ──► Application ──► Domain
    ├──► Data ──► Domain
    ├──► SoundPlayer ──► Application
@@ -46,22 +54,67 @@ Desktop ──► Application ──► Domain
 | `Gadz.Tetris.SoundPlayer` | Audio adapter over `winmm.dll`, implementing the `Application`'s `ISoundPlayer`. |
 | `Gadz.Tetris.Texts` | User interface texts in English and Portuguese, shared by the user interfaces. |
 | `Gadz.Tetris.Application` | `GameController` (facade for the user interfaces) and the keyboard commands. Depends only on the domain: it receives the repository and the sound player from its caller. |
-| `Gadz.Tetris.Desktop` | WinForms interface: handles device input and gives visual feedback to the player. Holds no game rules. It is the composition root: `Program.cs` creates the file repository and the Windows sound player. |
+| `Gadz.Tetris.Web` | Blazor WebAssembly interface (PWA) for browsers and phones. The whole game (domain and application) runs in the browser itself, with no server. Statistics are kept in `localStorage` and sounds play through the Web Audio API. Holds no game rules. |
+| `Gadz.Tetris.Desktop` | WinForms interface for Windows: the same handheld as the Web, in a window. Holds no game rules. It is the composition root: `Program.cs` creates the file repository and the Windows sound player. |
 | `Gadz.Tetris.Tests` | NUnit tests for the domain and the `GameController`. |
 
-While modeling the domain, technology neutrality and decoupled responsibilities were essential, so the domain has no links to the infrastructure or interface layers. After all, players must not be able to tamper with the game rules, and the game should not be tied to a single interface. There will probably be versions for other devices, such as mobile. Inside each project, whatever does not need to be seen from outside is hidden with the *internal* and *private* modifiers.
+While modeling the domain, technology neutrality and decoupled responsibilities were essential, so the domain has no links to the infrastructure or interface layers. After all, players must not be able to tamper with the game rules, and the game should not be tied to a single interface. This separation is what made it possible to take the game, born on Windows, to browsers and phones while reusing the same domain. Inside each project, whatever does not need to be seen from outside is hidden with the *internal* and *private* modifiers.
 
 The evolution plans are in [docs/PLANO-REFATORACAO.md](docs/PLANO-REFATORACAO.md) and [docs/PLANO-MULTIPLATAFORMA.md](docs/PLANO-MULTIPLATAFORMA.md) (in Portuguese).
 
+## How to run
+
+You need the [.NET 10 SDK](https://dotnet.microsoft.com/download) (the version is pinned in `global.json`).
+
+```sh
+dotnet build Gadz.Tetris.sln
+dotnet test Gadz.Tetris.sln
+```
+
+### Web (browser)
+
+```sh
+dotnet run --project Gadz.Tetris.Web
+```
+
+Then open http://localhost:5156 in your browser (the address is also printed in the terminal). For HTTPS, run with `--launch-profile https` and open https://localhost:7231. The profiles live in `Gadz.Tetris.Web/Properties/launchSettings.json`.
+
+- It runs on any operating system with the SDK, and the game opens in current browsers.
+- The language follows the browser: Portuguese for `pt`, English otherwise.
+- The high score, history, theme and sound on/off are stored in the browser. Clearing the site data resets them.
+- Browsers only allow sound after the first tap or key press, so sounds start with your first action.
+- In the browser, the About screen opens with **F2**, because F12 opens the developer tools.
+
+To build the static files (which any web server can host, no .NET needed):
+
+```sh
+dotnet publish Gadz.Tetris.Web -c Release -o publish
+```
+
+The site ends up in `publish/wwwroot`.
+
+The online version is published to [GitHub Pages](https://phduarte.github.io/Tetris/) by the `.github/workflows/pages.yml` workflow, on every push to `master`. Since the site lives in the `/Tetris/` subfolder, the workflow adjusts the `<base href>` in `index.html` before `publish`.
+
+### Desktop (Windows)
+
+```sh
+dotnet run --project Gadz.Tetris.Desktop
+```
+
+The WinForms interface and the sound (`winmm.dll`) only work on Windows.
+
+In VS Code, `.vscode/launch.json` provides **Web (Blazor WebAssembly)** and **Desktop (WinForms)** entries to run and debug with F5.
+
 ## Features
 
+- **In the browser and on your phone**: the game opens straight from the link, fits the phone screen and can be installed as an app (PWA). On Windows there is also the Desktop version.
 - **One device, many screens**: the game is a handheld console (graphite and coral case) where only the LCD changes from one screen to the next. The case buttons show the action and the key, and they can be clicked too.
 - **BRICK GAME style**: a greenish monochrome LCD, like the handheld brick games that were popular in the 1990s.
 - **TETRIS style**: a dark LCD with the pieces in the colors of the original 1980s game. Pick the theme in the menu with ← / →.
-- **Pause and game over on the LCD**: when paused (including the automatic pause when the window loses focus) the board goes blank so you can't peek at the move. When you lose, a curtain of blocks rises and falls before GAME OVER, which moves on to the result on any key or by itself after 10 seconds.
-- **Result**: score, level, lines, pieces, TETRIS % and time, with a NEW RECORD badge when the game beats the saved high score. It goes back to the menu on ENTER or by itself after 30 seconds.
+- **Pause and game over on the LCD**: when paused (including the automatic pause when the window loses focus) the board goes blank so you can't peek at the move. When you lose, a curtain of blocks rises and falls before GAME OVER, which moves on to the result on any key or by itself 5 seconds after the game over music ends.
+- **Result**: score, level, lines, pieces, TETRIS % and time, with a NEW RECORD badge when the game beats the saved high score. It goes back to the menu on ENTER or by itself after 15 seconds.
 - **Interactive help**: pressing a key highlights its row in the manual, which also shows the scoring table.
-- **Languages**: texts in English and Portuguese, following the Windows language.
+- **Languages**: texts in English and Portuguese, following the browser language (or the Windows language, on the Desktop).
 - **Slide**: holding CTRL while moving the piece left or right slides it all the way to the edge.
 - **Smash Down**: pressing SPACEBAR drops the piece at once.
 - **Sounds**: events and moves play sounds similar to those of brick games.
@@ -87,7 +140,7 @@ The evolution plans are in [docs/PLANO-REFATORACAO.md](docs/PLANO-REFATORACAO.md
 | ESC | End the game and save the statistics |
 | SHIFT | Turn the sound on / off (while the sound is off, the SOUND button stays pressed in) |
 | F1 | Open the help (in the menu) |
-| F12 | Open the About screen (in the menu) |
+| F12 | Open the About screen (in the menu; F2 on the Web) |
 
 ## Screenshot
 
@@ -117,6 +170,8 @@ This version had to be finished quickly, and Windows Forms helped by making it e
 
 The project is light and small to download, thanks to the many libraries that come built into .NET.
 
+Later the Web (Blazor WebAssembly) became the main user interface, and WinForms remains as the Desktop version. Since all the rules were in the domain, the new interface only had to draw the handheld and swap the infrastructure (file and `winmm.dll` for `localStorage` and Web Audio).
+
 ### Clean Code
 
 After finishing the first version, I found many other implementations built as simpler projects.
@@ -145,7 +200,8 @@ In the client application, each keyboard action is a Command registered in a fac
 
 ## Useful links
 
-- [Download](https://github.com/phduarte/Tetris/releases/latest)
+- [Play in your browser](https://phduarte.github.io/Tetris/)
+- [Download the Desktop version (Windows)](https://github.com/phduarte/Tetris/releases/latest)
 - [Documentation](https://github.com/phduarte/Tetris/wiki)
 
 ## Bibliography (in Portuguese)

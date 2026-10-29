@@ -1,0 +1,959 @@
+/* Gadz Tetris — o "aparelho" na Web. Cores iguais às da Palette e do estilo TETRIS do Desktop. */
+
+@font-face {
+    font-family: "Silkscreen";
+    src: url("../Fontes/Silkscreen-Regular.ttf") format("truetype");
+    font-display: swap;
+}
+
+:root {
+    --case-top: #37383e;
+    --case-bottom: #25262a;
+    --bezel: #131417;
+    --accent: #ff7a59;
+    --accent-dark: #c9492c;
+    --accent-shadow: #7a2c1a;
+    --case-text: #e9e6df;
+    --button-top: #4a4b52;
+    --button-bottom: #303137;
+    --button-shadow: #141518;
+    --dpad-top: #3f4046;
+    --dpad-bottom: #2b2c31;
+    --dpad-center: #2f3035;
+    --dpad-arrow: #c9cbd0;
+    --dpad-arrow-disabled: #55575d;
+    --lcd: #11161a;
+    --ink: #dfe8e1;
+    --ghost: rgb(223 232 225 / 6%);
+    --faded: rgb(223 232 225 / 70%);
+
+    --cyan: #35c6e8;
+    --purple: #a66cf0;
+    --orange: #f7953b;
+    --blue: #4a7cf7;
+    --yellow: #f5cc3c;
+    --green: #4cc27a;
+    --red: #ef5a6f;
+
+    /* o tamanho da célula do tabuleiro guia todas as medidas do LCD */
+    --cell: clamp(10px, min((100dvh - 240px) / 24, (100vw - 110px) / 22.5), 24px);
+    --gap: calc(var(--cell) / 8);
+    --pixel: "Silkscreen", ui-monospace, monospace;
+    --text: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    height: 100%;
+    background: radial-gradient(circle at 50% 30%, #2d2e33, #0c0d0f 70%);
+    color: var(--case-text);
+    font-family: var(--text);
+    overflow: hidden;
+    user-select: none;
+    /* toques rápidos (girar, girar...) não podem virar zoom de toque duplo */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#app {
+    display: grid;
+    place-items: center;
+    min-height: 100%;
+    padding: 12px;
+}
+
+/* o espaço do anúncio só existe no celular (ver o fim do arquivo) */
+.ad-slot {
+    display: none;
+}
+
+.loading {
+    font-family: var(--pixel);
+    font-size: 32px;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    animation: blink 1s steps(1) infinite;
+}
+
+/* ---------- carcaça ---------- */
+
+.console {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 8px 22px 26px;
+    border-radius: 22px 22px 48px 22px;
+    background: linear-gradient(var(--case-top), var(--case-bottom));
+    box-shadow: 0 18px 40px rgb(0 0 0 / 55%), inset 0 1px 0 rgb(255 255 255 / 8%);
+}
+
+/* faixa superior da carcaça: um alto-falante em cada canto e a marca no meio */
+.case-top {
+    --speaker: 38px;
+    display: grid;
+    grid-template-columns: var(--speaker) 1fr var(--speaker);
+    align-items: center;
+    gap: 10px;
+    min-height: 46px;
+    margin-bottom: -4px;
+}
+
+/* a grade de furos do alto-falante: pontos repetidos, recortados num círculo afundado na carcaça */
+.speaker {
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--bezel) 1.3px, transparent 1.8px) center / 6px 6px, var(--case-bottom);
+    box-shadow: inset 0 2px 3px rgb(0 0 0 / 55%), 0 1px 0 rgb(255 255 255 / 7%);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.swatches {
+    display: flex;
+    gap: 3px;
+}
+
+.swatches span {
+    width: 7px;
+    height: 7px;
+    border-radius: 1px;
+}
+
+.brand-name {
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.32em;
+    white-space: nowrap;
+}
+
+.brand-game {
+    color: var(--accent);
+}
+
+.bezel {
+    padding: 14px;
+    border-radius: 12px;
+    background: var(--bezel);
+}
+
+.lcd {
+    position: relative;
+    width: calc(var(--cell) * 22.5);
+    height: calc(var(--cell) * 23.6);
+    padding: calc(var(--cell) * 0.6);
+    background: var(--lcd);
+    color: var(--ink);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* ---------- botões ---------- */
+
+/* direcional à esquerda, botões pequenos no meio e o grande à direita, como no Desktop */
+.buttons {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 14px;
+    min-height: 96px;
+}
+
+.smalls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.dpad-block {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dpad {
+    --arm: 28px;
+    display: grid;
+    grid-template-columns: repeat(3, var(--arm));
+    grid-template-rows: repeat(3, var(--arm));
+    grid-template-areas: ". up ." "left center right" ". down .";
+    filter: drop-shadow(0 3px 0 var(--button-shadow));
+}
+
+.dpad::after {
+    content: "";
+    grid-area: center;
+    background: var(--dpad-center);
+}
+
+.arrow {
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    cursor: pointer;
+    background: linear-gradient(var(--dpad-top), var(--dpad-bottom));
+}
+
+.arrow.up { grid-area: up; border-radius: 5px 5px 0 0; }
+.arrow.left { grid-area: left; border-radius: 5px 0 0 5px; }
+.arrow.right { grid-area: right; border-radius: 0 5px 5px 0; }
+.arrow.down { grid-area: down; border-radius: 0 0 5px 5px; }
+
+/* a seta é um triângulo desenhado com bordas, apontando para o lado do braço */
+.arrow::before {
+    content: "";
+    border: 6px solid transparent;
+}
+
+.arrow.up::before { border-bottom-color: var(--dpad-arrow); margin-top: -6px; }
+.arrow.down::before { border-top-color: var(--dpad-arrow); margin-bottom: -6px; }
+.arrow.left::before { border-right-color: var(--dpad-arrow); margin-left: -6px; }
+.arrow.right::before { border-left-color: var(--dpad-arrow); margin-right: -6px; }
+
+/* [data-pressed]: a tecla do botão está apertada no teclado (keyboard.js; não é classe porque o Blazor regrava o class) */
+.arrow:active:not(:disabled),
+.arrow[data-pressed]:not(:disabled) {
+    filter: brightness(1.3);
+}
+
+.arrow:disabled {
+    cursor: default;
+}
+
+.arrow:disabled::before {
+    --dpad-arrow: var(--dpad-arrow-disabled);
+}
+
+.dpad-caption {
+    margin: 0;
+    font-family: var(--pixel);
+    font-size: 9px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    white-space: pre-line;
+}
+
+.dpad-hint {
+    display: block;
+    color: var(--accent);
+}
+
+.button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    border: 0;
+    cursor: pointer;
+    color: var(--case-text);
+    font-family: var(--pixel);
+    background: none;
+    padding: 0;
+}
+
+.button .caption {
+    display: grid;
+    place-items: center;
+    background: linear-gradient(var(--button-top), var(--button-bottom));
+    box-shadow: 0 3px 0 var(--button-shadow);
+    transition: transform 60ms, box-shadow 60ms;
+}
+
+.button .keycap {
+    font-size: 9px;
+    opacity: 0.6;
+    text-transform: uppercase;
+}
+
+.button.small .caption {
+    min-width: 64px;
+    height: 22px;
+    padding: 0 10px;
+    border-radius: 11px;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+.button.big .caption {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    font-size: 10px;
+    text-transform: uppercase;
+    background: linear-gradient(var(--accent), var(--accent-dark));
+    box-shadow: 0 4px 0 var(--accent-shadow);
+}
+
+.button:active .caption,
+.button[data-pressed] .caption,
+.button.latched .caption {
+    transform: translateY(3px);
+    box-shadow: 0 0 0 var(--button-shadow);
+}
+
+/* ---------- LCD: blocos e textos ---------- */
+
+.grid {
+    --size: var(--cell);
+    display: grid;
+    grid-template-columns: repeat(var(--columns), var(--size));
+    grid-template-rows: repeat(var(--rows), var(--size));
+    gap: calc(var(--size) / 8);
+}
+
+.grid.title {
+    --size: calc(var(--cell) * 0.7);
+}
+
+.grid.next {
+    --size: calc(var(--cell) * 0.8);
+}
+
+.grid.ground {
+    --size: calc(var(--cell) * 0.6);
+}
+
+.cell {
+    border-radius: 2px;
+    background: var(--color, var(--ghost));
+    box-shadow: inset 0 calc(var(--size) / -6) 0 rgb(0 0 0 / var(--shade, 0%));
+}
+
+.cell.cyan { --color: var(--cyan); --shade: 22%; }
+.cell.purple { --color: var(--purple); --shade: 22%; }
+.cell.orange { --color: var(--orange); --shade: 22%; }
+.cell.blue { --color: var(--blue); --shade: 22%; }
+.cell.yellow { --color: var(--yellow); --shade: 22%; }
+.cell.green { --color: var(--green); --shade: 22%; }
+.cell.red { --color: var(--red); --shade: 22%; }
+
+.screen {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    font-family: var(--pixel);
+    text-transform: uppercase;
+}
+
+.label {
+    font-family: var(--pixel);
+    font-size: calc(var(--cell) * 0.5);
+    opacity: 0.6;
+    text-transform: uppercase;
+}
+
+.subtitle {
+    margin: 0;
+    font-size: calc(var(--cell) * 0.6);
+    letter-spacing: 0.3em;
+    color: var(--faded);
+    text-align: center;
+}
+
+.blink {
+    animation: blink 1.2s steps(1) infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+/* ---------- menu ---------- */
+
+.screen p {
+    margin: 0;
+}
+
+.head {
+    font-size: calc(var(--cell) * 1.05);
+}
+
+.foot {
+    margin-top: auto !important;
+    font-size: calc(var(--cell) * 0.5);
+    text-align: center;
+}
+
+.menu {
+    align-items: center;
+    justify-content: space-between;
+}
+
+.record {
+    display: flex;
+    align-self: stretch;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title-block,
+.ground-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--cell) * 0.6);
+}
+
+.sound-state {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--cell) * 0.5);
+    font-size: calc(var(--cell) * 0.75);
+}
+
+.press {
+    font-size: calc(var(--cell) * 0.6);
+}
+
+/* ---------- resultado ---------- */
+
+.result {
+    align-items: center;
+    gap: calc(var(--cell) * 0.8);
+}
+
+.badge {
+    padding: 4px 10px;
+    border: 2px solid var(--ink);
+    font-size: calc(var(--cell) * 0.6);
+}
+
+.badge.hidden {
+    visibility: hidden;
+}
+
+.stat.centered {
+    align-items: center;
+}
+
+.result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: calc(var(--cell) * 0.8) calc(var(--cell) * 2);
+}
+
+/* ---------- ajuda ---------- */
+
+.help {
+    gap: calc(var(--cell) * 0.45);
+}
+
+.help ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.keys li {
+    display: grid;
+    grid-template-columns: calc(var(--cell) * 6) 1fr;
+    align-items: center;
+    padding: 2px 6px;
+    font-size: calc(var(--cell) * 0.5);
+}
+
+.keys li.highlighted {
+    background: var(--ink);
+    color: var(--lcd);
+}
+
+.caps {
+    display: flex;
+    gap: 4px;
+}
+
+kbd {
+    padding: 1px 5px 2px;
+    border: 1px solid currentColor;
+    border-bottom-width: 3px;
+    border-radius: 4px;
+    font-family: var(--pixel);
+    font-size: calc(var(--cell) * 0.42);
+}
+
+.points li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 6px;
+    font-size: calc(var(--cell) * 0.5);
+    line-height: 1.6;
+}
+
+.rule {
+    padding: 0 6px;
+    font-family: var(--text);
+    font-size: calc(var(--cell) * 0.5);
+    text-transform: none;
+    color: var(--faded);
+}
+
+/* ---------- sobre ---------- */
+
+.about {
+    align-items: center;
+    gap: calc(var(--cell) * 0.6);
+}
+
+.about-text {
+    font-family: var(--text);
+    font-size: calc(var(--cell) * 0.6);
+    text-align: center;
+    text-transform: none;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.tags li {
+    padding: 2px 6px;
+    border: 1px solid var(--ink);
+    font-size: calc(var(--cell) * 0.45);
+}
+
+.about .label {
+    align-self: flex-start;
+}
+
+.license {
+    flex: 1;
+    min-height: 0;
+    align-self: stretch;
+    overflow-y: auto;
+    padding-right: 6px;
+    font-family: var(--text);
+    font-size: calc(var(--cell) * 0.5);
+    text-transform: none;
+    white-space: pre-line;
+    scrollbar-color: var(--ink) var(--ghost);
+    user-select: text;
+}
+
+/* ---------- dígitos (visor de 7 segmentos) ---------- */
+
+.digits {
+    --height: calc(var(--cell) * 1.1);
+    display: inline-flex;
+    font-family: var(--pixel);
+    font-size: var(--height);
+    line-height: 1;
+}
+
+.digits.big {
+    --height: calc(var(--cell) * 1.35);
+}
+
+.digits.small {
+    --height: calc(var(--cell) * 0.9);
+}
+
+/* cada posição tem largura fixa e um 8 apagado atrás, para os números não "dançarem" */
+.digit {
+    position: relative;
+    width: 0.85em;
+    text-align: center;
+    white-space: pre;
+}
+
+.digit::before {
+    content: attr(data-ghost);
+    position: absolute;
+    inset: 0;
+    color: var(--ghost);
+}
+
+.unit {
+    margin-left: 3px;
+    font-family: var(--pixel);
+    font-size: calc(var(--cell) * 0.6);
+}
+
+/* ---------- partida ---------- */
+
+.play {
+    flex-direction: row;
+    gap: calc(var(--cell) * 0.7);
+}
+
+/* a margem à esquerda centraliza melhor o tabuleiro e deixa a coluna das estatísticas mais estreita */
+.board-area {
+    position: relative;
+    margin-left: calc(var(--cell) * 1.1);
+    padding-right: calc(var(--cell) * 0.4);
+    border-right: 2px solid var(--ink);
+}
+
+.board-area > .grid,
+.board-area > .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.board-area > .grid.board:first-child {
+    position: static;
+}
+
+.overlay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--cell) * 0.6);
+    width: calc(100% - var(--cell) * 0.4);
+    height: 100%;
+    text-align: center;
+}
+
+.overlay.opaque {
+    background: var(--lcd);
+}
+
+.overlay p {
+    margin: 0;
+}
+
+.pause {
+    font-size: calc(var(--cell) * 1.25);
+}
+
+.game-over {
+    max-width: 6em;
+    font-size: calc(var(--cell) * 1.9);
+    line-height: 1.05;
+    background: linear-gradient(var(--yellow), var(--red));
+    background-clip: text;
+    color: transparent;
+}
+
+.hint {
+    font-size: calc(var(--cell) * 0.55);
+}
+
+/* a cortina do fim de jogo: cada linha aparece (de baixo para cima) e depois se apaga (de cima para baixo) */
+.curtain .cell {
+    opacity: 0;
+    animation: curtain-cover 1ms forwards var(--cover), curtain-clear 1ms forwards var(--clear);
+}
+
+.curtain {
+    animation: curtain-fill 1ms forwards var(--fill);
+}
+
+@keyframes curtain-fill {
+    to { background: var(--lcd); }
+}
+
+@keyframes curtain-cover {
+    to { opacity: 1; }
+}
+
+@keyframes curtain-clear {
+    to { opacity: 1; background: var(--lcd); box-shadow: none; }
+}
+
+.side {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--cell) * 0.55);
+    min-width: 0;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--cell) * 0.25);
+}
+
+.stat-pair {
+    display: flex;
+    justify-content: space-between;
+    gap: calc(var(--cell) * 0.5);
+}
+
+.icons {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--cell) * 0.6);
+    font-size: calc(var(--cell) * 0.95);
+}
+
+.icons .off {
+    opacity: 0.1;
+}
+
+/* as barras da pausa são desenhadas, e não escritas: o "❚" de cada fonte tem um tamanho */
+.pause-icon {
+    width: 0.6em;
+    height: 0.8em;
+    background: linear-gradient(90deg, currentColor 33%, transparent 33% 66%, currentColor 66%);
+}
+
+/* ---------- erro do Blazor ---------- */
+
+#blazor-error-ui {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 0.6rem 1.25rem;
+    background: var(--red);
+    color: #fff;
+    z-index: 1000;
+}
+
+#blazor-error-ui a {
+    color: inherit;
+}
+
+#blazor-error-ui .dismiss {
+    position: absolute;
+    right: 0.75rem;
+    cursor: pointer;
+}
+
+/* ---------- estilo Brick Game (LcdTheme do Desktop: LCD verde, blocos de uma cor só) ---------- */
+
+.lcd.skin-brick {
+    --lcd: #b4bf9f;
+    --ink: #1d2618;
+    --ghost: rgb(29 38 24 / 9%);
+    --faded: rgb(29 38 24 / 70%);
+}
+
+/* cada bloco é um quadrado vazado com um miolo, como nos minigames de bolso */
+.lcd.skin-brick .cell {
+    --brick: var(--ghost);
+    border-radius: 0;
+    background: var(--brick);
+    box-shadow: inset 0 0 0 calc(var(--size) / 8) var(--brick), inset 0 0 0 calc(var(--size) / 4) var(--lcd);
+}
+
+.lcd.skin-brick .cell:not(.empty) {
+    --brick: var(--ink);
+}
+
+.lcd.skin-brick .game-over {
+    background: none;
+    color: var(--ink);
+}
+
+/* ---------- seletor de estilo (menu) ---------- */
+
+.style-picker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--cell) * 0.35);
+}
+
+.style-name {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--cell) * 0.5);
+    font-size: calc(var(--cell) * 0.75);
+}
+
+.pointer {
+    font-size: calc(var(--cell) * 0.5);
+}
+
+/* ---------- celular (retrato) ---------- */
+
+/*
+ * Feito a partir do protótipo para o iPhone 16 Pro Max (440×956), em proporção nos outros celulares:
+ * no topo, a faixa do anúncio (banner grande de app, 320×100; nas telas baixas, o banner comum, 320×50);
+ * abaixo dela, o aparelho ocupa o resto da tela, com o LCD na largura toda. A sobra de altura engrossa
+ * a faixa superior (até um limite) e espaça os botões. Os alvos de toque seguem o mínimo das diretrizes
+ * de iOS (44pt) e Android (48dp).
+ */
+@media (max-width: 640px) {
+    :root {
+        --ad-height: 100px;
+        /*
+         * largura: 2 × (borda da carcaça + moldura);
+         * altura: anúncio + faixa superior, moldura e botões no tamanho mínimo (ver abaixo)
+         */
+        --cell: clamp(8px, min((100vw - 46px) / 22.5, (100dvh - var(--ad-height) - 310px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) / 23.6), 24px);
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .ad-slot {
+        display: block;
+        flex: none;
+        box-sizing: content-box;
+        height: var(--ad-height);
+        padding-top: env(safe-area-inset-top);
+    }
+
+    #app {
+        display: flex;
+        align-items: stretch;
+        flex: 1;
+        min-height: 0;
+        padding: 0;
+    }
+
+    .console {
+        flex: 1;
+        gap: 0;
+        padding: 0 14px calc(16px + env(safe-area-inset-bottom));
+        border-radius: 26px 26px 0 0;
+    }
+
+    /* a faixa superior cresce com a sobra de altura, como a testa grossa do protótipo */
+    .case-top {
+        --speaker: 44px;
+        flex: 1 1 56px;
+        max-height: 96px;
+        gap: 8px;
+        margin: 0;
+    }
+
+    .brand {
+        gap: 8px;
+    }
+
+    .swatches span {
+        width: 5px;
+        height: 5px;
+    }
+
+    .swatches {
+        gap: 2px;
+    }
+
+    .brand-name {
+        font-size: 11px;
+        letter-spacing: 0.25em;
+    }
+
+    .bezel {
+        padding: 9px;
+    }
+
+    .lcd {
+        margin: 0 auto;
+    }
+
+    /*
+     * botões pequenos espalhados numa linha perto do LCD, longe dos polegares; direcional e botão grande
+     * embaixo. A sobra de altura se divide por igual entre as linhas.
+     */
+    .buttons {
+        flex: 2 1 auto;
+        grid-template-areas: "smalls smalls smalls" "dpad . big";
+        align-content: space-evenly;
+        row-gap: 12px;
+        padding: 12px 4px 0;
+    }
+
+    .smalls {
+        grid-area: smalls;
+        justify-content: space-around;
+        gap: 12px;
+    }
+
+    .dpad-block {
+        grid-area: dpad;
+    }
+
+    .buttons > .button.big {
+        grid-area: big;
+    }
+
+    .dpad {
+        --arm: 48px;
+    }
+
+    .arrow::before {
+        border-width: 9px;
+    }
+
+    .arrow.up::before { margin-top: -9px; }
+    .arrow.down::before { margin-bottom: -9px; }
+    .arrow.left::before { margin-left: -9px; }
+    .arrow.right::before { margin-right: -9px; }
+
+    /* a pílula continua discreta, mas a área de toque do botão tem 44px de altura */
+    .button.small {
+        justify-content: center;
+        min-height: 44px;
+    }
+
+    .button.small .caption {
+        min-width: 76px;
+        height: 32px;
+        border-radius: 16px;
+        font-size: 11px;
+    }
+
+    .button.big .caption {
+        width: 84px;
+        height: 84px;
+        font-size: 11px;
+    }
+}
+
+/*
+ * nas telas baixas (iPhone SE, Androids antigos), o banner comum de 50px, uma faixa superior mais fina e um
+ * direcional um pouco menor (ainda com 44px por braço) deixam o LCD ocupar a largura toda
+ */
+@media (max-width: 640px) and (max-height: 760px) {
+    :root {
+        --ad-height: 50px;
+        --cell: clamp(8px, min((100vw - 46px) / 22.5, (100dvh - var(--ad-height) - 276px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) / 23.6), 24px);
+    }
+
+    .case-top {
+        --speaker: 36px;
+        flex-basis: 48px;
+    }
+
+    .buttons {
+        row-gap: 8px;
+        padding-top: 6px;
+    }
+
+    .dpad {
+        --arm: 44px;
+    }
+}
+
+/* na tela de toque não há teclado: as teclas impressas sob os botões e o atalho do Ctrl não se aplicam */
+@media (hover: none) and (pointer: coarse) {
+    .keycap,
+    .dpad-hint {
+        display: none;
+    }
+}
+
+/* nos celulares mais estreitos (320px) os quadradinhos não cabem ao lado da marca */
+@media (max-width: 340px) {
+    .swatches {
+        display: none;
+    }
+}

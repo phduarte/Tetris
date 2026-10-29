@@ -6,7 +6,7 @@ Ao aplicar um padrão, avalie custo-benefício — **evite over-engineering**.
 
 ## Stack
 
-- .NET 10 (`net10.0`; o Desktop usa `net10.0-windows` + WinForms). SDK fixado em `global.json`.
+- .NET 10 (`net10.0`; o Desktop usa `net10.0-windows` + WinForms; a Web é Blazor WebAssembly PWA). SDK fixado em `global.json`.
 - Configuração comum (TargetFramework, `LangVersion latest`, `Nullable`, `ImplicitUsings`, análise de código) fica em `Directory.Build.props` — não repita essas propriedades nos `.csproj`.
 - Estilo de código definido em `.editorconfig` (`dotnet format` aplica).
 - Testes: NUnit (modelo clássico `Assert.AreEqual`, `Assert.IsTrue`...).
@@ -16,6 +16,7 @@ Ao aplicar um padrão, avalie custo-benefício — **evite over-engineering**.
 dotnet build Gadz.Tetris.sln
 dotnet test Gadz.Tetris.sln
 dotnet run --project Gadz.Tetris.Desktop
+dotnet run --project Gadz.Tetris.Web
 ```
 
 CI: `.github/workflows/main.yml` (restore, build e test em `windows-latest`). O `appveyor.yml` faz o mesmo, instalando antes o SDK do `global.json` (a imagem do AppVeyor não o inclui).
@@ -27,6 +28,9 @@ Desktop ──► Application ──► Domain
    ├──► Data ──► Domain               (só no Program.cs)
    ├──► SoundPlayer ──► Application   (só no Program.cs; implementa ISoundPlayer)
    └──► Texts                         (textos de interface, sem dependências)
+
+Web ──► Application ──► Domain
+   └──► Texts                         (infraestrutura do navegador em Web/Infrastructure)
 ```
 
 A `Application` depende só do `Domain`. Cada interface é a raiz de composição: cria a infraestrutura (repositório e som) e a passa ao `GameController.Create`.
@@ -39,6 +43,7 @@ A `Application` depende só do `Domain`. Cada interface é a raiz de composiçã
 | `Gadz.Tetris.SoundPlayer` | Adapter de áudio (`SoundPlayerAdapter : ISoundPlayer`) com os `.wav` embutidos em `Sounds.resx`. Criado uma única vez no `Program.cs` do Desktop. |
 | `Gadz.Tetris.Application` | `GameController` (fachada para o cliente), os `Commands` de teclado e o `ISoundPlayer`. Monta o domínio com a infraestrutura recebida no `Create`, sem referenciar `Data` nem `SoundPlayer`. |
 | `Gadz.Tetris.Desktop` | Interface WinForms: captura entradas e desenha a tela. Sem regras de jogo. O `Program.cs` cria o `StatsRepository` e o `SoundPlayerAdapter` e os entrega ao `ConsoleFrame` (`Repository`, `Sound`). Um único form sem borda (`Device/ConsoleFrame`, o "aparelho") desenha carcaça, LCD e botões; as telas (`Screens/*Screen`) só trocam o conteúdo do LCD. |
+| `Gadz.Tetris.Web` | Interface Blazor WebAssembly (PWA) para navegador e celular. Referencia só `Application` e `Texts`. Mesma ideia do Desktop: `Device/ConsoleFrame` é o aparelho e as telas (`Screens/*Screen`, componentes Razor que herdam de `ConsoleScreen`) trocam o LCD. A infraestrutura do navegador fica em `Infrastructure/` e é registrada no `Program.cs`; os textos vêm de `IStringLocalizer<Jogo>`, na cultura do navegador. |
 | `Gadz.Tetris.Tests` | Testes NUnit do domínio e do `GameController`. |
 
 ## Padrões de projeto usados (siga-os ao estender)
@@ -53,6 +58,7 @@ A `Application` depende só do `Domain`. Cada interface é a raiz de composiçã
 - **Adapter** — `SoundPlayerAdapter` encapsula a API nativa de áudio atrás do `ISoundPlayer` (interface na `Application`, porque som não é regra de jogo). O `GameController` recebe o `ISoundPlayer` no `Create` e liga os sons aos eventos do `Board`; as telas usam a mesma instância por `ConsoleFrame.Sound` (som fora da partida, mudo, música de fim).
 - **Eventos** — notificações usam o delegate `GameActionEventHandler` e eventos `On*` (`OnRefresh`, `OnClear`, `OnMove`, `OnDrop`, `OnLose`...), disparados com `Evento?.Invoke()`. O `GameController` repassa os eventos do `Board`.
 - **Telas do aparelho (Desktop)** — o `ConsoleFrame` exibe uma `ConsoleScreen` por vez (`MenuScreen`, `PlayScreen`, `ResultScreen`, `HelpScreen`, `AboutScreen`) e troca com `Navigate`. Cada tela declara o `ConsoleLayout` (direcional, botões pequenos e botão grande, cada um com tecla e legenda), desenha o LCD via `LcdCanvas` (células, 7 segmentos, textos) e trata as teclas. Clicar num botão equivale a apertar a tecla dele. Pausa e GAME OVER são modos de desenho da `PlayScreen`, não forms.
+- **Telas do aparelho (Web)** — a mesma ideia em Blazor: o `ConsoleFrame` troca a tela com `Navigate<TScreen>(parâmetros)` (via `DynamicComponent`), cada tela (`.razor` + `.razor.cs`) herda de `ConsoleScreen`, declara os botões com `<ConsoleButtons>` (que vão para a carcaça por `SectionOutlet`) e as teclas em `KeyBindings`. Blocos são `BlockGrid` (grid CSS, cores em classes), números são `Digits`; animações (cortina, piscar) ficam no CSS. Eventos do jogo redesenham com `InvokeAsync(StateHasChanged)`.
 
 ## Convenções de código
 
@@ -103,6 +109,7 @@ A `Application` depende só do `Domain`. Cada interface é a raiz de composiçã
 - `GameController.Create(width, height, repository, sound)` exige as duas dependências. Nos testes, sempre passe o `InMemoryStatsRepository` e o `FakeSoundPlayer` (`Gadz.Tetris.Tests.Model`) para não gravar em disco nem tocar som.
 - `PlayScreen.HandleKey` executa só o primeiro comando que casar com a tecla (ordem do `CommandFactory`); por isso cada tecla deve ter um único comando — o Enter usa `TogglePauseCommand`, que consulta `CanPause`/`CanContinue` no estado. `Command.Match` recebe também `repeat` (tecla segurada, detectada pelo `ConsoleFrame`): por padrão o comando ignora esse dado; `MoveLeft/Right` só casam no primeiro toque e `HoldLeft/Right` só nas repetições.
 - `Key` usa os códigos do WinForms (`Keys`): o Shift chega como `Keys.ShiftKey` (0x10), não `LShiftKey`.
+- Na Web, o `keyboard.js` ouve a página inteira e só repassa (com `preventDefault`) as teclas de `KeyMap.HandledKeys`; o `KeyMap` traduz `KeyboardEvent.key` (`"ArrowLeft"`, `" "`...) para `Key`. Os `KeyBindings` das telas Web usam as constantes `KeyMap.*`. O "sobre" é F2, porque F12 abre as ferramentas do desenvolvedor.
 - `SoundPlayerAdapter` e `StatsRepository` falam com o sistema (winmm, disco) e estão marcados com `[ExcludeFromCodeCoverage]`. Crie um só `SoundPlayerAdapter` por aplicação: o construtor abre os sons com aliases fixos.
 - A UI lê os textos pela classe gerada (pública, `PublicResXFileCodeGenerator`) de `Gadz.Tetris.Texts/Jogo.resx` (`using Texto = Gadz.Tetris.Texts.Jogo`). O `Jogo.pt.resx` é um recurso satélite (não gera classe): o Windows em português recebe os textos dele automaticamente.
 - Sem o Visual Studio, a classe de um `.resx` pode ser regenerada com o `ResGen.exe /str:cs,Gadz.Tetris.Texts,Jogo,... /publicClass` do Windows SDK (o construtor continua `internal`). Ele escreve os comentários no idioma do sistema; traduza-os de volta para o texto padrão em inglês (ou copie só o membro novo para o `Jogo.Designer.cs`).

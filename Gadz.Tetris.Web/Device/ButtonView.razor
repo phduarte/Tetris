@@ -1,0 +1,19 @@
+<button type="button" class="button @(Button.Big ? "big" : "small") @(Button.Latched ? "latched" : string.Empty)"
+        data-key="@Button.Key" @onclick="() => Frame.Press(Button.Key)">
+    <span class="caption">@Button.Caption</span>
+    <span class="keycap">@Button.KeyCap</span>
+</button>
+
+@code {
+    /// <summary>
+    /// O aparelho, que recebe o clique como se fosse a tecla.
+    /// </summary>
+    [CascadingParameter]
+    public ConsoleFrame Frame { get; set; } = default!;
+
+    /// <summary>
+    /// O botão desenhado.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public ConsoleButton Button { get; set; } = default!;
+}

@@ -1,0 +1,201 @@
+﻿using Gadz.Tetris.Application;
+using Gadz.Tetris.Domain.Models.Statistics;
+using Gadz.Tetris.Web.Input;
+using Gadz.Tetris.Web.Screens;
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
+
+namespace Gadz.Tetris.Web.Device;
+
+/// <summary>
+/// O aparelho: a carcaça com o LCD e os botões. Exibe uma <see cref="ConsoleScreen"/> por vez e troca com
+/// <see cref="Navigate{TScreen}"/>. Equivale ao <c>ConsoleFrame</c> do Desktop.
+/// </summary>
+public partial class ConsoleFrame : IAsyncDisposable
+{
+    /// <summary>
+    /// Nome da seção da carcaça onde cada tela coloca os seus botões (ver <see cref="ConsoleButtons"/>).
+    /// </summary>
+    public const string BUTTONS_SECTION = "console-buttons";
+
+    /// <summary>
+    /// O tipo da tela exibida.
+    /// </summary>
+    private Type _screen = typeof(MenuScreen);
+
+    /// <summary>
+    /// Os parâmetros da tela exibida.
+    /// </summary>
+    private IDictionary<string, object?> _parameters = new Dictionary<string, object?>();
+
+    /// <summary>
+    /// A tela exibida, que recebe as teclas; registrada por ela mesma ao ser criada.
+    /// </summary>
+    private ConsoleScreen? _current;
+
+    /// <summary>
+    /// Onde as estatísticas das partidas são guardadas (no navegador, o <c>LocalStorageStatsRepository</c>).
+    /// </summary>
+    [Inject]
+    public IStatsRepository Repository { get; set; } = default!;
+
+    /// <summary>
+    /// Os sons do jogo (no navegador, o <c>WebAudioSoundPlayer</c>), usados também fora da partida.
+    /// </summary>
+    [Inject]
+    public ISoundPlayer Sound { get; set; } = default!;
+
+    /// <summary>
+    /// O runtime JavaScript, para ouvir o teclado.
+    /// </summary>
+    [Inject]
+    private IJSRuntime JS { get; set; } = default!;
+
+    /// <summary>
+    /// A referência a este aparelho entregue ao <c>keyboard.js</c>.
+    /// </summary>
+    private DotNetObjectReference<ConsoleFrame>? _self;
+
+    /// <summary>
+    /// O ouvinte do teclado criado pelo <c>keyboard.js</c>.
+    /// </summary>
+    private IJSObjectReference? _keyboard;
+
+    /// <summary>
+    /// A carcaça, sacudida por <see cref="ShakeDownAsync"/>.
+    /// </summary>
+    private ElementReference _console;
+
+    /// <summary>
+    /// O módulo <c>shake.js</c>, importado no primeiro tremor.
+    /// </summary>
+    private IJSObjectReference? _shake;
+
+    /// <summary>
+    /// Sacode o aparelho para baixo (quando a peça é derrubada), como no Desktop.
+    /// </summary>
+    /// <returns>A tarefa do tremor.</returns>
+    public async Task ShakeDownAsync()
+    {
+        _shake ??= await JS.InvokeAsync<IJSObjectReference>("import", "./js/shake.js");
+        await _shake.InvokeVoidAsync("shakeDown", _console);
+    }
+
+    /// <summary>
+    /// A chave do estilo escolhido no <c>localStorage</c>, para ele valer na próxima visita.
+    /// </summary>
+    private const string SKIN_KEY = "gadz-tetris:skin:v1";
+
+    /// <summary>
+    /// O estilo do LCD, escolhido no menu e aplicado a todas as telas.
+    /// </summary>
+    public Skin Skin { get; private set; } = Skin.Tetris;
+
+    /// <summary>
+    /// A classe CSS do estilo, aplicada ao LCD.
+    /// </summary>
+    private string SkinClass => Skin == Skin.Tetris ? "skin-tetris" : "skin-brick";
+
+    /// <summary>
+    /// Troca entre os estilos e guarda a escolha.
+    /// </summary>
+    public void ToggleSkin()
+    {
+        Skin = Skin == Skin.Tetris ? Skin.BrickGame : Skin.Tetris;
+        ((IJSInProcessRuntime)JS).InvokeVoid("localStorage.setItem", SKIN_KEY, Skin.ToString());
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Recupera o estilo escolhido na visita anterior.
+    /// </summary>
+    protected override void OnInitialized()
+    {
+        if (Enum.TryParse<Skin>(((IJSInProcessRuntime)JS).Invoke<string?>("localStorage.getItem", SKIN_KEY), out var skin))
+        {
+            Skin = skin;
+        }
+    }
+
+    /// <summary>
+    /// Troca a tela do LCD.
+    /// </summary>
+    /// <typeparam name="TScreen">A nova tela.</typeparam>
+    /// <param name="parameters">Os parâmetros da nova tela, pelo nome da propriedade.</param>
+    public void Navigate<TScreen>(IDictionary<string, object?>? parameters = null) where TScreen : ConsoleScreen
+    {
+        _current = null;
+        _screen = typeof(TScreen);
+        _parameters = parameters ?? new Dictionary<string, object?>();
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Registra a tela exibida; chamado pela própria tela ao ser criada.
+    /// </summary>
+    /// <param name="screen">A tela.</param>
+    internal void Attach(ConsoleScreen screen) => _current = screen;
+
+    /// <summary>
+    /// Repassa uma tecla (ou um botão clicado) para a tela exibida.
+    /// </summary>
+    /// <param name="key">A tecla, como o navegador a informa em <c>KeyboardEvent.key</c>.</param>
+    /// <param name="control">Se o Ctrl estava apertado.</param>
+    /// <param name="repeat">Se é uma repetição automática da tecla segurada.</param>
+    /// <returns><c>true</c> se a tecla fez algo na tela.</returns>
+    public bool Press(string key, bool control = false, bool repeat = false)
+        => _current?.HandleKey(key, control, repeat) ?? false;
+
+    /// <summary>
+    /// Uma tecla tratada pelo jogo foi apertada na página (chamado pelo <c>keyboard.js</c>).
+    /// </summary>
+    /// <param name="key">A tecla, como em <c>KeyboardEvent.key</c>.</param>
+    /// <param name="control">Se o Ctrl estava apertado.</param>
+    /// <param name="repeat">Se é uma repetição automática da tecla segurada (<c>KeyboardEvent.repeat</c>).</param>
+    [JSInvokable]
+    public void OnKeyDown(string key, bool control, bool repeat) => Press(key, control, repeat);
+
+    /// <summary>
+    /// A janela do navegador perdeu o foco (chamado pelo <c>keyboard.js</c>); a partida pausa sozinha, como no Desktop.
+    /// </summary>
+    [JSInvokable]
+    public void OnBlur() => _current?.Deactivate();
+
+    /// <summary>
+    /// Depois do primeiro desenho, passa a ouvir o teclado da página inteira.
+    /// </summary>
+    /// <param name="firstRender">Se é o primeiro desenho.</param>
+    /// <returns>A tarefa de importação do módulo.</returns>
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return;
+        }
+
+        _self = DotNetObjectReference.Create(this);
+        await using var module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/keyboard.js");
+        _keyboard = await module.InvokeAsync<IJSObjectReference>("listen", _self, KeyMap.HandledKeys);
+    }
+
+    /// <summary>
+    /// Para de ouvir o teclado.
+    /// </summary>
+    /// <returns>A tarefa de liberação.</returns>
+    public async ValueTask DisposeAsync()
+    {
+        if (_keyboard is not null)
+        {
+            await _keyboard.InvokeVoidAsync("dispose");
+            await _keyboard.DisposeAsync();
+        }
+
+        if (_shake is not null)
+        {
+            await _shake.DisposeAsync();
+        }
+
+        _self?.Dispose();
+        GC.SuppressFinalize(this);
+    }
+}
