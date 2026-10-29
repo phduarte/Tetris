@@ -91,9 +91,11 @@ Desktop ──► Application ──► Domain
 11. **Compatibilidade do arquivo de estatísticas.** `stats.mc` é texto separado por tab com ordem de colunas fixa (`COL_ID`…`COL_TIME`). Só acrescente colunas ao final e mantenha a leitura de arquivos antigos funcionando.
 12. **Testes acompanham as regras.** Toda regra de domínio nova ou alterada precisa de teste em `Gadz.Tetris.Tests`. Mudanças na tabela de pontuação, cores, estados ou teclas exigem atualizar testes **e** o `README.md`.
 13. **Não edite arquivos gerados** (`*.Designer.cs`) à mão.
+14. **Testes passando antes de abrir ou atualizar uma PR.** Rode `dotnet test Gadz.Tetris.sln` e só abra a PR (ou faça push nela) com todos os testes verdes. Teste novo ou alterado que dependa de sorteio, tempo ou thread deve ser executado várias vezes seguidas (ex.: 20× com `--filter`) antes do push — uma única execução local não revela falha intermitente, e a CI (GitHub Actions e AppVeyor) roda de novo a cada push.
 
 ## Armadilhas conhecidas
 
+- O `GameController` sorteia as peças (o `Create` não aceita outro gerador). Teste que posicione a peça deve valer para qualquer tipo e rotação: a I deitada ocupa 4 colunas, e `CurrentPiecePosition` é a origem da forma, que pode ficar fora do tabuleiro (ex.: -1) quando os blocos começam numa coluna interna. Para conferir a borda, use os blocos (`GetActualBlocks().Min(b => b.X)`); para cenários exatos, teste o `Board` com o `SequencePieceGenerator`.
 - `GameController.Create(width, height)` sem repositório usa o `StatsRepository` real (`%USERPROFILE%\Tetris\stats.mc`). Nos testes, sempre passe o `InMemoryStatsRepository` (`Gadz.Tetris.Tests.Model`) para não gravar em disco.
 - `PlayScreen.HandleKey` executa só o primeiro comando que casar com a tecla (ordem do `CommandFactory`); por isso cada tecla deve ter um único comando — o Enter usa `TogglePauseCommand`, que consulta `CanPause`/`CanContinue` no estado. `Command.Match` recebe também `repeat` (tecla segurada, detectada pelo `ConsoleFrame`): por padrão o comando ignora esse dado; `MoveLeft/Right` só casam no primeiro toque e `HoldLeft/Right` só nas repetições.
 - `Key` usa os códigos do WinForms (`Keys`): o Shift chega como `Keys.ShiftKey` (0x10), não `LShiftKey`.

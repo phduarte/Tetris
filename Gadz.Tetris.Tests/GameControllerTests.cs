@@ -263,7 +263,7 @@ public class GameControllerTests
     }
 
     /// <summary>
-    /// Deslizar para a esquerda leva a peça até a coluna 0.
+    /// Deslizar para a esquerda leva a peça até encostar na borda: o bloco mais à esquerda fica na coluna 0.
     /// </summary>
     [Test]
     public void DeveCorrerParaEsquerda()
@@ -271,7 +271,9 @@ public class GameControllerTests
         DeveCorrerParaDireita();
         app.RunLeft();
         Thread.Sleep(100);
-        Assert.AreEqual(0, app.CurrentPiecePosition.X);
+
+        // a posição é a origem da forma, que pode ficar em -1 quando a rotação sorteada começa os blocos na coluna 1
+        Assert.AreEqual(0, app.GetActualBlocks().Min(b => b.X));
     }
 
     /// <summary>
@@ -378,13 +380,16 @@ public class GameControllerTests
     [TestCase(Key.Left, -1)]
     public void DeveAndarMaisRapidoComASetaSegurada(Key key, int direction)
     {
-        const int START_COLUMN = 4;
+        // a peça é sorteada: da coluna 3, até a mais larga (I deitada, 4 blocos) cabe nos 3 passos para qualquer lado
+        const int START_COLUMN = 3;
         app.Start();
         var factory = new CommandFactory(app);
-        factory.GetAll(Key.Right, false).First().Execute();
-        app.MoveRight();
-        app.MoveRight();
-        app.MoveRight();
+
+        for (var i = 0; i < START_COLUMN; i++)
+        {
+            app.MoveRight();
+        }
+
         Assert.AreEqual(START_COLUMN, app.CurrentPiecePosition.X, "A peça deveria ter saído do canto.");
 
         factory.GetAll(key, false, repeat: false).First().Execute();
