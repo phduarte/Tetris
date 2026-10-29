@@ -21,14 +21,9 @@ public class Board : Entity
     private IStatsRepository _repository;
 
     /// <summary>
-    /// Defines the MAXIMO_LINHAS_POSSIVEIS
+    /// Os blocos já assentados, com a colisão e a limpeza de linhas.
     /// </summary>
-    private const int MAXIMO_LINHAS_POSSIVEIS = 4;
-
-    /// <summary>
-    /// Defines the _playedBlocks
-    /// </summary>
-    private List<Block> _playedBlocks = [];
+    private Playfield _playfield;
 
     /// <summary>
     /// Serializa as mutações do tabuleiro: o loop roda em background e os comandos chegam pela thread da UI.
@@ -65,11 +60,6 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// Gets the Matrix
-    /// </summary>
-    public Block[,] Matrix { get; }
-
-    /// <summary>
     /// Gets the CurrentPiece
     /// </summary>
     public Piece CurrentPiece { get; private set; }
@@ -92,7 +82,7 @@ public class Board : Entity
     /// <summary>
     /// Gets the Blocks
     /// </summary>
-    public IReadOnlyList<Block> Blocks => _playedBlocks;
+    public IReadOnlyList<Block> Blocks => _playfield.Blocks;
 
     /// <summary>
     /// Gets the Record
@@ -197,9 +187,9 @@ public class Board : Entity
         _pieceGenerator = pieceGenerator ?? new RandomPieceGenerator();
         _pieceBuilder = new PieceBuilder().OnBoard(this);
         Dimension = new Size(width, height);
+        _playfield = new Playfield(Dimension);
         Stats = new Stats();
-        State = new PausedState();
-        Matrix = new Block[width, height];
+        State = PausedState.Instance;
         Record = _repository.MaxScore();
         CurrentPiece = CreateNextPiece();
         NextPiece = CreateNextPiece();
@@ -212,9 +202,8 @@ public class Board : Entity
     {
         lock (_sync)
         {
-            while (CanMoveDown(CurrentPiece))
+            while (TryMove(0, 1))
             {
-                CurrentPiece.MoveDown();
                 OnSlide?.Invoke();
             }
 
@@ -230,12 +219,11 @@ public class Board : Entity
     {
         lock (_sync)
         {
-            if (!CanMoveRight(CurrentPiece))
+            if (!TryMove(1, 0))
                 return;
 
-            while (CanMoveRight(CurrentPiece))
+            while (TryMove(1, 0))
             {
-                CurrentPiece.MoveRight();
             }
             Checkout();
             OnSlide?.Invoke();
@@ -249,12 +237,11 @@ public class Board : Entity
     {
         lock (_sync)
         {
-            if (!CanMoveLeft(CurrentPiece))
+            if (!TryMove(-1, 0))
                 return;
 
-            while (CanMoveLeft(CurrentPiece))
+            while (TryMove(-1, 0))
             {
-                CurrentPiece.MoveLeft();
             }
             Checkout();
             OnSlide?.Invoke();
@@ -274,7 +261,7 @@ public class Board : Entity
             }
 
             OnPause?.Invoke();
-            State = new PausedState();
+            State = PausedState.Instance;
             Stats.Pause();
         }
     }
@@ -292,7 +279,7 @@ public class Board : Entity
             }
 
             OnContinue?.Invoke();
-            State = new PlayingState();
+            State = PlayingState.Instance;
             Stats.Continue();
             RefreshAsync();
         }
@@ -325,7 +312,7 @@ public class Board : Entity
         {
             OnRefresh?.Invoke();
             Stats.Finish();
-            State = new FinishedState();
+            State = FinishedState.Instance;
             OnFinish?.Invoke();
         }
     }
@@ -339,7 +326,7 @@ public class Board : Entity
         {
             OnRefresh?.Invoke();
             Stats.Finish();
-            State = new FinishedState();
+            State = FinishedState.Instance;
             //OnFinish?.Invoke();
             OnLose?.Invoke();
         }
@@ -355,9 +342,9 @@ public class Board : Entity
             CurrentPiece = CreateNextPiece();
             NextPiece = CreateNextPiece();
             Stats.Start();
-            _playedBlocks.Clear();
-            ResetMatrix();
-            State = new PlayingState();
+            _playfield.Clear();
+            OnRefresh?.Invoke();
+            State = PlayingState.Instance;
             RefreshAsync();
         }
     }
@@ -383,6 +370,28 @@ public class Board : Entity
     }
 
     /// <summary>
+    /// O bloco visível na célula: um bloco da peça atual, um bloco assentado ou, se vazia, um bloco com <see cref="PieceColor.None"/>.
+    /// </summary>
+    /// <param name="x">A coluna, de 0 a <see cref="Width"/> - 1.</param>
+    /// <param name="y">A linha, de 0 a <see cref="Height"/> - 1.</param>
+    /// <returns>O bloco da célula.</returns>
+    public Block GetBlock(int x, int y)
+    {
+        lock (_sync)
+        {
+            foreach (var block in CurrentPiece.Blocks)
+            {
+                if (block.X == x && block.Y == y)
+                {
+                    return block;
+                }
+            }
+
+            return _playfield.BlockAt(x, y);
+        }
+    }
+
+    /// <summary>
     /// The Load
     /// </summary>
     /// <param name="id">The id<see cref="Identity"/></param>
@@ -401,9 +410,8 @@ public class Board : Entity
     {
         lock (_sync)
         {
-            if (CanMoveDown(CurrentPiece))
+            if (TryMove(0, 1))
             {
-                CurrentPiece.MoveDown();
                 OnMove?.Invoke();
             }
 
@@ -418,11 +426,10 @@ public class Board : Entity
     {
         lock (_sync)
         {
-            if (CanMoveRight(CurrentPiece))
+            if (TryMove(1, 0))
             {
-                CurrentPiece.MoveRight();
                 OnMove?.Invoke();
-                ResetMatrix();
+                OnRefresh?.Invoke();
             }
         }
     }
@@ -434,11 +441,10 @@ public class Board : Entity
     {
         lock (_sync)
         {
-            if (CanMoveLeft(CurrentPiece))
+            if (TryMove(-1, 0))
             {
-                CurrentPiece.MoveLeft();
                 OnMove?.Invoke();
-                ResetMatrix();
+                OnRefresh?.Invoke();
             }
         }
     }
@@ -466,7 +472,7 @@ public class Board : Entity
 
             CurrentPiece = rotated;
             OnMove?.Invoke();
-            ResetMatrix();
+            OnRefresh?.Invoke();
         }
     }
 
@@ -480,8 +486,8 @@ public class Board : Entity
         lock (_sync)
         {
             CurrentPiece = currentPiece;
-            _playedBlocks = [.. settledBlocks];
-            ResetMatrix();
+            _playfield = new Playfield(Dimension, settledBlocks);
+            OnRefresh?.Invoke();
         }
     }
 
@@ -492,109 +498,36 @@ public class Board : Entity
     /// <returns><c>true</c> se a peça cabe na posição e rotação informadas.</returns>
     private bool Fits(Piece piece)
     {
-        foreach (var block in piece.Blocks)
-        {
-            if (block.X < 0 || block.X > Dimension.Width - 1 || block.Y < 0 || block.Y > Dimension.Height - 1)
-            {
-                return false;
-            }
-        }
-
-        return !ThereIsCollision(piece);
+        return piece.Blocks.All(_playfield.Contains) && !_playfield.Collides(piece);
     }
 
     /// <summary>
-    /// The CanMoveLeft
+    /// Desloca a peça atual se o estado permitir movimento e a peça couber na nova posição.
     /// </summary>
-    /// <param name="piece">The piece<see cref="Piece"/></param>
-    /// <returns>The <see cref="bool"/></returns>
-    private bool CanMoveLeft(Piece piece)
+    /// <param name="dx">Deslocamento horizontal (negativo = esquerda).</param>
+    /// <param name="dy">Deslocamento vertical (positivo = para baixo).</param>
+    /// <returns><c>true</c> se a peça foi movida.</returns>
+    private bool TryMove(int dx, int dy)
     {
         if (!State.CanMove)
-            return false;
-
-        var newPosition = new Point(piece.Position.X - 1, piece.Position.Y);
-        var testPiece = new PieceBuilder()
-                                .OfType(piece.Type)
-                                .OnPosition(newPosition)
-                                .WithRotation(piece.Rotation)
-                                .OnBoard(this)
-                                .Build();
-
-        //check if current piece's blocks don't go out the board width edge
-        foreach (var i in testPiece.Blocks)
         {
-            if (i.X < 0)
-            {
-                return false;
-            }
+            return false;
         }
 
-        return !ThereIsCollision(testPiece);
+        var candidate = CurrentPiece.Clone();
+        candidate.MoveBy(dx, dy);
+
+        if (!Fits(candidate))
+        {
+            return false;
+        }
+
+        CurrentPiece.MoveBy(dx, dy);
+        return true;
     }
 
     /// <summary>
-    /// The CanMoveRight
-    /// </summary>
-    /// <param name="piece">The piece<see cref="Piece"/></param>
-    /// <returns>The <see cref="bool"/></returns>
-    private bool CanMoveRight(Piece piece)
-    {
-        if (!State.CanMove)
-            return false;
-
-        var newPosition = new Point(piece.Position.X + 1, piece.Position.Y);
-        var testPiece = new PieceBuilder()
-            .OfType(piece.Type)
-            .OnPosition(newPosition)
-            .WithRotation(piece.Rotation)
-            .OnBoard(this)
-            .Build();
-
-        //check if current piece's blocks don't go out the board width edge
-        foreach (var i in testPiece.Blocks)
-        {
-            if (i.X > Dimension.Width - 1)
-            {
-                return false;
-            }
-        }
-
-        return !ThereIsCollision(testPiece);
-    }
-
-    /// <summary>
-    /// The CanMoveDown
-    /// </summary>
-    /// <param name="piece">The piece<see cref="Piece"/></param>
-    /// <returns>The <see cref="bool"/></returns>
-    private bool CanMoveDown(Piece piece)
-    {
-        if (!State.CanMove)
-            return false;
-
-        var newPosition = new Point(piece.Position.X, piece.Position.Y + 1);
-        var testPiece = new PieceBuilder()
-            .OfType(piece.Type)
-            .OnPosition(newPosition)
-            .WithRotation(piece.Rotation)
-            .OnBoard(this)
-            .Build();
-
-        //check if current piece's blocks don't go out the board height edge
-        foreach (var i in testPiece.Blocks)
-        {
-            if (i.Y > Dimension.Height - 1)
-            {
-                return false;
-            }
-        }
-
-        return !ThereIsCollision(testPiece);
-    }
-
-    /// <summary>
-    /// The Checkout
+    /// Avança o jogo um passo: desce a peça atual ou, se ela não puder descer, assenta-a e traz a próxima.
     /// </summary>
     private void Checkout()
     {
@@ -603,66 +536,33 @@ public class Board : Entity
             return;
         }
 
-        if (CanMoveDown(CurrentPiece))
+        if (!TryMove(0, 1))
         {
-            CurrentPiece.MoveDown();
-        }
-        else
-        {
-            TrocarPecaAtual();
+            LockCurrentPiece();
 
             // o jogo termina quando a peça que acabou de entrar já nasce sobre blocos assentados
-            if (ThereIsCollision(CurrentPiece))
+            if (_playfield.Collides(CurrentPiece))
             {
                 Lose();
                 return;
             }
         }
 
-        ResetMatrix();
-        VerificarSePreencheuLinha();
-    }
-
-    /// <summary>
-    /// The VerificarSePreencheuLinha
-    /// </summary>
-    private void VerificarSePreencheuLinha()
-    {
-        var linhas = LimparLinhas();
-
-        if (linhas > 0)
-        {
-            Pontuar(linhas);
-        }
-    }
-
-    /// <summary>
-    /// The ResetMatrix
-    /// </summary>
-    private void ResetMatrix()
-    {
-        //limpar a matriz
-        for (int y = 0; y < Dimension.Height; y++)
-        {
-            for (int x = 0; x < Dimension.Width; x++)
-            {
-                Matrix[x, y] = new Block(x, y, PieceColor.None);
-            }
-        }
-
-        //pintar os blocos que já saíram
-        foreach (var i in _playedBlocks)
-        {
-            Matrix[i.X, i.Y] = i;
-        }
-
-        //pinta o bloco atual
-        foreach (var i in CurrentPiece.Blocks)
-        {
-            Matrix[i.X, i.Y] = i;
-        }
-
         OnRefresh?.Invoke();
+        ClearFullLines();
+    }
+
+    /// <summary>
+    /// Remove as linhas completas e pontua por elas.
+    /// </summary>
+    private void ClearFullLines()
+    {
+        var lines = _playfield.ClearFullLines();
+
+        if (lines > 0)
+        {
+            AddScore(lines);
+        }
     }
 
     /// <summary>
@@ -698,43 +598,22 @@ public class Board : Entity
     /// <returns>A peça criada no canto superior esquerdo do tabuleiro.</returns>
     private Piece CreateNextPiece()
     {
-        var (tipo, rotacao) = _pieceGenerator.Next();
-        var posicao = new Point(0, 0);
-        var peca = _pieceBuilder.OfType(tipo)
-            .OnPosition(posicao)
-            .WithRotation(rotacao)
+        var (type, rotation) = _pieceGenerator.Next();
+        var position = new Point(0, 0);
+        var piece = _pieceBuilder.OfType(type)
+            .OnPosition(position)
+            .WithRotation(rotation)
             .Build();
 
-        return peca.Clone();
+        return piece.Clone();
     }
 
     /// <summary>
-    /// The ThereIsCollision
+    /// Assenta a peça atual no <see cref="Playfield"/> e a substitui pela próxima.
     /// </summary>
-    /// <param name="peca">The peca<see cref="Piece"/></param>
-    /// <returns>The <see cref="bool"/></returns>
-    private bool ThereIsCollision(Piece peca)
+    private void LockCurrentPiece()
     {
-        foreach (var a in _playedBlocks)
-        {
-            foreach (var b in peca.Blocks)
-            {
-                if (a.CollideWith(b))
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// The TrocarPecaAtual
-    /// </summary>
-    private void TrocarPecaAtual()
-    {
-        GuardarBlocos();
+        _playfield.Lock(CurrentPiece);
         CurrentPiece = NextPiece.Clone();
         NextPiece = CreateNextPiece();
         Stats.IncludeBlock();
@@ -742,98 +621,12 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// The GuardarBlocos
+    /// Pontua as linhas removidas na jogada.
     /// </summary>
-    private void GuardarBlocos()
+    /// <param name="lines">A quantidade de linhas removidas.</param>
+    private void AddScore(int lines)
     {
-        foreach (var i in CurrentPiece.Blocks)
-        {
-            _playedBlocks.Add(i);
-        }
-    }
-
-    /// <summary>
-    /// The LimparLinhas
-    /// </summary>
-    /// <returns>The <see cref="int"/></returns>
-    private int LimparLinhas()
-    {
-        var linhas = 0;
-
-        //note que se no tabuleiro houver menos de 10 blocos, logicamente não haverá linha total preenchida
-        //então isso economiza um pouco o processamento
-        if (_playedBlocks.Count < 10)
-            return linhas;
-
-        var linha = Dimension.Height - 1;
-
-        //esse laço é invertido (decremental) para que a validação de linhas completadas ocorra debaixo pra cima.
-        do
-        {
-            if (linhas == MAXIMO_LINHAS_POSSIVEIS)
-                break;
-
-            if (ContarBlocosVaziosNaLinha(linha) > 0)
-            {
-                linha--;
-            }
-            else
-            {
-                linhas++;
-                RemoverLinha(linha);
-                MoverBlocosParaBaixo(linha);
-            }
-        } while (linha >= 0);
-
-        return linhas;
-    }
-
-    /// <summary>
-    /// The ContarBlocosVaziosNaLinha
-    /// </summary>
-    /// <param name="linha">The linha<see cref="int"/></param>
-    /// <returns>The <see cref="int"/></returns>
-    private int ContarBlocosVaziosNaLinha(int linha)
-    {
-        return Dimension.Width - _playedBlocks.Count(_ => _.Y == linha);
-    }
-
-    /// <summary>
-    /// The MoverBlocosParaBaixo
-    /// </summary>
-    /// <param name="linha">The linha<see cref="int"/></param>
-    private void MoverBlocosParaBaixo(int linha)
-    {
-        for (var i = 0; i < _playedBlocks.Count; i++)
-        {
-            if (_playedBlocks[i].Y < linha)
-            {
-                _playedBlocks[i] = new Block(_playedBlocks[i].X, _playedBlocks[i].Y + 1, _playedBlocks[i].Color);
-            }
-        }
-    }
-
-    /// <summary>
-    /// The RemoverLinha
-    /// </summary>
-    /// <param name="linha">The linha<see cref="int"/></param>
-    private void RemoverLinha(int linha)
-    {
-        var blocosExcluidos = _playedBlocks.Where(x => x.Y == linha).ToList();
-
-        foreach (var bloco in blocosExcluidos)
-        {
-            _playedBlocks.Remove(bloco);
-        }
-    }
-
-    /// <summary>
-    /// The Pontuar
-    /// </summary>
-    /// <param name="linhas">The linhas<see cref="int"/></param>
-    private void Pontuar(int linhas)
-    {
-        Stats.Gain(linhas);
+        Stats.Gain(lines);
         OnClear?.Invoke();
     }
 }

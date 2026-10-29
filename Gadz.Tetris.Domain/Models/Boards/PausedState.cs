@@ -6,6 +6,18 @@
 internal class PausedState : IBoardState
 {
     /// <summary>
+    /// Instância única: o estado não guarda dados, então todas as transições a reutilizam.
+    /// </summary>
+    public static readonly PausedState Instance = new();
+
+    /// <summary>
+    /// Impede novas instâncias; use <see cref="Instance"/>.
+    /// </summary>
+    private PausedState()
+    {
+    }
+
+    /// <summary>
     /// Gets a value indicating whether IsPlaying
     /// </summary>
     public bool IsPlaying => false;

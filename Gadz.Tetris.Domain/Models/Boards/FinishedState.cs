@@ -6,6 +6,18 @@
 internal class FinishedState : IBoardState
 {
     /// <summary>
+    /// Instância única: o estado não guarda dados, então todas as transições a reutilizam.
+    /// </summary>
+    public static readonly FinishedState Instance = new();
+
+    /// <summary>
+    /// Impede novas instâncias; use <see cref="Instance"/>.
+    /// </summary>
+    private FinishedState()
+    {
+    }
+
+    /// <summary>
     /// Gets a value indicating whether IsPlaying
     /// </summary>
     public bool IsPlaying => false;

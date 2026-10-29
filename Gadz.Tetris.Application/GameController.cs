@@ -94,11 +94,6 @@ public class GameController
     /// </summary>
     public int Lines => _board.Lines;
 
-    /// <summary>
-    /// Gets the Matrix
-    /// Matriz do tabuleiro
-    /// </summary>
-    public Block[,] Matrix => _board.Matrix;
 
     /// <summary>
     /// Gets the Duration
@@ -267,6 +262,14 @@ public class GameController
     /// </summary>
     /// <returns></returns>
     public IEnumerable<Block> GetActualBlocks() => _board.CurrentPiece.Blocks;
+
+    /// <summary>
+    /// Bloco exibido na célula do tabuleiro (peça atual, bloco assentado ou célula vazia com cor <c>None</c>).
+    /// </summary>
+    /// <param name="x">A coluna.</param>
+    /// <param name="y">A linha.</param>
+    /// <returns>O bloco da célula.</returns>
+    public Block GetBlock(int x, int y) => _board.GetBlock(x, y);
 
     /// <summary>
     /// Blocos da próxima peça.

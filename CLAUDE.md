@@ -39,7 +39,7 @@ Desktop ──► Application ──► Domain
 
 ## Padrões de projeto usados (siga-os ao estender)
 
-- **State** — `IBoardState` com `PlayingState`, `PausedState`, `FinishedState` (`internal`). Permissões (`CanMove`, `CanPause`...) são consultadas no estado, não em `if`s espalhados.
+- **State** — `IBoardState` com `PlayingState`, `PausedState`, `FinishedState` (`internal`, instância única em `Instance`). Permissões (`CanMove`, `CanPause`...) são consultadas no estado, não em `if`s espalhados.
 - **Builder** — `PieceBuilder` (`OfType().OnPosition().WithRotation().OnBoard().Build()`) é a única forma de criar peças.
 - **Strategy** — cada tetraminó (`TetraminoI/J/L/O/S/T/Z`, `internal`) define seus `Blocks` para as rotações 0–3.
 - **Gerador de peças** — `IPieceGenerator` (domínio) escolhe tipo e rotação de cada nova peça; o `Board` usa o `RandomPieceGenerator` (`internal`) por padrão e aceita outro pelo construtor. Nos testes, use o `SequencePieceGenerator` para cenários determinísticos.
@@ -53,8 +53,8 @@ Desktop ──► Application ──► Domain
 
 - **Namespaces** espelham as pastas: `Gadz.Tetris.<Projeto>.<Pasta>` (ex.: `Gadz.Tetris.Domain.Models.Pieces`). Use namespace file-scoped (`namespace X;`).
 - **C# moderno**: prefira primary constructors, switch expressions, collection expressions (`[]`), `new()` com tipo inferido e `using` declarations. Nada de avisos de nullable: anote com `?` o que pode ser nulo em vez de suprimir.
-- **Nomes**: `PascalCase` para tipos/membros públicos, `_camelCase` para campos privados, `UPPER_SNAKE_CASE` para constantes (`MAXIMO_LINHAS_POSSIVEIS`, `BLOCK_SIZE`).
-- **Idioma**: identificadores novos em inglês (padrão adotado na refatoração recente). Existem nomes legados em português (`TrocarPecaAtual`, `ColideCom`) — não renomeie fora de uma refatoração dedicada. Documentação XML voltada ao cliente (`GameController`) e mensagens de commit costumam estar em português.
+- **Nomes**: `PascalCase` para tipos/membros públicos, `_camelCase` para campos privados, `UPPER_SNAKE_CASE` para constantes (`MAX_LINES_PER_DROP`, `BLOCK_SIZE`).
+- **Idioma**: identificadores novos em inglês (padrão adotado na refatoração recente). Existem nomes legados em português (`ColideCom`) — não renomeie fora de uma refatoração dedicada. Documentação XML voltada ao cliente (`GameController`) e mensagens de commit costumam estar em português.
 - **Testes**: classes em português terminando em `Tests` (`PecaTests`, `EstatisticasTests`), métodos no formato `DeveXxx` / `NaoDeveXxx`.
 - **Documentação**: membros públicos e privados levam `/// <summary>`. Comentários de linha só para explicar o *porquê* de algo não óbvio.
 - **Encapsulamento**: propriedades de domínio com `private set`; coleções expostas como `IReadOnlyList`/`IEnumerable`; tipos que não precisam ser vistos fora do assembly são `internal`.
