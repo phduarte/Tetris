@@ -4,9 +4,9 @@ using Gadz.Tetris.Domain.Models.Statistics;
 namespace Gadz.Tetris.Tests.Model;
 
 /// <summary>
-/// Repositório em memória para testar o <see cref="Domain.Models.Boards.Board"/> sem gravar em disco.
+/// Repositório em memória para testar o <see cref="Domain.Models.Boards.Board"/> e o <see cref="Application.GameController"/> sem gravar em disco.
 /// </summary>
-internal class FakeStatsRepository : IStatsRepository
+internal class InMemoryStatsRepository : IStatsRepository
 {
     /// <summary>
     /// Estatísticas salvas durante o teste.
