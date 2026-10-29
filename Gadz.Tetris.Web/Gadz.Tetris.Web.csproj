@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+	<PropertyGroup>
+		<OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
+		<ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Gadz.Tetris.Application\Gadz.Tetris.Application.csproj" />
+		<ProjectReference Include="..\Gadz.Tetris.Texts\Gadz.Tetris.Texts.csproj" />
+	</ItemGroup>
+
+	<!-- a fonte do LCD (Silkscreen, OFL) é a mesma do Desktop: link, sem cópia do arquivo -->
+	<ItemGroup>
+		<Content Include="..\Gadz.Tetris.Desktop\Fontes\Silkscreen-Regular.ttf" Link="wwwroot\fonts\Silkscreen-Regular.ttf" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
+	</ItemGroup>
+
+</Project>

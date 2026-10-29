@@ -1,0 +1,29 @@
+<SectionContent SectionName="@ConsoleFrame.BUTTONS_SECTION">
+    @foreach (var button in Buttons)
+    {
+        <button type="button" class="@CssClass(button)" @onclick="() => Frame.Press(button.Key)">
+            <span class="caption">@button.Caption</span>
+            <span class="keycap">@button.KeyCap</span>
+        </button>
+    }
+</SectionContent>
+
+@code {
+    /// <summary>
+    /// O aparelho, que recebe o clique como se fosse a tecla.
+    /// </summary>
+    [CascadingParameter]
+    public ConsoleFrame Frame { get; set; } = default!;
+
+    /// <summary>
+    /// Os botões que a tela mostra na carcaça.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public IReadOnlyList<ConsoleButton> Buttons { get; set; } = [];
+
+    /// <summary>
+    /// As classes CSS do botão: grande ou pequeno, e afundado.
+    /// </summary>
+    private static string CssClass(ConsoleButton button)
+        => $"button {(button.Big ? "big" : "small")} {(button.Latched ? "latched" : string.Empty)}";
+}

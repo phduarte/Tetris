@@ -6,7 +6,7 @@ Ao aplicar um padrão, avalie custo-benefício — **evite over-engineering**.
 
 ## Stack
 
-- .NET 10 (`net10.0`; o Desktop usa `net10.0-windows` + WinForms). SDK fixado em `global.json`.
+- .NET 10 (`net10.0`; o Desktop usa `net10.0-windows` + WinForms; a Web é Blazor WebAssembly PWA). SDK fixado em `global.json`.
 - Configuração comum (TargetFramework, `LangVersion latest`, `Nullable`, `ImplicitUsings`, análise de código) fica em `Directory.Build.props` — não repita essas propriedades nos `.csproj`.
 - Estilo de código definido em `.editorconfig` (`dotnet format` aplica).
 - Testes: NUnit (modelo clássico `Assert.AreEqual`, `Assert.IsTrue`...).
@@ -16,6 +16,7 @@ Ao aplicar um padrão, avalie custo-benefício — **evite over-engineering**.
 dotnet build Gadz.Tetris.sln
 dotnet test Gadz.Tetris.sln
 dotnet run --project Gadz.Tetris.Desktop
+dotnet run --project Gadz.Tetris.Web
 ```
 
 CI: `.github/workflows/main.yml` (restore, build e test em `windows-latest`). O `appveyor.yml` faz o mesmo, instalando antes o SDK do `global.json` (a imagem do AppVeyor não o inclui).
@@ -27,6 +28,9 @@ Desktop ──► Application ──► Domain
    ├──► Data ──► Domain               (só no Program.cs)
    ├──► SoundPlayer ──► Application   (só no Program.cs; implementa ISoundPlayer)
    └──► Texts                         (textos de interface, sem dependências)
+
+Web ──► Application ──► Domain
+   └──► Texts                         (infraestrutura do navegador em Web/Infrastructure)
 ```
 
 A `Application` depende só do `Domain`. Cada interface é a raiz de composição: cria a infraestrutura (repositório e som) e a passa ao `GameController.Create`.
@@ -39,6 +43,7 @@ A `Application` depende só do `Domain`. Cada interface é a raiz de composiçã
 | `Gadz.Tetris.SoundPlayer` | Adapter de áudio (`SoundPlayerAdapter : ISoundPlayer`) com os `.wav` embutidos em `Sounds.resx`. Criado uma única vez no `Program.cs` do Desktop. |
 | `Gadz.Tetris.Application` | `GameController` (fachada para o cliente), os `Commands` de teclado e o `ISoundPlayer`. Monta o domínio com a infraestrutura recebida no `Create`, sem referenciar `Data` nem `SoundPlayer`. |
 | `Gadz.Tetris.Desktop` | Interface WinForms: captura entradas e desenha a tela. Sem regras de jogo. O `Program.cs` cria o `StatsRepository` e o `SoundPlayerAdapter` e os entrega ao `ConsoleFrame` (`Repository`, `Sound`). Um único form sem borda (`Device/ConsoleFrame`, o "aparelho") desenha carcaça, LCD e botões; as telas (`Screens/*Screen`) só trocam o conteúdo do LCD. |
+| `Gadz.Tetris.Web` | Interface Blazor WebAssembly (PWA) para navegador e celular. Referencia só `Application` e `Texts`. Mesma ideia do Desktop: `Device/ConsoleFrame` é o aparelho e as telas (`Screens/*Screen`, componentes Razor que herdam de `ConsoleScreen`) trocam o LCD. A infraestrutura do navegador fica em `Infrastructure/` e é registrada no `Program.cs`; os textos vêm de `IStringLocalizer<Jogo>`, na cultura do navegador. |
 | `Gadz.Tetris.Tests` | Testes NUnit do domínio e do `GameController`. |
 
 ## Padrões de projeto usados (siga-os ao estender)

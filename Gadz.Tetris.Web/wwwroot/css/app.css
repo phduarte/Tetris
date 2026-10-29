@@ -1,0 +1,263 @@
+/* Gadz Tetris — o "aparelho" na Web. Cores iguais às da Palette e do estilo TETRIS do Desktop. */
+
+@font-face {
+    font-family: "Silkscreen";
+    src: url("../fonts/Silkscreen-Regular.ttf") format("truetype");
+    font-display: swap;
+}
+
+:root {
+    --case-top: #37383e;
+    --case-bottom: #25262a;
+    --bezel: #131417;
+    --accent: #ff7a59;
+    --accent-dark: #c9492c;
+    --accent-shadow: #7a2c1a;
+    --case-text: #e9e6df;
+    --button-top: #4a4b52;
+    --button-bottom: #303137;
+    --button-shadow: #141518;
+    --lcd: #11161a;
+    --ink: #dfe8e1;
+    --ghost: rgb(223 232 225 / 6%);
+    --faded: rgb(223 232 225 / 70%);
+
+    --cyan: #35c6e8;
+    --purple: #a66cf0;
+    --orange: #f7953b;
+    --blue: #4a7cf7;
+    --yellow: #f5cc3c;
+    --green: #4cc27a;
+    --red: #ef5a6f;
+
+    /* o tamanho da célula do tabuleiro guia todas as medidas do LCD */
+    --cell: clamp(12px, 3.2vh, 24px);
+    --gap: calc(var(--cell) / 8);
+    --pixel: "Silkscreen", ui-monospace, monospace;
+    --text: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    height: 100%;
+    background: radial-gradient(circle at 50% 30%, #2d2e33, #0c0d0f 70%);
+    color: var(--case-text);
+    font-family: var(--text);
+    overflow: hidden;
+    user-select: none;
+}
+
+#app {
+    display: grid;
+    place-items: center;
+    min-height: 100%;
+    padding: 12px;
+}
+
+.loading {
+    font-family: var(--pixel);
+    font-size: 32px;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    animation: blink 1s steps(1) infinite;
+}
+
+/* ---------- carcaça ---------- */
+
+.console {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 22px 22px 26px;
+    border-radius: 22px 22px 48px 22px;
+    background: linear-gradient(var(--case-top), var(--case-bottom));
+    box-shadow: 0 18px 40px rgb(0 0 0 / 55%), inset 0 1px 0 rgb(255 255 255 / 8%);
+}
+
+.bezel {
+    padding: 14px;
+    border-radius: 12px;
+    background: var(--bezel);
+}
+
+.lcd {
+    position: relative;
+    width: calc(var(--cell) * 21);
+    height: calc(var(--cell) * 22.5);
+    padding: calc(var(--cell) * 0.6);
+    background: var(--lcd);
+    color: var(--ink);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* ---------- botões ---------- */
+
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
+    min-height: 74px;
+}
+
+.button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    border: 0;
+    cursor: pointer;
+    color: var(--case-text);
+    font-family: var(--pixel);
+    background: none;
+    padding: 0;
+}
+
+.button .caption {
+    display: grid;
+    place-items: center;
+    background: linear-gradient(var(--button-top), var(--button-bottom));
+    box-shadow: 0 3px 0 var(--button-shadow);
+    transition: transform 60ms, box-shadow 60ms;
+}
+
+.button .keycap {
+    font-size: 9px;
+    opacity: 0.6;
+    text-transform: uppercase;
+}
+
+.button.small .caption {
+    min-width: 64px;
+    height: 22px;
+    padding: 0 10px;
+    border-radius: 11px;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+.button.big {
+    order: 1;
+    margin-left: 10px;
+}
+
+.button.big .caption {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    font-size: 11px;
+    text-transform: uppercase;
+    background: linear-gradient(var(--accent), var(--accent-dark));
+    box-shadow: 0 4px 0 var(--accent-shadow);
+}
+
+.button:active .caption,
+.button.latched .caption {
+    transform: translateY(3px);
+    box-shadow: 0 0 0 var(--button-shadow);
+}
+
+/* ---------- LCD: blocos e textos ---------- */
+
+.grid {
+    --size: var(--cell);
+    display: grid;
+    grid-template-columns: repeat(var(--columns), var(--size));
+    grid-template-rows: repeat(var(--rows), var(--size));
+    gap: calc(var(--size) / 8);
+}
+
+.grid.title {
+    --size: calc(var(--cell) * 0.7);
+}
+
+.grid.next {
+    --size: calc(var(--cell) * 0.8);
+}
+
+.grid.ground {
+    --size: calc(var(--cell) * 0.6);
+}
+
+.cell {
+    border-radius: 2px;
+    background: var(--color, var(--ghost));
+    box-shadow: inset 0 calc(var(--size) / -6) 0 rgb(0 0 0 / var(--shade, 0%));
+}
+
+.cell.cyan { --color: var(--cyan); --shade: 22%; }
+.cell.purple { --color: var(--purple); --shade: 22%; }
+.cell.orange { --color: var(--orange); --shade: 22%; }
+.cell.blue { --color: var(--blue); --shade: 22%; }
+.cell.yellow { --color: var(--yellow); --shade: 22%; }
+.cell.green { --color: var(--green); --shade: 22%; }
+.cell.red { --color: var(--red); --shade: 22%; }
+
+.screen {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    font-family: var(--pixel);
+    text-transform: uppercase;
+}
+
+.label {
+    font-family: var(--pixel);
+    font-size: calc(var(--cell) * 0.5);
+    opacity: 0.6;
+    text-transform: uppercase;
+}
+
+.subtitle {
+    margin: 0;
+    font-size: calc(var(--cell) * 0.6);
+    letter-spacing: 0.3em;
+    color: var(--faded);
+    text-align: center;
+}
+
+.blink {
+    animation: blink 1.2s steps(1) infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+/* ---------- menu ---------- */
+
+.menu {
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* ---------- erro do Blazor ---------- */
+
+#blazor-error-ui {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 0.6rem 1.25rem;
+    background: var(--red);
+    color: #fff;
+    z-index: 1000;
+}
+
+#blazor-error-ui a {
+    color: inherit;
+}
+
+#blazor-error-ui .dismiss {
+    position: absolute;
+    right: 0.75rem;
+    cursor: pointer;
+}
