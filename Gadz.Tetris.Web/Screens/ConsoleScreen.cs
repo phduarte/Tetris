@@ -1,5 +1,6 @@
 ﻿using Gadz.Tetris.Texts;
 using Gadz.Tetris.Web.Device;
+using Gadz.Tetris.Web.Input;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 
@@ -28,6 +29,17 @@ public abstract class ConsoleScreen : ComponentBase, IDisposable
     /// para cada tela só declarar as suas.
     /// </summary>
     protected virtual IReadOnlyDictionary<string, Action> KeyBindings { get; } = new Dictionary<string, Action>();
+
+    /// <summary>
+    /// O botão SOM, presente em todas as telas; com o som desligado, ele fica afundado.
+    /// </summary>
+    protected ConsoleButton SoundButton
+        => new(KeyMap.SHIFT, Texts[nameof(Jogo.Sound)], Texts[nameof(Jogo.KeyShift)], Latched: Frame.Sound.Mute);
+
+    /// <summary>
+    /// Liga ou desliga o som (tecla Shift) fora da partida; na partida, o <c>ToggleMuteCommand</c> faz o mesmo.
+    /// </summary>
+    protected void ToggleSound() => Frame.Sound.ToggleMute();
 
     /// <summary>
     /// Trata uma tecla apertada (ou um botão clicado).

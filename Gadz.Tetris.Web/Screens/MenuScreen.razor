@@ -3,4 +3,18 @@
 <div class="screen menu">
     <TitleArt />
     <p class="subtitle">@Texts[nameof(Jogo.Subtitle)]</p>
+    <p class="blink">@Texts[nameof(Jogo.EnterToPlay)]</p>
 </div>
+
+<ConsoleButtons Buttons="[new(KeyMap.ENTER, Texts[nameof(Jogo.CapPlay)], Texts[nameof(Jogo.KeyEnter)], Big: true)]" />
+
+@code {
+    /// <inheritdoc/>
+    protected override IReadOnlyDictionary<string, Action> KeyBindings => new Dictionary<string, Action>
+    {
+        [KeyMap.ENTER] = () => Frame.Navigate<PlayScreen>(new Dictionary<string, object?>
+        {
+            [nameof(PlayScreen.Controller)] = PlayScreen.CreateGame(Frame),
+        }),
+    };
+}

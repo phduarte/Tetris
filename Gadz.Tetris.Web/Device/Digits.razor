@@ -1,0 +1,23 @@
+<span class="digits @Class">@foreach (var character in Text)
+    {
+        <span class="digit" data-ghost="@Ghost(character)">@character</span>
+    }</span>
+
+@code {
+    /// <summary>
+    /// O valor já formatado (números completados com espaços à esquerda, como no LCD do Desktop).
+    /// </summary>
+    [Parameter, EditorRequired]
+    public string Text { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Classe CSS extra (define a altura dos dígitos).
+    /// </summary>
+    [Parameter]
+    public string? Class { get; set; }
+
+    /// <summary>
+    /// O "fantasma" de cada posição: um 8 apagado atrás dos números (e dos espaços), como nos visores de 7 segmentos.
+    /// </summary>
+    private static string Ghost(char character) => char.IsDigit(character) || character == ' ' ? "8" : character.ToString();
+}

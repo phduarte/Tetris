@@ -31,7 +31,7 @@
     --red: #ef5a6f;
 
     /* o tamanho da célula do tabuleiro guia todas as medidas do LCD */
-    --cell: clamp(12px, 3.2vh, 24px);
+    --cell: clamp(10px, min((100dvh - 240px) / 24, (100vw - 110px) / 22.5), 24px);
     --gap: calc(var(--cell) / 8);
     --pixel: "Silkscreen", ui-monospace, monospace;
     --text: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -87,8 +87,8 @@ body {
 
 .lcd {
     position: relative;
-    width: calc(var(--cell) * 21);
-    height: calc(var(--cell) * 22.5);
+    width: calc(var(--cell) * 22.5);
+    height: calc(var(--cell) * 23.6);
     padding: calc(var(--cell) * 0.6);
     background: var(--lcd);
     color: var(--ink);
@@ -149,10 +149,10 @@ body {
 }
 
 .button.big .caption {
-    width: 64px;
-    height: 64px;
+    width: 76px;
+    height: 76px;
     border-radius: 50%;
-    font-size: 11px;
+    font-size: 10px;
     text-transform: uppercase;
     background: linear-gradient(var(--accent), var(--accent-dark));
     box-shadow: 0 4px 0 var(--accent-shadow);
@@ -236,6 +236,164 @@ body {
 .menu {
     align-items: center;
     justify-content: space-between;
+}
+
+/* ---------- dígitos (visor de 7 segmentos) ---------- */
+
+.digits {
+    --height: calc(var(--cell) * 1.1);
+    display: inline-flex;
+    font-family: var(--pixel);
+    font-size: var(--height);
+    line-height: 1;
+}
+
+.digits.big {
+    --height: calc(var(--cell) * 1.35);
+}
+
+.digits.small {
+    --height: calc(var(--cell) * 0.9);
+}
+
+/* cada posição tem largura fixa e um 8 apagado atrás, para os números não "dançarem" */
+.digit {
+    position: relative;
+    width: 0.85em;
+    text-align: center;
+    white-space: pre;
+}
+
+.digit::before {
+    content: attr(data-ghost);
+    position: absolute;
+    inset: 0;
+    color: var(--ghost);
+}
+
+.unit {
+    margin-left: 3px;
+    font-family: var(--pixel);
+    font-size: calc(var(--cell) * 0.6);
+}
+
+/* ---------- partida ---------- */
+
+.play {
+    flex-direction: row;
+    gap: calc(var(--cell) * 0.7);
+}
+
+.board-area {
+    position: relative;
+    padding-right: calc(var(--cell) * 0.4);
+    border-right: 2px solid var(--ink);
+}
+
+.board-area > .grid,
+.board-area > .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.board-area > .grid.board:first-child {
+    position: static;
+}
+
+.overlay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--cell) * 0.6);
+    width: calc(100% - var(--cell) * 0.4);
+    height: 100%;
+    text-align: center;
+}
+
+.overlay.opaque {
+    background: var(--lcd);
+}
+
+.overlay p {
+    margin: 0;
+}
+
+.pause {
+    font-size: calc(var(--cell) * 1.25);
+}
+
+.game-over {
+    max-width: 6em;
+    font-size: calc(var(--cell) * 1.9);
+    line-height: 1.05;
+    background: linear-gradient(var(--yellow), var(--red));
+    background-clip: text;
+    color: transparent;
+}
+
+.hint {
+    font-size: calc(var(--cell) * 0.55);
+}
+
+/* a cortina do fim de jogo: cada linha aparece (de baixo para cima) e depois se apaga (de cima para baixo) */
+.curtain .cell {
+    opacity: 0;
+    animation: curtain-cover 1ms forwards var(--cover), curtain-clear 1ms forwards var(--clear);
+}
+
+.curtain {
+    animation: curtain-fill 1ms forwards var(--fill);
+}
+
+@keyframes curtain-fill {
+    to { background: var(--lcd); }
+}
+
+@keyframes curtain-cover {
+    to { opacity: 1; }
+}
+
+@keyframes curtain-clear {
+    to { opacity: 1; background: var(--lcd); box-shadow: none; }
+}
+
+.side {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--cell) * 0.55);
+    min-width: 0;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--cell) * 0.25);
+}
+
+.stat-pair {
+    display: flex;
+    justify-content: space-between;
+    gap: calc(var(--cell) * 0.5);
+}
+
+.icons {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--cell) * 0.6);
+    font-size: calc(var(--cell) * 0.95);
+}
+
+.icons .off {
+    opacity: 0.1;
+}
+
+/* as barras da pausa são desenhadas, e não escritas: o "❚" de cada fonte tem um tamanho */
+.pause-icon {
+    width: 0.6em;
+    height: 0.8em;
+    background: linear-gradient(90deg, currentColor 33%, transparent 33% 66%, currentColor 66%);
 }
 
 /* ---------- erro do Blazor ---------- */
