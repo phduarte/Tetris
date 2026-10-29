@@ -93,7 +93,7 @@ internal static class TextPainter
     /// <summary>
     /// Se o texto pode ser desenhado de uma vez: sem espaçamento extra e sem setas.
     /// </summary>
-    private static bool IsPlain(string text, float spacing) => spacing == 0 && text.IndexOfAny(ARROWS.ToCharArray()) < 0;
+    private static bool IsPlain(string text, float spacing) => spacing <= 0 && text.IndexOfAny(ARROWS.ToCharArray()) < 0;
 
     /// <summary>
     /// Largura de um caractere; o espaço é medido pela diferença entre "a a" e "aa", porque sozinho o GDI+ o mede como zero.

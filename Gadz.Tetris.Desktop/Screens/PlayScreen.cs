@@ -458,12 +458,12 @@ internal sealed class PlayScreen : ConsoleScreen
     /// <summary>
     /// Redesenha na thread de UI (os eventos do jogo chegam pela thread do loop).
     /// </summary>
-    private void RepaintAsync() => RunOnUiAsync(Frame.Invalidate);
+    private void RepaintAsync() => _ = RunOnUiAsync(Frame.Invalidate);
 
     /// <summary>
     /// Ao perder, começa a cortina na thread de UI.
     /// </summary>
-    private void StartCurtainAsync() => RunOnUiAsync(() =>
+    private void StartCurtainAsync() => _ = RunOnUiAsync(() =>
     {
         _curtain = new GameOverCurtain(BOARD_HEIGHT, CURTAIN_HOLD_MS, CURTAIN_STEP_MS, SoundPlayerAdapter.End, OnCurtainStep);
         Frame.Invalidate();
@@ -485,7 +485,7 @@ internal sealed class PlayScreen : ConsoleScreen
     /// <summary>
     /// Ao encerrar com Esc, vai direto para o resultado.
     /// </summary>
-    private void ShowResultAsync() => RunOnUiAsync(ShowResult);
+    private void ShowResultAsync() => _ = RunOnUiAsync(ShowResult);
 
     /// <summary>
     /// Mostra o resultado da partida.
@@ -503,8 +503,10 @@ internal sealed class PlayScreen : ConsoleScreen
     private void ShakeDown() => Frame.ShakeDown(2);
 
     /// <summary>
-    /// Executa a ação na thread de UI, pelo <see cref="TaskScheduler"/> capturado ao criar a tela.
+    /// Agenda a ação na thread de UI, pelo <see cref="TaskScheduler"/> capturado ao criar a tela.
+    /// Quem chama são os eventos do jogo, que não esperam pela tela: a tarefa é descartada.
     /// </summary>
-    private async void RunOnUiAsync(Action action)
-        => await Task.Factory.StartNew(action, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
+    /// <returns>A tarefa que executa a ação.</returns>
+    private Task RunOnUiAsync(Action action)
+        => Task.Factory.StartNew(action, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
 }

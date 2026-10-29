@@ -258,12 +258,12 @@ internal sealed class LcdCanvas : IDisposable
     /// <summary>
     /// Desenha um tempo como relógio de 7 segmentos (hh:mm:ss).
     /// </summary>
-    /// <param name="time">O tempo.</param>
+    /// <param name="duration">O tempo.</param>
     /// <param name="x">Esquerda.</param>
     /// <param name="y">Topo.</param>
     /// <param name="height">Altura dos dígitos.</param>
     /// <returns>A largura desenhada.</returns>
-    public float Time(TimeSpan time, float x, float y, float height) => Digits(time.ToString(@"hh\:mm\:ss"), x, y, height);
+    public float Time(TimeSpan duration, float x, float y, float height) => Digits(duration.ToString(@"hh\:mm\:ss"), x, y, height);
 
     /// <summary>
     /// Desenha caracteres em 7 segmentos.
@@ -306,14 +306,14 @@ internal sealed class LcdCanvas : IDisposable
     /// <summary>
     /// Desenha um texto numa linha, com espaçamento opcional entre as letras.
     /// </summary>
-    /// <param name="text">O texto.</param>
+    /// <param name="content">O texto.</param>
     /// <param name="font">A fonte.</param>
     /// <param name="x">Esquerda.</param>
     /// <param name="y">Topo.</param>
     /// <param name="spacing">Espaço extra entre as letras.</param>
     /// <param name="brush">O pincel; se omitido, a tinta.</param>
-    public void Text(string text, Font font, float x, float y, float spacing = 0, Brush? brush = null)
-        => TextPainter.Draw(Graphics, text, font, brush ?? _ink, x, y, spacing);
+    public void Text(string content, Font font, float x, float y, float spacing = 0, Brush? brush = null)
+        => TextPainter.Draw(Graphics, content, font, brush ?? _ink, x, y, spacing);
 
     /// <summary>
     /// Desenha um texto numa linha, centralizado.
