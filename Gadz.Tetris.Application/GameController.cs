@@ -8,15 +8,19 @@ using Gadz.Tetris.Domain.Models.Statistics;
 namespace Gadz.Tetris.Application;
 
 /// <summary>
-/// Controlador do Jogo. <para>Fornece uma interface para aplicação cliente.</para>
+/// Controlador do jogo (Facade): o único ponto de contato da aplicação cliente com o jogo.
+/// <para>Monta o domínio com a infraestrutura e repassa comandos, consultas e eventos do tabuleiro.</para>
 /// </summary>
 public class GameController
 {
     /// <summary>
-    /// Defines the _board
+    /// Menor largura e altura aceitas para o tabuleiro.
     /// </summary>
     private const int MINIMUM_BOARD_SIZE = 10;
 
+    /// <summary>
+    /// O tabuleiro controlado; nunca é exposto ao cliente.
+    /// </summary>
     private readonly Board _board;
 
     /// <summary>
@@ -45,7 +49,7 @@ public class GameController
     public event GameActionEventHandler? OnSlide;
 
     /// <summary>
-    /// Ocorre quando uma peça desliza na tela
+    /// Ocorre quando uma peça é derrubada até o fundo
     /// </summary>
     public event GameActionEventHandler? OnDrop;
 
@@ -65,88 +69,73 @@ public class GameController
     public event GameActionEventHandler? OnLose;
 
     /// <summary>
-    /// Gets a value indicating whether Playing
     /// Informa se o jogo está rodando
     /// </summary>
     public bool Playing => _board.IsPlaying;
 
     /// <summary>
-    /// Gets the BoardWidth
     /// Largura do tabuleiro
     /// </summary>
     public int BoardWidth => _board.Width;
 
     /// <summary>
-    /// Gets the BoardHeight
     /// Altura do tabuleiro
     /// </summary>
     public int BoardHeight => _board.Height;
 
     /// <summary>
-    /// Gets the Speed
     /// Velocidade do jogo
     /// </summary>
     public int Speed => _board.Speed;
 
     /// <summary>
-    /// Gets the Lines
     /// Quantidade de linhas destruídas
     /// </summary>
     public int Lines => _board.Lines;
 
 
     /// <summary>
-    /// Gets the Duration
     /// Tempo de duração total do jogo atual
     /// </summary>
     public TimeSpan Duration => _board.Duration;
 
     /// <summary>
-    /// Gets the Score
     /// Pontuação do jogador no jogo atual
     /// </summary>
     public int Score => _board.Score;
 
     /// <summary>
-    /// Gets the Level
     /// Nível de dificuldade
     /// </summary>
     public int Level => _board.Level;
 
     /// <summary>
-    /// Gets the State
     /// Estado do jogo
     /// </summary>
     public IBoardState State => _board.State;
 
     /// <summary>
-    /// Gets the CurrentPiecePosition
     /// Posição da peça atual
     /// </summary>
     public Point CurrentPiecePosition => _board.CurrentPiece.Position;
 
     /// <summary>
-    /// Gets the CurrentBoard
-    /// Tabuleiro atual
-    /// </summary>
-    public Board Board => _board;
-
-    /// <summary>
-    /// Gets the Amount Tetris in the game
+    /// Pontos obtidos com TETRIS (4 linhas de uma vez)
     /// </summary>
     public int Tetris => _board.Tetris;
 
     /// <summary>
-    /// 
+    /// Fração da pontuação obtida com TETRIS
     /// </summary>
     public float TetrisRate => _board.TetrisRate;
 
     /// <summary>
-    /// Prevents a default instance of the <see cref="GameController"/> class from being created.
+    /// Valida as dimensões, cria o tabuleiro e passa a repassar os eventos dele. Use <see cref="Create"/>.
     /// </summary>
-    /// <param name="width">The width<see cref="int"/></param>
-    /// <param name="height">The height<see cref="int"/></param>
+    /// <param name="width">Largura do tabuleiro</param>
+    /// <param name="height">Altura do tabuleiro</param>
     /// <param name="repository">Repositório onde as estatísticas são guardadas</param>
+    /// <exception cref="ArgumentException">Se a largura ou a altura for menor que <see cref="MINIMUM_BOARD_SIZE"/>.</exception>
     private GameController(int width, int height, IStatsRepository repository)
     {
         if (width < MINIMUM_BOARD_SIZE)
@@ -175,9 +164,10 @@ public class GameController
     /// Cria um novo Controlador do Jogo
     /// </summary>
     /// <param name="width">Largura do tabuleiro</param>
-    /// <param name="height">Algura do tabuleiro</param>
+    /// <param name="height">Altura do tabuleiro</param>
     /// <param name="repository">Repositório das estatísticas; se omitido, usa o arquivo em disco (<see cref="StatsRepository"/>)</param>
     /// <returns>Uma instância do Controlador do Jogo</returns>
+    /// <exception cref="ArgumentException">Se a largura ou a altura for menor que 10.</exception>
     public static GameController Create(int width, int height, IStatsRepository? repository = null)
     {
         return new GameController(width, height, repository ?? new StatsRepository());
@@ -229,7 +219,7 @@ public class GameController
     public void Save() => _board.Save();
 
     /// <summary>
-    /// Sai do j ogo
+    /// Sai do jogo e salva as estatísticas da partida
     /// </summary>
     public void Exit()
     {
@@ -260,7 +250,7 @@ public class GameController
     /// <summary>
     /// Blocos da peça atual
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Os 4 blocos da peça atual.</returns>
     public IEnumerable<Block> GetActualBlocks() => _board.CurrentPiece.Blocks;
 
     /// <summary>
@@ -274,13 +264,23 @@ public class GameController
     /// <summary>
     /// Blocos da próxima peça.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Os 4 blocos da próxima peça, na posição de entrada.</returns>
     public IEnumerable<Block> GetNextBlocks() => _board.NextPiece.Blocks;
+
+    /// <summary>
+    /// Estatísticas da partida atual, para exibir ao final do jogo.
+    /// </summary>
+    /// <returns>Um retrato das estatísticas no momento da chamada.</returns>
+    public StatsSnapshot GetStats()
+    {
+        var stats = _board.Stats;
+        return new(stats.Score, stats.Level, stats.Lines, stats.Blocks, stats.Duration, stats.TetrisRate);
+    }
 
     /// <summary>
     /// Maior pontuação registrada
     /// </summary>
-    /// <returns></returns>
+    /// <returns>O recorde guardado no repositório.</returns>
     public int GetMaxScore()
     {
         return _board.Record;

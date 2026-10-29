@@ -4,10 +4,19 @@ using Gadz.Tetris.Domain.Models.Statistics;
 namespace Gadz.Tetris.Domain.Models.Boards;
 
 /// <summary>
-/// Defines the <see cref="Board" />
+/// O tabuleiro de jogo: a peça atual e a próxima, os blocos assentados, o estado e as estatísticas da partida.
+/// Todas as regras de movimento, assentamento e fim de jogo passam por aqui.
 /// </summary>
 public class Board : Entity
 {
+    /// <summary>
+    /// Onde cada nova peça entra no tabuleiro: o canto superior esquerdo.
+    /// </summary>
+    private static readonly Point SPAWN_POSITION = new(0, 0);
+
+    /// <summary>
+    /// Cria as novas peças na posição de entrada.
+    /// </summary>
     private PieceBuilder _pieceBuilder;
 
     /// <summary>
@@ -16,7 +25,7 @@ public class Board : Entity
     private readonly IPieceGenerator _pieceGenerator;
 
     /// <summary>
-    /// Defines the _repository
+    /// Onde as estatísticas são guardadas ao sair e de onde vem o recorde.
     /// </summary>
     private IStatsRepository _repository;
 
@@ -37,22 +46,22 @@ public class Board : Entity
     private int _loopGeneration;
 
     /// <summary>
-    /// Gets the Dimension
+    /// Largura e altura do tabuleiro, em células.
     /// </summary>
     public Size Dimension { get; private set; }
 
     /// <summary>
-    /// Gets the State
+    /// O estado atual (jogando, pausado ou encerrado), que define o que é permitido.
     /// </summary>
     public IBoardState State { get; private set; }
 
     /// <summary>
-    /// Gets the Stats
+    /// As estatísticas da partida em andamento.
     /// </summary>
     public Stats Stats { get; private set; }
 
     /// <summary>
-    /// Gets a value indicating whether IsPlaying
+    /// Se a partida está em andamento.
     /// </summary>
     public bool IsPlaying
     {
@@ -60,57 +69,57 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// Gets the CurrentPiece
+    /// A peça controlada pelo jogador.
     /// </summary>
     public Piece CurrentPiece { get; private set; }
 
     /// <summary>
-    /// Gets the NextPiece
+    /// A peça que entra quando a atual for assentada.
     /// </summary>
     public Piece NextPiece { get; private set; }
 
     /// <summary>
-    /// Gets the Level
+    /// O nível atual.
     /// </summary>
     public int Level => Stats.Level;
 
     /// <summary>
-    /// Gets the Lines
+    /// Linhas removidas na partida.
     /// </summary>
     public int Lines => Stats.Lines;
 
     /// <summary>
-    /// Gets the Blocks
+    /// Os blocos já assentados no tabuleiro.
     /// </summary>
     public IReadOnlyList<Block> Blocks => _playfield.Blocks;
 
     /// <summary>
-    /// Gets the Record
+    /// A maior pontuação guardada no repositório quando o tabuleiro foi criado.
     /// </summary>
     public int Record { get; private set; }
 
     /// <summary>
-    /// Gets the Duration
+    /// Tempo jogado, sem contar as pausas.
     /// </summary>
     public TimeSpan Duration => Stats.Duration;
 
     /// <summary>
-    /// Gets the Height
+    /// Quantidade de linhas do tabuleiro.
     /// </summary>
     public int Height => Dimension.Height;
 
     /// <summary>
-    /// Gets the Width
+    /// Quantidade de colunas do tabuleiro.
     /// </summary>
     public int Width => Dimension.Width;
 
     /// <summary>
-    /// Gets the Speed
+    /// A velocidade atual.
     /// </summary>
     public int Speed => Stats.Speed;
 
     /// <summary>
-    /// Gets the Score
+    /// A pontuação da partida.
     /// </summary>
     public int Score => Stats.Score;
 
@@ -120,72 +129,72 @@ public class Board : Entity
     public int Frequency => Stats.Interval;
 
     /// <summary>
-    /// 
+    /// Pontos obtidos com TETRIS (4 linhas de uma vez).
     /// </summary>
     public int Tetris => Stats.Tetris;
 
     /// <summary>
-    /// 
+    /// Fração da pontuação obtida com TETRIS.
     /// </summary>
     public float TetrisRate => Stats.TetrisRate;
 
     /// <summary>
-    /// Defines the OnRefresh
+    /// Ocorre a cada mudança visível no tabuleiro (peça movida ou assentada, linhas removidas, início e fim da partida).
     /// </summary>
     public event GameActionEventHandler? OnRefresh;
 
     /// <summary>
-    /// Defines the OnFinish
+    /// Ocorre quando o jogador encerra a partida.
     /// </summary>
     public event GameActionEventHandler? OnFinish;
 
     /// <summary>
-    /// Defines the OnClear
+    /// Ocorre quando linhas completas são removidas.
     /// </summary>
     public event GameActionEventHandler? OnClear;
 
     /// <summary>
-    /// Defines the OnMove
+    /// Ocorre quando a peça atual se move ou gira.
     /// </summary>
     public event GameActionEventHandler? OnMove;
 
     /// <summary>
-    /// Defines the OnSlide
+    /// Ocorre a cada passo de uma peça deslizando (smash down ou Ctrl+seta).
     /// </summary>
     public event GameActionEventHandler? OnSlide;
 
     /// <summary>
-    /// Defines the OnDrop
+    /// Ocorre quando a peça é derrubada até o fundo (smash down).
     /// </summary>
     public event GameActionEventHandler? OnDrop;
 
     /// <summary>
-    /// Defines the OnPause
+    /// Ocorre quando a partida é pausada.
     /// </summary>
     public event GameActionEventHandler? OnPause;
 
     /// <summary>
-    /// Defines the OnContinue
+    /// Ocorre quando uma partida pausada continua.
     /// </summary>
     public event GameActionEventHandler? OnContinue;
 
     /// <summary>
-    /// Defines the OnContinue
+    /// Ocorre quando o jogador perde: a peça que acabou de entrar já nasce sobre blocos assentados.
     /// </summary>
     public event GameActionEventHandler? OnLose;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Board"/> class.
+    /// Cria o tabuleiro pausado, com a peça atual e a próxima já sorteadas. A partida começa em <see cref="Start"/>.
     /// </summary>
-    /// <param name="repository">The repository<see cref="IStatsRepository"/></param>
-    /// <param name="width">The width<see cref="int"/></param>
-    /// <param name="height">The height<see cref="int"/></param>
+    /// <param name="repository">Onde as estatísticas são guardadas e de onde vem o recorde.</param>
+    /// <param name="width">Quantidade de colunas.</param>
+    /// <param name="height">Quantidade de linhas.</param>
     /// <param name="pieceGenerator">Gerador das novas peças; se omitido, as peças são sorteadas.</param>
     public Board(IStatsRepository repository, int width, int height, IPieceGenerator? pieceGenerator = null)
     {
         _repository = repository;
         _pieceGenerator = pieceGenerator ?? new RandomPieceGenerator();
-        _pieceBuilder = new PieceBuilder().OnBoard(this);
+        _pieceBuilder = new PieceBuilder();
         Dimension = new Size(width, height);
         _playfield = new Playfield(Dimension);
         Stats = new Stats();
@@ -196,7 +205,7 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// The SmashDown
+    /// Derruba a peça atual até onde ela couber e a assenta.
     /// </summary>
     public void SmashDown()
     {
@@ -213,7 +222,7 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// The SlideRight
+    /// Desliza a peça atual para a direita até a borda ou até um bloco.
     /// </summary>
     public void SlideRight()
     {
@@ -231,7 +240,7 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// The SlideLeft
+    /// Desliza a peça atual para a esquerda até a borda ou até um bloco.
     /// </summary>
     public void SlideLeft()
     {
@@ -249,7 +258,7 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// The Pause
+    /// Pausa a partida, se o estado permitir, e para de contar o tempo.
     /// </summary>
     public void Pause()
     {
@@ -267,7 +276,7 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// The Continue
+    /// Continua a partida pausada, se o estado permitir, e retoma a descida automática.
     /// </summary>
     public void Continue()
     {
@@ -304,7 +313,7 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// The Finish
+    /// Encerra a partida por decisão do jogador.
     /// </summary>
     public void Finish()
     {
@@ -318,7 +327,7 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// The Finish
+    /// Encerra a partida por derrota.
     /// </summary>
     public void Lose()
     {
@@ -333,7 +342,7 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// The Start
+    /// Começa uma partida nova: limpa o tabuleiro, sorteia as peças e inicia a descida automática.
     /// </summary>
     public void Start()
     {
@@ -350,7 +359,7 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// The Restart
+    /// Encerra a partida atual e começa outra.
     /// </summary>
     public void Restart()
     {
@@ -362,7 +371,7 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// The Save
+    /// Guarda as estatísticas da partida no repositório.
     /// </summary>
     public void Save()
     {
@@ -392,9 +401,9 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// The Load
+    /// Substitui as estatísticas pelas de uma partida guardada.
     /// </summary>
-    /// <param name="id">The id<see cref="Identity"/></param>
+    /// <param name="id">A identidade da partida no repositório.</param>
     public void Load(Identity id)
     {
         lock (_sync)
@@ -404,7 +413,7 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// The MoveDown
+    /// Desce a peça atual uma linha; se ela não puder descer, é assentada.
     /// </summary>
     public void MoveDown()
     {
@@ -420,7 +429,7 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// The MoveRight
+    /// Move a peça atual uma coluna para a direita, se couber.
     /// </summary>
     public void MoveRight()
     {
@@ -435,7 +444,7 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// The MoveLeft
+    /// Move a peça atual uma coluna para a esquerda, se couber.
     /// </summary>
     public void MoveLeft()
     {
@@ -450,7 +459,7 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// The Rotate
+    /// Gira a peça atual, se a rotação couber no tabuleiro. Encostada na parede, a peça é empurrada para dentro.
     /// </summary>
     public void Rotate()
     {
@@ -464,6 +473,7 @@ public class Board : Entity
             // a colisão é testada numa cópia já girada; testar a peça atual deixaria a rotação sobrepor blocos
             var rotated = CurrentPiece.Clone();
             rotated.Rotate();
+            KeepWithinWidth(rotated);
 
             if (!Fits(rotated))
             {
@@ -499,6 +509,25 @@ public class Board : Entity
     private bool Fits(Piece piece)
     {
         return piece.Blocks.All(_playfield.Contains) && !_playfield.Collides(piece);
+    }
+
+    /// <summary>
+    /// Empurra a peça na horizontal até ela ficar entre as bordas, para que girar encostado na parede seja possível.
+    /// </summary>
+    /// <param name="piece">A peça recém-girada.</param>
+    private void KeepWithinWidth(Piece piece)
+    {
+        var minX = piece.Blocks.Min(block => block.X);
+        var maxX = piece.Blocks.Max(block => block.X);
+
+        if (minX < 0)
+        {
+            piece.MoveBy(-minX, 0);
+        }
+        else if (maxX >= Width)
+        {
+            piece.MoveBy(Width - 1 - maxX, 0);
+        }
     }
 
     /// <summary>
@@ -566,7 +595,7 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// The RefreshAsync
+    /// Inicia, numa thread de background, o loop que desce a peça a cada <see cref="Frequency"/> ms enquanto a partida estiver em andamento.
     /// </summary>
     private void RefreshAsync()
     {
@@ -599,9 +628,8 @@ public class Board : Entity
     private Piece CreateNextPiece()
     {
         var (type, rotation) = _pieceGenerator.Next();
-        var position = new Point(0, 0);
         var piece = _pieceBuilder.OfType(type)
-            .OnPosition(position)
+            .OnPosition(SPAWN_POSITION)
             .WithRotation(rotation)
             .Build();
 

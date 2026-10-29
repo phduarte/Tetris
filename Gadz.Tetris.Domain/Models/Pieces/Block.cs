@@ -1,28 +1,25 @@
 ﻿namespace Gadz.Tetris.Domain.Models.Pieces;
 
 /// <summary>
-/// Bloco
+/// Uma célula colorida do tabuleiro: um dos 4 blocos de uma peça, ou um bloco já assentado.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref=""/> class.
-/// </remarks>
-/// <param name="x">The x<see cref="int"/></param>
-/// <param name="y">The y<see cref="int"/></param>
-/// <param name="color">The color<see cref="PieceColor"/></param>
+/// <param name="x">A coluna.</param>
+/// <param name="y">A linha.</param>
+/// <param name="color">A cor do bloco.</param>
 public struct Block(int x, int y, PieceColor color)
 {
     /// <summary>
-    /// Gets the Point
+    /// A célula que o bloco ocupa.
     /// </summary>
     public Point Point { get; private set; } = new Point(x, y);
 
     /// <summary>
-    /// Gets the Color
+    /// A cor do bloco (a cor da peça a que ele pertence).
     /// </summary>
     public PieceColor Color { get; private set; } = color;
 
     /// <summary>
-    /// Gets the X
+    /// A coluna do bloco.
     /// </summary>
     public int X
     {
@@ -30,7 +27,7 @@ public struct Block(int x, int y, PieceColor color)
     }
 
     /// <summary>
-    /// Gets the Y
+    /// A linha do bloco.
     /// </summary>
     public int Y
     {
@@ -38,19 +35,19 @@ public struct Block(int x, int y, PieceColor color)
     }
 
     /// <summary>
-    /// The CollideWith
+    /// Informa se os dois blocos ocupam a mesma célula, independentemente da cor.
     /// </summary>
-    /// <param name="block">The block<see cref="Block"/></param>
-    /// <returns>The <see cref="bool"/></returns>
+    /// <param name="block">O outro bloco.</param>
+    /// <returns><c>true</c> se estiverem na mesma célula.</returns>
     public bool CollideWith(Block block)
     {
         return Point.ColideCom(block.Point);
     }
 
     /// <summary>
-    /// The ToString
+    /// A célula do bloco no formato <c>XxY</c>.
     /// </summary>
-    /// <returns>The <see cref="string"/></returns>
+    /// <returns>Por exemplo, <c>3x5</c>.</returns>
     public override string ToString()
     {
         return Point.ToString();

@@ -3,17 +3,19 @@
 namespace Gadz.Tetris.Domain.Models.Pieces;
 
 /// <summary>
-/// Defines the <see cref="Piece" />
+/// Um tetraminó: tipo, posição e rotação. A peça só sabe se mover e girar; quem decide se o movimento
+/// é válido (limites e colisão) é o <see cref="Board"/>. Crie peças com o <see cref="PieceBuilder"/>.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="Piece"/> class.
-/// </remarks>
-/// <param name="board">The board<see cref="Board"/></param>
-/// <param name="configuration">The configuration<see cref="PieceConfiguration"/></param>
-public abstract class Piece(Board board, PieceConfiguration configuration) : Entity
+/// <param name="configuration">Tipo, posição e rotação iniciais.</param>
+public abstract class Piece(PieceConfiguration configuration) : Entity
 {
     /// <summary>
-    /// Defines the _colors
+    /// Quantidade de rotações de uma peça; depois da última, volta à rotação 0.
+    /// </summary>
+    private const int ROTATION_COUNT = 4;
+
+    /// <summary>
+    /// A cor fixa de cada tipo de peça.
     /// </summary>
     private static IDictionary<PieceType, PieceColor> _colors = new Dictionary<PieceType, PieceColor> {
             { PieceType.I, PieceColor.Cyan },
@@ -26,79 +28,57 @@ public abstract class Piece(Board board, PieceConfiguration configuration) : Ent
     };
 
     /// <summary>
-    /// Gets the Rotation
+    /// A rotação atual, de 0 a 3.
     /// </summary>
     public int Rotation { get; private set; } = configuration.Rotation;
 
     /// <summary>
-    /// Gets the Color
+    /// A cor da peça, definida pelo seu tipo.
     /// </summary>
     public PieceColor Color => GetPieceColor(Type);
 
     /// <summary>
-    /// Gets the Position
+    /// O canto superior esquerdo da forma da peça no tabuleiro.
     /// </summary>
     public Point Position { get; private set; } = configuration.Position;
 
     /// <summary>
-    /// Gets the Type
+    /// O tetraminó que a peça representa.
     /// </summary>
     public PieceType Type { get; protected set; } = configuration.Type;
 
     /// <summary>
-    /// Gets the Board
+    /// A forma da peça: para cada rotação (0 a 3), o deslocamento de cada um dos 4 blocos em relação a <see cref="Position"/>.
+    /// Cada tetraminó define a sua (Strategy); a montagem dos blocos é comum a todos.
     /// </summary>
-    public Board Board { get; private set; } = board;
+    protected abstract Point[][] Shapes { get; }
 
     /// <summary>
-    /// Gets the Blocks
+    /// Os 4 blocos que a peça ocupa no tabuleiro, na posição e rotação atuais.
     /// </summary>
-    public abstract Block[] Blocks { get; }
+    public Block[] Blocks =>
+        [.. Shapes[Rotation].Select(offset => new Block(Position.X + offset.X, Position.Y + offset.Y, Color))];
 
     /// <summary>
-    /// The Rotate
+    /// Gira a peça para a próxima rotação, sem verificar limites nem colisão (isso cabe ao <see cref="Board"/>).
     /// </summary>
     public void Rotate()
     {
-        Rotation = Rotation == 3 ? 0 : ++Rotation;
-        PreventOverlap();
-    }
-
-    private void PreventOverlap()
-    {
-        int maxX = Blocks.Max(x => x.X);
-        int minX = Blocks.Min(x => x.X);
-
-        if (maxX > Board.Width - 1)
-        {
-            int excess = maxX - (Board.Width - 1);
-            for (int i = 0; i < excess; i++)
-            {
-                MoveLeft();
-            }
-        }
-
-        if (minX < 0)
-        {
-            for (int i = minX; i < 0; i++)
-            {
-                MoveRight();
-            }
-        }
+        Rotation = (Rotation + 1) % ROTATION_COUNT;
     }
 
     /// <summary>
-    /// The MoveDown
+    /// Desce a peça uma linha, sem verificar limites nem colisão.
     /// </summary>
     public void MoveDown() => MoveBy(0, 1);
 
     /// <summary>
-    /// The MoveRight
+    /// Move a peça uma coluna para a direita, sem verificar limites nem colisão.
     /// </summary>
     public void MoveRight() => MoveBy(1, 0);
 
     /// <summary>
-    /// The MoveLeft
+    /// Move a peça uma coluna para a esquerda, sem verificar limites nem colisão.
     /// </summary>
     public void MoveLeft() => MoveBy(-1, 0);
 
@@ -113,21 +93,21 @@ public abstract class Piece(Board board, PieceConfiguration configuration) : Ent
     }
 
     /// <summary>
-    /// The Clone
+    /// Cria uma cópia independente da peça, com a mesma identidade. Usada para testar um movimento antes de aplicá-lo.
     /// </summary>
-    /// <returns>The <see cref="Piece"/></returns>
+    /// <returns>A cópia.</returns>
     public virtual Piece Clone()
     {
-        var clone = new PieceBuilder().OnBoard(Board).OfType(Type).OnPosition(Position).WithRotation(Rotation).Build();
+        var clone = new PieceBuilder().OfType(Type).OnPosition(Position).WithRotation(Rotation).Build();
         clone.Id = Id;
         return clone;
     }
 
     /// <summary>
-    /// The GetPieceColor
+    /// A cor fixa de um tipo de peça.
     /// </summary>
-    /// <param name="index">The index<see cref="PieceType"/></param>
-    /// <returns>The <see cref="PieceColor"/></returns>
+    /// <param name="index">O tipo da peça.</param>
+    /// <returns>A cor do tipo, ou <see cref="PieceColor.None"/> se o tipo for desconhecido.</returns>
     public static PieceColor GetPieceColor(PieceType index)
     {
         try
@@ -141,10 +121,10 @@ public abstract class Piece(Board board, PieceConfiguration configuration) : Ent
     }
 
     /// <summary>
-    /// The Equals
+    /// Duas peças são iguais quando ocupam as mesmas células, na mesma ordem de blocos.
     /// </summary>
-    /// <param name="obj">The obj<see cref="object"/></param>
-    /// <returns>The <see cref="bool"/></returns>
+    /// <param name="obj">O objeto a comparar.</param>
+    /// <returns><c>true</c> se <paramref name="obj"/> for uma peça com os mesmos blocos.</returns>
     public override bool Equals(object? obj)
     {
         if (obj is Piece p)
@@ -154,17 +134,18 @@ public abstract class Piece(Board board, PieceConfiguration configuration) : Ent
         return false;
     }
 
-    /// <summary>
-    /// The GetHashCode
-    /// </summary>
-    /// <returns>The <see cref="int"/></returns>
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         return ToString().GetHashCode();
     }
 
+    /// <summary>
+    /// As células ocupadas pela peça, separadas por vírgula (ex.: <c>0x0,0x1,0x2,0x3</c>).
+    /// </summary>
+    /// <returns>Os blocos em texto.</returns>
     public override string ToString()
     {
-        return $"{Blocks[0]},{Blocks[1]},{Blocks[2]},{Blocks[3]}";
+        return string.Join(",", Blocks);
     }
 }

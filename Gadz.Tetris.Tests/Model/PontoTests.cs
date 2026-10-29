@@ -4,12 +4,12 @@ using NUnit.Framework;
 namespace Gadz.Tetris.Tests.Model;
 
 /// <summary>
-/// Defines the <see cref="PontoTests" />
+/// Testes de <see cref="Point"/>.
 /// </summary>
 public class PontoTests
 {
     /// <summary>
-    /// The DeveInstanciar
+    /// O ponto é criado com as coordenadas informadas.
     /// </summary>
     [Test]
     public void DeveInstanciar()
@@ -20,7 +20,7 @@ public class PontoTests
     }
 
     /// <summary>
-    /// The DeveSerIguais
+    /// Pontos com as mesmas coordenadas são iguais.
     /// </summary>
     [Test]
     public void DeveSerIguais()
@@ -33,7 +33,7 @@ public class PontoTests
     }
 
     /// <summary>
-    /// The DeveSerDiferentes
+    /// Pontos com coordenadas diferentes são diferentes.
     /// </summary>
     [Test]
     public void DeveSerDiferentes()
@@ -45,7 +45,7 @@ public class PontoTests
     }
 
     /// <summary>
-    /// The DevemColidir
+    /// Pontos na mesma célula colidem.
     /// </summary>
     [Test]
     public void DevemColidir()
@@ -56,7 +56,7 @@ public class PontoTests
     }
 
     /// <summary>
-    /// The NaoDevemColidir
+    /// Pontos em células diferentes não colidem.
     /// </summary>
     [Test]
     public void NaoDevemColidir()

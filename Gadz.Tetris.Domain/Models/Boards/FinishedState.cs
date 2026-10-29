@@ -1,7 +1,7 @@
 ﻿namespace Gadz.Tetris.Domain.Models.Boards;
 
 /// <summary>
-/// Defines the <see cref="FinishedState" />
+/// Partida encerrada, por desistência ou derrota: só é possível começar outra.
 /// </summary>
 internal class FinishedState : IBoardState
 {
@@ -17,49 +17,33 @@ internal class FinishedState : IBoardState
     {
     }
 
-    /// <summary>
-    /// Gets a value indicating whether IsPlaying
-    /// </summary>
+    /// <inheritdoc/>
     public bool IsPlaying => false;
 
-    /// <summary>
-    /// Gets a value indicating whether CanChangeStats
-    /// </summary>
+    /// <inheritdoc/>
     public bool CanChangeStats => false;
 
-    /// <summary>
-    /// Gets a value indicating whether CanStart
-    /// </summary>
+    /// <inheritdoc/>
     public bool CanStart => true;
 
-    /// <summary>
-    /// Gets a value indicating whether CanMove
-    /// </summary>
+    /// <inheritdoc/>
     public bool CanMove => false;
 
-    /// <summary>
-    /// Gets a value indicating whether CanPause
-    /// </summary>
+    /// <inheritdoc/>
     public bool CanPause => false;
 
-    /// <summary>
-    /// Gets a value indicating whether CanContinue
-    /// </summary>
+    /// <inheritdoc/>
     public bool CanContinue => false;
 
-    /// <summary>
-    /// Gets a value indicating whether CanRestart
-    /// </summary>
+    /// <inheritdoc/>
     public bool CanRestart => true;
 
-    /// <summary>
-    /// Gets a value indicating whether CanFinish
-    /// </summary>
+    /// <inheritdoc/>
     public bool CanFinish => false;
 
     /// <summary>
-    /// The ToString
+    /// O nome do estado, verificado nos testes.
     /// </summary>
-    /// <returns>The <see cref="string"/></returns>
+    /// <returns>O nome do estado.</returns>
     public override string ToString() => "Finished";
 }

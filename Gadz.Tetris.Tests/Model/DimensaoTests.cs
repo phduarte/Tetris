@@ -4,12 +4,12 @@ using NUnit.Framework;
 namespace Gadz.Tetris.Tests.Model;
 
 /// <summary>
-/// Defines the <see cref="DimensaoTests" />
+/// Testes de <see cref="Size"/>.
 /// </summary>
 public class DimensaoTests
 {
     /// <summary>
-    /// The DeveInstanciar
+    /// A dimensão é criada com a largura e a altura informadas.
     /// </summary>
     [Test]
     public void DeveInstanciar()

@@ -5,13 +5,14 @@ using Gadz.Tetris.Domain.Models.Statistics;
 namespace Gadz.Tetris.Data;
 
 /// <summary>
-/// Defines the <see cref="StatsRepository" />
+/// Guarda as estatísticas num arquivo texto separado por tab (<c>%USERPROFILE%\Tetris\stats.mc</c>), uma partida por linha.
+/// O arquivo é lido uma vez, no construtor estático, e mantido em cache.
 /// </summary>
 [ExcludeFromCodeCoverage]
 public class StatsRepository : IStatsRepository
 {
     /// <summary>
-    /// Gets the StatsFilePath
+    /// Caminho do arquivo de estatísticas na pasta do usuário.
     /// </summary>
     private static string StatsFilePath
     {
@@ -23,57 +24,57 @@ public class StatsRepository : IStatsRepository
     }
 
     /// <summary>
-    /// Defines the DELIMITADOR
+    /// Separador das colunas de cada linha do arquivo.
     /// </summary>
     private const char DELIMITADOR = '\t';
 
     /// <summary>
-    /// Defines the COL_ID
+    /// Índice da coluna da identidade da partida. A ordem das colunas é fixa: só acrescente novas ao final.
     /// </summary>
     private const int COL_ID = 0;
 
     /// <summary>
-    /// Defines the COL_POINTS
+    /// Índice da coluna da pontuação.
     /// </summary>
     private const int COL_POINTS = 1;
 
     /// <summary>
-    /// Defines the COL_LEVEL
+    /// Índice da coluna do nível.
     /// </summary>
     private const int COL_LEVEL = 2;
 
     /// <summary>
-    /// Defines the COL_LINES
+    /// Índice da coluna das linhas removidas.
     /// </summary>
     private const int COL_LINES = 3;
 
     /// <summary>
-    /// Defines the COL_SPEED
+    /// Índice da coluna da velocidade.
     /// </summary>
     private const int COL_SPEED = 4;
 
     /// <summary>
-    /// Defines the COL_MOVES
+    /// Índice da coluna dos movimentos.
     /// </summary>
     private const int COL_MOVES = 5;
 
     /// <summary>
-    /// Defines the COL_BLOCKS
+    /// Índice da coluna das peças assentadas.
     /// </summary>
     private const int COL_BLOCKS = 6;
 
     /// <summary>
-    /// Defines the COL_TIME
+    /// Índice da coluna da duração, gravada em ticks.
     /// </summary>
     private const int COL_TIME = 7;
 
     /// <summary>
-    /// Defines the _cache
+    /// As partidas já lidas do arquivo ou salvas nesta execução.
     /// </summary>
     private static IList<Stats> _cache;
 
     /// <summary>
-    /// Initializes static members of the <see cref="StatsRepository"/> class.
+    /// Carrega o arquivo para o cache, criando-o se ainda não existir.
     /// </summary>
     static StatsRepository()
     {
@@ -81,9 +82,9 @@ public class StatsRepository : IStatsRepository
     }
 
     /// <summary>
-    /// The Save
+    /// Acrescenta a partida ao final do arquivo e ao cache.
     /// </summary>
-    /// <param name="stats">The stats<see cref="Stats"/></param>
+    /// <param name="stats">As estatísticas da partida.</param>
     public async void Save(Stats stats)
     {
         if (!File.Exists(StatsFilePath))
@@ -100,19 +101,20 @@ public class StatsRepository : IStatsRepository
     }
 
     /// <summary>
-    /// The Load
+    /// Busca uma partida guardada.
     /// </summary>
-    /// <param name="id">The id<see cref="Identity"/></param>
-    /// <returns>The <see cref="Stats"/></returns>
+    /// <param name="id">A identidade da partida.</param>
+    /// <returns>As estatísticas da partida.</returns>
+    /// <exception cref="InvalidOperationException">Se não houver partida com essa identidade.</exception>
     public Stats Load(Identity id)
     {
         return All().First(x => x.Id.Equals(id));
     }
 
     /// <summary>
-    /// The MaxScore
+    /// A maior pontuação entre as partidas guardadas.
     /// </summary>
-    /// <returns>The <see cref="int"/></returns>
+    /// <returns>O recorde, ou 0 se não houver partidas.</returns>
     public int MaxScore()
     {
         try
@@ -126,18 +128,18 @@ public class StatsRepository : IStatsRepository
     }
 
     /// <summary>
-    /// The All
+    /// Todas as partidas guardadas.
     /// </summary>
-    /// <returns>The <see cref="IEnumerable{Stats}"/></returns>
+    /// <returns>As partidas em cache.</returns>
     public IEnumerable<Stats> All()
     {
         return _cache;
     }
 
     /// <summary>
-    /// The LoadCache
+    /// Lê todas as partidas do arquivo.
     /// </summary>
-    /// <returns>The <see cref="List{Stats}"/></returns>
+    /// <returns>As partidas lidas; vazia se o arquivo não existir.</returns>
     private static List<Stats> LoadCache()
     {
         var results = new List<Stats>();
@@ -158,6 +160,11 @@ public class StatsRepository : IStatsRepository
         return results;
     }
 
+    /// <summary>
+    /// Converte uma linha do arquivo num registro de partida.
+    /// </summary>
+    /// <param name="line">A linha, com as colunas separadas por <see cref="DELIMITADOR"/>.</param>
+    /// <returns>O registro da partida.</returns>
     private static StatsRecord Map(string line)
     {
         var cols = line.Split(DELIMITADOR);
@@ -175,6 +182,11 @@ public class StatsRepository : IStatsRepository
         };
     }
 
+    /// <summary>
+    /// Converte uma partida numa linha do arquivo, na ordem fixa das colunas.
+    /// </summary>
+    /// <param name="stats">As estatísticas da partida.</param>
+    /// <returns>A linha a gravar.</returns>
     private static string Map(Stats stats)
     {
         var cols = new string[8];
@@ -192,9 +204,9 @@ public class StatsRepository : IStatsRepository
     }
 
     /// <summary>
-    /// The StatsFileExists
+    /// Garante que o arquivo exista, criando a pasta e um arquivo vazio se preciso.
     /// </summary>
-    /// <returns>The <see cref="bool"/></returns>
+    /// <returns><c>true</c> se o arquivo existia antes da chamada.</returns>
     private static bool StatsFileExists()
     {
         var fi = new FileInfo(StatsFilePath);

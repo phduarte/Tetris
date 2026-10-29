@@ -1,26 +1,26 @@
 ﻿namespace Gadz.Tetris.Domain.Models;
 
 /// <summary>
-/// Defines the <see cref="Entity" />
+/// Base das entidades do domínio: objetos com identidade própria, que continuam os mesmos mesmo quando seus dados mudam.
 /// </summary>
 public abstract class Entity
 {
     /// <summary>
-    /// Gets the Id
+    /// A identidade da entidade.
     /// </summary>
     public Identity Id { get; set; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Entity"/> class.
+    /// Cria a entidade com uma identidade já existente (por exemplo, ao carregar do repositório).
     /// </summary>
-    /// <param name="id">The id<see cref="Identity"/></param>
+    /// <param name="id">A identidade da entidade.</param>
     protected Entity(Identity id)
     {
         Id = id;
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Entity"/> class.
+    /// Cria a entidade com uma identidade nova.
     /// </summary>
     protected Entity()
     {
@@ -28,9 +28,9 @@ public abstract class Entity
     }
 
     /// <summary>
-    /// The ToString
+    /// A identidade em texto.
     /// </summary>
-    /// <returns>The <see cref="string"/></returns>
+    /// <returns>O valor de <see cref="Id"/>.</returns>
     public override string ToString()
     {
         return Id.ToString();

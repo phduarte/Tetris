@@ -1,7 +1,7 @@
 ﻿namespace Gadz.Tetris.Domain.Models.Boards;
 
 /// <summary>
-/// Defines the <see cref="PlayingState" />
+/// Partida em andamento: a peça desce sozinha e aceita comandos; pode ser pausada, reiniciada ou encerrada.
 /// </summary>
 internal class PlayingState : IBoardState
 {
@@ -17,49 +17,33 @@ internal class PlayingState : IBoardState
     {
     }
 
-    /// <summary>
-    /// Gets a value indicating whether IsPlaying
-    /// </summary>
+    /// <inheritdoc/>
     public bool IsPlaying => true;
 
-    /// <summary>
-    /// Gets a value indicating whether CanChangeStats
-    /// </summary>
+    /// <inheritdoc/>
     public bool CanChangeStats => true;
 
-    /// <summary>
-    /// Gets a value indicating whether CanStart
-    /// </summary>
+    /// <inheritdoc/>
     public bool CanStart => false;
 
-    /// <summary>
-    /// Gets a value indicating whether CanMove
-    /// </summary>
+    /// <inheritdoc/>
     public bool CanMove => true;
 
-    /// <summary>
-    /// Gets a value indicating whether CanPause
-    /// </summary>
+    /// <inheritdoc/>
     public bool CanPause => true;
 
-    /// <summary>
-    /// Gets a value indicating whether CanContinue
-    /// </summary>
+    /// <inheritdoc/>
     public bool CanContinue => false;
 
-    /// <summary>
-    /// Gets a value indicating whether CanRestart
-    /// </summary>
+    /// <inheritdoc/>
     public bool CanRestart => true;
 
-    /// <summary>
-    /// Gets a value indicating whether CanFinish
-    /// </summary>
+    /// <inheritdoc/>
     public bool CanFinish => true;
 
     /// <summary>
-    /// The ToString
+    /// O nome do estado, verificado nos testes.
     /// </summary>
-    /// <returns>The <see cref="string"/></returns>
+    /// <returns>O nome do estado.</returns>
     public override string ToString() => "Playing";
 }

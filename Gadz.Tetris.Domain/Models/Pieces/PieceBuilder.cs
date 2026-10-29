@@ -1,42 +1,36 @@
-﻿using Gadz.Tetris.Domain.Models.Boards;
-
-namespace Gadz.Tetris.Domain.Models.Pieces;
+﻿namespace Gadz.Tetris.Domain.Models.Pieces;
 
 /// <summary>
-/// Defines the <see cref="PieceBuilder" />
+/// Única forma de criar peças (Builder): escolhe o tetraminó concreto pelo <see cref="PieceType"/>,
+/// mantendo as classes <c>Tetramino*</c> internas ao domínio.
 /// </summary>
 public class PieceBuilder
 {
     /// <summary>
-    /// Defines the _pieceType
+    /// O tipo da peça a construir.
     /// </summary>
     private PieceType _pieceType;
 
     /// <summary>
-    /// Defines the _position
+    /// A posição da peça a construir.
     /// </summary>
     private Point _position;
 
     /// <summary>
-    /// Defines the _rotation
+    /// A rotação da peça a construir, de 0 a 3.
     /// </summary>
     private int _rotation;
 
     /// <summary>
-    /// Defines the _board
-    /// </summary>
-    private Board? _board;
-
-    /// <summary>
-    /// 
+    /// A configuração acumulada até aqui, entregue ao tetraminó em <see cref="Build"/>.
     /// </summary>
     public PieceConfiguration Configuration => new() { Type = _pieceType, Position = _position, Rotation = _rotation };
 
     /// <summary>
-    /// The OfType
+    /// Define o tipo da peça.
     /// </summary>
-    /// <param name="type">The type<see cref="PieceType"/></param>
-    /// <returns>The <see cref="PieceBuilder"/></returns>
+    /// <param name="type">O tetraminó.</param>
+    /// <returns>O próprio builder, para encadear chamadas.</returns>
     public PieceBuilder OfType(PieceType type)
     {
         _pieceType = type;
@@ -44,10 +38,10 @@ public class PieceBuilder
     }
 
     /// <summary>
-    /// The OnPosition
+    /// Define a posição da peça (o canto superior esquerdo da sua forma).
     /// </summary>
-    /// <param name="position">The position<see cref="Point"/></param>
-    /// <returns>The <see cref="PieceBuilder"/></returns>
+    /// <param name="position">A posição no tabuleiro.</param>
+    /// <returns>O próprio builder, para encadear chamadas.</returns>
     public PieceBuilder OnPosition(Point position)
     {
         _position = position;
@@ -55,10 +49,10 @@ public class PieceBuilder
     }
 
     /// <summary>
-    /// The WithRotation
+    /// Define a rotação da peça.
     /// </summary>
-    /// <param name="rotation">The rotation<see cref="int"/></param>
-    /// <returns>The <see cref="PieceBuilder"/></returns>
+    /// <param name="rotation">A rotação, de 0 a 3.</param>
+    /// <returns>O próprio builder, para encadear chamadas.</returns>
     public PieceBuilder WithRotation(int rotation)
     {
         _rotation = rotation;
@@ -66,33 +60,21 @@ public class PieceBuilder
     }
 
     /// <summary>
-    /// The OnBoard
+    /// Cria a peça com a configuração definida.
     /// </summary>
-    /// <param name="board">The board<see cref="Board"/></param>
-    /// <returns>The <see cref="PieceBuilder"/></returns>
-    public PieceBuilder OnBoard(Board board)
-    {
-        _board = board;
-        return this;
-    }
-
-    /// <summary>
-    /// The Build
-    /// </summary>
-    /// <returns>The <see cref="Piece"/></returns>
+    /// <returns>Uma nova peça.</returns>
+    /// <exception cref="NotImplementedException">Se o tipo não corresponder a nenhum tetraminó.</exception>
     public Piece Build()
     {
-        var board = _board ?? throw new InvalidOperationException($"Informe o tabuleiro com {nameof(OnBoard)} antes de construir a peça.");
-
         return _pieceType switch
         {
-            PieceType.T => new TetraminoT(board, Configuration),
-            PieceType.O => new TetraminoO(board, Configuration),
-            PieceType.I => new TetraminoI(board, Configuration),
-            PieceType.L => new TetraminoL(board, Configuration),
-            PieceType.J => new TetraminoJ(board, Configuration),
-            PieceType.S => new TetraminoS(board, Configuration),
-            PieceType.Z => new TetraminoZ(board, Configuration),
+            PieceType.T => new TetraminoT(Configuration),
+            PieceType.O => new TetraminoO(Configuration),
+            PieceType.I => new TetraminoI(Configuration),
+            PieceType.L => new TetraminoL(Configuration),
+            PieceType.J => new TetraminoJ(Configuration),
+            PieceType.S => new TetraminoS(Configuration),
+            PieceType.Z => new TetraminoZ(Configuration),
             _ => throw new NotImplementedException()
         };
     }

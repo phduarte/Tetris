@@ -1,50 +1,26 @@
-﻿using Gadz.Tetris.Domain.Models.Boards;
-
-namespace Gadz.Tetris.Domain.Models.Pieces;
+﻿namespace Gadz.Tetris.Domain.Models.Pieces;
 
 /// <summary>
-/// Defines the <see cref="TetraminoS" />
+/// Tetraminó S: dois pares de blocos desencontrados, com uma forma em pé e outra deitada.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="TetraminoS"/> class.
-/// </remarks>
-/// <param name="config">The position<see cref="PieceConfiguration"/></param>
-internal class TetraminoS(Board board, PieceConfiguration config) : Piece(board, config)
+/// <param name="config">Tipo, posição e rotação iniciais da peça.</param>
+internal class TetraminoS(PieceConfiguration config) : Piece(config)
 {
-    public override Block[] Blocks
-    {
-        get
-        {
-            var blocks = new Block[4];
-            int x = Position.X, y = Position.Y;
+    /// <summary>
+    /// O S em pé.
+    /// </summary>
+    private static readonly Point[] VERTICAL = [new(0, 0), new(0, 1), new(1, 1), new(1, 2)];
 
-            switch (Rotation)
-            {
-                case 0:
-                case 2:
-                    {
-                        blocks[0] = new Block(x, y, Color);
-                        blocks[1] = new Block(x, y + 1, Color);
-                        blocks[2] = new Block(x + 1, y + 1, Color);
-                        blocks[3] = new Block(x + 1, y + 2, Color);
+    /// <summary>
+    /// O S deitado.
+    /// </summary>
+    private static readonly Point[] HORIZONTAL = [new(0, 1), new(1, 1), new(1, 0), new(2, 0)];
 
-                        break;
-                    }
-                case 1:
-                case 3:
-                    {
-                        blocks[0] = new Block(x, y + 1, Color);
-                        blocks[1] = new Block(x + 1, y + 1, Color);
-                        blocks[2] = new Block(x + 1, y, Color);
-                        blocks[3] = new Block(x + 2, y, Color);
+    /// <summary>
+    /// A forma de cada rotação, de 0 a 3.
+    /// </summary>
+    private static readonly Point[][] SHAPES = [VERTICAL, HORIZONTAL, VERTICAL, HORIZONTAL];
 
-                        break;
-                    }
-                default:
-                    break;
-            }
-
-            return blocks;
-        }
-    }
+    /// <inheritdoc/>
+    protected override Point[][] Shapes => SHAPES;
 }

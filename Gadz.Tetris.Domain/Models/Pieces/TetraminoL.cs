@@ -1,54 +1,22 @@
-﻿using Gadz.Tetris.Domain.Models.Boards;
-
-namespace Gadz.Tetris.Domain.Models.Pieces;
+﻿namespace Gadz.Tetris.Domain.Models.Pieces;
 
 /// <summary>
-/// Defines the <see cref="TetraminoL" />
+/// Tetraminó L: o espelho do J, uma linha de três blocos com um quarto bloco dobrado numa das pontas.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="TetraminoL"/> class.
-/// </remarks>
-/// <param name="board">The parent board<see cref="Board"/></param>
-/// <param name="config">The configuration<see cref="PieceConfiguration"/></param>
-internal class TetraminoL(Board board, PieceConfiguration config) : Piece(board, config)
+/// <param name="config">Tipo, posição e rotação iniciais da peça.</param>
+internal class TetraminoL(PieceConfiguration config) : Piece(config)
 {
-    public override Block[] Blocks
-    {
-        get
-        {
-            var blocks = new Block[4];
-            int x = Position.X, y = Position.Y;
+    /// <summary>
+    /// A forma de cada rotação, de 0 a 3.
+    /// </summary>
+    private static readonly Point[][] SHAPES =
+    [
+        [new(0, 0), new(0, 1), new(0, 2), new(1, 2)],
+        [new(0, 1), new(1, 1), new(2, 1), new(2, 0)],
+        [new(0, 0), new(1, 0), new(1, 1), new(1, 2)],
+        [new(0, 0), new(1, 0), new(2, 0), new(0, 1)]
+    ];
 
-            if (Rotation == 0)
-            {
-                blocks[0] = new Block(x, y, Color);
-                blocks[1] = new Block(x, y + 1, Color);
-                blocks[2] = new Block(x, y + 2, Color);
-                blocks[3] = new Block(x + 1, y + 2, Color);
-            }
-            else if (Rotation == 1)
-            {
-                blocks[0] = new Block(x, y + 1, Color);
-                blocks[1] = new Block(x + 1, y + 1, Color);
-                blocks[2] = new Block(x + 2, y + 1, Color);
-                blocks[3] = new Block(x + 2, y, Color);
-            }
-            else if (Rotation == 2)
-            {
-                blocks[0] = new Block(x, y, Color);
-                blocks[1] = new Block(x + 1, y, Color);
-                blocks[2] = new Block(x + 1, y + 1, Color);
-                blocks[3] = new Block(x + 1, y + 2, Color);
-            }
-            else if (Rotation == 3)
-            {
-                blocks[0] = new Block(x, y, Color);
-                blocks[1] = new Block(x + 1, y, Color);
-                blocks[2] = new Block(x + 2, y, Color);
-                blocks[3] = new Block(x, y + 1, Color);
-            }
-
-            return blocks;
-        }
-    }
+    /// <inheritdoc/>
+    protected override Point[][] Shapes => SHAPES;
 }

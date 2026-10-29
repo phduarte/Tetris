@@ -4,12 +4,12 @@ using NUnit.Framework;
 namespace Gadz.Tetris.Tests.Model;
 
 /// <summary>
-/// Defines the <see cref="BlocoTests" />
+/// Testes de <see cref="Block"/>.
 /// </summary>
 public class BlocoTests
 {
     /// <summary>
-    /// The DeveColidir
+    /// Blocos na mesma célula colidem, mesmo com cores diferentes.
     /// </summary>
     [Test]
     public void DeveColidir()
@@ -22,7 +22,7 @@ public class BlocoTests
     }
 
     /// <summary>
-    /// The NaoDeveColidir
+    /// Blocos em células diferentes não colidem.
     /// </summary>
     [Test]
     public void NaoDeveColidir()
@@ -35,7 +35,7 @@ public class BlocoTests
     }
 
     /// <summary>
-    /// The DeveInstanciar
+    /// O bloco é criado na célula informada.
     /// </summary>
     [Test]
     public void DeveInstanciar()

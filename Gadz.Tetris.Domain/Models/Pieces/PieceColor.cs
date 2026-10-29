@@ -1,47 +1,47 @@
 ﻿namespace Gadz.Tetris.Domain.Models.Pieces;
 
 /// <summary>
-/// Defines the PieceColor
+/// Cor de um bloco. Cada <see cref="PieceType"/> tem uma cor fixa (ver <see cref="Piece.GetPieceColor"/>).
 /// </summary>
 public enum PieceColor
 {
     /// <summary>
-    /// Defines the None
+    /// Sem cor: célula vazia do tabuleiro.
     /// </summary>
     None = 0,
 
     /// <summary>
-    /// Defines the Yellow
+    /// Cor da peça O.
     /// </summary>
     Yellow,
 
     /// <summary>
-    /// Defines the Blue
+    /// Cor da peça J.
     /// </summary>
     Blue,
 
     /// <summary>
-    /// Defines the Cyan
+    /// Cor da peça I.
     /// </summary>
     Cyan,
 
     /// <summary>
-    /// Defines the Orange
+    /// Cor da peça L.
     /// </summary>
     Orange,
 
     /// <summary>
-    /// Defines the Green
+    /// Cor da peça S.
     /// </summary>
     Green,
 
     /// <summary>
-    /// Defines the Red
+    /// Cor da peça Z.
     /// </summary>
     Red,
 
     /// <summary>
-    /// Defines the Purple
+    /// Cor da peça T.
     /// </summary>
     Purple
 }

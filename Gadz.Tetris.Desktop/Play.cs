@@ -12,12 +12,25 @@ public partial class Play : Form
     #region fields
 
     private Form _baseForm;
-    private static int _index = 0;
     private readonly TaskScheduler _threadPrincipal;
     private readonly GameController _controller;
     private readonly CommandFactory _commandFactory;
     private const int BLOCK_SIZE = 22;
-    private const string BLOCK_PREFIX = "block";
+
+    /// <summary>
+    /// Lado, em células, do quadro que mostra a próxima peça (cabe qualquer tetraminó).
+    /// </summary>
+    private const int NEXT_PIECE_SIZE = 4;
+
+    /// <summary>
+    /// As células do tabuleiro, indexadas por [x, y], para pintar sem procurar o controle no painel.
+    /// </summary>
+    private PictureBox[,] _boardCells = new PictureBox[0, 0];
+
+    /// <summary>
+    /// As células do quadro da próxima peça, indexadas por [x, y].
+    /// </summary>
+    private PictureBox[,] _nextPieceCells = new PictureBox[0, 0];
 
     private static IDictionary<string, Image> _imageCache = new Dictionary<string, Image> {
         {string.Empty, Properties.Resources.BLOCK_CLASSIC},
@@ -30,6 +43,16 @@ public partial class Play : Form
         {"Blue", Properties.Resources.BLOCK_BLUE },
         {"Cyan", Properties.Resources.BLOCK_CYAN }
     };
+
+    /// <summary>
+    /// Bloco preenchido do modo clássico. Guardado porque cada leitura de <c>Properties.Resources</c> cria um novo <see cref="Image"/>.
+    /// </summary>
+    private static readonly Image _classicBlock = Properties.Resources.BLOCK_CLASSIC;
+
+    /// <summary>
+    /// Célula vazia do modo clássico.
+    /// </summary>
+    private static readonly Image _classicFadedBlock = Properties.Resources.BLOCK_CLASSIC_FADED;
 
     #endregion
 
@@ -122,7 +145,7 @@ public partial class Play : Form
             MouseMove -= Play_MouseMove;
             Hide();
             new GameOver().ShowDialog();
-            new Deserve(_controller.Board.Stats).ShowDialog();
+            new Deserve(_controller.GetStats()).ShowDialog();
             Close();
         }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
     }
@@ -132,34 +155,42 @@ public partial class Play : Form
         await Task.Factory.StartNew(() =>
         {
             MouseMove -= Play_MouseMove;
-            new Deserve(_controller.Board.Stats).ShowDialog();
+            new Deserve(_controller.GetStats()).ShowDialog();
             Close();
         }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
     }
 
     private void DrawScreen()
     {
-        mainBoardPanel.Controls.Clear();
         mainBoardPanel.Width = _controller.BoardWidth * BLOCK_SIZE;
         mainBoardPanel.Height = _controller.BoardHeight * BLOCK_SIZE;
 
-        for (int y = 0; y < _controller.BoardHeight; y++)
+        _boardCells = CreateCells(mainBoardPanel, _controller.BoardWidth, _controller.BoardHeight);
+        _nextPieceCells = CreateCells(nextBlockPanel, NEXT_PIECE_SIZE, NEXT_PIECE_SIZE);
+    }
+
+    /// <summary>
+    /// Substitui o conteúdo do painel por uma grade de células vazias.
+    /// </summary>
+    /// <param name="panel">O painel que recebe as células.</param>
+    /// <param name="width">Quantidade de colunas.</param>
+    /// <param name="height">Quantidade de linhas.</param>
+    /// <returns>As células criadas, indexadas por [x, y].</returns>
+    private static PictureBox[,] CreateCells(Panel panel, int width, int height)
+    {
+        var cells = new PictureBox[width, height];
+        panel.Controls.Clear();
+
+        for (int y = 0; y < height; y++)
         {
-            for (int x = 0; x < _controller.BoardWidth; x++)
+            for (int x = 0; x < width; x++)
             {
-                mainBoardPanel.Controls.Add(CreateBlock(x, y, string.Empty));
+                cells[x, y] = CreateBlock(x, y, string.Empty);
+                panel.Controls.Add(cells[x, y]);
             }
         }
 
-        nextBlockPanel.Controls.Clear();
-
-        for (int y = 0; y < 4; y++)
-        {
-            for (int x = 0; x < 4; x++)
-            {
-                nextBlockPanel.Controls.Add(CreateBlock(x, y, string.Empty));
-            }
-        }
+        return cells;
     }
 
     private void PaintScreen()
@@ -173,17 +204,17 @@ public partial class Play : Form
         await Task.Factory.StartNew(() =>
         {
             ClearNextPiece();
-            PaintBlock(_controller.GetNextBlocks(), nextBlockPanel);
+            PaintBlock(_controller.GetNextBlocks(), _nextPieceCells);
         }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
     }
 
     private void ClearNextPiece()
     {
-        for (int y = 0; y < 4; y++)
+        for (int y = 0; y < NEXT_PIECE_SIZE; y++)
         {
-            for (int x = 0; x < 4; x++)
+            for (int x = 0; x < NEXT_PIECE_SIZE; x++)
             {
-                PaintBlock(x, y, string.Empty, nextBlockPanel);
+                PaintBlock(x, y, string.Empty, _nextPieceCells);
             }
         }
     }
@@ -196,7 +227,7 @@ public partial class Play : Form
             {
                 for (int x = 0; x < _controller.BoardWidth; x++)
                 {
-                    PaintBlock(x, y, _controller.GetBlock(x, y).Color.ToString(), mainBoardPanel);
+                    PaintBlock(x, y, _controller.GetBlock(x, y).Color.ToString(), _boardCells);
                 }
             }
         }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
@@ -209,7 +240,7 @@ public partial class Play : Form
             Location = new System.Drawing.Point(x * BLOCK_SIZE, y * BLOCK_SIZE),
             BackgroundImage = GetBackgroundImage(cor),
             BackgroundImageLayout = ImageLayout.Stretch,
-            Name = BLOCK_PREFIX + (_index++).ToString(),
+            BackColor = Color.Transparent,
             Size = new System.Drawing.Size(BLOCK_SIZE, BLOCK_SIZE),
             BorderStyle = BorderStyle.None,
             TabIndex = 0,
@@ -221,35 +252,31 @@ public partial class Play : Form
     {
         if ("None".Equals(cor) || string.Empty.Equals(cor))
         {
-            return Program.ClassicMode ? Properties.Resources.BLOCK_CLASSIC_FADED : null;
+            return Program.ClassicMode ? _classicFadedBlock : null;
         }
         else
         {
-            return Program.ClassicMode ? Properties.Resources.BLOCK_CLASSIC : _imageCache[cor];
+            return Program.ClassicMode ? _classicBlock : _imageCache[cor];
         }
     }
 
-    private void PaintBlock(IEnumerable<Block> blocos, Panel panel)
+    private static void PaintBlock(IEnumerable<Block> blocos, PictureBox[,] cells)
     {
         foreach (var bloco in blocos)
         {
-            PaintBlock(bloco.X, bloco.Y, bloco.Color.ToString(), panel);
+            PaintBlock(bloco.X, bloco.Y, bloco.Color.ToString(), cells);
         }
     }
 
-    private void PaintBlock(int x, int y, string color, Panel panel)
+    private static void PaintBlock(int x, int y, string color, PictureBox[,] cells)
     {
-        foreach (Control i in panel.Controls)
-        {
-            var isSameLocation = i.Location.X == x * BLOCK_SIZE && i.Location.Y == y * BLOCK_SIZE;
-            var isSameBlock = i.Name.StartsWith(BLOCK_PREFIX) && isSameLocation;
+        var cell = cells[x, y];
+        var image = GetBackgroundImage(color);
 
-            if (isSameBlock)
-            {
-                i.BackColor = Color.Transparent;
-                i.BackgroundImage = GetBackgroundImage(color);
-                break;
-            }
+        // reatribuir a mesma imagem invalida o controle; pular evita repintar as células que não mudaram (flicker)
+        if (cell.BackgroundImage != image)
+        {
+            cell.BackgroundImage = image;
         }
     }
 

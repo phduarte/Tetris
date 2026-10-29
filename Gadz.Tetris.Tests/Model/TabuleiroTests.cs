@@ -68,6 +68,23 @@ public class TabuleiroTests
     }
 
     /// <summary>
+    /// Uma peça I vertical encostada na borda direita gira para a horizontal e é empurrada para dentro do tabuleiro.
+    /// </summary>
+    [TestCase(9)]
+    [TestCase(8)]
+    [TestCase(7)]
+    public void DeveGirarEncostadoNaBordaDireita(int column)
+    {
+        _board.Arrange(CreatePiece(PieceType.I, new Point(column, 10), 0), []);
+
+        _board.Rotate();
+
+        Assert.AreEqual(1, _board.CurrentPiece.Rotation);
+        Assert.AreEqual(9, _board.CurrentPiece.Blocks.Max(block => block.X), "A peça não ficou encostada na borda.");
+        Assert.AreEqual(6, _board.CurrentPiece.Position.X);
+    }
+
+    /// <summary>
     /// Em espaço livre a rotação cicla 0→1→2→3→0.
     /// </summary>
     [Test]
@@ -330,15 +347,15 @@ public class TabuleiroTests
     }
 
     /// <summary>
-    /// Cria uma peça no tabuleiro do teste.
+    /// Cria uma peça para posicionar no tabuleiro do teste.
     /// </summary>
     /// <param name="type">O tipo da peça.</param>
     /// <param name="position">A posição da peça.</param>
     /// <param name="rotation">A rotação da peça.</param>
     /// <returns>A peça criada.</returns>
-    private Piece CreatePiece(PieceType type, Point position, int rotation)
+    private static Piece CreatePiece(PieceType type, Point position, int rotation)
     {
-        return new PieceBuilder().OfType(type).OnPosition(position).WithRotation(rotation).OnBoard(_board).Build();
+        return new PieceBuilder().OfType(type).OnPosition(position).WithRotation(rotation).Build();
     }
 
     /// <summary>

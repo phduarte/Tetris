@@ -1,24 +1,21 @@
 ﻿namespace Gadz.Tetris.Domain.Models;
 
 /// <summary>
-/// Defines the <see cref="Size" />
+/// Dimensões de uma área retangular, em células.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref=""/> class.
-/// </remarks>
-/// <param name="largura">The largura<see cref="int"/></param>
-/// <param name="altura">The altura<see cref="int"/></param>
+/// <param name="largura">Quantidade de colunas.</param>
+/// <param name="altura">Quantidade de linhas.</param>
 public struct Size(int largura, int altura)
 {
     /// <summary>
-    /// Defines the Height, Width
+    /// Quantidade de linhas (<see cref="Height"/>) e de colunas (<see cref="Width"/>).
     /// </summary>
     public int Height = altura, Width = largura;
 
     /// <summary>
-    /// The ToString
+    /// As dimensões no formato <c>largura:altura</c>.
     /// </summary>
-    /// <returns>The <see cref="string"/></returns>
+    /// <returns>Por exemplo, <c>10:20</c>.</returns>
     public override string ToString()
     {
         return $"{Width}:{Height}";

@@ -1,29 +1,21 @@
-﻿using Gadz.Tetris.Domain.Models.Boards;
-
-namespace Gadz.Tetris.Domain.Models.Pieces;
+﻿namespace Gadz.Tetris.Domain.Models.Pieces;
 
 /// <summary>
-/// Defines the <see cref="TetraminoO" />
+/// Tetraminó O: um quadrado 2×2, igual em todas as rotações.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="TetraminoO"/> class.
-/// </remarks>
-/// <param name="config">The position<see cref="PieceConfiguration"/></param>
-internal class TetraminoO(Board board, PieceConfiguration config) : Piece(board, config)
+/// <param name="config">Tipo, posição e rotação iniciais da peça.</param>
+internal class TetraminoO(PieceConfiguration config) : Piece(config)
 {
-    public override Block[] Blocks
-    {
-        get
-        {
-            var blocks = new Block[4];
-            int x = Position.X, y = Position.Y;
+    /// <summary>
+    /// O quadrado.
+    /// </summary>
+    private static readonly Point[] SQUARE = [new(0, 0), new(0, 1), new(1, 0), new(1, 1)];
 
-            blocks[0] = new Block(x, y, Color);
-            blocks[1] = new Block(x, y + 1, Color);
-            blocks[2] = new Block(x + 1, y, Color);
-            blocks[3] = new Block(x + 1, y + 1, Color);
+    /// <summary>
+    /// A forma de cada rotação, de 0 a 3.
+    /// </summary>
+    private static readonly Point[][] SHAPES = [SQUARE, SQUARE, SQUARE, SQUARE];
 
-            return blocks;
-        }
-    }
+    /// <inheritdoc/>
+    protected override Point[][] Shapes => SHAPES;
 }
