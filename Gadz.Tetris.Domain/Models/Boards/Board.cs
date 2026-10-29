@@ -191,7 +191,7 @@ public class Board : Entity
         _pieceBuilder = new PieceBuilder().OnBoard(this);
         Dimension = new Size(width, height);
         Stats = new Stats();
-        State = new PausedState();
+        State = PausedState.Instance;
         Matrix = new Block[width, height];
         Record = _repository.MaxScore();
         CurrentPiece = CreateRandomBlock();
@@ -267,7 +267,7 @@ public class Board : Entity
             }
 
             OnPause?.Invoke();
-            State = new PausedState();
+            State = PausedState.Instance;
             Stats.Pause();
         }
     }
@@ -285,7 +285,7 @@ public class Board : Entity
             }
 
             OnContinue?.Invoke();
-            State = new PlayingState();
+            State = PlayingState.Instance;
             Stats.Continue();
             RefreshAsync();
         }
@@ -318,7 +318,7 @@ public class Board : Entity
         {
             OnRefresh?.Invoke();
             Stats.Finish();
-            State = new FinishedState();
+            State = FinishedState.Instance;
             OnFinish?.Invoke();
         }
     }
@@ -332,7 +332,7 @@ public class Board : Entity
         {
             OnRefresh?.Invoke();
             Stats.Finish();
-            State = new FinishedState();
+            State = FinishedState.Instance;
             //OnFinish?.Invoke();
             OnLose?.Invoke();
         }
@@ -350,7 +350,7 @@ public class Board : Entity
             Stats.Start();
             _playedBlocks.Clear();
             ResetMatrix();
-            State = new PlayingState();
+            State = PlayingState.Instance;
             RefreshAsync();
         }
     }
