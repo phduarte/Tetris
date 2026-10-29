@@ -1,43 +1,26 @@
 ﻿namespace Gadz.Tetris.Domain.Models.Pieces;
 
 /// <summary>
-/// Defines the <see cref="TetraminoI" />
+/// Tetraminó I: quatro blocos em linha, na vertical nas rotações pares e na horizontal nas ímpares.
 /// </summary>
-internal class TetraminoI : Piece
+/// <param name="config">Tipo, posição e rotação iniciais da peça.</param>
+internal class TetraminoI(PieceConfiguration config) : Piece(config)
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="TetraminoI"/> class.
+    /// A linha em pé.
     /// </summary>
-    /// <param name="config">The configuration<see cref="PieceConfiguration"/></param>
-    internal TetraminoI(PieceConfiguration config)
-        : base(config)
-    {
-    }
+    private static readonly Point[] VERTICAL = [new(0, 0), new(0, 1), new(0, 2), new(0, 3)];
 
-    public override Block[] Blocks
-    {
-        get
-        {
-            var blocks = new Block[4];
-            var x = Position.X;
-            var y = Position.Y;
+    /// <summary>
+    /// A linha deitada.
+    /// </summary>
+    private static readonly Point[] HORIZONTAL = [new(0, 0), new(1, 0), new(2, 0), new(3, 0)];
 
-            if (Rotation == 0 || Rotation == 2)
-            {
-                blocks[0] = new Block(x, y, Color);
-                blocks[1] = new Block(x, y + 1, Color);
-                blocks[2] = new Block(x, y + 2, Color);
-                blocks[3] = new Block(x, y + 3, Color);
-            }
-            else
-            {
-                blocks[0] = new Block(x, y, Color);
-                blocks[1] = new Block(x + 1, y, Color);
-                blocks[2] = new Block(x + 2, y, Color);
-                blocks[3] = new Block(x + 3, y, Color);
-            }
+    /// <summary>
+    /// A forma de cada rotação, de 0 a 3.
+    /// </summary>
+    private static readonly Point[][] SHAPES = [VERTICAL, HORIZONTAL, VERTICAL, HORIZONTAL];
 
-            return blocks;
-        }
-    }
+    /// <inheritdoc/>
+    protected override Point[][] Shapes => SHAPES;
 }

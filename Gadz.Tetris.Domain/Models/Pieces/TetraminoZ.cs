@@ -1,48 +1,26 @@
 ﻿namespace Gadz.Tetris.Domain.Models.Pieces;
 
 /// <summary>
-/// Defines the <see cref="TetraminoZ" />
+/// Tetraminó Z: o espelho do S, com uma forma em pé e outra deitada.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="TetraminoZ"/> class.
-/// </remarks>
-/// <param name="config">The position<see cref="PieceConfiguration"/></param>
+/// <param name="config">Tipo, posição e rotação iniciais da peça.</param>
 internal class TetraminoZ(PieceConfiguration config) : Piece(config)
 {
-    public override Block[] Blocks
-    {
-        get
-        {
-            var blocks = new Block[4];
-            int x = Position.X, y = Position.Y;
+    /// <summary>
+    /// O Z em pé.
+    /// </summary>
+    private static readonly Point[] VERTICAL = [new(1, 0), new(1, 1), new(0, 1), new(0, 2)];
 
-            switch (Rotation)
-            {
-                case 0:
-                case 2:
+    /// <summary>
+    /// O Z deitado.
+    /// </summary>
+    private static readonly Point[] HORIZONTAL = [new(0, 0), new(1, 0), new(1, 1), new(2, 1)];
 
-                    blocks[0] = new Block(x + 1, y, Color);
-                    blocks[1] = new Block(x + 1, y + 1, Color);
-                    blocks[2] = new Block(x, y + 1, Color);
-                    blocks[3] = new Block(x, y + 2, Color);
+    /// <summary>
+    /// A forma de cada rotação, de 0 a 3.
+    /// </summary>
+    private static readonly Point[][] SHAPES = [VERTICAL, HORIZONTAL, VERTICAL, HORIZONTAL];
 
-                    break;
-
-                case 1:
-                case 3:
-
-                    blocks[0] = new Block(x, y, Color);
-                    blocks[1] = new Block(x + 1, y, Color);
-                    blocks[2] = new Block(x + 1, y + 1, Color);
-                    blocks[3] = new Block(x + 2, y + 1, Color);
-
-                    break;
-
-                default:
-                    throw new NotImplementedException($"Rotation {Rotation}");
-            }
-
-            return blocks;
-        }
-    }
+    /// <inheritdoc/>
+    protected override Point[][] Shapes => SHAPES;
 }

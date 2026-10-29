@@ -45,9 +45,16 @@ public abstract class Piece(PieceConfiguration configuration) : Entity
     public PieceType Type { get; protected set; } = configuration.Type;
 
     /// <summary>
-    /// Gets the Blocks
+    /// A forma da peça: para cada rotação (0 a 3), o deslocamento de cada um dos 4 blocos em relação a <see cref="Position"/>.
+    /// Cada tetraminó define a sua (Strategy); a montagem dos blocos é comum a todos.
     /// </summary>
-    public abstract Block[] Blocks { get; }
+    protected abstract Point[][] Shapes { get; }
+
+    /// <summary>
+    /// Os 4 blocos que a peça ocupa no tabuleiro, na posição e rotação atuais.
+    /// </summary>
+    public Block[] Blocks =>
+        [.. Shapes[Rotation].Select(offset => new Block(Position.X + offset.X, Position.Y + offset.Y, Color))];
 
     /// <summary>
     /// Gira a peça para a próxima rotação, sem verificar limites nem colisão (isso cabe ao <see cref="Board"/>).
