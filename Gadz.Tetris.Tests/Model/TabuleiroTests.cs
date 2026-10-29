@@ -283,6 +283,39 @@ public class TabuleiroTests
     }
 
     /// <summary>
+    /// As peças atual e seguinte vêm do gerador injetado, tanto ao iniciar quanto ao trocar de peça.
+    /// </summary>
+    [Test]
+    public void DeveCriarAsPecasPeloGeradorInjetado()
+    {
+        // o construtor consome as duas primeiras peças; o Start, as duas seguintes; a troca, a quinta
+        var generator = new SequencePieceGenerator(
+            (PieceType.O, 0), (PieceType.O, 0), (PieceType.I, 1), (PieceType.T, 2), (PieceType.Z, 3));
+        var board = new Board(new InMemoryStatsRepository(), 10, 20, generator);
+
+        try
+        {
+            board.Start();
+
+            Assert.AreEqual(PieceType.I, board.CurrentPiece.Type);
+            Assert.AreEqual(1, board.CurrentPiece.Rotation);
+            Assert.AreEqual(PieceType.T, board.NextPiece.Type);
+            Assert.AreEqual(2, board.NextPiece.Rotation);
+
+            board.SmashDown();
+
+            Assert.AreEqual(PieceType.T, board.CurrentPiece.Type);
+            Assert.AreEqual(2, board.CurrentPiece.Rotation);
+            Assert.AreEqual(PieceType.Z, board.NextPiece.Type);
+            Assert.AreEqual(3, board.NextPiece.Rotation);
+        }
+        finally
+        {
+            board.Finish();
+        }
+    }
+
+    /// <summary>
     /// Derruba peças na coluna inicial até o jogo acabar.
     /// </summary>
     private void LoseGame()

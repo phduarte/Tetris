@@ -11,6 +11,11 @@ public class Board : Entity
     private PieceBuilder _pieceBuilder;
 
     /// <summary>
+    /// Escolhe o tipo e a rotação de cada nova peça.
+    /// </summary>
+    private readonly IPieceGenerator _pieceGenerator;
+
+    /// <summary>
     /// Defines the _repository
     /// </summary>
     private IStatsRepository _repository;
@@ -175,17 +180,19 @@ public class Board : Entity
     /// <param name="repository">The repository<see cref="IStatsRepository"/></param>
     /// <param name="width">The width<see cref="int"/></param>
     /// <param name="height">The height<see cref="int"/></param>
-    public Board(IStatsRepository repository, int width, int height)
+    /// <param name="pieceGenerator">Gerador das novas peças; se omitido, as peças são sorteadas.</param>
+    public Board(IStatsRepository repository, int width, int height, IPieceGenerator? pieceGenerator = null)
     {
         _repository = repository;
+        _pieceGenerator = pieceGenerator ?? new RandomPieceGenerator();
         _pieceBuilder = new PieceBuilder().OnBoard(this);
         Dimension = new Size(width, height);
         _playfield = new Playfield(Dimension);
         Stats = new Stats();
         State = PausedState.Instance;
         Record = _repository.MaxScore();
-        CurrentPiece = CreateRandomBlock();
-        NextPiece = CreateRandomBlock();
+        CurrentPiece = CreateNextPiece();
+        NextPiece = CreateNextPiece();
     }
 
     /// <summary>
@@ -332,8 +339,8 @@ public class Board : Entity
     {
         lock (_sync)
         {
-            CurrentPiece = CreateRandomBlock();
-            NextPiece = CreateRandomBlock();
+            CurrentPiece = CreateNextPiece();
+            NextPiece = CreateNextPiece();
             Stats.Start();
             _playfield.Clear();
             OnRefresh?.Invoke();
@@ -586,13 +593,12 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// The CreateRandomBlock
+    /// Cria a próxima peça com o tipo e a rotação escolhidos pelo <see cref="IPieceGenerator"/>.
     /// </summary>
-    /// <returns>The <see cref="Piece"/></returns>
-    private Piece CreateRandomBlock()
+    /// <returns>A peça criada no canto superior esquerdo do tabuleiro.</returns>
+    private Piece CreateNextPiece()
     {
-        var type = (PieceType)Random.Shared.Next(0, 7);
-        var rotation = Random.Shared.Next(0, 4);
+        var (type, rotation) = _pieceGenerator.Next();
         var position = new Point(0, 0);
         var piece = _pieceBuilder.OfType(type)
             .OnPosition(position)
@@ -609,7 +615,7 @@ public class Board : Entity
     {
         _playfield.Lock(CurrentPiece);
         CurrentPiece = NextPiece.Clone();
-        NextPiece = CreateRandomBlock();
+        NextPiece = CreateNextPiece();
         Stats.IncludeBlock();
         OnRefresh?.Invoke();
     }
