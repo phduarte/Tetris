@@ -122,7 +122,7 @@ public partial class Play : Form
             MouseMove -= Play_MouseMove;
             Hide();
             new GameOver().ShowDialog();
-            new Deserve(_controller.Board.Stats).ShowDialog();
+            new Deserve(_controller.GetStats()).ShowDialog();
             Close();
         }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
     }
@@ -132,7 +132,7 @@ public partial class Play : Form
         await Task.Factory.StartNew(() =>
         {
             MouseMove -= Play_MouseMove;
-            new Deserve(_controller.Board.Stats).ShowDialog();
+            new Deserve(_controller.GetStats()).ShowDialog();
             Close();
         }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
     }

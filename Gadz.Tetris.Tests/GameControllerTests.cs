@@ -281,10 +281,26 @@ public class GameControllerTests
     public void DeveCorrerParaBaixo()
     {
         app.Start();
-        var p = app.Board.CurrentPiece;
         app.SmashDown();
-        //Thread.Sleep(100);
-        Assert.AreNotEqual(app.Board.CurrentPiece, p, $"Uma nova peça não foi introduzida no jogo.");
+        Assert.AreEqual(1, app.GetStats().Pieces, "A peça não foi assentada no tabuleiro.");
+        Assert.AreEqual(0, app.CurrentPiecePosition.Y, "Uma nova peça não foi introduzida no jogo.");
+    }
+
+    /// <summary>
+    /// As estatísticas entregues à interface refletem a partida em andamento.
+    /// </summary>
+    [Test]
+    public void DeveInformarAsEstatisticasDaPartida()
+    {
+        app.Start();
+
+        var stats = app.GetStats();
+
+        Assert.AreEqual(app.Score, stats.Score);
+        Assert.AreEqual(app.Level, stats.Level);
+        Assert.AreEqual(app.Lines, stats.Lines);
+        Assert.AreEqual(0, stats.Pieces);
+        Assert.AreEqual(app.TetrisRate, stats.TetrisRate);
     }
 
     /// <summary>

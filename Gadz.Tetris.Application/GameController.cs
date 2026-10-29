@@ -126,12 +126,6 @@ public class GameController
     public Point CurrentPiecePosition => _board.CurrentPiece.Position;
 
     /// <summary>
-    /// Gets the CurrentBoard
-    /// Tabuleiro atual
-    /// </summary>
-    public Board Board => _board;
-
-    /// <summary>
     /// Gets the Amount Tetris in the game
     /// </summary>
     public int Tetris => _board.Tetris;
@@ -276,6 +270,16 @@ public class GameController
     /// </summary>
     /// <returns></returns>
     public IEnumerable<Block> GetNextBlocks() => _board.NextPiece.Blocks;
+
+    /// <summary>
+    /// Estatísticas da partida atual, para exibir ao final do jogo.
+    /// </summary>
+    /// <returns>Um retrato das estatísticas no momento da chamada.</returns>
+    public StatsSnapshot GetStats()
+    {
+        var stats = _board.Stats;
+        return new(stats.Score, stats.Level, stats.Lines, stats.Blocks, stats.Duration, stats.TetrisRate);
+    }
 
     /// <summary>
     /// Maior pontuação registrada

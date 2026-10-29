@@ -1,16 +1,16 @@
-﻿using Gadz.Tetris.Domain.Models.Statistics;
+﻿using Gadz.Tetris.Application;
 
 namespace Gadz.Tetris.Desktop;
 
 public partial class Deserve : Form
 {
-    public Deserve(Stats stats)
+    public Deserve(StatsSnapshot stats)
     {
         InitializeComponent();
 
         lbScore.Text = stats.Score.ToString();
         lbLevel.Text = stats.Level.ToString();
-        lbPieces.Text = stats.Blocks.ToString();
+        lbPieces.Text = stats.Pieces.ToString();
         lbTime.Text = stats.Duration.ToString();
         lbTetris.Text = stats.TetrisRate.ToString("P0");
     }
