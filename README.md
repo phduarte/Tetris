@@ -1,10 +1,15 @@
 # Tetris
 
 ![.NET](https://github.com/phduarte/Tetris/actions/workflows/main.yml/badge.svg)
+[![GitHub Pages](https://github.com/phduarte/Tetris/actions/workflows/pages.yml/badge.svg)](https://phduarte.github.io/Tetris/)
 [![CodeFactor](https://www.codefactor.io/repository/github/phduarte/tetris/badge)](https://www.codefactor.io/repository/github/phduarte/tetris)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d567b76d931e4e619802302fdf0124b7)](https://www.codacy.com/manual/phduarte87/Tetris?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=phduarte/Tetris&amp;utm_campaign=Badge_Grade)
 
 *[Read this in English](README.en.md)*
+
+### [▶ Jogar no navegador](https://phduarte.github.io/Tetris/)
+
+O jogo é uma aplicação web **PWA** (Blazor WebAssembly): roda no navegador do computador ou do celular, sem instalar nada e sem servidor, e pode ser instalado como aplicativo pelo próprio navegador. Também há uma versão **Desktop** para Windows, em WinForms. As duas interfaces usam o mesmo domínio, com as mesmas regras.
 
 Tetris é um jogo comercializado pela Nintendo em 1989 e um dos jogos de vídeo-game mais famosos de todos os tempos.
 
@@ -35,12 +40,12 @@ Um fato curioso é que Steve Wozniak, cofundador da Apple foi um dos maiores rec
   A Solution começou com apenas dois pacotes, o Core e o Desktop. Com as refatorações ela foi separada em camadas, usando .NET 10:
 
 ```
+Web ──► Application ──► Domain
+   └──► Texts
+
 Desktop ──► Application ──► Domain
    ├──► Data ──► Domain
    ├──► SoundPlayer ──► Application
-   └──► Texts
-
-Web ──► Application ──► Domain
    └──► Texts
 ```
 
@@ -51,11 +56,11 @@ Web ──► Application ──► Domain
 | `Gadz.Tetris.SoundPlayer` | Adapter de áudio sobre a `winmm.dll`, que implementa o `ISoundPlayer` da `Application`. |
 | `Gadz.Tetris.Texts` | Textos da interface em inglês e português, compartilhados entre as interfaces. |
 | `Gadz.Tetris.Application` | `GameController` (fachada para as interfaces) e os comandos de teclado. Depende só do domínio: recebe o repositório e o som de quem a usa. |
-| `Gadz.Tetris.Desktop` | Interface WinForms: lida com as entradas dos dispositivos e dá respostas visuais ao jogador. Não tem regras de jogo. É a raiz de composição: cria o repositório em arquivo e o som do Windows no `Program.cs`. |
-| `Gadz.Tetris.Web` | Interface Blazor WebAssembly (PWA): o mesmo aparelho do Desktop, rodando no navegador. O jogo inteiro (domínio e aplicação) roda no próprio navegador, sem servidor. As estatísticas ficam no `localStorage` e os sons tocam pela Web Audio API, com os mesmos `.wav` do Desktop. |
+| `Gadz.Tetris.Web` | Interface Blazor WebAssembly (PWA) para navegador e celular. O jogo inteiro (domínio e aplicação) roda no próprio navegador, sem servidor. As estatísticas ficam no `localStorage` e os sons tocam pela Web Audio API. Não tem regras de jogo. |
+| `Gadz.Tetris.Desktop` | Interface WinForms para Windows: o mesmo aparelho da Web, numa janela. Não tem regras de jogo. É a raiz de composição: cria o repositório em arquivo e o som do Windows no `Program.cs`. |
 | `Gadz.Tetris.Tests` | Testes NUnit do domínio e do `GameController`. |
 
-  Enquanto eu modelava o Modelo de Domínio, a neutralidade tecnológica e o desacoplamento das responsabilidades foi algo fundamental, por isso o Domínio não tem ligações externas com camadas de Infraestrutura ou Interface por exemplo. Afinal, não podemos permitir que regras do jogo sejam manipuladas pelo usuário, e nem ficar preso num modelo de Interface só. Provavelmente teremos versões para outros dispositivos de IHC, como Mobile por exemplo. Dentro de cada projeto, o que não precisa ser visto de fora fica isolado com os modificadores *internal* e *private*.
+  Enquanto eu modelava o Modelo de Domínio, a neutralidade tecnológica e o desacoplamento das responsabilidades foi algo fundamental, por isso o Domínio não tem ligações externas com camadas de Infraestrutura ou Interface por exemplo. Afinal, não podemos permitir que regras do jogo sejam manipuladas pelo usuário, e nem ficar preso num modelo de Interface só. Foi essa separação que permitiu levar o jogo, que nasceu no Windows, para o navegador e o celular reaproveitando o mesmo domínio. Dentro de cada projeto, o que não precisa ser visto de fora fica isolado com os modificadores *internal* e *private*.
 
 Os planos de evolução estão em [docs/PLANO-REFATORACAO.md](docs/PLANO-REFATORACAO.md) e [docs/PLANO-MULTIPLATAFORMA.md](docs/PLANO-MULTIPLATAFORMA.md).
 
@@ -67,14 +72,6 @@ Os planos de evolução estão em [docs/PLANO-REFATORACAO.md](docs/PLANO-REFATOR
 dotnet build Gadz.Tetris.sln
 dotnet test Gadz.Tetris.sln
 ```
-
-### Desktop (Windows)
-
-```sh
-dotnet run --project Gadz.Tetris.Desktop
-```
-
-A interface WinForms e o som (`winmm.dll`) só funcionam no Windows.
 
 ### Web (navegador)
 
@@ -98,18 +95,28 @@ dotnet publish Gadz.Tetris.Web -c Release -o publish
 
 O site fica em `publish/wwwroot`.
 
+A versão online é publicada no [GitHub Pages](https://phduarte.github.io/Tetris/) pelo workflow `.github/workflows/pages.yml`, a cada push no `master`. Como o site fica na subpasta `/Tetris/`, o workflow ajusta o `<base href>` do `index.html` antes do `publish`.
+
+### Desktop (Windows)
+
+```sh
+dotnet run --project Gadz.Tetris.Desktop
+```
+
+A interface WinForms e o som (`winmm.dll`) só funcionam no Windows.
+
 No VS Code, o `.vscode/launch.json` traz as opções **Web (Blazor WebAssembly)** e **Desktop (WinForms)** para rodar e depurar com F5.
 
 ## Características
 
+- **No navegador e no celular**: o jogo abre direto pelo link, se ajusta à tela do celular e pode ser instalado como aplicativo (PWA). No Windows, também há a versão Desktop.
 - **Um aparelho, várias telas**: o jogo é um minigame de bolso (carcaça grafite e coral) em que só o LCD muda de uma tela para outra. Os botões da carcaça mostram a ação e a tecla, e também podem ser clicados.
 - **Estilo BRICK GAME**: LCD esverdeado e monocromático, como o video-game de bolso famoso na década de 90.
 - **Estilo TETRIS**: LCD escuro com as peças nas cores do jogo original da década de 80. O tema é escolhido no menu com ← / →.
 - **Pausa e fim de jogo no LCD**: na pausa (inclusive a automática, quando a janela perde o foco) o tabuleiro apaga para não espiar a jogada. Ao perder, uma cortina de blocos sobe e desce antes do GAME OVER, que segue para o resultado com qualquer tecla ou sozinho 5 segundos depois de a música de fim terminar.
 - **Resultado**: pontos, nível, linhas, peças, % de TETRIS e tempo, com o selo NOVO RECORDE quando a partida supera o recorde guardado. Volta ao menu com ENTER ou sozinho depois de 15 segundos.
 - **Ajuda interativa**: apertar uma tecla destaca a linha dela no manual, que também traz a tabela de pontos.
-- **Idiomas**: textos em inglês e em português, conforme o idioma do Windows (ou do navegador, na Web).
-- **Desktop e Web**: o mesmo jogo roda no Windows (WinForms) e no navegador (Blazor WebAssembly), sobre o mesmo domínio.
+- **Idiomas**: textos em inglês e em português, conforme o idioma do navegador (ou do Windows, no Desktop).
 - **Slide**: Segurar a tecla CTRL enquanto move a peça para esquerda ou direita faz a peça deslizar até o limite.
 - **Smash Down**: Ao apertar a tecla SPACEBAR a peça imediatamente cai em velocidade acelerada.
 - **Sons**: Os eventos e movimentos reproduzem sons similares aos dos brickgames.
@@ -166,6 +173,8 @@ Essa versão deveria ser concluída rápido, o Windows Forms ajudou por permitir
 
 O projeto ficou bem leve e pequeno para download, graças às várias bibliotecas que já vêm embutidas no .NET.
 
+Depois, a interface principal passou a ser a Web (Blazor WebAssembly), e o WinForms continua como a versão Desktop. Como as regras estavam todas no domínio, a nova interface só precisou desenhar o aparelho e trocar a infraestrutura (arquivo e `winmm.dll` por `localStorage` e Web Audio).
+
 ### Clean Code
 
 Depois que terminei a primeira versão, achei vários exemplos de outras implementações desenvolvidas com projetos mais simples. 
@@ -197,7 +206,8 @@ Na aplicação cliente, cada ação de teclado é um Command registrado numa fá
 
 ## Links úteis
 
-- [Baixar](https://github.com/phduarte/Tetris/releases/latest)
+- [Jogar no navegador](https://phduarte.github.io/Tetris/)
+- [Baixar a versão Desktop (Windows)](https://github.com/phduarte/Tetris/releases/latest)
 - [Documentação](https://github.com/phduarte/Tetris/wiki)
 
 
