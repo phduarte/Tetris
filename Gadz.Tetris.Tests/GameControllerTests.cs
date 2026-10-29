@@ -135,6 +135,18 @@ public class GameControllerTests
     }
 
     /// <summary>
+    /// Os comandos são criados uma única vez, e não a cada tecla pressionada.
+    /// </summary>
+    [Test]
+    public void DeveReaproveitarOsComandosEntreTeclas()
+    {
+        var factory = new CommandFactory(app);
+
+        Assert.AreSame(factory.Commands, factory.Commands);
+        Assert.AreSame(factory.GetAll(Key.Enter, false).Single(), factory.GetAll(Key.Enter, false).Single());
+    }
+
+    /// <summary>
     /// The DeveIniciarComNivelUm
     /// </summary>
     [Test]
