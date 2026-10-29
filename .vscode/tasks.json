@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build-desktop",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["build", "${workspaceFolder}/Gadz.Tetris.Desktop/Gadz.Tetris.Desktop.csproj"],
+      "problemMatcher": "$msCompile",
+      "group": "build"
+    },
+    {
+      "label": "run-web",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["run", "--project", "${workspaceFolder}/Gadz.Tetris.Web/Gadz.Tetris.Web.csproj", "--launch-profile", "http"],
+      "isBackground": true,
+      "problemMatcher": []
+    }
+  ]
+}
