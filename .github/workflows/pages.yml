@@ -1,6 +1,6 @@
 name: GitHub Pages
 
-# publica a versão Web (Blazor WebAssembly) em https://phduarte.github.io/Tetris/
+# publica a versão Web (Blazor WebAssembly) em https://phduarte.github.io/tetris/
 on:
   push:
     branches: [main]
@@ -28,7 +28,7 @@ jobs:
       with:
         global-json-file: global.json
 
-    # o site fica na subpasta /Tetris/; o ajuste vem antes do publish para os hashes do
+    # o site fica na subpasta /tetris/; o ajuste vem antes do publish para os hashes do
     # service-worker-assets.js baterem com o index.html publicado
     - name: Base href
       run: sed -i 's|<base href="/" />|<base href="/${{ github.event.repository.name }}/" />|' Gadz.Tetris.Web/wwwroot/index.html

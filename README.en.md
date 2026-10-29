@@ -1,13 +1,13 @@
 # Tetris
 
-![.NET](https://github.com/phduarte/Tetris/actions/workflows/main.yml/badge.svg)
-[![GitHub Pages](https://github.com/phduarte/Tetris/actions/workflows/pages.yml/badge.svg)](https://phduarte.github.io/Tetris/)
+![.NET](https://github.com/phduarte/tetris/actions/workflows/main.yml/badge.svg)
+[![GitHub Pages](https://github.com/phduarte/tetris/actions/workflows/pages.yml/badge.svg)](https://phduarte.github.io/tetris/)
 [![CodeFactor](https://www.codefactor.io/repository/github/phduarte/tetris/badge)](https://www.codefactor.io/repository/github/phduarte/tetris)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d567b76d931e4e619802302fdf0124b7)](https://www.codacy.com/manual/phduarte87/Tetris?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=phduarte/Tetris&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d567b76d931e4e619802302fdf0124b7)](https://www.codacy.com/manual/phduarte87/Tetris?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=phduarte/tetris&amp;utm_campaign=Badge_Grade)
 
 *[Leia em português](README.md)*
 
-### [▶ Play in your browser](https://phduarte.github.io/Tetris/)
+### [▶ Play in your browser](https://phduarte.github.io/tetris/)
 
 The game is a **PWA** web application (Blazor WebAssembly): it runs in the browser on a computer or phone, with nothing to install and no server, and the browser can install it as an app. There is also a **Desktop** version for Windows, in WinForms. Both user interfaces share the same domain and the same rules.
 
@@ -93,7 +93,7 @@ dotnet publish Gadz.Tetris.Web -c Release -o publish
 
 The site ends up in `publish/wwwroot`.
 
-The online version is published to [GitHub Pages](https://phduarte.github.io/Tetris/) by the `.github/workflows/pages.yml` workflow, on every push to `main`. Since the site lives in the `/Tetris/` subfolder, the workflow adjusts the `<base href>` in `index.html` before `publish`.
+The online version is published to [GitHub Pages](https://phduarte.github.io/tetris/) by the `.github/workflows/pages.yml` workflow, on every push to `main`. Since the site lives in the `/tetris/` subfolder, the workflow adjusts the `<base href>` in `index.html` before `publish`.
 
 ### Desktop (Windows)
 
@@ -200,9 +200,9 @@ In the client application, each keyboard action is a Command registered in a fac
 
 ## Useful links
 
-- [Play in your browser](https://phduarte.github.io/Tetris/)
-- [Download the Desktop version (Windows)](https://github.com/phduarte/Tetris/releases/latest)
-- [Documentation](https://github.com/phduarte/Tetris/wiki)
+- [Play in your browser](https://phduarte.github.io/tetris/)
+- [Download the Desktop version (Windows)](https://github.com/phduarte/tetris/releases/latest)
+- [Documentation](https://github.com/phduarte/tetris/wiki)
 
 ## Bibliography (in Portuguese)
 

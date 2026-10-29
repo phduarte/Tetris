@@ -43,8 +43,8 @@ Adotar a **opção 1**: criar o projeto `Gadz.Tetris.Web` em **Blazor WebAssembl
 
 Para viabilizar a decisão:
 
-1. **Loop fora do `Domain`.** O `Board` expõe um `Tick()` (o atual `Checkout()`), e a `Application` controla o relógio com `PeriodicTimer`/`Task.Delay`, que funcionam no WASM e no Desktop. Ver [#63](https://github.com/phduarte/Tetris/issues/63).
-2. **`Application` sem infraestrutura.** Cria-se a interface `ISoundPlayer` na `Application`, e o `GameController.Create` passa a receber `IStatsRepository` e `ISoundPlayer`. A `Application` deixa de referenciar `Data` e `SoundPlayer`. Ver [#53](https://github.com/phduarte/Tetris/issues/53).
+1. **Loop fora do `Domain`.** O `Board` expõe um `Tick()` (o atual `Checkout()`), e a `Application` controla o relógio com `PeriodicTimer`/`Task.Delay`, que funcionam no WASM e no Desktop. Ver [#63](https://github.com/phduarte/tetris/issues/63).
+2. **`Application` sem infraestrutura.** Cria-se a interface `ISoundPlayer` na `Application`, e o `GameController.Create` passa a receber `IStatsRepository` e `ISoundPlayer`. A `Application` deixa de referenciar `Data` e `SoundPlayer`. Ver [#53](https://github.com/phduarte/tetris/issues/53).
 3. **Cada interface monta as suas dependências** (composition root):
    - Desktop, no `Program.cs`: `StatsRepository` + `SoundPlayerAdapter`.
    - Web: `LocalStorageStatsRepository` + `WebAudioSoundPlayer` (JS interop), em `Gadz.Tetris.Web/Infrastructure`.

@@ -30,13 +30,13 @@ O `Board.RefreshAsync()` cria uma thread de background. O WebAssembly roda numa 
 - O `Domain` expõe um `Tick()` (o atual `Checkout()`), e o "relógio" fica fora dele.
 - A `Application` controla o loop com `PeriodicTimer`/`Task.Delay`, que funcionam no WASM.
 - Bônus: os testes de queda e de nível ficam determinísticos, porque dá para chamar `Tick()` direto sem esperar tempo real.
-- Relacionada: [#63](https://github.com/phduarte/Tetris/issues/63) (serializar as mutações do `Board`). ✅ Fechada com um `lock` no `Board`.
-- ✅ [#82](https://github.com/phduarte/Tetris/issues/82): o `Board` expõe `Tick()` e o `GameController` desce a peça com `Task.Delay`, lendo `Stats.Interval` a cada volta.
+- Relacionada: [#63](https://github.com/phduarte/tetris/issues/63) (serializar as mutações do `Board`). ✅ Fechada com um `lock` no `Board`.
+- ✅ [#82](https://github.com/phduarte/tetris/issues/82): o `Board` expõe `Tick()` e o `GameController` desce a peça com `Task.Delay`, lendo `Stats.Interval` a cada volta.
 
 ### 2. A Application está presa à infraestrutura do Windows
 
-- ~~`GameController.Create` faz `new StatsRepository()`, que grava em arquivo.~~ ✅ [#84](https://github.com/phduarte/Tetris/issues/84): `Create(width, height, IStatsRepository, ISoundPlayer)`; a `Application` referencia só o `Domain`.
-- ~~`ToggleMuteCommand` chama o `SoundPlayerAdapter` estático, que usa `winmm.dll`.~~ ✅ [#83](https://github.com/phduarte/Tetris/issues/83): `ISoundPlayer` na `Application`; o Desktop cria o `SoundPlayerAdapter` e o passa ao `Create`.
+- ~~`GameController.Create` faz `new StatsRepository()`, que grava em arquivo.~~ ✅ [#84](https://github.com/phduarte/tetris/issues/84): `Create(width, height, IStatsRepository, ISoundPlayer)`; a `Application` referencia só o `Domain`.
+- ~~`ToggleMuteCommand` chama o `SoundPlayerAdapter` estático, que usa `winmm.dll`.~~ ✅ [#83](https://github.com/phduarte/tetris/issues/83): `ISoundPlayer` na `Application`; o Desktop cria o `SoundPlayerAdapter` e o passa ao `Create`.
 
 Proposta: criar a interface `ISoundPlayer` na `Application` (som não é regra de jogo, então não vai no `Domain`) e mudar a assinatura para `GameController.Create(width, height, IStatsRepository, ISoundPlayer)`. A `Application` deixa de referenciar `Data` e `SoundPlayer`.
 
@@ -54,10 +54,10 @@ Proposta: criar a interface `ISoundPlayer` na `Application` (som não é regra d
 | Item | Proposta | Relacionada |
 | --- | --- | --- |
 | Teclas | O enum `Key` usa códigos de tecla do Windows. A Web mapeia o `KeyboardEvent.key` do navegador para `Key`, e os botões de toque disparam os mesmos `Key`, reaproveitando o `CommandFactory` sem `switch` | — |
-| Pausa no Enter | Unificar `PauseCommand`/`ContinueCommand` em `TogglePauseCommand` que consulta o State | [#58](https://github.com/phduarte/Tetris/issues/58) ✅ |
-| Textos | ✅ `Jogo.resx` e `Jogo.pt.resx` no projeto compartilhado `Gadz.Tetris.Texts`; a Web usará as mesmas chaves via `IStringLocalizer` | [#85](https://github.com/phduarte/Tetris/issues/85) |
-| `Matrix` | Expor uma cópia somente leitura (snapshot) em vez de `Block[,]` mutável | [#61](https://github.com/phduarte/Tetris/issues/61) ✅ |
-| `Board` exposto | O `GameController` não deve expor a entidade `Board` às interfaces | [#65](https://github.com/phduarte/Tetris/issues/65) ✅ |
+| Pausa no Enter | Unificar `PauseCommand`/`ContinueCommand` em `TogglePauseCommand` que consulta o State | [#58](https://github.com/phduarte/tetris/issues/58) ✅ |
+| Textos | ✅ `Jogo.resx` e `Jogo.pt.resx` no projeto compartilhado `Gadz.Tetris.Texts`; a Web usará as mesmas chaves via `IStringLocalizer` | [#85](https://github.com/phduarte/tetris/issues/85) |
+| `Matrix` | Expor uma cópia somente leitura (snapshot) em vez de `Block[,]` mutável | [#61](https://github.com/phduarte/tetris/issues/61) ✅ |
+| `Board` exposto | O `GameController` não deve expor a entidade `Board` às interfaces | [#65](https://github.com/phduarte/tetris/issues/65) ✅ |
 
 Ao fim da fase 0, o Desktop funciona igual e os testes cobrem as mudanças.
 
