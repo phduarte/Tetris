@@ -1,0 +1,39 @@
+@inherits ConsoleScreen
+
+<div class="screen about">
+    <TitleArt />
+    <p class="subtitle">@Texts[nameof(Jogo.By)]</p>
+    <p class="about-text">@Texts[nameof(Jogo.AboutText)]</p>
+
+    <ul class="tags">
+        @foreach (var tag in Texts[nameof(Jogo.Tags)].Value.Split(TAG_SEPARATOR))
+        {
+            <li>@tag</li>
+        }
+    </ul>
+
+    <span class="label">@Texts[nameof(Jogo.MitLicense)]</span>
+    <div class="license">@Texts[nameof(Jogo.LicenseText)]</div>
+</div>
+
+<ConsoleButtons Buttons="Buttons" />
+
+@code {
+    /// <summary>
+    /// Separador dos temas em <c>Tags</c>.
+    /// </summary>
+    private const char TAG_SEPARATOR = '|';
+
+    /// <inheritdoc/>
+    protected override IReadOnlyDictionary<string, Action> KeyBindings => new Dictionary<string, Action>
+    {
+        [KeyMap.ESCAPE] = () => Frame.Navigate<MenuScreen>(),
+        [KeyMap.SHIFT] = ToggleSound,
+    };
+
+    /// <summary>
+    /// Os botões da carcaça: som e voltar.
+    /// </summary>
+    private IReadOnlyList<ConsoleButton> Buttons =>
+        [SoundButton, new(KeyMap.ESCAPE, Texts[nameof(Jogo.CapBack)], Texts[nameof(Jogo.KeyEsc)], Big: true)];
+}

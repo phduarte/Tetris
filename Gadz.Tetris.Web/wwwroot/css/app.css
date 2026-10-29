@@ -233,9 +233,179 @@ body {
 
 /* ---------- menu ---------- */
 
+.screen p {
+    margin: 0;
+}
+
+.head {
+    font-size: calc(var(--cell) * 1.05);
+}
+
+.foot {
+    margin-top: auto !important;
+    font-size: calc(var(--cell) * 0.5);
+    text-align: center;
+}
+
 .menu {
     align-items: center;
     justify-content: space-between;
+}
+
+.record {
+    display: flex;
+    align-self: stretch;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title-block,
+.ground-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--cell) * 0.6);
+}
+
+.sound-state {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--cell) * 0.5);
+    font-size: calc(var(--cell) * 0.75);
+}
+
+.press {
+    font-size: calc(var(--cell) * 0.6);
+}
+
+/* ---------- resultado ---------- */
+
+.result {
+    align-items: center;
+    gap: calc(var(--cell) * 0.8);
+}
+
+.badge {
+    padding: 4px 10px;
+    border: 2px solid var(--ink);
+    font-size: calc(var(--cell) * 0.6);
+}
+
+.badge.hidden {
+    visibility: hidden;
+}
+
+.stat.centered {
+    align-items: center;
+}
+
+.result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: calc(var(--cell) * 0.8) calc(var(--cell) * 2);
+}
+
+/* ---------- ajuda ---------- */
+
+.help {
+    gap: calc(var(--cell) * 0.45);
+}
+
+.help ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.keys li {
+    display: grid;
+    grid-template-columns: calc(var(--cell) * 6) 1fr;
+    align-items: center;
+    padding: 2px 6px;
+    font-size: calc(var(--cell) * 0.5);
+}
+
+.keys li.highlighted {
+    background: var(--ink);
+    color: var(--lcd);
+}
+
+.caps {
+    display: flex;
+    gap: 4px;
+}
+
+kbd {
+    padding: 1px 5px 2px;
+    border: 1px solid currentColor;
+    border-bottom-width: 3px;
+    border-radius: 4px;
+    font-family: var(--pixel);
+    font-size: calc(var(--cell) * 0.42);
+}
+
+.points li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 6px;
+    font-size: calc(var(--cell) * 0.5);
+    line-height: 1.6;
+}
+
+.rule {
+    padding: 0 6px;
+    font-family: var(--text);
+    font-size: calc(var(--cell) * 0.5);
+    text-transform: none;
+    color: var(--faded);
+}
+
+/* ---------- sobre ---------- */
+
+.about {
+    align-items: center;
+    gap: calc(var(--cell) * 0.6);
+}
+
+.about-text {
+    font-family: var(--text);
+    font-size: calc(var(--cell) * 0.6);
+    text-align: center;
+    text-transform: none;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.tags li {
+    padding: 2px 6px;
+    border: 1px solid var(--ink);
+    font-size: calc(var(--cell) * 0.45);
+}
+
+.about .label {
+    align-self: flex-start;
+}
+
+.license {
+    flex: 1;
+    min-height: 0;
+    align-self: stretch;
+    overflow-y: auto;
+    padding-right: 6px;
+    font-family: var(--text);
+    font-size: calc(var(--cell) * 0.5);
+    text-transform: none;
+    white-space: pre-line;
+    scrollbar-color: var(--ink) var(--ghost);
+    user-select: text;
 }
 
 /* ---------- dígitos (visor de 7 segmentos) ---------- */

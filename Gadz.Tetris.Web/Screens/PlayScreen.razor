@@ -38,11 +38,11 @@
     <aside class="side">
         <div class="stat">
             <span class="label">@Texts[nameof(Jogo.Pontuacao)]</span>
-            <Digits Text="@Number(Controller.Score, SCORE_DIGITS)" Class="big" />
+            <Digits Text="@Digits.Number(Controller.Score, SCORE_DIGITS)" Class="big" />
         </div>
         <div class="stat">
             <span class="label">@Texts[nameof(Jogo.Linhas)]</span>
-            <Digits Text="@Number(Controller.Lines, LINES_DIGITS)" />
+            <Digits Text="@Digits.Number(Controller.Lines, LINES_DIGITS)" />
         </div>
         <div class="stat">
             <span class="label">@Texts[nameof(Jogo.Proximo)]</span>
@@ -51,20 +51,20 @@
         <div class="stat-pair">
             <div class="stat">
                 <span class="label">@Texts[nameof(Jogo.Nivel)]</span>
-                <Digits Text="@Number(Controller.Level, LEVEL_DIGITS)" />
+                <Digits Text="@Digits.Number(Controller.Level, LEVEL_DIGITS)" />
             </div>
             <div class="stat">
                 <span class="label">@Texts[nameof(Jogo.TaxaTetris)]</span>
-                <span><Digits Text="@Percent(Controller.TetrisRate)" /><span class="unit">%</span></span>
+                <span><Digits Text="@Digits.Percent(Controller.TetrisRate, RATE_DIGITS)" /><span class="unit">%</span></span>
             </div>
         </div>
         <div class="stat">
             <span class="label">@Texts[nameof(Jogo.Tempo)]</span>
-            <Digits Text="@Time(Controller.Duration)" Class="small" />
+            <Digits Text="@Digits.Time(Controller.Duration)" Class="small" />
         </div>
         <div class="stat">
             <span class="label">@Texts[nameof(Jogo.Recorde)]</span>
-            <Digits Text="@Number(Controller.GetMaxScore(), SCORE_DIGITS)" Class="small" />
+            <Digits Text="@Digits.Number(Controller.GetMaxScore(), SCORE_DIGITS)" Class="small" />
         </div>
         <div class="icons">
             <span class="@(Controller.IsMuted ? "off" : "on")">♪</span>

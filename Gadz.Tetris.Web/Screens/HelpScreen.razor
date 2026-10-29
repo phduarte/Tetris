@@ -1,0 +1,33 @@
+@inherits ConsoleScreen
+
+<div class="screen help">
+    <p class="head">@Texts[nameof(Jogo.HowToPlay)]</p>
+
+    <ul class="keys">
+        @for (var i = 0; i < _rows.Count; i++)
+        {
+            <li class="@(_highlighted.Contains(i) ? "highlighted" : string.Empty)">
+                <span class="caps">
+                    @foreach (var cap in _rows[i].Caps)
+                    {
+                        <kbd>@cap</kbd>
+                    }
+                </span>
+                <span>@_rows[i].Text</span>
+            </li>
+        }
+    </ul>
+
+    <span class="label">@Texts[nameof(Jogo.PointsPerDrop)]</span>
+    <ul class="points">
+        @for (var i = 0; i < GameController.ScoreTable.Count; i++)
+        {
+            <li><span>@LinesText(i + 1)</span><span>@GameController.ScoreTable[i]</span></li>
+        }
+    </ul>
+
+    <p class="rule">@Texts[nameof(Jogo.LevelRule)]</p>
+    <p class="foot blink">@Texts[nameof(Jogo.PressKeyToTest)]</p>
+</div>
+
+<ConsoleButtons Buttons="Buttons" />

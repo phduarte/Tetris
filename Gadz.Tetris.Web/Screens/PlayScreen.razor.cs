@@ -51,11 +51,6 @@ public partial class PlayScreen
     private const int RATE_DIGITS = 3;
 
     /// <summary>
-    /// Multiplicador de uma fração para porcentagem.
-    /// </summary>
-    private const int PERCENT = 100;
-
-    /// <summary>
     /// Espera, em milissegundos, entre perder e a cortina começar.
     /// </summary>
     private const int CURTAIN_HOLD_MS = 700;
@@ -240,21 +235,6 @@ public partial class PlayScreen
     private static int CurtainFillMs() => CURTAIN_HOLD_MS + (BOARD_HEIGHT * CURTAIN_STEP_MS);
 
     /// <summary>
-    /// Um número completado com espaços à esquerda, nas posições do display.
-    /// </summary>
-    private static string Number(int value, int digits) => value.ToString().PadLeft(digits)[^digits..];
-
-    /// <summary>
-    /// Uma fração como porcentagem, nas posições do display.
-    /// </summary>
-    private static string Percent(float fraction) => Number((int)Math.Round(fraction * PERCENT), RATE_DIGITS);
-
-    /// <summary>
-    /// O tempo jogado no formato do display.
-    /// </summary>
-    private static string Time(TimeSpan duration) => duration.ToString(@"hh\:mm\:ss");
-
-    /// <summary>
     /// Redesenha pelo despachante do Blazor (os eventos do jogo chegam pelo relógio da Application).
     /// </summary>
     private void RepaintAsync() => _ = InvokeAsync(StateHasChanged);
@@ -300,5 +280,9 @@ public partial class PlayScreen
     /// <summary>
     /// Mostra o resultado da partida.
     /// </summary>
-    private void ShowResult() => Frame.Navigate<MenuScreen>();
+    private void ShowResult() => Frame.Navigate<ResultScreen>(new Dictionary<string, object?>
+    {
+        [nameof(ResultScreen.Stats)] = Controller.GetStats(),
+        [nameof(ResultScreen.IsNewRecord)] = Controller.IsNewRecord,
+    });
 }
