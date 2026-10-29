@@ -1,6 +1,7 @@
 ﻿using Gadz.Tetris.Domain.Models;
 using Gadz.Tetris.Domain.Models.Boards;
 using Gadz.Tetris.Domain.Models.Pieces;
+using Gadz.Tetris.Domain.Models.Statistics;
 using NUnit.Framework;
 
 namespace Gadz.Tetris.Tests.Model;
@@ -330,6 +331,77 @@ public class TabuleiroTests
         {
             board.Finish();
         }
+    }
+
+    /// <summary>
+    /// O recorde é a maior pontuação guardada enquanto a partida atual não a supera.
+    /// </summary>
+    [Test]
+    public void DeveInformarORecordeGuardado()
+    {
+        const int RECORDE = 1200;
+        var board = CreateBoardWithRecord(RECORDE);
+
+        try
+        {
+            board.Start();
+            CompleteOneLine(board);
+
+            Assert.AreEqual(RECORDE, board.Record);
+        }
+        finally
+        {
+            board.Finish();
+        }
+    }
+
+    /// <summary>
+    /// Quando a partida atual supera o recorde guardado, o recorde passa a ser a pontuação atual.
+    /// </summary>
+    [Test]
+    public void DeveAtualizarORecordeAoSuperarAPontuacaoGuardada()
+    {
+        const int RECORDE = 30;
+        var board = CreateBoardWithRecord(RECORDE);
+
+        try
+        {
+            board.Start();
+            CompleteOneLine(board);
+
+            Assert.AreEqual(board.Score, board.Record);
+            Assert.IsTrue(board.Record > RECORDE);
+        }
+        finally
+        {
+            board.Finish();
+        }
+    }
+
+    /// <summary>
+    /// Cria um tabuleiro cujo repositório já guarda uma partida com a pontuação informada.
+    /// </summary>
+    /// <param name="record">A pontuação da partida guardada.</param>
+    /// <returns>O tabuleiro, ainda não iniciado.</returns>
+    private static Board CreateBoardWithRecord(int record)
+    {
+        var repository = new InMemoryStatsRepository();
+        repository.Save(Stats.Load(new StatsRecord { Id = Identity.New(), Score = record }));
+        return new Board(repository, 10, 20);
+    }
+
+    /// <summary>
+    /// Completa a última linha: preenche as colunas 1 a 9 e derruba uma peça I vertical na coluna 0.
+    /// </summary>
+    /// <param name="board">O tabuleiro em jogo.</param>
+    private static void CompleteOneLine(Board board)
+    {
+        var row = Enumerable.Range(1, board.Width - 1).Select(x => new Block(x, board.Height - 1, PieceColor.Blue));
+        board.Arrange(CreatePiece(PieceType.I, new Point(0, 0), 0), row);
+
+        board.SmashDown();
+
+        Assert.AreEqual(1, board.Lines, "A última linha deveria ter sido removida.");
     }
 
     /// <summary>

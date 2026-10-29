@@ -160,6 +160,15 @@ namespace Gadz.Tetris.Desktop.Textos {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Recorde.
+        /// </summary>
+        internal static string Recorde {
+            get {
+                return ResourceManager.GetString("Recorde", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to About.
         /// </summary>
         internal static string Sobre {

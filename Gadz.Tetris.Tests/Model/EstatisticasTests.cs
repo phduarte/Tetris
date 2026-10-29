@@ -202,4 +202,34 @@ public class EstatisticasTests
 
         Assert.IsTrue(x < stats.Duration.Ticks);
     }
+
+    /// <summary>
+    /// Uma partida carregada continua contando a partir do tempo guardado.
+    /// </summary>
+    [Test]
+    public void DeveSomarOTempoGuardadoAoContinuar()
+    {
+        const long TEMPO_GUARDADO = 452165;
+        var stats = Stats.Load(new StatsRecord { Id = Identity.New(), Seconds = TEMPO_GUARDADO });
+
+        stats.Continue();
+        Thread.Sleep(50);
+
+        Assert.IsTrue(stats.Duration.Ticks > TEMPO_GUARDADO);
+    }
+
+    /// <summary>
+    /// Iniciar de novo com o tempo já contando não descarta o trecho em andamento.
+    /// </summary>
+    [Test]
+    public void NaoDevePerderTempoAoIniciarDuasVezes()
+    {
+        stats.Start();
+        Thread.Sleep(50);
+        var x = stats.Duration.Ticks;
+
+        stats.Start();
+
+        Assert.IsTrue(stats.Duration.Ticks >= x);
+    }
 }

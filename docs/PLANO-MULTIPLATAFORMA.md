@@ -30,11 +30,11 @@ O `Board.RefreshAsync()` cria uma thread de background. O WebAssembly roda numa 
 - O `Domain` expõe um `Tick()` (o atual `Checkout()`), e o "relógio" fica fora dele.
 - A `Application` controla o loop com `PeriodicTimer`/`Task.Delay`, que funcionam no WASM.
 - Bônus: os testes de queda e de nível ficam determinísticos, porque dá para chamar `Tick()` direto sem esperar tempo real.
-- Relacionada: [#63](https://github.com/phduarte/Tetris/issues/63) (serializar as mutações do `Board` com `Tick()` chamado de fora).
+- Relacionada: [#63](https://github.com/phduarte/Tetris/issues/63) (serializar as mutações do `Board`). ✅ Fechada com um `lock` no `Board`; o loop continua numa `Thread` de background, então mover o relógio para fora segue pendente.
 
 ### 2. A Application está presa à infraestrutura do Windows
 
-- `GameController.Create` faz `new StatsRepository()`, que grava em arquivo. Relacionada: [#53](https://github.com/phduarte/Tetris/issues/53).
+- `GameController.Create` faz `new StatsRepository()`, que grava em arquivo. Relacionada: [#53](https://github.com/phduarte/Tetris/issues/53) ✅ — já existe a sobrecarga `Create(width, height, IStatsRepository)`, mas a versão sem repositório ainda cria o `StatsRepository`.
 - `ToggleMuteCommand` chama o `SoundPlayerAdapter` estático, que usa `winmm.dll`.
 
 Proposta: criar a interface `ISoundPlayer` na `Application` (som não é regra de jogo, então não vai no `Domain`) e mudar a assinatura para `GameController.Create(width, height, IStatsRepository, ISoundPlayer)`. A `Application` deixa de referenciar `Data` e `SoundPlayer`.
@@ -53,10 +53,10 @@ Proposta: criar a interface `ISoundPlayer` na `Application` (som não é regra d
 | Item | Proposta | Relacionada |
 | --- | --- | --- |
 | Teclas | O enum `Key` usa códigos de tecla do Windows. A Web mapeia o `KeyboardEvent.key` do navegador para `Key`, e os botões de toque disparam os mesmos `Key`, reaproveitando o `CommandFactory` sem `switch` | — |
-| Pausa no Enter | Unificar `PauseCommand`/`ContinueCommand` em `TogglePauseCommand` que consulta o State | [#58](https://github.com/phduarte/Tetris/issues/58) |
+| Pausa no Enter | Unificar `PauseCommand`/`ContinueCommand` em `TogglePauseCommand` que consulta o State | [#58](https://github.com/phduarte/Tetris/issues/58) ✅ |
 | Textos | Mover `Jogo.resx` e `Jogo-pt.resx` para um projeto compartilhado (ou para a `Application`), para a Web usar as mesmas chaves via `IStringLocalizer` | — |
-| `Matrix` | Expor uma cópia somente leitura (snapshot) em vez de `Block[,]` mutável | [#61](https://github.com/phduarte/Tetris/issues/61) |
-| `Board` exposto | O `GameController` não deve expor a entidade `Board` às interfaces | [#65](https://github.com/phduarte/Tetris/issues/65) |
+| `Matrix` | Expor uma cópia somente leitura (snapshot) em vez de `Block[,]` mutável | [#61](https://github.com/phduarte/Tetris/issues/61) ✅ |
+| `Board` exposto | O `GameController` não deve expor a entidade `Board` às interfaces | [#65](https://github.com/phduarte/Tetris/issues/65) ✅ |
 
 Ao fim da fase 0, o Desktop funciona igual e os testes cobrem as mudanças.
 

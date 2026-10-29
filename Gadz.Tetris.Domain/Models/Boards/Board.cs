@@ -96,7 +96,12 @@ public class Board : Entity
     /// <summary>
     /// A maior pontuação guardada no repositório quando o tabuleiro foi criado.
     /// </summary>
-    public int Record { get; private set; }
+    private readonly int _storedRecord;
+
+    /// <summary>
+    /// O recorde (HI-SCORE): o guardado no repositório ou, se a partida atual já o superou, a pontuação atual.
+    /// </summary>
+    public int Record => Math.Max(_storedRecord, Stats.Score);
 
     /// <summary>
     /// Tempo jogado, sem contar as pausas.
@@ -199,7 +204,7 @@ public class Board : Entity
         _playfield = new Playfield(Dimension);
         Stats = new Stats();
         State = PausedState.Instance;
-        Record = _repository.MaxScore();
+        _storedRecord = _repository.MaxScore();
         CurrentPiece = CreateNextPiece();
         NextPiece = CreateNextPiece();
     }
