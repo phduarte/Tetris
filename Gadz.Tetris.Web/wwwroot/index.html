@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#25262a" />
     <title>Gadz Tetris</title>
     <base href="/" />
@@ -16,7 +16,11 @@
     <script type="importmap"></script>
 </head>
 
-<body>
+<!-- o ontouchstart vazio faz o Safari do iOS aplicar o :active (botão afundado) ao tocar -->
+<body ontouchstart="">
+    <!-- no celular, o espaço livre acima do aparelho, reservado para anúncio -->
+    <div id="ad-slot" class="ad-slot"></div>
+
     <div id="app">
         <div class="loading">TETRIS</div>
     </div>

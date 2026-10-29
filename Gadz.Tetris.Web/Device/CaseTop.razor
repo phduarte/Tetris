@@ -1,0 +1,35 @@
+@inject IStringLocalizer<Jogo> Texts
+
+<header class="case-top">
+    <span class="speaker"></span>
+
+    <div class="brand">
+        <span class="swatches">
+            @foreach (var color in _colors)
+            {
+                <span style="background: var(--@color)"></span>
+            }
+        </span>
+        <span class="brand-name">@BRAND_MAKER <span class="brand-game">@Texts[nameof(Jogo.Nome)].Value.ToUpperInvariant()</span></span>
+        <span class="swatches">
+            @foreach (var color in _colors.Reverse())
+            {
+                <span style="background: var(--@color)"></span>
+            }
+        </span>
+    </div>
+
+    <span class="speaker"></span>
+</header>
+
+@code {
+    /// <summary>
+    /// A marca do aparelho, antes do nome do jogo (como na faixa superior do Desktop).
+    /// </summary>
+    private const string BRAND_MAKER = "GADZ";
+
+    /// <summary>
+    /// As cores das peças na ordem I, T, L, J, O, S, Z (variáveis do CSS), como no logotipo do Desktop.
+    /// </summary>
+    private static readonly string[] _colors = ["cyan", "purple", "orange", "blue", "yellow", "green", "red"];
+}

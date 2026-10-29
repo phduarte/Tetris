@@ -55,6 +55,9 @@ body {
     font-family: var(--text);
     overflow: hidden;
     user-select: none;
+    /* toques rápidos (girar, girar...) não podem virar zoom de toque duplo */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 #app {
@@ -62,6 +65,11 @@ body {
     place-items: center;
     min-height: 100%;
     padding: 12px;
+}
+
+/* o espaço do anúncio só existe no celular (ver o fim do arquivo) */
+.ad-slot {
+    display: none;
 }
 
 .loading {
@@ -78,10 +86,59 @@ body {
     display: flex;
     flex-direction: column;
     gap: 18px;
-    padding: 22px 22px 26px;
+    padding: 8px 22px 26px;
     border-radius: 22px 22px 48px 22px;
     background: linear-gradient(var(--case-top), var(--case-bottom));
     box-shadow: 0 18px 40px rgb(0 0 0 / 55%), inset 0 1px 0 rgb(255 255 255 / 8%);
+}
+
+/* faixa superior da carcaça: um alto-falante em cada canto e a marca no meio */
+.case-top {
+    --speaker: 38px;
+    display: grid;
+    grid-template-columns: var(--speaker) 1fr var(--speaker);
+    align-items: center;
+    gap: 10px;
+    min-height: 46px;
+    margin-bottom: -4px;
+}
+
+/* a grade de furos do alto-falante: pontos repetidos, recortados num círculo afundado na carcaça */
+.speaker {
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--bezel) 1.3px, transparent 1.8px) center / 6px 6px, var(--case-bottom);
+    box-shadow: inset 0 2px 3px rgb(0 0 0 / 55%), 0 1px 0 rgb(255 255 255 / 7%);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.swatches {
+    display: flex;
+    gap: 3px;
+}
+
+.swatches span {
+    width: 7px;
+    height: 7px;
+    border-radius: 1px;
+}
+
+.brand-name {
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.32em;
+    white-space: nowrap;
+}
+
+.brand-game {
+    color: var(--accent);
 }
 
 .bezel {
@@ -713,4 +770,185 @@ kbd {
 
 .pointer {
     font-size: calc(var(--cell) * 0.5);
+}
+
+/* ---------- celular (retrato) ---------- */
+
+/*
+ * Feito a partir do protótipo para o iPhone 16 Pro Max (440×956), em proporção nos outros celulares:
+ * no topo, a faixa do anúncio (banner grande de app, 320×100; nas telas baixas, o banner comum, 320×50);
+ * abaixo dela, o aparelho ocupa o resto da tela, com o LCD na largura toda. A sobra de altura engrossa
+ * a faixa superior (até um limite) e espaça os botões. Os alvos de toque seguem o mínimo das diretrizes
+ * de iOS (44pt) e Android (48dp).
+ */
+@media (max-width: 640px) {
+    :root {
+        --ad-height: 100px;
+        /*
+         * largura: 2 × (borda da carcaça + moldura);
+         * altura: anúncio + faixa superior, moldura e botões no tamanho mínimo (ver abaixo)
+         */
+        --cell: clamp(8px, min((100vw - 46px) / 22.5, (100dvh - var(--ad-height) - 310px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) / 23.6), 24px);
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .ad-slot {
+        display: block;
+        flex: none;
+        box-sizing: content-box;
+        height: var(--ad-height);
+        padding-top: env(safe-area-inset-top);
+    }
+
+    #app {
+        display: flex;
+        align-items: stretch;
+        flex: 1;
+        min-height: 0;
+        padding: 0;
+    }
+
+    .console {
+        flex: 1;
+        gap: 0;
+        padding: 0 14px calc(16px + env(safe-area-inset-bottom));
+        border-radius: 26px 26px 0 0;
+    }
+
+    /* a faixa superior cresce com a sobra de altura, como a testa grossa do protótipo */
+    .case-top {
+        --speaker: 44px;
+        flex: 1 1 56px;
+        max-height: 96px;
+        gap: 8px;
+        margin: 0;
+    }
+
+    .brand {
+        gap: 8px;
+    }
+
+    .swatches span {
+        width: 5px;
+        height: 5px;
+    }
+
+    .swatches {
+        gap: 2px;
+    }
+
+    .brand-name {
+        font-size: 11px;
+        letter-spacing: 0.25em;
+    }
+
+    .bezel {
+        padding: 9px;
+    }
+
+    .lcd {
+        margin: 0 auto;
+    }
+
+    /*
+     * botões pequenos espalhados numa linha perto do LCD, longe dos polegares; direcional e botão grande
+     * embaixo. A sobra de altura se divide por igual entre as linhas.
+     */
+    .buttons {
+        flex: 2 1 auto;
+        grid-template-areas: "smalls smalls smalls" "dpad . big";
+        align-content: space-evenly;
+        row-gap: 12px;
+        padding: 12px 4px 0;
+    }
+
+    .smalls {
+        grid-area: smalls;
+        justify-content: space-around;
+        gap: 12px;
+    }
+
+    .dpad-block {
+        grid-area: dpad;
+    }
+
+    .buttons > .button.big {
+        grid-area: big;
+    }
+
+    .dpad {
+        --arm: 48px;
+    }
+
+    .arrow::before {
+        border-width: 9px;
+    }
+
+    .arrow.up::before { margin-top: -9px; }
+    .arrow.down::before { margin-bottom: -9px; }
+    .arrow.left::before { margin-left: -9px; }
+    .arrow.right::before { margin-right: -9px; }
+
+    /* a pílula continua discreta, mas a área de toque do botão tem 44px de altura */
+    .button.small {
+        justify-content: center;
+        min-height: 44px;
+    }
+
+    .button.small .caption {
+        min-width: 76px;
+        height: 32px;
+        border-radius: 16px;
+        font-size: 11px;
+    }
+
+    .button.big .caption {
+        width: 84px;
+        height: 84px;
+        font-size: 11px;
+    }
+}
+
+/*
+ * nas telas baixas (iPhone SE, Androids antigos), o banner comum de 50px, uma faixa superior mais fina e um
+ * direcional um pouco menor (ainda com 44px por braço) deixam o LCD ocupar a largura toda
+ */
+@media (max-width: 640px) and (max-height: 760px) {
+    :root {
+        --ad-height: 50px;
+        --cell: clamp(8px, min((100vw - 46px) / 22.5, (100dvh - var(--ad-height) - 276px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) / 23.6), 24px);
+    }
+
+    .case-top {
+        --speaker: 36px;
+        flex-basis: 48px;
+    }
+
+    .buttons {
+        row-gap: 8px;
+        padding-top: 6px;
+    }
+
+    .dpad {
+        --arm: 44px;
+    }
+}
+
+/* na tela de toque não há teclado: as teclas impressas sob os botões e o atalho do Ctrl não se aplicam */
+@media (hover: none) and (pointer: coarse) {
+    .keycap,
+    .dpad-hint {
+        display: none;
+    }
+}
+
+/* nos celulares mais estreitos (320px) os quadradinhos não cabem ao lado da marca */
+@media (max-width: 340px) {
+    .swatches {
+        display: none;
+    }
 }
