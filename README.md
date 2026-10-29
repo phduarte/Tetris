@@ -2,8 +2,9 @@
 
 ![.NET](https://github.com/phduarte/Tetris/actions/workflows/main.yml/badge.svg)
 [![CodeFactor](https://www.codefactor.io/repository/github/phduarte/tetris/badge)](https://www.codefactor.io/repository/github/phduarte/tetris)
-[![BCH compliance](https://bettercodehub.com/edge/badge/phduarte/Tetris?branch=master)](https://bettercodehub.com/)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d567b76d931e4e619802302fdf0124b7)](https://www.codacy.com/manual/phduarte87/Tetris?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=phduarte/Tetris&amp;utm_campaign=Badge_Grade)
+
+*[Read this in English](README.en.md)*
 
 Tetris é um jogo comercializado pela Nintendo em 1989 e um dos jogos de vídeo-game mais famosos de todos os tempos.
 
@@ -31,18 +32,32 @@ Um fato curioso é que Steve Wozniak, cofundador da Apple foi um dos maiores rec
 
   O propósito deste projeto é simplificar a aplicação das métodologias, padrões e princípios em destaque atualmente. Toda implementação leva em consideração as boas práticas do Clean Code, Design Patterns e princípios como SOLID, mas com a preocupação de se evitar o over-engineering. Então mesmo que algum padrão possa ser aplicado, ainda será avaliado seu custo benefício. O projeto sempre estará aberto a refatoração.
 
-  A Solution inicial é composta por somente dois pacotes principais, o Core e o Desktop.
-O Core é tem responsabilidades transversais, ele provém o Modelo de Domínio e os Acessos a Dados. 
+  A Solution começou com apenas dois pacotes, o Core e o Desktop. Com as refatorações ela foi separada em camadas, usando .NET 10:
 
-O projeto Desktop contém as IHC, como parte da camada de Interfaces, aqui fornecendo interface para usuários desktop Windows. Sua preocupação se limita em lidar com as entradas vindas dos dispositivos e fornecer respostas visuais amigáveis à um cliente humano.
+```
+Desktop ──► Application ──► Domain
+                       ├──► Data ──► Domain
+                       └──► SoundPlayer
+```
 
-  Enquanto eu modelava o Modelo de Domínio, a neutralidade tecnológica e o desacoplamento das responsabilidades foi algo fundamental, por isso o Domínio não tem ligações externas com camadas de Infraestrutura ou Interface por exemplo. Afinal, não podemos permitir que regras do jogo sejam manipuladas pelo usuário, e nem ficar preso num modelo de Interface só. Provavelmente teremos versões para outros dispositivos de IHC, como Mobile por exemplo. No entanto, não isolei o Domain Model em uma DLL à parte (simplesmente porque não faz nenhum sentido pra mim fazer isso nesse projeto), mas isolei todas as classes, métodos e propriedades que precisavam simplesmente usando operadores de visibilidade *Internal* e *Private*.
+| Projeto | Responsabilidade |
+| --- | --- |
+| `Gadz.Tetris.Domain` | Modelo de domínio e todas as regras do jogo (tabuleiro, peças, colisão, pontuação, níveis, recorde e estados). Não depende de nenhum outro projeto. |
+| `Gadz.Tetris.Data` | Repositório das estatísticas, gravadas em `%USERPROFILE%\Tetris\stats.mc`. |
+| `Gadz.Tetris.SoundPlayer` | Adapter de áudio sobre a `winmm.dll`. |
+| `Gadz.Tetris.Application` | `GameController` (fachada para as interfaces) e os comandos de teclado. Monta o domínio com a infraestrutura. |
+| `Gadz.Tetris.Desktop` | Interface WinForms: lida com as entradas dos dispositivos e dá respostas visuais ao jogador. Não tem regras de jogo. |
+| `Gadz.Tetris.Tests` | Testes NUnit do domínio e do `GameController`. |
+
+  Enquanto eu modelava o Modelo de Domínio, a neutralidade tecnológica e o desacoplamento das responsabilidades foi algo fundamental, por isso o Domínio não tem ligações externas com camadas de Infraestrutura ou Interface por exemplo. Afinal, não podemos permitir que regras do jogo sejam manipuladas pelo usuário, e nem ficar preso num modelo de Interface só. Provavelmente teremos versões para outros dispositivos de IHC, como Mobile por exemplo. Dentro de cada projeto, o que não precisa ser visto de fora fica isolado com os modificadores *internal* e *private*.
+
+Os planos de evolução estão em [docs/PLANO-REFATORACAO.md](docs/PLANO-REFATORACAO.md) e [docs/PLANO-MULTIPLATAFORMA.md](docs/PLANO-MULTIPLATAFORMA.md).
 
 ## Características
 
 - **Tema Clássico**: Opção para selecionar o tema similar ao do jogo original da década de 80.
 - **Tema Brickgame**: Opção para selecionar o tema similar ao do video-game de bolso, famoso na década de 90.
-- **Slide**: Segurar a tecla CTRL enquanto move a peça para esquerda ou direita acelera a velocidade do movimento.
+- **Slide**: Segurar a tecla CTRL enquanto move a peça para esquerda ou direita faz a peça deslizar até o limite.
 - **Smash Down**: Ao apertar a tecla SPACEBAR a peça imediatamente cai em velocidade acelerada.
 - **Sons**: Os eventos e movimentos reproduzem sons similares aos dos brickgames.
 - **Sound On/Off**: Opção para ligar ou desligar sons na tela inicial ou durante o jogo pressionando a tecla SHIFT.
@@ -52,6 +67,20 @@ O projeto Desktop contém as IHC, como parte da camada de Interfaces, aqui forne
   + 3 linhas completas na mesma jogada valem 300 pontos
   + TETRIS (4 linhas completas na mesma jogada) vale 1.200 pontos
 - **Níveis e velocidade**: o nível sobe ao completar a meta de linhas (20 no primeiro nível, crescendo 25% a cada nível). No nível 1 a peça desce a cada 1.000 ms, e esse intervalo diminui 50 ms por nível até o mínimo de 100 ms.
+- **HI-SCORE**: a tela de jogo mostra o recorde abaixo da pontuação. Ele é a maior pontuação já guardada e passa a acompanhar a pontuação atual quando ela o supera.
+
+## Controles
+
+| Tecla | Ação |
+| --- | --- |
+| ← / → | Move a peça |
+| CTRL + ← / → | Desliza a peça até o limite |
+| ↓ | Desce a peça |
+| ↑ | Gira a peça |
+| ESPAÇO | Derruba a peça (smash down) |
+| ENTER | Pausa / continua |
+| ESC | Encerra o jogo e salva as estatísticas |
+| SHIFT | Liga / desliga o som |
 
 ## Gráfico
 
@@ -76,7 +105,7 @@ A escolha de uma tecnologia não tão popular atualmente foi proposital, justame
 
 Essa versão deveria ser concluída rápido, o Windows Forms ajudou por permitir trabalhar facilmente com callbacks através de Eventos e delegates.
 
-O projeto ficou bem leve e pequeno para download, graças ao .Net Framework que já possui várias bibliotecas embutidas.
+O projeto ficou bem leve e pequeno para download, graças às várias bibliotecas que já vêm embutidas no .NET.
 
 ### Clean Code
 
@@ -101,11 +130,11 @@ Usei por exemplo o padrão State para garantir por exemplo, que um jogo em andam
 
 Também foi usado o padrão Builder para tornar a construção de uma peça mais dinâmica em tempo de execução.
 
-Para montagem dos tetraminós usei o padrão Strategy, pois, o formato de cada peça é diferente além do comportamento de rotação e isso é definido em tempo de execução.
+Para montagem dos tetraminós usei o padrão Strategy, pois o formato de cada peça é diferente em cada rotação e isso é definido em tempo de execução. Cada tetraminó declara suas formas como uma tabela de posições, e a classe base monta os blocos a partir dela.
 
 Para persistência dos dados usei o padrão Repository, onde eu tenho um interface no Modelo de Domínio e uma implementação fora dele. No meu caso aqui a implementação é quase um Mock para salvar em formato flat no disco local, mas poderia facimente ser extendido para um modelo em núvem por exemplo.
 
-Na aplicação cliente, eu implementei o padrão command para permitir extensão de comandos respeitando OCP do SOLID.
+Na aplicação cliente, cada ação de teclado é um Command registrado numa fábrica, o que permite novos comandos sem alterar os formulários.
 
 ## Links úteis
 

@@ -69,6 +69,8 @@ Desktop ──► Application ──► Domain
 - Pontuação por jogada: 1 linha = 40, 2 = 100, 3 = 300, 4 (TETRIS) = 1200. No máximo 4 linhas por jogada.
 - Nível sobe ao completar a meta de linhas (inicia em 20 e cresce 25% a cada nível).
 - Velocidade: a peça desce a cada `Stats.Interval` ms — 1000 no nível 1, menos 50 por nível, mínimo de 100.
+- Recorde (HI-SCORE): `Board.Record` é a maior pontuação guardada no repositório ou a pontuação atual, se ela já a superou.
+- Tempo jogado: contado pelo `PlayClock` (`internal`) dentro de `Stats`, sem contar as pausas.
 - Estados: `Playing` ↔ `Parado` (pausado) → `Finished`. Os textos de `ToString()` dos estados são verificados nos testes.
 - Teclas: ←/→ movem, Ctrl+←/→ deslizam até o limite, ↓ desce, Espaço derruba (smash down), ↑ gira, Enter pausa, Esc encerra o jogo e salva as estatísticas, Shift liga/desliga som.
 
@@ -93,3 +95,6 @@ Desktop ──► Application ──► Domain
 - `GameController.Create(width, height)` sem repositório usa o `StatsRepository` real (`%USERPROFILE%\Tetris\stats.mc`). Nos testes, sempre passe o `InMemoryStatsRepository` (`Gadz.Tetris.Tests.Model`) para não gravar em disco.
 - `Play.Jogo_KeyDown` executa só o primeiro comando que casar com a tecla (ordem do `CommandFactory`); por isso cada tecla deve ter um único comando — o Enter usa `TogglePauseCommand`, que consulta `CanPause`/`CanContinue` no estado.
 - `SoundPlayerAdapter` e `StatsRepository` são estáticos/têm construtor estático e estão marcados com `[ExcludeFromCodeCoverage]`.
+- A tela usa só `Textos/Jogo.resx` (`using Texto = ...Textos.Jogo`); o `Jogo-pt.resx` gera outra classe (`Jogo_pt`) e não é lido. Hoje os valores dos dois arquivos estão misturados entre inglês e português.
+- Sem o Visual Studio, a classe de um `.resx` pode ser regenerada com o `ResGen.exe /str:cs,...` do Windows SDK. Ele escreve os comentários no idioma do sistema; copie só o membro novo para o `Jogo*.Designer.cs`.
+- Controles novos numa tela sem o designer do Visual Studio são criados em código no próprio formulário (ex.: o rótulo do recorde em `Play.CreateRecordLabel`), para não editar o `*.Designer.cs`.

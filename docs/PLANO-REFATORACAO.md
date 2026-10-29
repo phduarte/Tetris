@@ -4,12 +4,14 @@ Análise de 28/10/2026, branch `modernize/dotnet10`.
 
 A arquitetura em camadas está sólida. Os problemas se concentram no `Board` (730 linhas) e na interação entre a thread do jogo e a UI. São 20 itens, cada um com uma issue no GitHub, organizados em 5 fases.
 
+> **Situação:** as fases 1 a 5 estão concluídas (todas as 20 issues fechadas). A fase 6 reúne itens antigos do backlog; veja o fim do documento.
+
 ## Como ler as labels das issues
 
 | Grupo | Labels | Significado |
 | --- | --- | --- |
 | Importância | `prioridade:alta`, `prioridade:média`, `prioridade:baixa` | Alta = bug visível ou bloqueia outros itens; baixa = limpeza |
-| Ordem | `fase-1` … `fase-5` | Sequência sugerida; cada fase destrava a seguinte |
+| Ordem | `fase-1` … `fase-6` | Sequência sugerida; cada fase destrava a seguinte |
 | Validação | `validação:teste-unitário` | Exige teste NUnit novo que falha antes e passa depois |
 | Validação | `validação:regressão` | Sem mudança de comportamento: `dotnet test` continua verde |
 | Validação | `validação:manual` | Jogar e observar o comportamento descrito na issue |
@@ -71,7 +73,14 @@ As duas têm prioridade alta, mas ficam na fase 4 porque #63 fica muito mais sim
 | [#70](https://github.com/phduarte/Tetris/issues/70) | `CommandFactory` recria a lista de comandos a cada tecla | baixa | regressão |
 | [#71](https://github.com/phduarte/Tetris/issues/71) | Otimizar a pintura do tabuleiro em `Play` | baixa | manual |
 
-## Issues antigas relacionadas
+## Fase 6 — Backlog antigo
 
-- [#29](https://github.com/phduarte/Tetris/issues/29) "Refactor Board.cs": coberta pelas fases 3 e 4.
-- [#31](https://github.com/phduarte/Tetris/issues/31) "Refactor Stats.cs": parcialmente coberta por #48 e #68.
+Itens que estavam no backlog desde antes deste plano, revistos depois da fase 5.
+
+| Issue | Item | Situação |
+| --- | --- | --- |
+| [#29](https://github.com/phduarte/Tetris/issues/29) | Refactor `Board.cs` (aberta pelo Better Code Hub) | Fechada sem mudanças: coberta pelas fases 3 a 5 |
+| [#30](https://github.com/phduarte/Tetris/issues/30) | Refactor `Block.cs` (aberta pelo Better Code Hub) | Fechada sem mudanças: `Block` é um value object; fan-in alto é esperado |
+| [#31](https://github.com/phduarte/Tetris/issues/31) | Refactor `Stats.cs` | Contagem do tempo extraída para `PlayClock`; pontuação e níveis já tinham sido tratados em #48 e #68 |
+| [#2](https://github.com/phduarte/Tetris/issues/2) | HI-SCORE na tela de jogo | `Board.Record` acompanha a pontuação atual quando ela supera o recorde guardado; o `Play` mostra o recorde abaixo da pontuação |
+| [#49](https://github.com/phduarte/Tetris/issues/49) | README em inglês | `README.en.md` |
