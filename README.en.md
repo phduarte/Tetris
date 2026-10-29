@@ -37,6 +37,9 @@ Desktop ──► Application ──► Domain
    ├──► Data ──► Domain
    ├──► SoundPlayer ──► Application
    └──► Texts
+
+Web ──► Application ──► Domain
+   └──► Texts
 ```
 
 | Project | Responsibility |
@@ -47,11 +50,53 @@ Desktop ──► Application ──► Domain
 | `Gadz.Tetris.Texts` | User interface texts in English and Portuguese, shared by the user interfaces. |
 | `Gadz.Tetris.Application` | `GameController` (facade for the user interfaces) and the keyboard commands. Depends only on the domain: it receives the repository and the sound player from its caller. |
 | `Gadz.Tetris.Desktop` | WinForms interface: handles device input and gives visual feedback to the player. Holds no game rules. It is the composition root: `Program.cs` creates the file repository and the Windows sound player. |
+| `Gadz.Tetris.Web` | Blazor WebAssembly interface (PWA): the same handheld as the Desktop, running in the browser. The whole game (domain and application) runs in the browser itself, with no server. Statistics are kept in `localStorage` and sounds play through the Web Audio API, using the same `.wav` files as the Desktop. |
 | `Gadz.Tetris.Tests` | NUnit tests for the domain and the `GameController`. |
 
 While modeling the domain, technology neutrality and decoupled responsibilities were essential, so the domain has no links to the infrastructure or interface layers. After all, players must not be able to tamper with the game rules, and the game should not be tied to a single interface. There will probably be versions for other devices, such as mobile. Inside each project, whatever does not need to be seen from outside is hidden with the *internal* and *private* modifiers.
 
 The evolution plans are in [docs/PLANO-REFATORACAO.md](docs/PLANO-REFATORACAO.md) and [docs/PLANO-MULTIPLATAFORMA.md](docs/PLANO-MULTIPLATAFORMA.md) (in Portuguese).
+
+## How to run
+
+You need the [.NET 10 SDK](https://dotnet.microsoft.com/download) (the version is pinned in `global.json`).
+
+```sh
+dotnet build Gadz.Tetris.sln
+dotnet test Gadz.Tetris.sln
+```
+
+### Desktop (Windows)
+
+```sh
+dotnet run --project Gadz.Tetris.Desktop
+```
+
+The WinForms interface and the sound (`winmm.dll`) only work on Windows.
+
+### Web (browser)
+
+```sh
+dotnet run --project Gadz.Tetris.Web
+```
+
+Then open http://localhost:5156 in your browser (the address is also printed in the terminal). For HTTPS, run with `--launch-profile https` and open https://localhost:7231. The profiles live in `Gadz.Tetris.Web/Properties/launchSettings.json`.
+
+- It runs on any operating system with the SDK, and the game opens in current browsers.
+- The language follows the browser: Portuguese for `pt`, English otherwise.
+- The high score, history, theme and sound on/off are stored in the browser. Clearing the site data resets them.
+- Browsers only allow sound after the first tap or key press, so sounds start with your first action.
+- In the browser, the About screen opens with **F2**, because F12 opens the developer tools.
+
+To build the static files (which any web server can host, no .NET needed):
+
+```sh
+dotnet publish Gadz.Tetris.Web -c Release -o publish
+```
+
+The site ends up in `publish/wwwroot`.
+
+In VS Code, `.vscode/launch.json` provides **Web (Blazor WebAssembly)** and **Desktop (WinForms)** entries to run and debug with F5.
 
 ## Features
 
@@ -61,7 +106,8 @@ The evolution plans are in [docs/PLANO-REFATORACAO.md](docs/PLANO-REFATORACAO.md
 - **Pause and game over on the LCD**: when paused (including the automatic pause when the window loses focus) the board goes blank so you can't peek at the move. When you lose, a curtain of blocks rises and falls before GAME OVER, which moves on to the result on any key or by itself after 10 seconds.
 - **Result**: score, level, lines, pieces, TETRIS % and time, with a NEW RECORD badge when the game beats the saved high score. It goes back to the menu on ENTER or by itself after 30 seconds.
 - **Interactive help**: pressing a key highlights its row in the manual, which also shows the scoring table.
-- **Languages**: texts in English and Portuguese, following the Windows language.
+- **Languages**: texts in English and Portuguese, following the Windows language (or the browser's, on the Web).
+- **Desktop and Web**: the same game runs on Windows (WinForms) and in the browser (Blazor WebAssembly), on top of the same domain.
 - **Slide**: holding CTRL while moving the piece left or right slides it all the way to the edge.
 - **Smash Down**: pressing SPACEBAR drops the piece at once.
 - **Sounds**: events and moves play sounds similar to those of brick games.
@@ -87,7 +133,7 @@ The evolution plans are in [docs/PLANO-REFATORACAO.md](docs/PLANO-REFATORACAO.md
 | ESC | End the game and save the statistics |
 | SHIFT | Turn the sound on / off (while the sound is off, the SOUND button stays pressed in) |
 | F1 | Open the help (in the menu) |
-| F12 | Open the About screen (in the menu) |
+| F12 | Open the About screen (in the menu; F2 on the Web) |
 
 ## Screenshot
 
