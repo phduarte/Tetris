@@ -25,7 +25,8 @@ CI: `.github/workflows/main.yml` (restore, build e test em `windows-latest`). O 
 ```
 Desktop ──► Application ──► Domain
    ├──► Data ──► Domain               (só no Program.cs)
-   └──► SoundPlayer ──► Application   (só no Program.cs; implementa ISoundPlayer)
+   ├──► SoundPlayer ──► Application   (só no Program.cs; implementa ISoundPlayer)
+   └──► Texts                         (textos de interface, sem dependências)
 ```
 
 A `Application` depende só do `Domain`. Cada interface é a raiz de composição: cria a infraestrutura (repositório e som) e a passa ao `GameController.Create`.
@@ -34,6 +35,7 @@ A `Application` depende só do `Domain`. Cada interface é a raiz de composiçã
 |---|---|
 | `Gadz.Tetris.Domain` | Modelo de domínio e **todas** as regras do jogo (tabuleiro, peças, colisão, pontuação, níveis, estados). Não referencia nenhum outro projeto nem pacote. |
 | `Gadz.Tetris.Data` | Implementação dos repositórios do domínio (`StatsRepository` → arquivo texto `%USERPROFILE%\Tetris\stats.mc`). |
+| `Gadz.Tetris.Texts` | Textos de interface (`Jogo.resx` em inglês e `Jogo.pt.resx` em português), compartilhados entre as interfaces. Não referencia nenhum projeto nem WinForms. |
 | `Gadz.Tetris.SoundPlayer` | Adapter de áudio (`SoundPlayerAdapter : ISoundPlayer`) com os `.wav` embutidos em `Sounds.resx`. Criado uma única vez no `Program.cs` do Desktop. |
 | `Gadz.Tetris.Application` | `GameController` (fachada para o cliente), os `Commands` de teclado e o `ISoundPlayer`. Monta o domínio com a infraestrutura recebida no `Create`, sem referenciar `Data` nem `SoundPlayer`. |
 | `Gadz.Tetris.Desktop` | Interface WinForms: captura entradas e desenha a tela. Sem regras de jogo. O `Program.cs` cria o `StatsRepository` e o `SoundPlayerAdapter` e os entrega ao `ConsoleFrame` (`Repository`, `Sound`). Um único form sem borda (`Device/ConsoleFrame`, o "aparelho") desenha carcaça, LCD e botões; as telas (`Screens/*Screen`) só trocam o conteúdo do LCD. |
@@ -88,7 +90,7 @@ A `Application` depende só do `Domain`. Cada interface é a raiz de composiçã
 6. **Estado do tabuleiro só muda via State.** Não crie flags booleanas paralelas para "jogando/pausado"; adicione permissões em `IBoardState` e implemente em todos os estados.
 7. **Não exponha estado mutável do domínio.** Mantenha `private set`, coleções somente leitura e tipos internos como `internal`.
 8. **Sem números mágicos.** Valores com significado viram constantes nomeadas (`private const`).
-9. **Textos de interface ficam em recursos.** Todo texto visível vai em `Textos/Jogo.resx` (inglês) **e** `Textos/Jogo.pt.resx` (português), com a mesma chave nos dois.
+9. **Textos de interface ficam em recursos.** Todo texto visível vai em `Gadz.Tetris.Texts/Jogo.resx` (inglês) **e** `Gadz.Tetris.Texts/Jogo.pt.resx` (português), com a mesma chave nos dois. O projeto `Gadz.Tetris.Texts` é compartilhado entre as interfaces e não depende de WinForms.
 10. **Atualizações de controles WinForms acontecem na thread de UI.** O relógio do `GameController` (`RunClockAsync`) chama `Board.Tick` fora da thread de UI; use o `TaskScheduler` capturado (`_threadPrincipal`) como em `PlayScreen.RunOnUiAsync`.
 11. **Compatibilidade do arquivo de estatísticas.** `stats.mc` é texto separado por tab com ordem de colunas fixa (`COL_ID`…`COL_TIME`). Só acrescente colunas ao final e mantenha a leitura de arquivos antigos funcionando.
 12. **Testes acompanham as regras.** Toda regra de domínio nova ou alterada precisa de teste em `Gadz.Tetris.Tests`. Mudanças na tabela de pontuação, cores, estados ou teclas exigem atualizar testes **e** o `README.md`.
@@ -102,7 +104,7 @@ A `Application` depende só do `Domain`. Cada interface é a raiz de composiçã
 - `PlayScreen.HandleKey` executa só o primeiro comando que casar com a tecla (ordem do `CommandFactory`); por isso cada tecla deve ter um único comando — o Enter usa `TogglePauseCommand`, que consulta `CanPause`/`CanContinue` no estado. `Command.Match` recebe também `repeat` (tecla segurada, detectada pelo `ConsoleFrame`): por padrão o comando ignora esse dado; `MoveLeft/Right` só casam no primeiro toque e `HoldLeft/Right` só nas repetições.
 - `Key` usa os códigos do WinForms (`Keys`): o Shift chega como `Keys.ShiftKey` (0x10), não `LShiftKey`.
 - `SoundPlayerAdapter` e `StatsRepository` falam com o sistema (winmm, disco) e estão marcados com `[ExcludeFromCodeCoverage]`. Crie um só `SoundPlayerAdapter` por aplicação: o construtor abre os sons com aliases fixos.
-- A UI lê os textos pela classe gerada de `Textos/Jogo.resx` (`using Texto = ...Textos.Jogo`). O `Jogo.pt.resx` é um recurso satélite (não gera classe): o Windows em português recebe os textos dele automaticamente.
-- Sem o Visual Studio, a classe de um `.resx` pode ser regenerada com o `ResGen.exe /str:cs,...` do Windows SDK. Ele escreve os comentários no idioma do sistema; traduza-os de volta para o texto padrão em inglês (ou copie só o membro novo para o `Jogo.Designer.cs`).
+- A UI lê os textos pela classe gerada (pública, `PublicResXFileCodeGenerator`) de `Gadz.Tetris.Texts/Jogo.resx` (`using Texto = Gadz.Tetris.Texts.Jogo`). O `Jogo.pt.resx` é um recurso satélite (não gera classe): o Windows em português recebe os textos dele automaticamente.
+- Sem o Visual Studio, a classe de um `.resx` pode ser regenerada com o `ResGen.exe /str:cs,Gadz.Tetris.Texts,Jogo,... /publicClass` do Windows SDK (o construtor continua `internal`). Ele escreve os comentários no idioma do sistema; traduza-os de volta para o texto padrão em inglês (ou copie só o membro novo para o `Jogo.Designer.cs`).
 - As telas não têm designer: tudo é desenhado em código, em pixels a 96 DPI, e o `ConsoleFrame` escala para o DPI do monitor. Medidas e cores ficam em constantes e na `Palette`; a fonte do LCD (Silkscreen, OFL) e o ícone estão em `Properties/Resources.resx`.
 - O ícone (`tetris.ico`) é gerado por `dotnet run tools/gerar-icone.cs -- Gadz.Tetris.Desktop/tetris.ico`; altere o script, não o `.ico`.

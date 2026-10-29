@@ -4,7 +4,7 @@ using System.Drawing.Text;
 using Gadz.Tetris.Application;
 using Gadz.Tetris.Domain.Models.Statistics;
 using Gadz.Tetris.Desktop.Screens;
-using Texto = Gadz.Tetris.Desktop.Textos.Jogo;
+using Texto = Gadz.Tetris.Texts.Jogo;
 
 namespace Gadz.Tetris.Desktop.Device;
 

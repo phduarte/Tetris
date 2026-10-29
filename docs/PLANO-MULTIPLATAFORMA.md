@@ -55,7 +55,7 @@ Proposta: criar a interface `ISoundPlayer` na `Application` (som não é regra d
 | --- | --- | --- |
 | Teclas | O enum `Key` usa códigos de tecla do Windows. A Web mapeia o `KeyboardEvent.key` do navegador para `Key`, e os botões de toque disparam os mesmos `Key`, reaproveitando o `CommandFactory` sem `switch` | — |
 | Pausa no Enter | Unificar `PauseCommand`/`ContinueCommand` em `TogglePauseCommand` que consulta o State | [#58](https://github.com/phduarte/Tetris/issues/58) ✅ |
-| Textos | Mover `Jogo.resx` e `Jogo-pt.resx` para um projeto compartilhado (ou para a `Application`), para a Web usar as mesmas chaves via `IStringLocalizer` | — |
+| Textos | ✅ `Jogo.resx` e `Jogo.pt.resx` no projeto compartilhado `Gadz.Tetris.Texts`; a Web usará as mesmas chaves via `IStringLocalizer` | [#85](https://github.com/phduarte/Tetris/issues/85) |
 | `Matrix` | Expor uma cópia somente leitura (snapshot) em vez de `Block[,]` mutável | [#61](https://github.com/phduarte/Tetris/issues/61) ✅ |
 | `Board` exposto | O `GameController` não deve expor a entidade `Board` às interfaces | [#65](https://github.com/phduarte/Tetris/issues/65) ✅ |
 

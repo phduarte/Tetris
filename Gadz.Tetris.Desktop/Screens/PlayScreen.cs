@@ -4,7 +4,7 @@ using Gadz.Tetris.Application.Commands;
 using Gadz.Tetris.Desktop.Device;
 using Gadz.Tetris.Desktop.Extensions;
 using Gadz.Tetris.Domain.Models.Pieces;
-using Texto = Gadz.Tetris.Desktop.Textos.Jogo;
+using Texto = Gadz.Tetris.Texts.Jogo;
 
 namespace Gadz.Tetris.Desktop.Screens;
 

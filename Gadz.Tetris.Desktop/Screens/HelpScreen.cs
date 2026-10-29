@@ -1,6 +1,6 @@
 ﻿using Gadz.Tetris.Application;
 using Gadz.Tetris.Desktop.Device;
-using Texto = Gadz.Tetris.Desktop.Textos.Jogo;
+using Texto = Gadz.Tetris.Texts.Jogo;
 
 namespace Gadz.Tetris.Desktop.Screens;
 
