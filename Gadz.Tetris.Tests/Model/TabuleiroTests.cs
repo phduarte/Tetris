@@ -379,6 +379,33 @@ public class TabuleiroTests
     }
 
     /// <summary>
+    /// A partida é um novo recorde só quando supera a pontuação guardada.
+    /// </summary>
+    /// <param name="record">A pontuação guardada.</param>
+    /// <param name="esperado">Se a partida, depois de remover 1 linha (40 pontos), é um novo recorde.</param>
+    [TestCase(30, true)]
+    [TestCase(40, false)]
+    [TestCase(1200, false)]
+    public void DeveInformarSeAPartidaEUmNovoRecorde(int record, bool esperado)
+    {
+        var board = CreateBoardWithRecord(record);
+
+        try
+        {
+            board.Start();
+            Assert.IsFalse(board.IsNewRecord, "Sem pontos, a partida não pode ser um novo recorde.");
+
+            CompleteOneLine(board);
+
+            Assert.AreEqual(esperado, board.IsNewRecord);
+        }
+        finally
+        {
+            board.Finish();
+        }
+    }
+
+    /// <summary>
     /// Cria um tabuleiro cujo repositório já guarda uma partida com a pontuação informada.
     /// </summary>
     /// <param name="record">A pontuação da partida guardada.</param>

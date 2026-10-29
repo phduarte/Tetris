@@ -19,7 +19,7 @@ namespace Gadz.Tetris.Desktop.Textos {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Jogo {
@@ -61,7 +61,16 @@ namespace Gadz.Tetris.Desktop.Textos {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ajuda.
+        ///   Looks up a localized string similar to A Tetris made to study software engineering in a setting everyone knows..
+        /// </summary>
+        internal static string AboutText {
+            get {
+                return ResourceManager.GetString("AboutText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Help.
         /// </summary>
         internal static string Ajuda {
             get {
@@ -70,25 +79,346 @@ namespace Gadz.Tetris.Desktop.Textos {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Escolha o estilo.
+        ///   Looks up a localized string similar to by gadz.
         /// </summary>
-        internal static string EscolheEstilo {
+        internal static string By {
             get {
-                return ResourceManager.GetString("EscolheEstilo", resourceCulture);
+                return ResourceManager.GetString("By", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Iniciar.
+        ///   Looks up a localized string similar to Back.
         /// </summary>
-        internal static string Iniciar {
+        internal static string CapBack {
             get {
-                return ResourceManager.GetString("Iniciar", resourceCulture);
+                return ResourceManager.GetString("CapBack", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linhas.
+        ///   Looks up a localized string similar to Continue.
+        /// </summary>
+        internal static string CapContinue {
+            get {
+                return ResourceManager.GetString("CapContinue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Done.
+        /// </summary>
+        internal static string CapDone {
+            get {
+                return ResourceManager.GetString("CapDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ▼ Down.
+        /// </summary>
+        internal static string CapDown {
+            get {
+                return ResourceManager.GetString("CapDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drop.
+        /// </summary>
+        internal static string CapDrop {
+            get {
+                return ResourceManager.GetString("CapDrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License.
+        /// </summary>
+        internal static string CapLicense {
+            get {
+                return ResourceManager.GetString("CapLicense", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ◀ ▶ Move · ▲ Rotate.
+        /// </summary>
+        internal static string CapMove {
+            get {
+                return ResourceManager.GetString("CapMove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pause.
+        /// </summary>
+        internal static string CapPause {
+            get {
+                return ResourceManager.GetString("CapPause", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Play.
+        /// </summary>
+        internal static string CapPlay {
+            get {
+                return ResourceManager.GetString("CapPlay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quit.
+        /// </summary>
+        internal static string CapQuit {
+            get {
+                return ResourceManager.GetString("CapQuit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ▲ ▼ Scroll.
+        /// </summary>
+        internal static string CapScroll {
+            get {
+                return ResourceManager.GetString("CapScroll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ctrl + ◀ ▶ slides.
+        /// </summary>
+        internal static string CapSlide {
+            get {
+                return ResourceManager.GetString("CapSlide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test.
+        /// </summary>
+        internal static string CapTest {
+            get {
+                return ResourceManager.GetString("CapTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ◀ ▶ Theme.
+        /// </summary>
+        internal static string CapTheme {
+            get {
+                return ResourceManager.GetString("CapTheme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter · done.
+        /// </summary>
+        internal static string EnterDone {
+            get {
+                return ResourceManager.GetString("EnterDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter to play.
+        /// </summary>
+        internal static string EnterToPlay {
+            get {
+                return ResourceManager.GetString("EnterToPlay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Game over.
+        /// </summary>
+        internal static string GameOver {
+            get {
+                return ResourceManager.GetString("GameOver", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drop.
+        /// </summary>
+        internal static string HelpHardDrop {
+            get {
+                return ResourceManager.GetString("HelpHardDrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move.
+        /// </summary>
+        internal static string HelpMove {
+            get {
+                return ResourceManager.GetString("HelpMove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pause / resume.
+        /// </summary>
+        internal static string HelpPause {
+            get {
+                return ResourceManager.GetString("HelpPause", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quit and save.
+        /// </summary>
+        internal static string HelpQuit {
+            get {
+                return ResourceManager.GetString("HelpQuit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rotate.
+        /// </summary>
+        internal static string HelpRotate {
+            get {
+                return ResourceManager.GetString("HelpRotate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slide to the edge.
+        /// </summary>
+        internal static string HelpSlide {
+            get {
+                return ResourceManager.GetString("HelpSlide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move down.
+        /// </summary>
+        internal static string HelpSoftDrop {
+            get {
+                return ResourceManager.GetString("HelpSoftDrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sound on / off.
+        /// </summary>
+        internal static string HelpSound {
+            get {
+                return ResourceManager.GetString("HelpSound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How to play.
+        /// </summary>
+        internal static string HowToPlay {
+            get {
+                return ResourceManager.GetString("HowToPlay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Any key.
+        /// </summary>
+        internal static string KeyAny {
+            get {
+                return ResourceManager.GetString("KeyAny", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ctrl.
+        /// </summary>
+        internal static string KeyCtrl {
+            get {
+                return ResourceManager.GetString("KeyCtrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter.
+        /// </summary>
+        internal static string KeyEnter {
+            get {
+                return ResourceManager.GetString("KeyEnter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Esc.
+        /// </summary>
+        internal static string KeyEsc {
+            get {
+                return ResourceManager.GetString("KeyEsc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to F1.
+        /// </summary>
+        internal static string KeyF1 {
+            get {
+                return ResourceManager.GetString("KeyF1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to F12.
+        /// </summary>
+        internal static string KeyF12 {
+            get {
+                return ResourceManager.GetString("KeyF12", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shift.
+        /// </summary>
+        internal static string KeyShift {
+            get {
+                return ResourceManager.GetString("KeyShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Space.
+        /// </summary>
+        internal static string KeySpace {
+            get {
+                return ResourceManager.GetString("KeySpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The level goes up when you reach the line goal (20 at first, +25% each level) and the pieces fall faster..
+        /// </summary>
+        internal static string LevelRule {
+            get {
+                return ResourceManager.GetString("LevelRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MIT License
+        ///
+        ///Copyright (c) 2018 Paulo Duarte
+        ///
+        ///Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+        ///
+        ///The above copyright notice [o restante da cadeia de caracteres foi truncado]&quot;;.
+        /// </summary>
+        internal static string LicenseText {
+            get {
+                return ResourceManager.GetString("LicenseText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lines.
         /// </summary>
         internal static string Linhas {
             get {
@@ -97,7 +427,34 @@ namespace Gadz.Tetris.Desktop.Textos {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nível.
+        ///   Looks up a localized string similar to {0} lines.
+        /// </summary>
+        internal static string ManyLines {
+            get {
+                return ResourceManager.GetString("ManyLines", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MIT license.
+        /// </summary>
+        internal static string MitLicense {
+            get {
+                return ResourceManager.GetString("MitLicense", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New record!.
+        /// </summary>
+        internal static string NewRecord {
+            get {
+                return ResourceManager.GetString("NewRecord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Level.
         /// </summary>
         internal static string Nivel {
             get {
@@ -115,7 +472,16 @@ namespace Gadz.Tetris.Desktop.Textos {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Paused.
+        ///   Looks up a localized string similar to {0} line.
+        /// </summary>
+        internal static string OneLine {
+            get {
+                return ResourceManager.GetString("OneLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pause.
         /// </summary>
         internal static string Pausado {
             get {
@@ -124,7 +490,25 @@ namespace Gadz.Tetris.Desktop.Textos {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pontos.
+        ///   Looks up a localized string similar to Pieces.
+        /// </summary>
+        internal static string Pieces {
+            get {
+                return ResourceManager.GetString("Pieces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Points per drop.
+        /// </summary>
+        internal static string PointsPerDrop {
+            get {
+                return ResourceManager.GetString("PointsPerDrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Score.
         /// </summary>
         internal static string Pontuacao {
             get {
@@ -133,7 +517,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Press ENTER to continue.
+        ///   Looks up a localized string similar to Enter continues.
         /// </summary>
         internal static string PressioneEnterParaContinuar {
             get {
@@ -142,7 +526,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Press any key to continue.
+        ///   Looks up a localized string similar to Any key.
         /// </summary>
         internal static string PressioneParaContinuar {
             get {
@@ -151,7 +535,16 @@ namespace Gadz.Tetris.Desktop.Textos {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Próximo.
+        ///   Looks up a localized string similar to Press a key to test.
+        /// </summary>
+        internal static string PressKeyToTest {
+            get {
+                return ResourceManager.GetString("PressKeyToTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next.
         /// </summary>
         internal static string Proximo {
             get {
@@ -160,16 +553,43 @@ namespace Gadz.Tetris.Desktop.Textos {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hi-Score.
+        ///   Looks up a localized string similar to Hi-score.
         /// </summary>
         internal static string Recorde {
             get {
                 return ResourceManager.GetString("Recorde", resourceCulture);
             }
         }
-
+        
         /// <summary>
-        ///   Looks up a localized string similar to Sobre.
+        ///   Looks up a localized string similar to Result.
+        /// </summary>
+        internal static string Result {
+            get {
+                return ResourceManager.GetString("Result", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Brick game.
+        /// </summary>
+        internal static string SkinBrickGame {
+            get {
+                return ResourceManager.GetString("SkinBrickGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tetris.
+        /// </summary>
+        internal static string SkinTetris {
+            get {
+                return ResourceManager.GetString("SkinTetris", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About.
         /// </summary>
         internal static string Sobre {
             get {
@@ -178,7 +598,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Som desligado.
+        ///   Looks up a localized string similar to Off.
         /// </summary>
         internal static string SomDesligado {
             get {
@@ -187,11 +607,38 @@ namespace Gadz.Tetris.Desktop.Textos {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Som ligado.
+        ///   Looks up a localized string similar to On.
         /// </summary>
         internal static string SomLigado {
             get {
                 return ResourceManager.GetString("SomLigado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sound.
+        /// </summary>
+        internal static string Sound {
+            get {
+                return ResourceManager.GetString("Sound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Study edition.
+        /// </summary>
+        internal static string Subtitle {
+            get {
+                return ResourceManager.GetString("Subtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DDD|Clean code|SOLID|Design patterns.
+        /// </summary>
+        internal static string Tags {
+            get {
+                return ResourceManager.GetString("Tags", resourceCulture);
             }
         }
         
@@ -205,7 +652,7 @@ namespace Gadz.Tetris.Desktop.Textos {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tempo.
+        ///   Looks up a localized string similar to Time.
         /// </summary>
         internal static string Tempo {
             get {
@@ -214,20 +661,20 @@ namespace Gadz.Tetris.Desktop.Textos {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Aperte SHIFT para ligar ou desligar o som.
+        ///   Looks up a localized string similar to {0} lines · tetris!.
         /// </summary>
-        internal static string ToggleSoundKey {
+        internal static string TetrisLines {
             get {
-                return ResourceManager.GetString("ToggleSoundKey", resourceCulture);
+                return ResourceManager.GetString("TetrisLines", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Velocidade.
+        ///   Looks up a localized string similar to Theme.
         /// </summary>
-        internal static string Velocidade {
+        internal static string Theme {
             get {
-                return ResourceManager.GetString("Velocidade", resourceCulture);
+                return ResourceManager.GetString("Theme", resourceCulture);
             }
         }
     }

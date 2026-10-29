@@ -8,7 +8,7 @@ internal class SmashDownCommand(GameController game) : Command(game)
 
     public override void Execute() => _gameController.SmashDown();
 
-    public override bool Match(Key key, bool control)
+    public override bool Match(Key key, bool control, bool repeat)
         => key == Key.Space || key == Key.Down && control;
 
     public override string ToString()

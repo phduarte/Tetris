@@ -117,61 +117,216 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AboutText" xml:space="preserve">
+    <value>A Tetris made to study software engineering in a setting everyone knows.</value>
+  </data>
   <data name="Ajuda" xml:space="preserve">
-    <value>Ajuda</value>
+    <value>Help</value>
   </data>
-  <data name="EscolheEstilo" xml:space="preserve">
-    <value>Escolha o estilo</value>
+  <data name="By" xml:space="preserve">
+    <value>by gadz</value>
   </data>
-  <data name="Iniciar" xml:space="preserve">
-    <value>Iniciar</value>
+  <data name="CapBack" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="CapContinue" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="CapDone" xml:space="preserve">
+    <value>Done</value>
+  </data>
+  <data name="CapDown" xml:space="preserve">
+    <value>▼ Down</value>
+  </data>
+  <data name="CapDrop" xml:space="preserve">
+    <value>Drop</value>
+  </data>
+  <data name="CapLicense" xml:space="preserve">
+    <value>License</value>
+  </data>
+  <data name="CapMove" xml:space="preserve">
+    <value>◀ ▶ Move · ▲ Rotate</value>
+  </data>
+  <data name="CapPause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="CapPlay" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="CapQuit" xml:space="preserve">
+    <value>Quit</value>
+  </data>
+  <data name="CapScroll" xml:space="preserve">
+    <value>▲ ▼ Scroll</value>
+  </data>
+  <data name="CapSlide" xml:space="preserve">
+    <value>Ctrl + ◀ ▶ slides</value>
+  </data>
+  <data name="CapTest" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="CapTheme" xml:space="preserve">
+    <value>◀ ▶ Theme</value>
+  </data>
+  <data name="EnterDone" xml:space="preserve">
+    <value>Enter · done</value>
+  </data>
+  <data name="EnterToPlay" xml:space="preserve">
+    <value>Enter to play</value>
+  </data>
+  <data name="GameOver" xml:space="preserve">
+    <value>Game over</value>
+  </data>
+  <data name="HelpHardDrop" xml:space="preserve">
+    <value>Drop</value>
+  </data>
+  <data name="HelpMove" xml:space="preserve">
+    <value>Move</value>
+  </data>
+  <data name="HelpPause" xml:space="preserve">
+    <value>Pause / resume</value>
+  </data>
+  <data name="HelpQuit" xml:space="preserve">
+    <value>Quit and save</value>
+  </data>
+  <data name="HelpRotate" xml:space="preserve">
+    <value>Rotate</value>
+  </data>
+  <data name="HelpSlide" xml:space="preserve">
+    <value>Slide to the edge</value>
+  </data>
+  <data name="HelpSoftDrop" xml:space="preserve">
+    <value>Move down</value>
+  </data>
+  <data name="HelpSound" xml:space="preserve">
+    <value>Sound on / off</value>
+  </data>
+  <data name="HowToPlay" xml:space="preserve">
+    <value>How to play</value>
+  </data>
+  <data name="KeyAny" xml:space="preserve">
+    <value>Any key</value>
+  </data>
+  <data name="KeyCtrl" xml:space="preserve">
+    <value>Ctrl</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeyEsc" xml:space="preserve">
+    <value>Esc</value>
+  </data>
+  <data name="KeyF1" xml:space="preserve">
+    <value>F1</value>
+  </data>
+  <data name="KeyF12" xml:space="preserve">
+    <value>F12</value>
+  </data>
+  <data name="KeyShift" xml:space="preserve">
+    <value>Shift</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Space</value>
+  </data>
+  <data name="LevelRule" xml:space="preserve">
+    <value>The level goes up when you reach the line goal (20 at first, +25% each level) and the pieces fall faster.</value>
+  </data>
+  <data name="LicenseText" xml:space="preserve">
+    <value>MIT License
+
+Copyright (c) 2018 Paulo Duarte
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</value>
   </data>
   <data name="Linhas" xml:space="preserve">
-    <value>Linhas</value>
+    <value>Lines</value>
+  </data>
+  <data name="ManyLines" xml:space="preserve">
+    <value>{0} lines</value>
+  </data>
+  <data name="MitLicense" xml:space="preserve">
+    <value>MIT license</value>
+  </data>
+  <data name="NewRecord" xml:space="preserve">
+    <value>New record!</value>
   </data>
   <data name="Nivel" xml:space="preserve">
-    <value>Nível</value>
+    <value>Level</value>
   </data>
   <data name="Nome" xml:space="preserve">
     <value>Tetris</value>
   </data>
+  <data name="OneLine" xml:space="preserve">
+    <value>{0} line</value>
+  </data>
   <data name="Pausado" xml:space="preserve">
-    <value>Paused</value>
+    <value>Pause</value>
+  </data>
+  <data name="Pieces" xml:space="preserve">
+    <value>Pieces</value>
+  </data>
+  <data name="PointsPerDrop" xml:space="preserve">
+    <value>Points per drop</value>
   </data>
   <data name="Pontuacao" xml:space="preserve">
-    <value>Pontos</value>
+    <value>Score</value>
   </data>
   <data name="PressioneEnterParaContinuar" xml:space="preserve">
-    <value>Press ENTER to continue</value>
+    <value>Enter continues</value>
   </data>
   <data name="PressioneParaContinuar" xml:space="preserve">
-    <value>Press any key to continue</value>
+    <value>Any key</value>
+  </data>
+  <data name="PressKeyToTest" xml:space="preserve">
+    <value>Press a key to test</value>
   </data>
   <data name="Proximo" xml:space="preserve">
-    <value>Próximo</value>
+    <value>Next</value>
   </data>
   <data name="Recorde" xml:space="preserve">
-    <value>Hi-Score</value>
+    <value>Hi-score</value>
+  </data>
+  <data name="Result" xml:space="preserve">
+    <value>Result</value>
+  </data>
+  <data name="SkinBrickGame" xml:space="preserve">
+    <value>Brick game</value>
+  </data>
+  <data name="SkinTetris" xml:space="preserve">
+    <value>Tetris</value>
   </data>
   <data name="Sobre" xml:space="preserve">
-    <value>Sobre</value>
+    <value>About</value>
   </data>
   <data name="SomDesligado" xml:space="preserve">
-    <value>Som desligado</value>
+    <value>Off</value>
   </data>
   <data name="SomLigado" xml:space="preserve">
-    <value>Som ligado</value>
+    <value>On</value>
+  </data>
+  <data name="Sound" xml:space="preserve">
+    <value>Sound</value>
+  </data>
+  <data name="Subtitle" xml:space="preserve">
+    <value>Study edition</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>DDD|Clean code|SOLID|Design patterns</value>
   </data>
   <data name="TaxaTetris" xml:space="preserve">
     <value>Tetris</value>
   </data>
   <data name="Tempo" xml:space="preserve">
-    <value>Tempo</value>
+    <value>Time</value>
   </data>
-  <data name="ToggleSoundKey" xml:space="preserve">
-    <value>Aperte SHIFT para ligar ou desligar o som</value>
+  <data name="TetrisLines" xml:space="preserve">
+    <value>{0} lines · tetris!</value>
   </data>
-  <data name="Velocidade" xml:space="preserve">
-    <value>Velocidade</value>
+  <data name="Theme" xml:space="preserve">
+    <value>Theme</value>
   </data>
 </root>

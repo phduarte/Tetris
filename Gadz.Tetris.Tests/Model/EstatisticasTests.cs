@@ -101,6 +101,15 @@ public class EstatisticasTests
     }
 
     /// <summary>
+    /// A tabela de pontuação exposta à interface é a mesma usada para pontuar: 1 a 4 linhas.
+    /// </summary>
+    [Test]
+    public void DeveExporATabelaDePontuacao()
+    {
+        CollectionAssert.AreEqual(new[] { 40, 100, 300, 1200 }, Stats.ScoreTable);
+    }
+
+    /// <summary>
     /// O intervalo do nível 1 é de 1000 ms.
     /// </summary>
     [Test]

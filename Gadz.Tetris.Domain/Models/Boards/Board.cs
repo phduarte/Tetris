@@ -104,6 +104,11 @@ public class Board : Entity
     public int Record => Math.Max(_storedRecord, Stats.Score);
 
     /// <summary>
+    /// Se a partida atual superou o recorde guardado no repositório.
+    /// </summary>
+    public bool IsNewRecord => Stats.Score > _storedRecord;
+
+    /// <summary>
     /// Tempo jogado, sem contar as pausas.
     /// </summary>
     public TimeSpan Duration => Stats.Duration;

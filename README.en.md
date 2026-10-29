@@ -53,8 +53,13 @@ The evolution plans are in [docs/PLANO-REFATORACAO.md](docs/PLANO-REFATORACAO.md
 
 ## Features
 
-- **Classic theme**: a look similar to the original 1980s game.
-- **Brick Game theme**: a look similar to the handheld brick games that were popular in the 1990s.
+- **One device, many screens**: the game is a handheld console (graphite and coral case) where only the LCD changes from one screen to the next. The case buttons show the action and the key, and they can be clicked too.
+- **BRICK GAME style**: a greenish monochrome LCD, like the handheld brick games that were popular in the 1990s.
+- **TETRIS style**: a dark LCD with the pieces in the colors of the original 1980s game. Pick the theme in the menu with ← / →.
+- **Pause and game over on the LCD**: when paused (including the automatic pause when the window loses focus) the board goes blank so you can't peek at the move. When you lose, a curtain of blocks rises and falls before GAME OVER, which moves on to the result on any key or by itself after 10 seconds.
+- **Result**: score, level, lines, pieces, TETRIS % and time, with a NEW RECORD badge when the game beats the saved high score. It goes back to the menu on ENTER or by itself after 30 seconds.
+- **Interactive help**: pressing a key highlights its row in the manual, which also shows the scoring table.
+- **Languages**: texts in English and Portuguese, following the Windows language.
 - **Slide**: holding CTRL while moving the piece left or right slides it all the way to the edge.
 - **Smash Down**: pressing SPACEBAR drops the piece at once.
 - **Sounds**: events and moves play sounds similar to those of brick games.
@@ -65,24 +70,30 @@ The evolution plans are in [docs/PLANO-REFATORACAO.md](docs/PLANO-REFATORACAO.md
   + 3 complete lines in the same move are worth 300 points
   + TETRIS (4 complete lines in the same move) is worth 1,200 points
 - **Levels and speed**: the level goes up when you reach the line goal (20 on the first level, growing 25% each level). On level 1 the piece falls every 1,000 ms, and this interval drops 50 ms per level down to a minimum of 100 ms.
-- **HI-SCORE**: the game screen shows the high score below the score. It is the highest score ever saved, and it follows the current score once the current game beats it.
+- **HI-SCORE**: the menu and the game screen show the high score. It is the highest score ever saved (games ended with ESC or lost), and it follows the current score once the current game beats it.
 
 ## Controls
 
 | Key | Action |
 | --- | --- |
-| ← / → | Move the piece |
+| ← / → | Move the piece (holding the key moves it 2 blocks on each repeat) |
 | CTRL + ← / → | Slide the piece to the edge |
 | ↓ | Move the piece down |
 | ↑ | Rotate the piece |
 | SPACE | Drop the piece (smash down) |
 | ENTER | Pause / resume |
 | ESC | End the game and save the statistics |
-| SHIFT | Turn the sound on / off |
+| SHIFT | Turn the sound on / off (while the sound is off, the SOUND button stays pressed in) |
+| F1 | Open the help (in the menu) |
+| F12 | Open the About screen (in the menu) |
 
 ## Screenshot
 
-![img1](docs/screenshots/tela2.1.png)
+| Menu | Game | Help | Result |
+| --- | --- | --- | --- |
+| ![Menu](docs/screenshots/tela1.png) | ![Game](docs/screenshots/tela2.2.png) | ![Help](docs/screenshots/tela6.png) | ![Result](docs/screenshots/tela5.png) |
+
+The redesign mockups and decisions are in [docs/redesign.html](docs/redesign.html), and the flow between screens is in [docs/jornada.html](docs/jornada.html) (both in Portuguese).
 
 ## Conclusion
 
