@@ -62,6 +62,42 @@ public partial class ConsoleFrame : IAsyncDisposable
     private IJSObjectReference? _keyboard;
 
     /// <summary>
+    /// A chave do estilo escolhido no <c>localStorage</c>, para ele valer na próxima visita.
+    /// </summary>
+    private const string SKIN_KEY = "gadz-tetris:skin:v1";
+
+    /// <summary>
+    /// O estilo do LCD, escolhido no menu e aplicado a todas as telas.
+    /// </summary>
+    public Skin Skin { get; private set; } = Skin.Tetris;
+
+    /// <summary>
+    /// A classe CSS do estilo, aplicada ao LCD.
+    /// </summary>
+    private string SkinClass => Skin == Skin.Tetris ? "skin-tetris" : "skin-brick";
+
+    /// <summary>
+    /// Troca entre os estilos e guarda a escolha.
+    /// </summary>
+    public void ToggleSkin()
+    {
+        Skin = Skin == Skin.Tetris ? Skin.BrickGame : Skin.Tetris;
+        ((IJSInProcessRuntime)JS).InvokeVoid("localStorage.setItem", SKIN_KEY, Skin.ToString());
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Recupera o estilo escolhido na visita anterior.
+    /// </summary>
+    protected override void OnInitialized()
+    {
+        if (Enum.TryParse<Skin>(((IJSInProcessRuntime)JS).Invoke<string?>("localStorage.getItem", SKIN_KEY), out var skin))
+        {
+            Skin = skin;
+        }
+    }
+
+    /// <summary>
     /// Troca a tela do LCD.
     /// </summary>
     /// <typeparam name="TScreen">A nova tela.</typeparam>

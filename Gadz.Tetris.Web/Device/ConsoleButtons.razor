@@ -1,10 +1,24 @@
 <SectionContent SectionName="@ConsoleFrame.BUTTONS_SECTION">
-    @foreach (var button in Buttons)
+    <div class="dpad-block">
+        <div class="dpad">
+            @foreach (var (key, area, enabled) in DpadKeys)
+            {
+                <button type="button" class="arrow @area" disabled="@(!enabled)" @onclick="() => Frame.Press(key)"></button>
+            }
+        </div>
+        <p class="dpad-caption">@Dpad.Label<span class="dpad-hint">@Dpad.Hint</span></p>
+    </div>
+
+    <div class="smalls">
+        @foreach (var button in Buttons.Where(b => !b.Big))
+        {
+            <ButtonView Button="button" />
+        }
+    </div>
+
+    @foreach (var button in Buttons.Where(b => b.Big))
     {
-        <button type="button" class="@CssClass(button)" @onclick="() => Frame.Press(button.Key)">
-            <span class="caption">@button.Caption</span>
-            <span class="keycap">@button.KeyCap</span>
-        </button>
+        <ButtonView Button="button" />
     }
 </SectionContent>
 
@@ -16,14 +30,25 @@
     public ConsoleFrame Frame { get; set; } = default!;
 
     /// <summary>
+    /// O direcional da tela.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public DpadSetup Dpad { get; set; } = new(false, false, string.Empty);
+
+    /// <summary>
     /// Os botões que a tela mostra na carcaça.
     /// </summary>
     [Parameter, EditorRequired]
     public IReadOnlyList<ConsoleButton> Buttons { get; set; } = [];
 
     /// <summary>
-    /// As classes CSS do botão: grande ou pequeno, e afundado.
+    /// As quatro setas do direcional: a tecla, a posição na cruz (classe CSS) e se a tela usa a seta.
     /// </summary>
-    private static string CssClass(ConsoleButton button)
-        => $"button {(button.Big ? "big" : "small")} {(button.Latched ? "latched" : string.Empty)}";
+    private IEnumerable<(string Key, string Area, bool Enabled)> DpadKeys =>
+    [
+        (KeyMap.UP, "up", Dpad.Vertical),
+        (KeyMap.LEFT, "left", Dpad.Horizontal),
+        (KeyMap.RIGHT, "right", Dpad.Horizontal),
+        (KeyMap.DOWN, "down", Dpad.Vertical),
+    ];
 }

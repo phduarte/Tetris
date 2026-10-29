@@ -110,6 +110,13 @@ public partial class PlayScreen
         ];
 
     /// <summary>
+    /// O direcional: na partida, mover, girar e descer; no GAME OVER, qualquer seta continua.
+    /// </summary>
+    private DpadSetup Dpad => _lost
+        ? new(true, true, Texts[nameof(Jogo.KeyAny)], Texts[nameof(Jogo.CapContinue)])
+        : new(true, true, $"{Texts[nameof(Jogo.CapMove)]}\n{Texts[nameof(Jogo.CapDown)]}", Texts[nameof(Jogo.CapSlide)]);
+
+    /// <summary>
     /// Se a partida está pausada; consulta o estado do jogo, sem flag paralela.
     /// </summary>
     private bool Paused => Controller.State.CanContinue;

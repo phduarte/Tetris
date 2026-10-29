@@ -57,6 +57,8 @@ public partial class MenuScreen
         [KeyMap.ENTER] = () => Frame.Navigate<PlayScreen>(new Dictionary<string, object?> { [nameof(PlayScreen.Controller)] = _nextGame }),
         [KeyMap.F1] = () => Frame.Navigate<HelpScreen>(),
         [KeyMap.F2] = () => Frame.Navigate<AboutScreen>(),
+        [KeyMap.LEFT] = ToggleSkin,
+        [KeyMap.RIGHT] = ToggleSkin,
         [KeyMap.SHIFT] = ToggleSound,
     };
 
@@ -70,6 +72,20 @@ public partial class MenuScreen
         SoundButton,
         new(KeyMap.ENTER, Texts[nameof(Jogo.CapPlay)], Texts[nameof(Jogo.KeyEnter)], Big: true),
     ];
+
+    /// <summary>
+    /// O direcional: ◀ ▶ trocam o estilo.
+    /// </summary>
+    private DpadSetup Dpad => new(true, false, Texts[nameof(Jogo.CapTheme)]);
+
+    /// <summary>
+    /// Troca o estilo do LCD, com o som do encaixe como confirmação (como no Desktop).
+    /// </summary>
+    private void ToggleSkin()
+    {
+        Frame.ToggleSkin();
+        Frame.Sound.Dock();
+    }
 
     /// <summary>
     /// Cria a próxima partida e lê o recorde.

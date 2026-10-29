@@ -11,6 +11,15 @@
         <p class="subtitle">@Texts[nameof(Jogo.Subtitle)]</p>
     </div>
 
+    <div class="style-picker">
+        <span class="label">@Texts[nameof(Jogo.Theme)]</span>
+        <span class="style-name">
+            <span class="pointer">◀</span>
+            @Texts[Frame.Skin == Skin.Tetris ? nameof(Jogo.SkinTetris) : nameof(Jogo.SkinBrickGame)]
+            <span class="pointer">▶</span>
+        </span>
+    </div>
+
     <div class="sound-state">
         <span class="label">@Texts[nameof(Jogo.Sound)]</span>
         <span>@(Frame.Sound.Mute ? Texts[nameof(Jogo.SomDesligado)] : $"♪ {Texts[nameof(Jogo.SomLigado)]}")</span>
@@ -22,4 +31,4 @@
     </div>
 </div>
 
-<ConsoleButtons Buttons="Buttons" />
+<ConsoleButtons Dpad="Dpad" Buttons="Buttons" />

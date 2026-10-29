@@ -63,6 +63,11 @@ public partial class ResultScreen
     };
 
     /// <summary>
+    /// O direcional, sem uso nesta tela.
+    /// </summary>
+    private static DpadSetup Dpad { get; } = new(false, false, string.Empty);
+
+    /// <summary>
     /// Os botões da carcaça: som e concluir.
     /// </summary>
     private IReadOnlyList<ConsoleButton> Buttons =>

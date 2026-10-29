@@ -39,6 +39,11 @@ public partial class HelpScreen
     };
 
     /// <summary>
+    /// O direcional: qualquer seta acende a sua linha, para testar.
+    /// </summary>
+    private DpadSetup Dpad => new(true, true, Texts[nameof(Jogo.CapTest)], Texts[nameof(Jogo.KeyAny)]);
+
+    /// <summary>
     /// Os botões da carcaça: som e voltar.
     /// </summary>
     private IReadOnlyList<ConsoleButton> Buttons =>
