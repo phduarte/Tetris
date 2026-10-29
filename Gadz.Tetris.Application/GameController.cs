@@ -278,9 +278,9 @@ public class GameController
     }
 
     /// <summary>
-    /// Maior pontuação registrada
+    /// Maior pontuação registrada (HI-SCORE)
     /// </summary>
-    /// <returns>O recorde guardado no repositório.</returns>
+    /// <returns>O recorde guardado no repositório, ou a pontuação atual se ela já o superou.</returns>
     public int GetMaxScore()
     {
         return _board.Record;

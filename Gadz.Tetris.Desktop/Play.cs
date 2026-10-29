@@ -32,6 +32,16 @@ public partial class Play : Form
     /// </summary>
     private PictureBox[,] _nextPieceCells = new PictureBox[0, 0];
 
+    /// <summary>
+    /// Tamanho da fonte do recorde, menor que a da pontuação para caber entre ela e "LINES".
+    /// </summary>
+    private const float RECORD_FONT_SIZE = 7F;
+
+    /// <summary>
+    /// O recorde (HI-SCORE), logo abaixo da pontuação. Criado em código para não editar o <c>Play.Designer.cs</c> à mão.
+    /// </summary>
+    private readonly Label _lbRecord = new();
+
     private static IDictionary<string, Image> _imageCache = new Dictionary<string, Image> {
         {string.Empty, Properties.Resources.BLOCK_CLASSIC},
         {"Transparente", Properties.Resources.BLOCK_CLASSIC},
@@ -64,6 +74,7 @@ public partial class Play : Form
         _commandFactory = new CommandFactory(_controller);
 
         InitializeComponent();
+        CreateRecordLabel();
         HidePausedScreen();
         SetScreenText();
         ListenEvents();
@@ -82,6 +93,7 @@ public partial class Play : Form
         _controller.Start();
         DrawScreen();
         PaintScreen();
+        UpdateScreenTextAsync();
         PlayStartSound();
     }
 
@@ -96,6 +108,20 @@ public partial class Play : Form
         lbPause.Text = Texto.Pausado;
         lbPauseDescription.Text = Texto.PressioneEnterParaContinuar;
         Text = Texto.Nome.ToUpper();
+    }
+
+    /// <summary>
+    /// Posiciona o rótulo do recorde no espaço entre o valor da pontuação e o título "LINES".
+    /// </summary>
+    private void CreateRecordLabel()
+    {
+        _lbRecord.BackColor = Color.Transparent;
+        _lbRecord.ForeColor = lbPoints.ForeColor;
+        _lbRecord.Font = new Font(lbPoints.Font.FontFamily, RECORD_FONT_SIZE);
+        _lbRecord.Location = new Point(label2.Left, lbPoints.Bottom);
+        _lbRecord.Size = new Size(label2.Width, label4.Top - lbPoints.Bottom);
+        _lbRecord.TextAlign = ContentAlignment.MiddleCenter;
+        Controls.Add(_lbRecord);
     }
 
     private void PlayStartSound()
@@ -132,6 +158,7 @@ public partial class Play : Form
         {
             lbLevel.Text = _controller.Level.ToString();
             lbPoints.Text = _controller.Score.ToString();
+            _lbRecord.Text = $"{Texto.Recorde.ToUpper()} {_controller.GetMaxScore()}";
             lbTime.Text = _controller.Duration.ToString(@"hh\:mm\:ss");
             lbLines.Text = _controller.Lines.ToString();
             lbTetris.Text = _controller.TetrisRate.ToString("P0");

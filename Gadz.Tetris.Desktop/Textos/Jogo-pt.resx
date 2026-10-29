@@ -150,6 +150,9 @@
   <data name="Proximo" xml:space="preserve">
     <value>Next</value>
   </data>
+  <data name="Recorde" xml:space="preserve">
+    <value>Recorde</value>
+  </data>
   <data name="Sobre" xml:space="preserve">
     <value>About</value>
   </data>
