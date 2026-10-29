@@ -20,6 +20,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Gadz.Tetris.Application\Gadz.Tetris.Application.csproj" />
+	  <ProjectReference Include="..\Gadz.Tetris.Web\Gadz.Tetris.Web.csproj" />
 	</ItemGroup>
 
 </Project>

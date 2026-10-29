@@ -1,7 +1,9 @@
 ﻿using Gadz.Tetris.Application;
 using Gadz.Tetris.Domain.Models.Statistics;
+using Gadz.Tetris.Web.Input;
 using Gadz.Tetris.Web.Screens;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace Gadz.Tetris.Web.Device;
 
@@ -9,7 +11,7 @@ namespace Gadz.Tetris.Web.Device;
 /// O aparelho: a carcaça com o LCD e os botões. Exibe uma <see cref="ConsoleScreen"/> por vez e troca com
 /// <see cref="Navigate{TScreen}"/>. Equivale ao <c>ConsoleFrame</c> do Desktop.
 /// </summary>
-public partial class ConsoleFrame
+public partial class ConsoleFrame : IAsyncDisposable
 {
     /// <summary>
     /// Nome da seção da carcaça onde cada tela coloca os seus botões (ver <see cref="ConsoleButtons"/>).
@@ -44,6 +46,22 @@ public partial class ConsoleFrame
     public ISoundPlayer Sound { get; set; } = default!;
 
     /// <summary>
+    /// O runtime JavaScript, para ouvir o teclado.
+    /// </summary>
+    [Inject]
+    private IJSRuntime JS { get; set; } = default!;
+
+    /// <summary>
+    /// A referência a este aparelho entregue ao <c>keyboard.js</c>.
+    /// </summary>
+    private DotNetObjectReference<ConsoleFrame>? _self;
+
+    /// <summary>
+    /// O ouvinte do teclado criado pelo <c>keyboard.js</c>.
+    /// </summary>
+    private IJSObjectReference? _keyboard;
+
+    /// <summary>
     /// Troca a tela do LCD.
     /// </summary>
     /// <typeparam name="TScreen">A nova tela.</typeparam>
@@ -71,4 +89,52 @@ public partial class ConsoleFrame
     /// <returns><c>true</c> se a tecla fez algo na tela.</returns>
     public bool Press(string key, bool control = false, bool repeat = false)
         => _current?.HandleKey(key, control, repeat) ?? false;
+
+    /// <summary>
+    /// Uma tecla tratada pelo jogo foi apertada na página (chamado pelo <c>keyboard.js</c>).
+    /// </summary>
+    /// <param name="key">A tecla, como em <c>KeyboardEvent.key</c>.</param>
+    /// <param name="control">Se o Ctrl estava apertado.</param>
+    /// <param name="repeat">Se é uma repetição automática da tecla segurada (<c>KeyboardEvent.repeat</c>).</param>
+    [JSInvokable]
+    public void OnKeyDown(string key, bool control, bool repeat) => Press(key, control, repeat);
+
+    /// <summary>
+    /// A janela do navegador perdeu o foco (chamado pelo <c>keyboard.js</c>); a partida pausa sozinha, como no Desktop.
+    /// </summary>
+    [JSInvokable]
+    public void OnBlur() => _current?.Deactivate();
+
+    /// <summary>
+    /// Depois do primeiro desenho, passa a ouvir o teclado da página inteira.
+    /// </summary>
+    /// <param name="firstRender">Se é o primeiro desenho.</param>
+    /// <returns>A tarefa de importação do módulo.</returns>
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return;
+        }
+
+        _self = DotNetObjectReference.Create(this);
+        await using var module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/keyboard.js");
+        _keyboard = await module.InvokeAsync<IJSObjectReference>("listen", _self, KeyMap.HandledKeys);
+    }
+
+    /// <summary>
+    /// Para de ouvir o teclado.
+    /// </summary>
+    /// <returns>A tarefa de liberação.</returns>
+    public async ValueTask DisposeAsync()
+    {
+        if (_keyboard is not null)
+        {
+            await _keyboard.InvokeVoidAsync("dispose");
+            await _keyboard.DisposeAsync();
+        }
+
+        _self?.Dispose();
+        GC.SuppressFinalize(this);
+    }
 }
