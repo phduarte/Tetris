@@ -25,6 +25,51 @@ public class Stats(Identity id) : Entity(id)
     private const int MIN_INTERVAL_MS = 100;
 
     /// <summary>
+    /// Nível em que toda partida começa.
+    /// </summary>
+    private const int INITIAL_LEVEL = 1;
+
+    /// <summary>
+    /// Velocidade em que toda partida começa.
+    /// </summary>
+    private const int INITIAL_SPEED = 1;
+
+    /// <summary>
+    /// Linhas a completar para sair do primeiro nível.
+    /// </summary>
+    private const int INITIAL_LINE_GOAL = 20;
+
+    /// <summary>
+    /// Quanto a meta de linhas cresce a cada nível (25%).
+    /// </summary>
+    private const double GOAL_GROWTH_RATE = 0.25;
+
+    /// <summary>
+    /// Pontos por remover 1 linha numa jogada.
+    /// </summary>
+    private const int SCORE_SINGLE = 40;
+
+    /// <summary>
+    /// Pontos por remover 2 linhas numa jogada.
+    /// </summary>
+    private const int SCORE_DOUBLE = 100;
+
+    /// <summary>
+    /// Pontos por remover 3 linhas numa jogada.
+    /// </summary>
+    private const int SCORE_TRIPLE = 300;
+
+    /// <summary>
+    /// Pontos por remover 4 linhas numa jogada (TETRIS).
+    /// </summary>
+    private const int SCORE_TETRIS = 1200;
+
+    /// <summary>
+    /// Quantidade de linhas removidas de uma vez que caracteriza um TETRIS.
+    /// </summary>
+    private const int TETRIS_LINES = 4;
+
+    /// <summary>
     /// Defines the _durationHistory
     /// </summary>
     private IDictionary<DateTime, long> _durationHistory = new Dictionary<DateTime, long>();
@@ -35,14 +80,14 @@ public class Stats(Identity id) : Entity(id)
     private DateTime? _startTime;
 
     /// <summary>
-    /// Defines the stageLines
+    /// Linhas removidas desde a última subida de nível.
     /// </summary>
-    private int stageLines = 0;
+    private int _stageLines;
 
     /// <summary>
-    /// Defines the goal
+    /// Linhas a completar no nível atual para subir de nível.
     /// </summary>
-    private int goal = 20;
+    private int _goal = INITIAL_LINE_GOAL;
 
     /// <summary>
     /// Gets the Lines
@@ -83,7 +128,7 @@ public class Stats(Identity id) : Entity(id)
     /// Intervalo, em milissegundos, entre as descidas automáticas da peça.
     /// Diminui <see cref="INTERVAL_STEP_MS"/> a cada nível até o mínimo de <see cref="MIN_INTERVAL_MS"/>.
     /// </summary>
-    public int Interval => Math.Max(MIN_INTERVAL_MS, BASE_INTERVAL_MS - ((Level - 1) * INTERVAL_STEP_MS));
+    public int Interval => Math.Max(MIN_INTERVAL_MS, BASE_INTERVAL_MS - ((Level - INITIAL_LEVEL) * INTERVAL_STEP_MS));
 
     /// <summary>
     /// 
@@ -98,8 +143,8 @@ public class Stats(Identity id) : Entity(id)
     public Stats()
         : this(Identity.New())
     {
-        Level = 1;
-        Speed = 1;
+        Level = INITIAL_LEVEL;
+        Speed = INITIAL_SPEED;
     }
 
     /// <summary>
@@ -133,7 +178,7 @@ public class Stats(Identity id) : Entity(id)
     {
         Lines += lines;
         Score += CalculateScore(lines);
-        stageLines += lines;
+        _stageLines += lines;
         CheckLevel();
     }
 
@@ -215,11 +260,11 @@ public class Stats(Identity id) : Entity(id)
     /// </summary>
     private void CheckLevel()
     {
-        if (stageLines >= goal)
+        if (_stageLines >= _goal)
         {
             LevelUp();
-            stageLines = 0;
-            goal += (int)(goal * 0.25);
+            _stageLines = 0;
+            _goal += (int)(_goal * GOAL_GROWTH_RATE);
         }
     }
 
@@ -241,14 +286,14 @@ public class Stats(Identity id) : Entity(id)
     {
         var score = linhas switch
         {
-            1 => 40,
-            2 => 100,
-            3 => 300,
-            4 => 1200,
+            1 => SCORE_SINGLE,
+            2 => SCORE_DOUBLE,
+            3 => SCORE_TRIPLE,
+            TETRIS_LINES => SCORE_TETRIS,
             _ => 0
         };
 
-        if (linhas == 4)
+        if (linhas == TETRIS_LINES)
             Tetris += score;
 
         return score;

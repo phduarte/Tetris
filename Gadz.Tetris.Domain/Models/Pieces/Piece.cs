@@ -12,6 +12,11 @@ namespace Gadz.Tetris.Domain.Models.Pieces;
 public abstract class Piece(PieceConfiguration configuration) : Entity
 {
     /// <summary>
+    /// Quantidade de rotações de uma peça; depois da última, volta à rotação 0.
+    /// </summary>
+    private const int ROTATION_COUNT = 4;
+
+    /// <summary>
     /// Defines the _colors
     /// </summary>
     private static IDictionary<PieceType, PieceColor> _colors = new Dictionary<PieceType, PieceColor> {
@@ -61,7 +66,7 @@ public abstract class Piece(PieceConfiguration configuration) : Entity
     /// </summary>
     public void Rotate()
     {
-        Rotation = Rotation == 3 ? 0 : ++Rotation;
+        Rotation = (Rotation + 1) % ROTATION_COUNT;
     }
 
     /// <summary>
@@ -142,6 +147,6 @@ public abstract class Piece(PieceConfiguration configuration) : Entity
 
     public override string ToString()
     {
-        return $"{Blocks[0]},{Blocks[1]},{Blocks[2]},{Blocks[3]}";
+        return string.Join(",", Blocks);
     }
 }

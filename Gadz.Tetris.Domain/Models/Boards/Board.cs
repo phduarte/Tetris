@@ -8,6 +8,11 @@ namespace Gadz.Tetris.Domain.Models.Boards;
 /// </summary>
 public class Board : Entity
 {
+    /// <summary>
+    /// Onde cada nova peça entra no tabuleiro: o canto superior esquerdo.
+    /// </summary>
+    private static readonly Point SPAWN_POSITION = new(0, 0);
+
     private PieceBuilder _pieceBuilder;
 
     /// <summary>
@@ -619,9 +624,8 @@ public class Board : Entity
     private Piece CreateNextPiece()
     {
         var (type, rotation) = _pieceGenerator.Next();
-        var position = new Point(0, 0);
         var piece = _pieceBuilder.OfType(type)
-            .OnPosition(position)
+            .OnPosition(SPAWN_POSITION)
             .WithRotation(rotation)
             .Build();
 
