@@ -1,6 +1,4 @@
-﻿using Gadz.Tetris.Domain.Models.Boards;
-
-namespace Gadz.Tetris.Domain.Models.Pieces;
+﻿namespace Gadz.Tetris.Domain.Models.Pieces;
 
 /// <summary>
 /// Defines the <see cref="TetraminoL" />
@@ -8,9 +6,8 @@ namespace Gadz.Tetris.Domain.Models.Pieces;
 /// <remarks>
 /// Initializes a new instance of the <see cref="TetraminoL"/> class.
 /// </remarks>
-/// <param name="board">The parent board<see cref="Board"/></param>
 /// <param name="config">The configuration<see cref="PieceConfiguration"/></param>
-internal class TetraminoL(Board board, PieceConfiguration config) : Piece(board, config)
+internal class TetraminoL(PieceConfiguration config) : Piece(config)
 {
     public override Block[] Blocks
     {

@@ -8,9 +8,8 @@ namespace Gadz.Tetris.Domain.Models.Pieces;
 /// <remarks>
 /// Initializes a new instance of the <see cref="Piece"/> class.
 /// </remarks>
-/// <param name="board">The board<see cref="Board"/></param>
 /// <param name="configuration">The configuration<see cref="PieceConfiguration"/></param>
-public abstract class Piece(Board board, PieceConfiguration configuration) : Entity
+public abstract class Piece(PieceConfiguration configuration) : Entity
 {
     /// <summary>
     /// Defines the _colors
@@ -46,45 +45,16 @@ public abstract class Piece(Board board, PieceConfiguration configuration) : Ent
     public PieceType Type { get; protected set; } = configuration.Type;
 
     /// <summary>
-    /// Gets the Board
-    /// </summary>
-    public Board Board { get; private set; } = board;
-
-    /// <summary>
     /// Gets the Blocks
     /// </summary>
     public abstract Block[] Blocks { get; }
 
     /// <summary>
-    /// The Rotate
+    /// Gira a peça para a próxima rotação, sem verificar limites nem colisão (isso cabe ao <see cref="Board"/>).
     /// </summary>
     public void Rotate()
     {
         Rotation = Rotation == 3 ? 0 : ++Rotation;
-        PreventOverlap();
-    }
-
-    private void PreventOverlap()
-    {
-        int maxX = Blocks.Max(x => x.X);
-        int minX = Blocks.Min(x => x.X);
-
-        if (maxX > Board.Width - 1)
-        {
-            int excess = maxX - (Board.Width - 1);
-            for (int i = 0; i < excess; i++)
-            {
-                MoveLeft();
-            }
-        }
-
-        if (minX < 0)
-        {
-            for (int i = minX; i < 0; i++)
-            {
-                MoveRight();
-            }
-        }
     }
 
     /// <summary>
@@ -118,7 +88,7 @@ public abstract class Piece(Board board, PieceConfiguration configuration) : Ent
     /// <returns>The <see cref="Piece"/></returns>
     public virtual Piece Clone()
     {
-        var clone = new PieceBuilder().OnBoard(Board).OfType(Type).OnPosition(Position).WithRotation(Rotation).Build();
+        var clone = new PieceBuilder().OfType(Type).OnPosition(Position).WithRotation(Rotation).Build();
         clone.Id = Id;
         return clone;
     }

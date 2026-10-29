@@ -1,5 +1,4 @@
-﻿using Gadz.Tetris.Application;
-using Gadz.Tetris.Domain.Models.Pieces;
+﻿using Gadz.Tetris.Domain.Models.Pieces;
 using NUnit.Framework;
 
 namespace Gadz.Tetris.Tests.Model;
@@ -14,9 +13,7 @@ public class FormasTests
     [SetUp]
     public void Setup()
     {
-        var game = GameController.Create(10, 10);
-        _pieceBuilder = new PieceBuilder()
-            .OnBoard(game.Board);
+        _pieceBuilder = new PieceBuilder();
     }
 
     /// <summary>

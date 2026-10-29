@@ -1,6 +1,4 @@
-﻿using Gadz.Tetris.Application;
-using Gadz.Tetris.Domain.Models.Boards;
-using Gadz.Tetris.Domain.Models.Pieces;
+﻿using Gadz.Tetris.Domain.Models.Pieces;
 using NUnit.Framework;
 
 namespace Gadz.Tetris.Tests.Model;
@@ -16,22 +14,14 @@ public class PecaTests
     private Piece peca;
 
     /// <summary>
-    /// Defines the tabuleiro
-    /// </summary>
-    private Board tabuleiro;
-
-    /// <summary>
     /// The Setup
     /// </summary>
     [SetUp]
     public void Setup()
     {
-        tabuleiro = GameController.Create(10, 20).Board;
-
         peca = new PieceBuilder()
             .OfType(PieceType.I)
             .WithRotation(0)
-            .OnBoard(tabuleiro)
             .Build();
     }
 

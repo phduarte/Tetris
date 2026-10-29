@@ -133,14 +133,13 @@ public class CampoDeJogoTests
     }
 
     /// <summary>
-    /// Cria uma peça num tabuleiro descartável, só para obter os blocos dela.
+    /// Cria uma peça na rotação inicial, só para obter os blocos dela.
     /// </summary>
     /// <param name="type">O tipo da peça.</param>
     /// <param name="position">A posição da peça.</param>
     /// <returns>A peça criada.</returns>
     private static Piece CreatePiece(PieceType type, Point position)
     {
-        var board = new Board(new InMemoryStatsRepository(), WIDTH, HEIGHT);
-        return new PieceBuilder().OfType(type).OnPosition(position).WithRotation(0).OnBoard(board).Build();
+        return new PieceBuilder().OfType(type).OnPosition(position).WithRotation(0).Build();
     }
 }

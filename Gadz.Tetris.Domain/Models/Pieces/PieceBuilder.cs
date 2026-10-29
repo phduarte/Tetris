@@ -1,6 +1,4 @@
-﻿using Gadz.Tetris.Domain.Models.Boards;
-
-namespace Gadz.Tetris.Domain.Models.Pieces;
+﻿namespace Gadz.Tetris.Domain.Models.Pieces;
 
 /// <summary>
 /// Defines the <see cref="PieceBuilder" />
@@ -21,11 +19,6 @@ public class PieceBuilder
     /// Defines the _rotation
     /// </summary>
     private int _rotation;
-
-    /// <summary>
-    /// Defines the _board
-    /// </summary>
-    private Board? _board;
 
     /// <summary>
     /// 
@@ -66,33 +59,20 @@ public class PieceBuilder
     }
 
     /// <summary>
-    /// The OnBoard
-    /// </summary>
-    /// <param name="board">The board<see cref="Board"/></param>
-    /// <returns>The <see cref="PieceBuilder"/></returns>
-    public PieceBuilder OnBoard(Board board)
-    {
-        _board = board;
-        return this;
-    }
-
-    /// <summary>
     /// The Build
     /// </summary>
     /// <returns>The <see cref="Piece"/></returns>
     public Piece Build()
     {
-        var board = _board ?? throw new InvalidOperationException($"Informe o tabuleiro com {nameof(OnBoard)} antes de construir a peça.");
-
         return _pieceType switch
         {
-            PieceType.T => new TetraminoT(board, Configuration),
-            PieceType.O => new TetraminoO(board, Configuration),
-            PieceType.I => new TetraminoI(board, Configuration),
-            PieceType.L => new TetraminoL(board, Configuration),
-            PieceType.J => new TetraminoJ(board, Configuration),
-            PieceType.S => new TetraminoS(board, Configuration),
-            PieceType.Z => new TetraminoZ(board, Configuration),
+            PieceType.T => new TetraminoT(Configuration),
+            PieceType.O => new TetraminoO(Configuration),
+            PieceType.I => new TetraminoI(Configuration),
+            PieceType.L => new TetraminoL(Configuration),
+            PieceType.J => new TetraminoJ(Configuration),
+            PieceType.S => new TetraminoS(Configuration),
+            PieceType.Z => new TetraminoZ(Configuration),
             _ => throw new NotImplementedException()
         };
     }

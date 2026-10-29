@@ -1,6 +1,4 @@
-﻿using Gadz.Tetris.Domain.Models.Boards;
-
-namespace Gadz.Tetris.Domain.Models.Pieces;
+﻿namespace Gadz.Tetris.Domain.Models.Pieces;
 
 /// <summary>
 /// Defines the <see cref="TetraminoI" />
@@ -11,8 +9,8 @@ internal class TetraminoI : Piece
     /// Initializes a new instance of the <see cref="TetraminoI"/> class.
     /// </summary>
     /// <param name="config">The configuration<see cref="PieceConfiguration"/></param>
-    internal TetraminoI(Board board, PieceConfiguration config)
-        : base(board, config)
+    internal TetraminoI(PieceConfiguration config)
+        : base(config)
     {
     }
 

@@ -40,7 +40,7 @@ Desktop ──► Application ──► Domain
 ## Padrões de projeto usados (siga-os ao estender)
 
 - **State** — `IBoardState` com `PlayingState`, `PausedState`, `FinishedState` (`internal`, instância única em `Instance`). Permissões (`CanMove`, `CanPause`...) são consultadas no estado, não em `if`s espalhados.
-- **Builder** — `PieceBuilder` (`OfType().OnPosition().WithRotation().OnBoard().Build()`) é a única forma de criar peças.
+- **Builder** — `PieceBuilder` (`OfType().OnPosition().WithRotation().Build()`) é a única forma de criar peças.
 - **Strategy** — cada tetraminó (`TetraminoI/J/L/O/S/T/Z`, `internal`) define seus `Blocks` para as rotações 0–3.
 - **Gerador de peças** — `IPieceGenerator` (domínio) escolhe tipo e rotação de cada nova peça; o `Board` usa o `RandomPieceGenerator` (`internal`) por padrão e aceita outro pelo construtor. Nos testes, use o `SequencePieceGenerator` para cenários determinísticos.
 - **Repository** — interface no domínio (`IStatsRepository : IRepository`), implementação em `Data`.

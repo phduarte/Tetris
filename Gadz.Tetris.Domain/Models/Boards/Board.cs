@@ -185,7 +185,7 @@ public class Board : Entity
     {
         _repository = repository;
         _pieceGenerator = pieceGenerator ?? new RandomPieceGenerator();
-        _pieceBuilder = new PieceBuilder().OnBoard(this);
+        _pieceBuilder = new PieceBuilder();
         Dimension = new Size(width, height);
         _playfield = new Playfield(Dimension);
         Stats = new Stats();
@@ -464,6 +464,7 @@ public class Board : Entity
             // a colisão é testada numa cópia já girada; testar a peça atual deixaria a rotação sobrepor blocos
             var rotated = CurrentPiece.Clone();
             rotated.Rotate();
+            KeepWithinWidth(rotated);
 
             if (!Fits(rotated))
             {
@@ -499,6 +500,25 @@ public class Board : Entity
     private bool Fits(Piece piece)
     {
         return piece.Blocks.All(_playfield.Contains) && !_playfield.Collides(piece);
+    }
+
+    /// <summary>
+    /// Empurra a peça na horizontal até ela ficar entre as bordas, para que girar encostado na parede seja possível.
+    /// </summary>
+    /// <param name="piece">A peça recém-girada.</param>
+    private void KeepWithinWidth(Piece piece)
+    {
+        var minX = piece.Blocks.Min(block => block.X);
+        var maxX = piece.Blocks.Max(block => block.X);
+
+        if (minX < 0)
+        {
+            piece.MoveBy(-minX, 0);
+        }
+        else if (maxX >= Width)
+        {
+            piece.MoveBy(Width - 1 - maxX, 0);
+        }
     }
 
     /// <summary>
