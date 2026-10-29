@@ -90,25 +90,26 @@ public abstract class Piece(Board board, PieceConfiguration configuration) : Ent
     /// <summary>
     /// The MoveDown
     /// </summary>
-    public void MoveDown()
-    {
-        Position = new Point(Position.X, Position.Y + 1);
-    }
+    public void MoveDown() => MoveBy(0, 1);
 
     /// <summary>
     /// The MoveRight
     /// </summary>
-    public void MoveRight()
-    {
-        Position = new Point(Position.X + 1, Position.Y);
-    }
+    public void MoveRight() => MoveBy(1, 0);
 
     /// <summary>
     /// The MoveLeft
     /// </summary>
-    public void MoveLeft()
+    public void MoveLeft() => MoveBy(-1, 0);
+
+    /// <summary>
+    /// Desloca a peça pelo deslocamento informado, sem verificar limites nem colisão (isso cabe ao <see cref="Board"/>).
+    /// </summary>
+    /// <param name="dx">Deslocamento horizontal (negativo = esquerda).</param>
+    /// <param name="dy">Deslocamento vertical (positivo = para baixo).</param>
+    internal void MoveBy(int dx, int dy)
     {
-        Position = new Point(Position.X - 1, Position.Y);
+        Position = new Point(Position.X + dx, Position.Y + dy);
     }
 
     /// <summary>

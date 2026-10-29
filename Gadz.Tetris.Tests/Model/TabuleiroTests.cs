@@ -132,6 +132,62 @@ public class TabuleiroTests
     }
 
     /// <summary>
+    /// Uma peça encostada na borda esquerda não sai do tabuleiro ao mover ou deslizar para a esquerda.
+    /// </summary>
+    [Test]
+    public void NaoDeveSairPelaBordaEsquerda()
+    {
+        _board.Arrange(CreatePiece(PieceType.I, new Point(0, 5), 0), []);
+
+        _board.MoveLeft();
+        _board.SlideLeft();
+
+        Assert.AreEqual(0, _board.CurrentPiece.Position.X);
+    }
+
+    /// <summary>
+    /// Uma peça encostada na borda direita não sai do tabuleiro ao mover ou deslizar para a direita.
+    /// </summary>
+    [Test]
+    public void NaoDeveSairPelaBordaDireita()
+    {
+        _board.Arrange(CreatePiece(PieceType.I, new Point(_board.Width - 1, 5), 0), []);
+
+        _board.MoveRight();
+        _board.SlideRight();
+
+        Assert.AreEqual(_board.Width - 1, _board.CurrentPiece.Position.X);
+    }
+
+    /// <summary>
+    /// Deslizar para a direita leva a peça até a borda, sem ultrapassá-la.
+    /// </summary>
+    [Test]
+    public void DeveDeslizarAteABordaDireita()
+    {
+        _board.Arrange(CreatePiece(PieceType.I, new Point(3, 5), 1), []);
+
+        _board.SlideRight();
+
+        Assert.AreEqual(_board.Width - 1, _board.CurrentPiece.Blocks.Max(b => b.X));
+    }
+
+    /// <summary>
+    /// Derrubar a peça a assenta na última linha, sem sair pelo fundo do tabuleiro.
+    /// </summary>
+    [Test]
+    public void NaoDeveSairPeloFundo()
+    {
+        _board.Arrange(CreatePiece(PieceType.I, new Point(3, 5), 0), []);
+
+        _board.SmashDown();
+
+        Assert.AreEqual(4, _board.Blocks.Count);
+        Assert.AreEqual(_board.Height - 1, _board.Blocks.Max(b => b.Y), "A peça não chegou à última linha.");
+        Assert.IsTrue(_board.Blocks.All(b => b.X == 3 && b.Y < _board.Height), "A peça saiu do tabuleiro.");
+    }
+
+    /// <summary>
     /// Pausar um jogo finalizado não altera o estado.
     /// </summary>
     [Test]

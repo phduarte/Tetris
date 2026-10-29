@@ -205,9 +205,8 @@ public class Board : Entity
     {
         lock (_sync)
         {
-            while (CanMoveDown(CurrentPiece))
+            while (TryMove(0, 1))
             {
-                CurrentPiece.MoveDown();
                 OnSlide?.Invoke();
             }
 
@@ -223,12 +222,11 @@ public class Board : Entity
     {
         lock (_sync)
         {
-            if (!CanMoveRight(CurrentPiece))
+            if (!TryMove(1, 0))
                 return;
 
-            while (CanMoveRight(CurrentPiece))
+            while (TryMove(1, 0))
             {
-                CurrentPiece.MoveRight();
             }
             Checkout();
             OnSlide?.Invoke();
@@ -242,12 +240,11 @@ public class Board : Entity
     {
         lock (_sync)
         {
-            if (!CanMoveLeft(CurrentPiece))
+            if (!TryMove(-1, 0))
                 return;
 
-            while (CanMoveLeft(CurrentPiece))
+            while (TryMove(-1, 0))
             {
-                CurrentPiece.MoveLeft();
             }
             Checkout();
             OnSlide?.Invoke();
@@ -394,9 +391,8 @@ public class Board : Entity
     {
         lock (_sync)
         {
-            if (CanMoveDown(CurrentPiece))
+            if (TryMove(0, 1))
             {
-                CurrentPiece.MoveDown();
                 OnMove?.Invoke();
             }
 
@@ -411,9 +407,8 @@ public class Board : Entity
     {
         lock (_sync)
         {
-            if (CanMoveRight(CurrentPiece))
+            if (TryMove(1, 0))
             {
-                CurrentPiece.MoveRight();
                 OnMove?.Invoke();
                 ResetMatrix();
             }
@@ -427,9 +422,8 @@ public class Board : Entity
     {
         lock (_sync)
         {
-            if (CanMoveLeft(CurrentPiece))
+            if (TryMove(-1, 0))
             {
-                CurrentPiece.MoveLeft();
                 OnMove?.Invoke();
                 ResetMatrix();
             }
@@ -497,93 +491,28 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// The CanMoveLeft
+    /// Desloca a peça atual se o estado permitir movimento e a peça couber na nova posição.
     /// </summary>
-    /// <param name="piece">The piece<see cref="Piece"/></param>
-    /// <returns>The <see cref="bool"/></returns>
-    private bool CanMoveLeft(Piece piece)
+    /// <param name="dx">Deslocamento horizontal (negativo = esquerda).</param>
+    /// <param name="dy">Deslocamento vertical (positivo = para baixo).</param>
+    /// <returns><c>true</c> se a peça foi movida.</returns>
+    private bool TryMove(int dx, int dy)
     {
         if (!State.CanMove)
-            return false;
-
-        var newPosition = new Point(piece.Position.X - 1, piece.Position.Y);
-        var testPiece = new PieceBuilder()
-                                .OfType(piece.Type)
-                                .OnPosition(newPosition)
-                                .WithRotation(piece.Rotation)
-                                .OnBoard(this)
-                                .Build();
-
-        //check if current piece's blocks don't go out the board width edge
-        foreach (var i in testPiece.Blocks)
         {
-            if (i.X < 0)
-            {
-                return false;
-            }
+            return false;
         }
 
-        return !ThereIsCollision(testPiece);
-    }
+        var candidate = CurrentPiece.Clone();
+        candidate.MoveBy(dx, dy);
 
-    /// <summary>
-    /// The CanMoveRight
-    /// </summary>
-    /// <param name="piece">The piece<see cref="Piece"/></param>
-    /// <returns>The <see cref="bool"/></returns>
-    private bool CanMoveRight(Piece piece)
-    {
-        if (!State.CanMove)
-            return false;
-
-        var newPosition = new Point(piece.Position.X + 1, piece.Position.Y);
-        var testPiece = new PieceBuilder()
-            .OfType(piece.Type)
-            .OnPosition(newPosition)
-            .WithRotation(piece.Rotation)
-            .OnBoard(this)
-            .Build();
-
-        //check if current piece's blocks don't go out the board width edge
-        foreach (var i in testPiece.Blocks)
+        if (!Fits(candidate))
         {
-            if (i.X > Dimension.Width - 1)
-            {
-                return false;
-            }
+            return false;
         }
 
-        return !ThereIsCollision(testPiece);
-    }
-
-    /// <summary>
-    /// The CanMoveDown
-    /// </summary>
-    /// <param name="piece">The piece<see cref="Piece"/></param>
-    /// <returns>The <see cref="bool"/></returns>
-    private bool CanMoveDown(Piece piece)
-    {
-        if (!State.CanMove)
-            return false;
-
-        var newPosition = new Point(piece.Position.X, piece.Position.Y + 1);
-        var testPiece = new PieceBuilder()
-            .OfType(piece.Type)
-            .OnPosition(newPosition)
-            .WithRotation(piece.Rotation)
-            .OnBoard(this)
-            .Build();
-
-        //check if current piece's blocks don't go out the board height edge
-        foreach (var i in testPiece.Blocks)
-        {
-            if (i.Y > Dimension.Height - 1)
-            {
-                return false;
-            }
-        }
-
-        return !ThereIsCollision(testPiece);
+        CurrentPiece.MoveBy(dx, dy);
+        return true;
     }
 
     /// <summary>
@@ -596,11 +525,7 @@ public class Board : Entity
             return;
         }
 
-        if (CanMoveDown(CurrentPiece))
-        {
-            CurrentPiece.MoveDown();
-        }
-        else
+        if (!TryMove(0, 1))
         {
             TrocarPecaAtual();
 
