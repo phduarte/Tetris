@@ -55,11 +55,6 @@ public class Board : Entity
     }
 
     /// <summary>
-    /// Gets the Matrix
-    /// </summary>
-    public Block[,] Matrix { get; }
-
-    /// <summary>
     /// Gets the CurrentPiece
     /// </summary>
     public Piece CurrentPiece { get; private set; }
@@ -188,7 +183,6 @@ public class Board : Entity
         _playfield = new Playfield(Dimension);
         Stats = new Stats();
         State = PausedState.Instance;
-        Matrix = new Block[width, height];
         Record = _repository.MaxScore();
         CurrentPiece = CreateRandomBlock();
         NextPiece = CreateRandomBlock();
@@ -342,7 +336,7 @@ public class Board : Entity
             NextPiece = CreateRandomBlock();
             Stats.Start();
             _playfield.Clear();
-            ResetMatrix();
+            OnRefresh?.Invoke();
             State = PlayingState.Instance;
             RefreshAsync();
         }
@@ -366,6 +360,28 @@ public class Board : Entity
     public void Save()
     {
         _repository.Save(Stats);
+    }
+
+    /// <summary>
+    /// O bloco visível na célula: um bloco da peça atual, um bloco assentado ou, se vazia, um bloco com <see cref="PieceColor.None"/>.
+    /// </summary>
+    /// <param name="x">A coluna, de 0 a <see cref="Width"/> - 1.</param>
+    /// <param name="y">A linha, de 0 a <see cref="Height"/> - 1.</param>
+    /// <returns>O bloco da célula.</returns>
+    public Block GetBlock(int x, int y)
+    {
+        lock (_sync)
+        {
+            foreach (var block in CurrentPiece.Blocks)
+            {
+                if (block.X == x && block.Y == y)
+                {
+                    return block;
+                }
+            }
+
+            return _playfield.BlockAt(x, y);
+        }
     }
 
     /// <summary>
@@ -406,7 +422,7 @@ public class Board : Entity
             if (TryMove(1, 0))
             {
                 OnMove?.Invoke();
-                ResetMatrix();
+                OnRefresh?.Invoke();
             }
         }
     }
@@ -421,7 +437,7 @@ public class Board : Entity
             if (TryMove(-1, 0))
             {
                 OnMove?.Invoke();
-                ResetMatrix();
+                OnRefresh?.Invoke();
             }
         }
     }
@@ -449,7 +465,7 @@ public class Board : Entity
 
             CurrentPiece = rotated;
             OnMove?.Invoke();
-            ResetMatrix();
+            OnRefresh?.Invoke();
         }
     }
 
@@ -464,7 +480,7 @@ public class Board : Entity
         {
             CurrentPiece = currentPiece;
             _playfield = new Playfield(Dimension, settledBlocks);
-            ResetMatrix();
+            OnRefresh?.Invoke();
         }
     }
 
@@ -525,7 +541,7 @@ public class Board : Entity
             }
         }
 
-        ResetMatrix();
+        OnRefresh?.Invoke();
         ClearFullLines();
     }
 
@@ -540,29 +556,6 @@ public class Board : Entity
         {
             AddScore(lines);
         }
-    }
-
-    /// <summary>
-    /// The ResetMatrix
-    /// </summary>
-    private void ResetMatrix()
-    {
-        //pintar os blocos que já saíram
-        for (int y = 0; y < Dimension.Height; y++)
-        {
-            for (int x = 0; x < Dimension.Width; x++)
-            {
-                Matrix[x, y] = _playfield.BlockAt(x, y);
-            }
-        }
-
-        //pinta o bloco atual
-        foreach (var i in CurrentPiece.Blocks)
-        {
-            Matrix[i.X, i.Y] = i;
-        }
-
-        OnRefresh?.Invoke();
     }
 
     /// <summary>

@@ -1,4 +1,4 @@
-using Gadz.Tetris.Domain.Models;
+﻿using Gadz.Tetris.Domain.Models;
 using Gadz.Tetris.Domain.Models.Boards;
 using Gadz.Tetris.Domain.Models.Pieces;
 using NUnit.Framework;

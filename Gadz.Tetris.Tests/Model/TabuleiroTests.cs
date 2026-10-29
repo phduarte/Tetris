@@ -188,6 +188,19 @@ public class TabuleiroTests
     }
 
     /// <summary>
+    /// Cada célula mostra o bloco da peça atual, o bloco assentado ou fica vazia.
+    /// </summary>
+    [Test]
+    public void DeveDevolverOBlocoDeCadaCelula()
+    {
+        _board.Arrange(CreatePiece(PieceType.O, new Point(4, 5), 0), [new Block(0, 19, PieceColor.Red)]);
+
+        Assert.AreEqual(PieceColor.Yellow, _board.GetBlock(4, 5).Color, "A peça atual não aparece na célula.");
+        Assert.AreEqual(PieceColor.Red, _board.GetBlock(0, 19).Color, "O bloco assentado não aparece na célula.");
+        Assert.AreEqual(PieceColor.None, _board.GetBlock(9, 0).Color, "A célula vazia deveria ficar sem cor.");
+    }
+
+    /// <summary>
     /// Pausar um jogo finalizado não altera o estado.
     /// </summary>
     [Test]

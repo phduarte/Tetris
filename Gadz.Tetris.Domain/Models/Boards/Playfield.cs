@@ -1,4 +1,4 @@
-using Gadz.Tetris.Domain.Models.Pieces;
+﻿using Gadz.Tetris.Domain.Models.Pieces;
 
 namespace Gadz.Tetris.Domain.Models.Boards;
 

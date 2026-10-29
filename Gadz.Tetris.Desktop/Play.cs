@@ -196,7 +196,7 @@ public partial class Play : Form
             {
                 for (int x = 0; x < _controller.BoardWidth; x++)
                 {
-                    PaintBlock(x, y, _controller.Matrix[x, y].Color.ToString(), mainBoardPanel);
+                    PaintBlock(x, y, _controller.GetBlock(x, y).Color.ToString(), mainBoardPanel);
                 }
             }
         }, CancellationToken.None, TaskCreationOptions.None, _threadPrincipal);
